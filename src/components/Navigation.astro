@@ -1,0 +1,31 @@
+---
+const pathname = new URL(Astro.request.url).pathname;
+const currentPath = pathname.slice(1);
+---
+
+<nav class='w-100 flex justify-between h-16'>
+	<span class="flex gap-2">
+		<a
+			class={currentPath === ''
+				? 'underline hover:text-slate-600'
+				: 'hover:text-slate-400'}
+			href='/' data-astro-prefetch>Index</a
+		>
+		/
+		<a
+			class={currentPath === 'collections'
+				? 'underline hover:text-slate-600'
+				: 'hover:text-slate-400'}
+			href='/collections' data-astro-prefetch>Collections</a
+		>
+	</span>
+	<div class='flex flex-nowrap gap-2'>
+		<a
+			class={currentPath === 'about'
+				? 'underline hover:text-slate-600'
+				: 'hover:text-slate-400'}
+			href='/about'
+			data-astro-prefetch>About</a
+		>
+	</div>
+</nav>

@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const albums = await getCollection("albums");
+
+  const paths = Object.values(albums).map((album) => {
+    return {
+      params: {
+        id: (album as any).id,
+      },
+      props: {
+        album,
+      },
+    };
+  });
+
+  return paths;
+}
+
+const { album } = Astro.props;
+---
+
+<div class="text-center my-16 mb-32">
+    <h1 class="text-3xl xl:text-6xl font-bold">
+    {(album as any).data.title}
+    </h1>
+    <p class="text-lg xl:text-2xl my-4">
+    {(album as any).data.description}
+    </p>
+
+    <div>
+      Images go here...
+    </div>
+
+    <p class="text-lg my-4 text-center">
+      <a href="/gallery/" class="text-white hover:underline"
+        >Go back →</a
+      >
+    </p>
+  </div>
