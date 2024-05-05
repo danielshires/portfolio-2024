@@ -11,6 +11,8 @@ const albumYear = await getCollection('albums', (entry: any) => {
 ---
 
 <Layout pageTitle='Pictures'>
+	<h1 class='text-4xl mb-4'>Pictures</h1>
+
 	{
 		albumYear.map((item) => (
 			<>

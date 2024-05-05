@@ -1,5 +1,5 @@
 ---
-import PostCard from '../components/PostCard.astro';
+import PostCard from '../components/Cards/PostCard.astro';
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 const posts = await getCollection('posts');
@@ -7,20 +7,26 @@ const albums = await getCollection('albums');
 ---
 
 <Layout pageTitle='index'>
-	<div class="h-screen">
-<div class="flex flex-col h-5/6 justify-center align-middle gap-6 w-full md:w-10/12">
-	<h2 class="text-xl md:text-4xl md:leading-snug lg:leading-snug">Hi, I'm Dan. I'm a Product Designer.</h2>
-	<h2 class="text-xl md:text-4xl md:leading-snug lg:leading-snug">
-		I love designing systematic, engaging, and user-centric applications with
-		the ultimate goal of delivering more value to business & customers.
-	</h2>
-	<h2 class="text-xl md:text-4xl md:leading-snug lg:leading-snug">
-		I'm currently working at <a href="https://www.commbank.com.au/" target="_blank">Commonwealth Bank</a>. You can also find me on Read.CV
-		or Instagram.
-	</h2>
-</div>
-</div>
-<div>
-	{posts.slice(0, 3).map((p) => <PostCard post={p} />)}
-</div>
+	<div class='h-screen'>
+		<div
+			class='flex flex-col h-5/6 justify-center align-middle gap-6 lg:gap-12 w-full md:w-10/12 lg:w-9/12'
+		>
+			<h2 class='text-xl md:text-4xl md:leading-snug lg:text-5xl g:leading-snug'>
+				Hi, I'm Dan. I'm a Product Designer.
+			</h2>
+			<h2 class='text-xl md:text-4xl md:leading-snug lg:text-5xl lg:leading-snug'>
+				I love designing systematic, engaging, and user-centric applications
+				with the ultimate goal of delivering more value to business & customers.
+			</h2>
+			<h2 class='text-xl md:text-4xl md:leading-snug lg:text-5xl lg:leading-snug'>
+				I'm currently working at <a
+					href='https://www.commbank.com.au/'
+					target='_blank'>Commonwealth Bank</a
+				>. You can also find me on Read.CV or Instagram.
+			</h2>
+		</div>
+	</div>
+	<div>
+		{posts.slice(0, 3).map((p) => <PostCard post={p} />)}
+	</div>
 </Layout>

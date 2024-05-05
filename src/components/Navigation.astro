@@ -2,37 +2,24 @@
 const pathname = new URL(Astro.request.url).pathname;
 const currentPath = pathname.slice(1);
 import '../../src/styles/navigation.css';
-import Image from "astro/components/Image.astro";
-import Logo from '../../public/images/svg/logo.svg'
+import Image from 'astro/components/Image.astro';
+import Logo from '../../public/images/svg/logo.svg';
+import TextLink from './Buttons/TextLink.astro';
 ---
 
 <nav class='w-100 flex flex-col sm:flex-row justify-between h-16 sticky'>
-	<div class="headline flex flex-col sm:flex-row gap-4">
-		<a
+	<div class='headline flex flex-col sm:flex-row gap-4'>
+		<p
 			class={currentPath === ''
 				? 'font-semibold'
-				: 'underline-offset-4 hover:underline hover:text-purple-800 font-semibold'}
-			href='/' data-astro-prefetch><span class="flex align-middle gap-2"><Image src={Logo} alt="Logo"/>Dan Shires</span></a
+				: 'underline-offset-4 hover:text-purple-800 font-semibold'}
 		>
-		<a
-		class={currentPath === 'pictures'
-			? 'underline underline-offset-4 '
-			: 'underline-offset-4 hover:underline hover:text-purple-800'}
-		href='/pictures' data-astro-prefetch>Pictures</a
-	>
-		<a
-		class={currentPath === 'posts'
-			? 'underline underline-offset-4 '
-			: 'underline-offset-4 hover:underline hover:text-purple-800'}
-		href='/posts' data-astro-prefetch>Journal</a
-	>
-	<a
-	class={currentPath === 'about'
-		? 'underline underline-offset-4 '
-		: 'underline-offset-4 hover:underline hover:text-purple-800'}
-	href='/about'
-	data-astro-prefetch>About</a
->
+			<span class='flex align-middle gap-2'
+				><Image src={Logo} alt='Logo' />Dan Shires</span>
+		</p>
+		<TextLink path="''" target='' href='/'>Home</TextLink>
+		<TextLink path="pictures" target='' href='/pictures'>Pitctures</TextLink>
+		<TextLink path="journal" target='' href='/posts'>Journal</TextLink>
+		<TextLink path="about" target='' href='/about'>About</TextLink>
 	</div>
-
 </nav>
