@@ -9,7 +9,7 @@ const { pageTitle } = Astro.props;
 ---
 
 <!doctype html>
-<html lang='en' class='bg-amber-50 p-4 font-serif text-base'>
+<html lang='en' class='bg-neutral-50 p-4 md:p-8 font-sans text-base'>
 	<head>
 		<meta charset='UTF-8' />
 		<meta name='description' content='Astro description' />
@@ -18,9 +18,40 @@ const { pageTitle } = Astro.props;
 		<meta name='generator' content={Astro.generator} />
 		<title>{pageTitle}</title>
 		<ViewTransitions />
+		<link rel='preconnect' href='https://fonts.googleapis.com' />
+		<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+		<link
+			href='https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'
+			rel='stylesheet'
+		/>
+		<link
+			href='https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap'
+			rel='stylesheet'
+		/>
+		<script src='https://unpkg.com/scrollreveal'></script>
 	</head>
-	<body transition:animate="none">
+	<body transition:animate='none'>
 		<Navigation />
 		<slot />
+		<script>
+			import { gsap } from 'gsap';
+			import ScrollTrigger from 'gsap/ScrollTrigger';
+			gsap.registerPlugin(ScrollTrigger);
+			const handleScroll = () => {
+				const nav = document.querySelector('.my-element');
+
+				gsap.to(nav, {
+					y: () => -nav.offsetHeight,
+					duration: 0.1,
+					scrollTrigger: {
+						trigger: nav,
+						start: 'top top',
+						end: '+=100',
+						scrub: true,
+					},
+				});
+			};
+			handleScroll();
+		</script>
 	</body>
 </html>

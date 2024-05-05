@@ -1,0 +1,37 @@
+title: Wanda
+description: Photographs taken around Wanda Beach in Cronulla, NSW.
+date: 2022-10-11
+cover: './01-wanda/Wanda_1.jpg'
+tags: ["wanda"]
+draft: false
+images:
+  - image: './01-wanda/Wanda_2.jpg'
+    caption: '1.1'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_3.jpg'
+    caption: '1.2'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_4.jpg'
+    caption: '1.3'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_5.jpg'
+    caption: '1.4'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_6.jpg'
+    caption: '1.5'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_7.jpg'
+    caption: '1.6'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_8.jpg'
+    caption: '1.7'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_9.jpg'
+    caption: '1.8'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_10.jpg'
+    caption: '1.9'
+    alt: Wanda beach
+  - image: './01-wanda/Wanda_12.jpg'
+    caption: '1.9'
+    alt: Wanda beach

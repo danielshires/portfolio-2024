@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Image from 'astro/components/Image.astro';
+import { getCollection } from 'astro:content';
+const albums = await getCollection('albums');
+const tags = await getCollection('tags');
+const albumYear = await getCollection('albums', (entry: any) => {
+	const data = entry.data;
+	return data.draft !== true && new Date(data.date) < new Date();
+});
+---
+
+<Layout pageTitle='Pictures'>
+	{
+		albumYear.map((item) => (
+			<>
+				<div class='grid gap-4 grid-cols-1 md:grid-cols-4 lg:grid-cols-5'>
+					<div class='flex flex-col gap-1'>
+						<h2>{item.data.title}</h2>
+						<p>{item.data.date.getFullYear()}</p>
+					</div>
+					{item.data.images.map((i) => (
+						<div class='flex flex-col gap-2'>
+							<Image class='bg-neutral-200' src={i.image} alt={i.alt} />
+						</div>
+					))}
+				</div>
+			</>
+		))
+	}
+</Layout>
+<!--
+<script>
+	function hideBlogs(evt) {
+		let selectedTag = evt.currentTarget.getAttribute('data-type');
+		console.log(selectedTag);
+		let tagElement = document.getElementById('tags');
+		//   let tags = tagElement.dataset.tags;
+		//   tags = tags.split(",");
+		//   tags.splice(tags.indexOf(selectedTag), 1);
+
+		//   tags.forEach((t) => {
+		// 	const elementsToHide = document.getElementsByClassName(t);
+		// 	for (let i = 0; i < elementsToHide.length; i++) {
+		// 	  elementsToHide[i].style.display = "none";
+		// 	}
+		//   });
+
+		//   let elementsToShow = document.getElementsByClassName(selectedTag);
+		//   for (let i = 0; i < elementsToShow.length; i++) {
+		// 	elementsToShow[i].style.display = "block";
+		//   }
+	}
+
+	// Event listener for the button click
+	const input = document.querySelectorAll('#blogFilter');
+	input.forEach((e) => {
+		e.addEventListener('click', hideBlogs);
+	});
+</script> -->

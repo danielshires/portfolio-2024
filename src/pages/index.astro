@@ -1,14 +1,26 @@
 ---
+import PostCard from '../components/PostCard.astro';
 import Layout from '../layouts/Layout.astro';
-import Image from 'astro/components/Image.astro';
-import fern from '../content/albums/photo-1.jpeg'
-import fern2 from '../content/albums/national-park/photo-2.jpeg'
+import { getCollection } from 'astro:content';
+const posts = await getCollection('posts');
+const albums = await getCollection('albums');
 ---
 
 <Layout pageTitle='index'>
-	<div class='grid gap-4 grid-cols-1 md:grid-cols-4 lg:grid-cols-6'>
-		<!-- <div class='w-full aspect-[4/5] md:col-auto'>Trees</div> -->
-		<Image src={fern} alt="Fern"></Image>
-		<Image src={fern2} alt="Fern"></Image>
-	</div>
+	<div class="h-screen">
+<div class="flex flex-col h-5/6 justify-center align-middle gap-6 w-full md:w-10/12">
+	<h2 class="text-xl md:text-4xl md:leading-snug lg:leading-snug">Hi, I'm Dan. I'm a Product Designer.</h2>
+	<h2 class="text-xl md:text-4xl md:leading-snug lg:leading-snug">
+		I love designing systematic, engaging, and user-centric applications with
+		the ultimate goal of delivering more value to business & customers.
+	</h2>
+	<h2 class="text-xl md:text-4xl md:leading-snug lg:leading-snug">
+		I'm currently working at <a href="https://www.commbank.com.au/" target="_blank">Commonwealth Bank</a>. You can also find me on Read.CV
+		or Instagram.
+	</h2>
+</div>
+</div>
+<div>
+	{posts.slice(0, 3).map((p) => <PostCard post={p} />)}
+</div>
 </Layout>

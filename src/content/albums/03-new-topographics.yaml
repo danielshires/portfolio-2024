@@ -1,0 +1,58 @@
+title: New Topographics
+description: Topographical studies of American Footbal stadiums
+date: 2023-10-11
+cover: ./02-national-park/photo-1.jpeg
+tags: ["new-topographics"]
+draft: true
+images:
+  - image: './03-new-topographics/Arrowhead-Stadium.jpeg'
+    caption: Arrowhead stadium
+    alt: Arrowhead stadium
+  - image: './03-new-topographics/Candlestick-Park.jpeg'
+    caption: Candlestick Park
+    alt: Candlestick Park
+  - image: './03-new-topographics/CenturyLink-Field.jpeg'
+    caption: Century Link Field
+    alt: Century Link Field
+  - image: './03-new-topographics/Cleveland-Brown.jpeg'
+    caption: Cleveland Brown
+    alt: Cleveland Brown
+  - image: './03-new-topographics/Cowboys-Stadium.jpeg'
+    caption: Cowboys stadium
+    alt: Cowboys stadium
+  - image: './03-new-topographics/EverBank-Field.jpeg'
+    caption: Everbank Field
+    alt: Everbank Field
+  - image: './03-new-topographics/Georgia-Dome.jpeg'
+    caption: Georgia Dome
+    alt: Georgia Dome
+  - image: './03-new-topographics/Gillette-Stadium.jpeg'
+    caption: Gilette Stadium
+    alt: Gilette Stadium
+  - image: './03-new-topographics/Lincoln-Financial-Field.jpeg'
+    caption: Lincoln Financial Field
+    alt: Lincoln Financial Field
+  - image: './03-new-topographics/Louisiana-Superdome.jpeg'
+    caption: Louisiana Superdome
+    alt: Louisiana Superdome
+  - image: './03-new-topographics/LP-Field.jpeg'
+    caption: LP Field
+    alt: LP Field
+  - image: './03-new-topographics/M&T-Bank-Stadium.jpeg'
+    caption: M&T Bank Stadium
+    alt: M&T Bank Stadium
+  - image: './03-new-topographics/qualcomm-stadium.jpeg'
+    caption: Qualcomm Stadium
+    alt: Qualcomm Stadium
+  - image: './03-new-topographics/Ralph-Wilson-Stadium.jpeg'
+    caption: Ralph Wilson Stadium
+    alt: Ralph Wilson Stadium
+  - image: './03-new-topographics/Reliant-Park.jpeg'
+    caption: Reliant park
+    alt: Reliant park
+  - image: './03-new-topographics/Sports-Authority-Field-at-Mile-High.jpeg'
+    caption: Sports Authority Field at Mile high
+    alt: Sports Authority Field at Mile high
+  - image: './03-new-topographics/Sun-Life-Stadium.jpeg'
+    caption: Sun life Stadium
+    alt: Sun life stadium
