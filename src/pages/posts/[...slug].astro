@@ -28,33 +28,18 @@ const relatedPosts = entry.data.relatedPosts
 ---
 
 <MarkdownWrapper frontMatter={entry.data}>
-	<div class='flex flex-row gap-3'>
-		<Image
-			src={authorData.headshot}
-			alt={authorData.name}
-			class='rounded-full w-12 h-12'
-		/>
-		<p>{authorData.name}</p>
-		<span>·</span>
-		<time datetime={entry.data.date.toISOString()}
-			>{
-				entry.data.date.toLocaleDateString(undefined, {
-					dateStyle: 'medium',
-					timeZone: 'UTC',
-				})
-			}</time
-		>
-		<span>·</span>
-	</div>
 	<Content />
 	<div>
 		{
 			relatedPosts.length > 0 && (
-				<div>
+				<div class="w-screen">
 					<h2>Related Posts</h2>
-					{relatedPosts.map((p) => (
+					<div class="flex flex-col gap-4 w-4/12">
+						{relatedPosts.map((p) => (
 						<PostCard post={p} />
 					))}
+					</div>
+
 				</div>
 			)
 		}

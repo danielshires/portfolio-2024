@@ -11,12 +11,10 @@ const albumYear = await getCollection('albums', (entry: any) => {
 ---
 
 <Layout pageTitle='Pictures'>
-	<h1 class='text-4xl mb-4'>Pictures</h1>
-
 	{
 		albumYear.map((item) => (
 			<>
-				<div class='grid gap-4 grid-cols-1 md:grid-cols-4 lg:grid-cols-5'>
+				<div class='grid gap-4 grid-cols-1 md:grid-cols-4 lg:grid-cols-5 mt-48'>
 					<div class='flex flex-col gap-1'>
 						<h2>{item.data.title}</h2>
 						<p>{item.data.date.getFullYear()}</p>

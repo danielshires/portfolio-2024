@@ -10,7 +10,11 @@ const albums = defineCollection({
 			date: z.date(),
 			draft: z.boolean(),
 			images: z.array(
-				z.object({ image: image(), caption: z.string().optional(), alt: z.string()}),
+				z.object({
+					image: image(),
+					caption: z.string().optional(),
+					alt: z.string(),
+				}),
 			),
 			tags: z.array(reference('tags')).optional(),
 		}),
@@ -25,19 +29,21 @@ const tags = defineCollection({
 
 const posts = defineCollection({
 	type: 'content',
-	schema: z.object({
-		title: z
-			.string()
-			.max(160, { message: 'Title must be 160 characters or less' }),
-		description: z
-			.string()
-			.max(160, { message: 'Title must be 160 characters or less' }),
-		date: z.date(),
-		tags: z.array(z.string()),
-		relatedPosts: z.array(reference('posts')),
-		author: reference('team').optional(),
-		albums: reference('albums').optional(),
-	}),
+	schema: ({ image }) =>
+		z.object({
+			title: z
+				.string()
+				.max(160, { message: 'Title must be 160 characters or less' }),
+			description: z
+				.string()
+				.max(160, { message: 'Title must be 160 characters or less' }),
+			date: z.date(),
+			tags: z.array(z.string()),
+			relatedPosts: z.array(reference('posts')).optional(),
+			author: reference('team').optional(),
+			albums: reference('albums').optional(),
+			cover: image().optional(),
+		}),
 });
 
 const team = defineCollection({
