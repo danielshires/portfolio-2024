@@ -10,7 +10,7 @@ const albumYear = await getCollection('albums', (entry: any) => {
 });
 ---
 
-<Layout pageTitle='Pictures'>
+<Layout pageTitle='Pictures' pageDescription='Pictures from my portfolio'>
 	{
 		albumYear.map((item) => (
 			<>

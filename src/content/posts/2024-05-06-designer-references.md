@@ -3,7 +3,7 @@ title: Designer references
 description: An ongoing collection of some of my favourite desigers
 tags: ["design", "references"]
 date: 2024-06-05
-relatedPosts: ["post-5", "2024_05_05_behaviour-change"]
+# relatedPosts: ["2024_05_05_behaviour-change"]
 author: dan-shires
 cover: ../albums/01-wanda/Wanda_1.jpg
 ---

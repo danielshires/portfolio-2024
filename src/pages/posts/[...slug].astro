@@ -1,6 +1,5 @@
 ---
 import { getCollection, getEntry, getEntries } from 'astro:content';
-import Image from 'astro/components/Image.astro';
 import MarkdownWrapper from '../../layouts/MarkdownWrapper.astro';
 import type { CollectionEntry } from 'astro:content';
 import PostCard from '../../components/Cards/PostCard.astro';
@@ -19,7 +18,7 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-const { data: authorData } = await getEntry('team', entry.data.author.id);
+// const { data: authorData } = await getEntry('team', entry.data.author.id);
 
 const relatedPosts = entry.data.relatedPosts
 	? await getEntries(entry.data.relatedPosts)

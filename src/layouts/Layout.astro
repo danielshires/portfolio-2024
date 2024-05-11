@@ -3,16 +3,17 @@ import Navigation from '../components/Navigation.astro';
 import ViewTransitions from 'astro/components/ViewTransitions.astro';
 interface Props {
 	pageTitle: string;
+	pageDescription: string;
 }
 
-const { pageTitle } = Astro.props;
+const { pageTitle, pageDescription } = Astro.props;
 ---
 
 <!doctype html>
 <html lang='en' class='bg-neutral-100 p-4 md:p-8 font-sans text-base'>
 	<head>
 		<meta charset='UTF-8' />
-		<meta name='description' content='Astro description' />
+		<meta name='description' content={pageDescription} />
 		<meta name='viewport' content='width=device-width' />
 		<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
 		<meta name='generator' content={Astro.generator} />
@@ -28,7 +29,7 @@ const { pageTitle } = Astro.props;
 	<body transition:animate='none'>
 		<Navigation />
 		<slot />
-		<script>
+		<!-- <script>
 			import { gsap } from 'gsap';
 			import ScrollTrigger from 'gsap/ScrollTrigger';
 			gsap.registerPlugin(ScrollTrigger);
@@ -47,6 +48,6 @@ const { pageTitle } = Astro.props;
 				});
 			};
 			handleScroll();
-		</script>
+		</script> -->
 	</body>
 </html>

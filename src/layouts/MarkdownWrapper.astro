@@ -4,7 +4,7 @@ import Layout from './Layout.astro';
 const { frontMatter } = Astro.props;
 ---
 
-<Layout pageTitle={frontMatter.title}>
+<Layout pageTitle={frontMatter.title} pageDescription={frontMatter.description}>
 		<Prose>
 			<article class='mt-48 w-12/12 md:w-8/12 lg:w-5/12'>
 				<h1>{frontMatter.title}</h1>

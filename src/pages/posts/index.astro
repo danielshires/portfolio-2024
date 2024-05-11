@@ -6,7 +6,7 @@ import PostCard from '../../components/Cards/PostCard.astro';
 const posts = await getCollection('posts');
 ---
 
-<Layout pageTitle='posts'>
+<Layout pageTitle='Journal' pageDescription='Journal of my different ideas and works in progress'>
         <!-- <h1 class='text-4xl mb-4'>Journal</h1> -->
 	<div class="flex flex-col gap-4 mt-48 ">
 		{posts.map((p) => <PostCard post={p} />)}
