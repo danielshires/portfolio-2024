@@ -10,8 +10,8 @@ interface Props {
 const { pageTitle, pageDescription } = Astro.props;
 ---
 
-<!doctype html>
-<html lang='en' class='bg-neutral-100 p-4 md:p-8 font-sans text-base'>
+<!doctype html >
+<html lang='en' class='bg-neutral-100 p-4 md:p-8 font-sans text-base' >
 	<head>
 		<meta charset='UTF-8' />
 		<meta name='description' content={pageDescription} />
@@ -27,28 +27,8 @@ const { pageTitle, pageDescription } = Astro.props;
 			rel='stylesheet'
 		/>
 	</head>
-	<body transition:animate='none'>
+	<body transition:animate='fade'>
 		<Navigation />
 		<slot />
-		<!-- <script>
-			import { gsap } from 'gsap';
-			import ScrollTrigger from 'gsap/ScrollTrigger';
-			gsap.registerPlugin(ScrollTrigger);
-			const handleScroll = () => {
-				const nav = document.querySelector('.my-element');
-
-				gsap.to(nav, {
-					y: () => -nav.offsetHeight,
-					duration: 0.1,
-					scrollTrigger: {
-						trigger: nav,
-						start: 'top top',
-						end: '+=100',
-						scrub: true,
-					},
-				});
-			};
-			handleScroll();
-		</script> -->
 	</body>
 </html>

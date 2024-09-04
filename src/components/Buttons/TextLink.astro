@@ -12,8 +12,8 @@ const { href, path, target } = Astro.props;
 
 const styles =
 	currentPath === path
-		? 'underline underline-offset-8'
-		: 'underline underline-offset-8 hover:text-blue-700';
+		? 'underline underline-offset-8 hover:text-blue-700'
+		: 'underline-offset-8 hover:text-blue-700';
 ---
 
 <a class={styles} href={href} target={target}><slot/></a>
