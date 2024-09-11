@@ -4,20 +4,24 @@ const currentPath = pathname.slice(1);
 import '../../src/styles/navigation.css';
 import Image from 'astro/components/Image.astro';
 import Logo from '../../public/images/svg/logo.svg';
-import TextLink from './Buttons/TextLink.astro';
+import TextLink from './Buttons/NavLink.astro';
+import { Icon } from 'astro-icon/components'
 ---
 
-<nav class='w-100 flex flex-col sm:flex-row justify-between h-16 sticky'>
-	<div class='headline flex flex-col sm:flex-row gap-4'>
-		<p class='font-semibold'>
+<nav class='w-100 flex flex-col sm:flex-row justify-between h-16 sticky pt-4 md:pt-8'>
+	<div class='headline flex flex-col sm:flex-row gap-4 justify-between'>
+		<!-- <p class='font-semibold'>
 			<span class='flex align-middle gap-2'
 				><Image src={Logo} alt='Logo' />Dan Shires</span
 			>
-		</p>
-		<TextLink path="''" target='' href='/'>Home</TextLink>
-		<TextLink path='pictures' target='' href='/pictures'>Pitctures</TextLink>
-		<TextLink path='journal' target='' href='/posts'>Journal</TextLink>
-		<TextLink path='journal' target='' href='/posts'>Design thinking</TextLink>
+		</p> -->
+		<div class="flex gap-4">
+			<TextLink path='' target='' href='/'>Daniel Shires</TextLink>
+			<TextLink path='design' target='' href='/design'>Design</TextLink>
+			<TextLink path='pictures' target='' href='/pictures'>Pitctures</TextLink>
+			<TextLink path='posts' target='' href='/posts'>Thoughts </TextLink>
+		</div>
+
 		<!-- <TextLink path='about' target='' href='/about'>About</TextLink> -->
 	</div>
 </nav>

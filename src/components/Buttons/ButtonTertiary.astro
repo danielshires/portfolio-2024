@@ -1,0 +1,17 @@
+---
+const pathname = new URL(Astro.request.url).pathname;
+const currentPath = pathname.slice(1);
+
+interface Props {
+	path: string;
+	target: string;
+	href: string;
+}
+
+const { href, target } = Astro.props;
+
+---
+
+<a class={'underline underline-offset-4 decoration-2 md:underline-offset-8 md:decoration-4'} href={href} target={target}><slot/></a>
+
+

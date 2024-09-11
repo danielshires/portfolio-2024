@@ -1,0 +1,19 @@
+---
+const pathname = new URL(Astro.request.url).pathname;
+const currentPath = pathname.slice(1);
+
+interface Props {
+	path: string;
+	target: string;
+	href: string;
+}
+
+const { href, path, target } = Astro.props;
+
+const styles =
+	currentPath === path
+		? 'underline-offset-8'
+		: 'underline-offset-8 hover:underline';
+---
+
+<a class={styles} href={href} target={target}><slot/></a>

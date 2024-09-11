@@ -5,13 +5,13 @@ const { frontMatter } = Astro.props;
 ---
 
 <Layout pageTitle={frontMatter.title} pageDescription={frontMatter.description}>
-		<Prose>
-			<article class='mt-48 w-12/12 md:w-8/12 lg:w-5/12'>
+	<Prose class=''>
+		<div class='w-100 flex flex-col justify-center items-center mt-48'>
+			<article class="prose-p:text-xl prose-p:leading-relaxed">
 				<h1>{frontMatter.title}</h1>
-				<p>{frontMatter.description}</p>
-				<Prose>
-					<slot />
-				</Prose>
+				<!-- <p>{frontMatter.description}</p> -->
+				<slot />
 			</article>
-		</Prose>
+		</div>
+	</Prose>
 </Layout>

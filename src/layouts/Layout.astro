@@ -10,8 +10,8 @@ interface Props {
 const { pageTitle, pageDescription } = Astro.props;
 ---
 
-<!doctype html >
-<html lang='en' class='bg-neutral-100 p-4 md:p-8 font-sans text-base' >
+<!doctype html>
+<html lang='en' class='bg-neutral-100 text-slate-900 font-sans text-base px-4 md:px-8'>
 	<head>
 		<meta charset='UTF-8' />
 		<meta name='description' content={pageDescription} />
@@ -22,10 +22,13 @@ const { pageTitle, pageDescription } = Astro.props;
 		<ViewTransitions />
 		<link rel='preconnect' href='https://fonts.googleapis.com' />
 		<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 		<link
-			href='https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'
-			rel='stylesheet'
-		/>
+		href='https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'
+		rel='stylesheet'
+	/>
 	</head>
 	<body transition:animate='fade'>
 		<Navigation />

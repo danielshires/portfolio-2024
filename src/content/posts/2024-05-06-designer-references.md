@@ -10,19 +10,19 @@ cover: ../albums/01-wanda/Wanda_1.jpg
 
 I come across a lot of design work and portfolios online. This is a list of some of the best that I've seen so far this year.
 
-#### Seungmee Lee
+### Seungmee Lee
 Super cool projects. Separated her film photography into a project… nice! Shows the variation in design skill.
 
 https://www.seungmee-lee.com
 
-#### Dan Tase
+### Dan Tase
 https://www.dantase.com/
 
-#### Mark Bolton
+### Mark Bolton
 https://markboulton.co.uk/
 
-#### Yambo Studio
+### Yambo Studio
 https://www.yambo-studio.com/
 
-#### For Good Design Lab
+### For Good Design Lab
 https://www.forgooddesignlab.com/
