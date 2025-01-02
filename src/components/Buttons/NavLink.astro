@@ -1,6 +1,11 @@
 ---
 const pathname = new URL(Astro.request.url).pathname;
+
 const currentPath = pathname.slice(1);
+
+console.log('Current Path:', currentPath);
+
+
 
 interface Props {
 	path: string;
@@ -12,8 +17,8 @@ const { href, path, target } = Astro.props;
 
 const styles =
 	currentPath === path
-		? 'underline-offset-8'
-		: 'underline-offset-8 hover:underline';
+		? 'underline underline-offset-8 dark:decoration-zinc-100'
+		: 'strong no-underline hover:underline underline-offset-8 dark:decoration-zinc-100';
 ---
 
-<a class={styles} href={href} target={target}><slot/></a>
+<a data-astro-reload class={styles} href={href} target={target}><slot/></a>

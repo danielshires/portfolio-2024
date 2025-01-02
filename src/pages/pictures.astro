@@ -1,60 +1,83 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import TextBanner from '../components/Text/TextBanner.astro';
 import Image from 'astro/components/Image.astro';
 import { getCollection } from 'astro:content';
 const albums = await getCollection('albums');
 const tags = await getCollection('tags');
+
+// Check if album is in draft
 const albumYear = await getCollection('albums', (entry: any) => {
 	const data = entry.data;
 	return data.draft !== true && new Date(data.date) < new Date();
 });
+
+// Sort albums by date
+albumYear.sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
+
+// Front Matter
+const frontMatter = {
+	pageTitle: 'Pictures',
+	pageDescription: 'Some recent pictures, all shot on 35mm and 120mm film',
+};
+
 ---
 
-<Layout pageTitle='Pictures' pageDescription='Pictures from my portfolio'>
-	{
-		albumYear.map((item) => (
-			<>
-				<div class='grid gap-4 grid-cols-1 md:grid-cols-4 lg:grid-cols-5 mt-48'>
-					<div class='flex flex-col gap-1'>
-						<h2>{item.data.title}</h2>
-						<p>{item.data.date.getFullYear()}</p>
-					</div>
-					{item.data.images.map((i) => (
-						<div class='flex flex-col gap-2'>
-							<Image class='bg-neutral-200' src={i.image} alt={i.alt} />
+<Layout
+	pageTitle={frontMatter.pageTitle}
+	pageDescription={frontMatter.pageDescription}
+	colourMode='light'
+>
+	<main id="intro" class="col-span-12">
+		<TextBanner
+			pageTitle={frontMatter.pageTitle}
+			pageDescription={frontMatter.pageDescription}
+		>
+		</TextBanner>
+		{
+			albumYear.map((item : any) => (
+				<>
+					<div class='grid gap-4 grid-cols-1 md:grid-cols-4 lg:grid-cols-5 mb-48'>
+						<div class='albumStart flex flex-col gap-2'>
+							<h2 class="font-medium">{item.data.title}</h2>
+							<p class="font-normal">{item.data.description}</p>
+							<p class="text-base=">{item.data.date.getFullYear()}</p>
 						</div>
-					))}
-				</div>
-			</>
-		))
-	}
+						{item.data.images.map((i : any) => (
+							<div class='flex flex-col gap-2 albumImages'>
+								<Image class='bg-zinc-200' src={i.image} alt={i.alt} />
+							</div>
+						))}
+					</div>
+				</>
+			))
+		}
+	</main>
 </Layout>
-<!--
+
 <script>
-	function hideBlogs(evt) {
-		let selectedTag = evt.currentTarget.getAttribute('data-type');
-		console.log(selectedTag);
-		let tagElement = document.getElementById('tags');
-		//   let tags = tagElement.dataset.tags;
-		//   tags = tags.split(",");
-		//   tags.splice(tags.indexOf(selectedTag), 1);
 
-		//   tags.forEach((t) => {
-		// 	const elementsToHide = document.getElementsByClassName(t);
-		// 	for (let i = 0; i < elementsToHide.length; i++) {
-		// 	  elementsToHide[i].style.display = "none";
-		// 	}
-		//   });
+    const scrollDistance = 50
 
-		//   let elementsToShow = document.getElementsByClassName(selectedTag);
-		//   for (let i = 0; i < elementsToShow.length; i++) {
-		// 	elementsToShow[i].style.display = "block";
-		//   }
-	}
+	const animationOptions = { duration: 300, delay: 100, distance: `${scrollDistance}px`, easing: 'ease-out' }
 
-	// Event listener for the button click
-	const input = document.querySelectorAll('#blogFilter');
-	input.forEach((e) => {
-		e.addEventListener('click', hideBlogs);
-	});
-</script> -->
+    function revealSection() {
+      const albumStart = document.querySelectorAll('.albumStart')
+      const albumImages = document.querySelectorAll('.albumImages')
+
+	  albumImages.forEach(album => {
+		ScrollReveal().reveal(album, animationOptions)
+	  })
+
+	  albumStart.forEach( album => {
+		ScrollReveal().reveal(album , animationOptions)
+	  })
+
+
+    }
+
+    window.addEventListener('load', function (event) {
+      revealSection()
+    })
+  </script>
+

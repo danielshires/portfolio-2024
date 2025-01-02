@@ -1,81 +1,151 @@
 ---
-import PostCard from '../components/Cards/PostCard.astro';
-import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-const posts = await getCollection('posts');
-const albums = await getCollection('albums');
-import TextLink from '../components/Buttons/NavLink.astro';
-import { fade } from 'astro:transitions';
-import ButtonTertiary from '../components/Buttons/ButtonTertiary.astro'
+import Layout from '../layouts/Layout.astro'
+import { fade } from 'astro:transitions'
+// import ButtonPrimary from '../components/Buttons/ButtonPrimary.astro'
+import { Image } from 'astro:assets'
+import ButtonPrimary from '../components/Buttons/ButtonPrimary.astro'
 
-const anim = {
-	old: {
-		name: 'fadeIn',
-		duration: '1s',
-		easing: 'linear',
-		fillMode: 'forwards',
-	},
-	new: {
-		name: 'fadeOut',
-		duration: '2s',
-		easing: 'linear',
-		fillMode: 'backwards',
-	},
-};
+// Grid Template
 
-const myFade = {
-	forwards: anim,
-	backwards: anim,
-};
-
-import { Icon } from 'astro-icon/components';
+const gridColDefault = 'grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6'
 ---
 
-<Layout
-	pageTitle='Daniel Shires | Product Designer based in Sydney currently working for Commonwealth Bank'
-	pageDescription='UX/UI Designer and Front-End Developer based in Sydney Australia. I use the principles of human centred design to create simple, impactful experiences in pixels and code.'
->
-	<div id="introduction" class='h-100 overflow-hidden' transition:animate={myFade}>
-		<div
-			class='flex flex-col h-5/6 justify-center align-middle gap-6 lg:gap-12 w-full md:w-10/12 lg:w-9/12 mt-48'
-		>
-			<h2
-				class='text-xl md:text-4xl md:leading-snug lg:text-5xl g:leading-snug'
-				transition:animate={fade({ duration: '0.2s' })}
-			>
-				Hi, I'm Dan. I'm a Product Designer.
-			</h2>
-			<h2
-				class='text-xl md:text-4xl md:leading-snug lg:text-5xl lg:leading-snug'
-				transition:animate={fade({ duration: '0.4s' })}
-			>
-				I love designing systematic, engaging, and user-centric applications
-				with the ultimate goal of delivering more value to business & customers.
-			</h2>
-			<h2
-				class='text-xl md:text-4xl md:leading-snug lg:text-5xl lg:leading-snug'
-				transition:animate={fade({ duration: '0.6s' })}
-			>
-				I'm currently working at <ButtonTertiary
-				href='https://www.commbank.com.au'
-				target='_blank'
-				path='/'
-			>
-				Commonwealth Bank
 
-			</ButtonTertiary>
-			</h2>
-			
-		</div>
-		<!-- <div
-			id='recent-posts'
-			class='mt-16 flex flex-col gap-4'
-			transition:animate={fade({ duration: '0.8s' })}
-		>
-			<h4 class=''>Recent Posts</h4>
-			<div>
-				{posts.slice(0, 3).map((p) => <PostCard post={p} />)}
-			</div>
-		</div> -->
-	</div>
+<Layout
+  pageTitle='Daniel Shires | Product Designer based in Sydney currently working for Commonwealth Bank'
+  pageDescription='UX/UI Designer and Front-End Developer based in Sydney Australia. I use the principles of human centred design to create simple, impactful experiences in pixels and code.'
+  colourMode='light'
+>
+  <main class=''>
+    <!-- Intro -->
+    <section id='intro' class='h-dvh grid grid-cols-1 col-span-1 gap-6 content-center'>
+      <h4>
+        <span id='name' class='block font-bold'>Daniel Shires</span>
+        <span id='jobTitle' class='block'>Product Designer</span>
+      </h4>
+      <h1 class='font-serif text-5xl md:text-8xl lg:text-10xl text-balance'>
+        <span id='transformational' class='flex'>Transformational.</span>
+        <span id='experiences' class='flex'>Digital experiences.</span>
+      </h1>
+      <div class=`grid ${gridColDefault} gap-4`>
+        <p id='introOne' class='col-span-1 md:col-span-3 lg:col-span-6 xl:col-span-4'>
+          Hi I’m Dan. I love to design systematic, engaging, and user-centric applications with the
+          ultimate goal of delivering more value to business and users.
+        </p>
+        <p id='introTwo' class='col-span-1 md:col-span-3 lg:col-span-6 xl:col-span-4 row-start-2'>
+          In my spare time, I like to take photographs with my Pentax K-1000, write about design and
+          productivity, and play around with code.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section One - One Cols -->
+    <section id='featuredWork' class='grid grid-cols-1 col-span-1 gap-6'>
+      <div id='featuredLarge' class=''>
+        <a href='/design/commbankyello' class='block hover:brightness-90'
+          ><Image
+            id='projectImage'
+            src='https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'
+            alt='image'
+            width='2600'
+            height='900'
+            decoding='async'
+            loading='lazy'
+            class='rounded-3xl aspect-[1/1] md:aspect-[12/5] object-cover hover:brightness-90'
+          />
+          <!-- <div class='absolute bottom-0 right-0'></div> -->
+        </a>
+        <div id='projectContent' class=`grid ${gridColDefault} mt-8 gap-6 `>
+          <div
+            id='text'
+            class='grid grid-cols-subgrid col-span-1 md:col-span-3 lg:col-span-6 grid-rows-1 gap-4'
+          >
+            <h3 class='row-start-1 col-span-6 text-sm'>CommBank Yello</h3>
+            <h2 class='row-start-2 col-span-3 md:col-span-3 lg:col-span-4 text-2xl md:text-4xl font-medium'>
+              Reimagine customer loyalty for Australia's largest bank
+            </h2>
+            <p class='row-start-3 col-span-3 md:col-span-3 lg:col-span-4'>
+              CommBank Yello is CommBanks customer engagement and loyalty program. As the Senior UX
+              Designer, I led the design and delivery of Yello 2.0, the next iteration of CommBank
+              Yello
+            </p>
+            <!-- <div class='row-start-4 col-span-3 md:col-span-3 lg:col-span-4 mt-4'>
+              <ButtonPrimary href='./' target='' path='./'>View project</ButtonPrimary>
+            </div> -->
+          </div>
+          <div
+            id='outcomes'
+            class='grid grid-cols-3 col-span-3 md:grid-cols-3 lg:col-span-6 gap-6 mt-4 md:mt-0 md:self-start md:place-items-end'
+          >
+            <div class='statistic'>
+              <p class='text-2xl md:text-4xl'>6.5m</p>
+              <p class='text-xs mt-1'>Engaged customers</p>
+            </div>
+            <div class='statistic'>
+              <p class='text-2xl md:text-4xl'>+32</p>
+              <p class='text-xs mt-1'>Net promoter score</p>
+            </div>
+            <div class='statistic'>
+              <p class='text-2xl md:text-4xl'>2m</p>
+              <p class='text-xs mt-1'>Visits per month</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="mt-8">
+    </section>
+    <section class='h-dvh mt-8'>
+
+    </section>
+  </main>
 </Layout>
+
+<script>
+  import gsap from 'gsap'
+
+  const scrollDistance = 20
+
+  function introAnimation() {
+    let tl = gsap.timeline()
+
+    var hasPlayed = sessionStorage.getItem('hasMyAnimationPlayed')
+    const headingName = document.getElementById('name')
+    const headingJobTitle = document.getElementById('jobTitle')
+    const headingTransformational = document.getElementById('transformational')
+    const headingExperiences = document.getElementById('experiences')
+    const introOne = document.getElementById('introOne')
+    const introTwo = document.getElementById('introTwo')
+    const animateStart = {
+      y: 10,
+      opacity: 0,
+      duration: 1,
+      onComplete: () => {
+        console.log('Animation complete')
+      },
+    }
+    const delayAnimation = `-=75%`
+
+    tl.from(headingName, animateStart)
+      .from(headingJobTitle, animateStart, delayAnimation)
+      .from(headingTransformational, animateStart, delayAnimation)
+      .from(headingExperiences, animateStart, delayAnimation)
+      .from(introOne, animateStart, delayAnimation)
+      .from(introTwo, animateStart, delayAnimation)
+  }
+
+  function revealSection() {
+    const featuredWork = document.getElementById('featuredWork')
+    const sectionThree = document.getElementById('sectionThree')
+
+    const animationOptions = { duration: 1000, delay: 500, distance: `${scrollDistance}px` }
+
+    ScrollReveal().reveal(featuredWork, animationOptions)
+    ScrollReveal().reveal(sectionThree, animationOptions)
+  }
+
+  window.addEventListener('load', function (event) {
+    introAnimation()
+    revealSection()
+  })
+</script>
+

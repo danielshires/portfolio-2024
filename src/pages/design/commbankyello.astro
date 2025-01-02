@@ -1,0 +1,58 @@
+---
+import PostCard from '../../components/Cards/PostCard.astro'
+import Layout from '../../layouts/Layout.astro'
+import ButtonPrimary from '../../components/Buttons/ButtonPrimary.astro'
+import Image from 'astro/components/Image.astro'
+import { fade } from 'astro:transitions'
+---
+
+<Layout
+  pageTitle='CommBank Yello'
+  pageDescription='UX/UI Designer and Front-End Developer based in Sydney Australia. I use the principles of human centred design to create simple, impactful experiences in pixels and code.'
+  colourMode='light'
+>
+  <main id='intro' class='grid-cols-12 grid-row-2 col-span-12 row-span-2 grid mt-32'>
+    <section id='commBank' class='grid grid-cols-12 col-span-12 content-center'>
+      <a href='/design' class='col-span-12'
+        ><Image
+          id='projectImage'
+          src='https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'
+          alt='image'
+          width='2400'
+          height='900'
+          decoding='async'
+          loading='lazy'
+          class='aspect-[1/1] md:aspect-[12/5] object-cover'
+        /></a
+      >
+      <div id='projectContent' class='grid grid-cols-12 col-span-12 grid-rows-2 gap-8 mt-8 mb-40'>
+        <div id='text' class='grid-cols-12 col-span-12 lg:col-span-5 flex flex-col gap-4'>
+          <h3 class='text-sm'>CommBank Yello</h3>
+          <h2 class='text-4xl'>Reimagine customer loyalty for Australia's largest bank</h2>
+          <p>
+            CommBank Yello is CommBanks customer engagement and loyalty program. As the Senior UX
+            Designer, I led the design and delivery of Yello 2.0, the next iteration of CommBank
+            Yello
+          </p>
+        </div>
+        <div
+          id='outcomes'
+          class='grid-cols-12 col-span-12 lg:col-span-6 lg:col-end-13 flex flex-row gap-12 justify-start lg:justify-end'
+        >
+          <div>
+            <p class='text-4xl'>6.5m</p>
+            <p>engaged customers</p>
+          </div>
+          <div>
+            <p class='text-4xl'>+32</p>
+            <p>Net promoter score</p>
+          </div>
+          <div>
+            <p class='text-4xl'>2m</p>
+            <p>visits per week</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TextBanner from '../../components/Text/TextBanner.astro';
+
+// Front Matter
+const frontMatter = {
+	pageTitle: 'Work',
+	pageDescription: 'Recent case studies and featured design work',
+};
+---
+
+<Layout
+	pageTitle={frontMatter.pageTitle}
+	pageDescription={frontMatter.pageDescription}
+	colourMode='light'
+>
+	<main id="intro" class='col-span-12'>
+		<TextBanner
+			pageTitle={frontMatter.pageTitle}
+			pageDescription={frontMatter.pageDescription}
+		/>
+    </main>
+</Layout>

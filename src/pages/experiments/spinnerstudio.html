@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two.js Shape Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+            margin: 0;
+            background-color: #1e1e1e;
+            /* Default background color */
+            font-family: 'IBM Plex Mono', monospace;
+            /* Use IBM Plex Mono */
+            color: white;
+            /* Text color */
+            font-size: 14px;
+            /* Set font size to 14px */
+        }
+        
+        section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+        }
+        
+        .controls {
+            width: 250px;
+            padding: 20px;
+            margin: 2rem;
+            border-radius: 1rem
+            ; background-color: rgba(255, 255, 255, 0.1);
+            /* Semi-transparent background for controls */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            /* Space between control groups */
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            /* Increased spacing between controls */
+        }
+        
+        .label-value {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        input[type="range"] {
+            flex-grow: 1;
+            background: #333;
+            /* Darker background for the slider */
+            border-radius: 4px;
+            height: 8px;
+            /* Adjust height for a better appearance */
+        }
+        
+        input,
+        select,
+        button {
+            margin: 5px 0;
+            background-color: #282828;
+            /* Control background color */
+            border: none;
+            color: white;
+            /* Control text color */
+            padding: 5px;
+            border-radius: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+            /* Set font for inputs */
+        }
+        
+        button {
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            section {
+                height: 300px;
+                /* Adjust height for mobile */
+            }
+            .controls {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section></section>
+
+    <div class="controls">
+        <!-- Shape Configuration -->
+        <div class="control-group">
+            <div class="label-value">
+                <label for="shapeCount">Number of Shapes</label>
+                <span id="shapeCountValue">18</span>
+            </div>
+            <input type="range" id="shapeCount" value="18" min="1" max="50">
+
+            <div class="label-value">
+                <label for="shapeType">Shape Type</label>
+                <select id="shapeType">
+                <option value="rectangle">Rectangle</option>
+                <option value="circle">Circle</option>
+                <option value="polygon">Polygon</option>
+                <option value="triangle">Triangle</option>
+                <option value="star">Star</option>
+                <option value="ellipse">Ellipse</option>
+            </select>
+            </div>
+
+            <div class="label-value">
+                <label for="shapeSize">Shape Size</label>
+                <span id="shapeSizeValue">200</span>
+            </div>
+            <input type="range" id="shapeSize" value="200" min="50" max="300">
+
+            <div class="label-value">
+                <label for="shapeColor">Shape Color</label>
+                <input type="color" id="shapeColor" value="#ffffff">
+            </div>
+
+            <div class="label-value">
+                <label for="strokeColor">Stroke Color</label>
+                <input type="color" id="strokeColor" value="#ffffff">
+            </div>
+
+            <div class="label-value">
+                <label for="strokeWidth">Stroke Width</label>
+                <span id="strokeWidthValue">0.1</span>
+            </div>
+            <input type="range" id="strokeWidth" value="0.1" min="0.1" max="10" step="0.1">
+
+            <div class="label-value">
+                <label for="shapeOpacity">Shape Opacity</label>
+                <span id="shapeOpacityValue">1</span>
+            </div>
+            <input type="range" id="shapeOpacity" value="1" min="0" max="1" step="0.01">
+        </div>
+
+        <!-- Positioning and Movement -->
+        <div class="control-group">
+            <div class="label-value">
+                <label for="plotRadius">Plot Radius</label>
+                <span id="plotRadiusValue">200</span>
+            </div>
+            <input type="range" id="plotRadius" value="200" min="50" max="400">
+        </div>
+
+        <!-- Animation Control -->
+        <div class="control-group">
+            <div class="label-value">
+                <label for="rotationSpeed">Rotation Speed</label>
+                <span id="rotationSpeedValue">1</span>
+            </div>
+            <input type="range" id="rotationSpeed" value="1" min="0.1" max="5" step="0.1">
+
+            <div class="label-value">
+                <label for="scaleSpeed">Scale Speed</label>
+                <span id="scaleSpeedValue">0.002</span>
+            </div>
+            <input type="range" id="scaleSpeed" value="0.002" min="0.001" max="0.01" step="0.001">
+
+            <div class="label-value">
+                <label for="rotationDirection">Rotation Direction</label>
+                <select id="rotationDirection">
+                <option value="clockwise">Clockwise</option>
+                <option value="counterclockwise">Counterclockwise</option>
+            </select>
+            </div>
+
+            <button id="resetButton">Reset</button>
+        </div>
+
+        <!-- Randomization -->
+        <div class="control-group">
+            <button id="randomColorButton">Random Colors</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/two.js/0.7.0/two.min.js"></script>
+    <script>
+        const container = document.querySelector("section");
+        const params = {
+            width: container.clientWidth,
+            height: container.clientHeight
+        };
+        const two = new Two(params).appendTo(container);
+        let shapes = [];
+        let group;
+        let scaler = 1;
+        let scaling = "grow";
+        let rotationSpeed = 0.0025;
+        let scaleSpeed = 0.002;
+        let rotationDirection = 1; // 1 for clockwise, -1 for counterclockwise
+
+        // Set default values for shape creation
+        const defaultFillColor = "#ffffff"; // Default fill color
+        const defaultStrokeColor = "#ffffff"; // Default stroke color
+        const defaultStrokeWidth = 0.1; // Default stroke width
+
+        function createShapes(numberOfShapes, plotRadius, shapeSize, shapeColor, shapeType, shapeOpacity, strokeColor, strokeWidth) {
+            // Clear existing shapes
+            if (group) {
+                group.remove();
+                shapes = [];
+            }
+
+            const fullRotation = Math.PI * 2;
+
+            for (let i = 0; i < numberOfShapes; i += 1) {
+                const angle = fullRotation * i / numberOfShapes;
+                const x = plotRadius * Math.cos(angle);
+                const y = plotRadius * Math.sin(angle);
+                let shape;
+
+                if (shapeType === "rectangle") {
+                    shape = two.makeRectangle(x, y, shapeSize, 2);
+                } else if (shapeType === "circle") {
+                    shape = two.makeCircle(x, y, shapeSize / 2);
+                } else if (shapeType === "polygon") {
+                    shape = two.makePolygon(x, y, shapeSize / 2, 5); // 5-sided polygon
+                } else if (shapeType === "triangle") {
+                    shape = two.makePolygon(x, y, shapeSize / 2, 3); // 3-sided triangle
+                } else if (shapeType === "star") {
+                    shape = two.makePolygon(x, y, shapeSize / 2, 5, 2); // Star shape
+                } else if (shapeType === "ellipse") {
+                    shape = two.makeEllipse(x, y, shapeSize, shapeSize / 2); // Ellipse shape
+                }
+
+                shape.fill = shapeColor || defaultFillColor;
+                shape.opacity = shapeOpacity;
+                shape.stroke = strokeColor || defaultStrokeColor;
+                shape.linewidth = strokeWidth || defaultStrokeWidth;
+                shape.rotation = angle;
+                shapes.push(shape);
+            }
+
+            group = two.makeGroup(shapes);
+            group.translation.set(params.width / 2, params.height / 2);
+        }
+
+        function animate() {
+            if (group) {
+                group.rotation += rotationSpeed * rotationDirection;
+
+                if (scaling === "grow") {
+                    scaler += scaleSpeed;
+                } else {
+                    scaler -= scaleSpeed;
+                }
+
+                if (scaler > 3) {
+                    scaling = "shrink";
+                }
+                if (scaler < 0.05) {
+                    scaling = "grow";
+                }
+
+                shapes.forEach(shape => {
+                    shape.scale = scaler;
+                    shape.rotation += rotationSpeed * rotationDirection; // Apply rotation direction
+                });
+
+                two.clear();
+                two.add(group);
+                two.update();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function updateShapes() {
+            const numberOfShapes = parseInt(document.getElementById("shapeCount").value);
+            const plotRadius = parseInt(document.getElementById("plotRadius").value);
+            const shapeSize = parseInt(document.getElementById("shapeSize").value);
+            const shapeColor = document.getElementById("shapeColor").value;
+            const shapeType = document.getElementById("shapeType").value;
+            const shapeOpacity = parseFloat(document.getElementById("shapeOpacity").value);
+            const strokeColor = document.getElementById("strokeColor").value;
+            const strokeWidth = parseFloat(document.getElementById("strokeWidth").value);
+            createShapes(numberOfShapes, plotRadius, shapeSize, shapeColor, shapeType, shapeOpacity, strokeColor, strokeWidth);
+            document.getElementById("shapeCountValue").textContent = numberOfShapes;
+            document.getElementById("plotRadiusValue").textContent = plotRadius;
+            document.getElementById("shapeSizeValue").textContent = shapeSize;
+            document.getElementById("shapeOpacityValue").textContent = shapeOpacity;
+            document.getElementById("strokeWidthValue").textContent = strokeWidth;
+        }
+
+        function updateSpeed() {
+            rotationSpeed = parseFloat(document.getElementById("rotationSpeed").value) * 0.001; // Scale for smoother control
+            document.getElementById("rotationSpeedValue").textContent = (rotationSpeed * 1000).toFixed(1); // Display in a more readable format
+        }
+
+        function updateScaleSpeed() {
+            scaleSpeed = parseFloat(document.getElementById("scaleSpeed").value);
+            document.getElementById("scaleSpeedValue").textContent = scaleSpeed;
+        }
+
+        function updateDirection() {
+            rotationDirection = document.getElementById("rotationDirection").value === "clockwise" ? 1 : -1;
+        }
+
+        function randomizeColors() {
+            shapes.forEach(shape => {
+                shape.fill = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            });
+            two.update();
+        }
+
+        function resetControls() {
+            document.getElementById("shapeCount").value = 18;
+            document.getElementById("plotRadius").value = 200;
+            document.getElementById("shapeSize").value = 200;
+            document.getElementById("shapeColor").value = "#ffffff";
+            document.getElementById("strokeColor").value = "#ffffff";
+            document.getElementById("strokeWidth").value = 0.1;
+            document.getElementById("shapeOpacity").value = 1;
+            document.getElementById("rotationSpeed").value = 1;
+            document.getElementById("scaleSpeed").value = 0.002;
+            document.getElementById("rotationDirection").value = "clockwise";
+            updateShapes();
+        }
+
+        // Event listeners
+        document.getElementById("shapeCount").addEventListener("input", updateShapes);
+        document.getElementById("plotRadius").addEventListener("input", updateShapes);
+        document.getElementById("shapeSize").addEventListener("input", updateShapes);
+        document.getElementById("rotationSpeed").addEventListener("input", updateSpeed);
+        document.getElementById("scaleSpeed").addEventListener("input", updateScaleSpeed);
+        document.getElementById("shapeColor").addEventListener("input", updateShapes);
+        document.getElementById("shapeType").addEventListener("change", updateShapes);
+        document.getElementById("rotationDirection").addEventListener("change", updateDirection);
+        document.getElementById("shapeOpacity").addEventListener("input", updateShapes);
+        document.getElementById("strokeColor").addEventListener("input", updateShapes);
+        document.getElementById("strokeWidth").addEventListener("input", updateShapes);
+        document.getElementById("randomColorButton").addEventListener("click", randomizeColors);
+        document.getElementById("resetButton").addEventListener("click", resetControls);
+
+        // Initial shape creation with defaults
+        createShapes(18, 200, 200, defaultFillColor, "rectangle", 1, defaultStrokeColor, defaultStrokeWidth);
+        animate();
+
+        // Update Two.js dimensions on window resize
+        window.addEventListener('resize', () => {
+            params.width = container.clientWidth;
+            params.height = container.clientHeight;
+            two.width = params.width;
+            two.height = params.height;
+            if (group) {
+                group.translation.set(params.width / 2, params.height / 2);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -9,5 +9,10 @@ export default defineConfig({
   integrations: [tailwind(), react(), icon()],
   prefetch: {
     prefetchAll: true
-  }
+  },
+  vite: {
+    optimizeDeps: {
+      include: ['gsap'],
+    },
+  },
 });

@@ -1,9 +1,9 @@
 title: New Topographics
 description: Topographical studies of American Footbal stadiums
-date: 2023-10-11
+date: 2011-10-11
 cover: ./02-national-park/photo-1.jpeg
-tags: ["new-topographics"]
-draft: true
+# tags: ["newtopographics"]
+draft: false
 images:
   - image: './03-new-topographics/Arrowhead-Stadium.jpeg'
     caption: Arrowhead stadium

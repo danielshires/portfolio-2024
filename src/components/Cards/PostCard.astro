@@ -7,18 +7,43 @@ type Props = {
 };
 
 const { post } = Astro.props as Props;
-const {title, date} = post.data;
+const {title, cover, date} = post.data;
+import fallbackImage from '../../../public/images/jpg/background.webp'
 const pathname = new URL(Astro.request.url).pathname;
 const day = date.getDate();
 const month = date.getMonth() + 1; // JavaScript months are zero-based
 const year = date.getFullYear();
-const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+// const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+const formattedDate = new Intl.DateTimeFormat('en-GB', {
+	day: '2-digit',
+	month: 'long',
+	year: 'numeric',
+}).format(date);
+
 ---
 
-<a href=`/posts/${post.slug}` class='flex flex-col shrink rounded-xl hover:underline hover:underline-offset-4'>
-	<div class="flex flex-col">
-		<h2 class='text-xl mb-1'>{title}</h2>
-		<p class='text-xl mb-1 text-neutral-400'>{formattedDate}</p>
+<a href=`/posts/${post.slug}` class='flex flex-col w-fit'>
+	{cover ? <Image
+		id='projectImage'
+		src={cover}
+		alt={title}
+		width='2600'
+		height='900'
+		decoding='async'
+		loading='lazy'
+		class='rounded-2xl aspect-[3/2] object-cover hover:brightness-90'
+	  /> : <Image
+		id='projectImage'
+		src={fallbackImage}
+		alt={title}
+		width='2600'
+		height='900'
+		decoding='async'
+		loading='lazy'
+		class='rounded-2xl aspect-[3/2] object-cover hover:opacity-90'
+	  />}
+	  <div class="flex flex-col mt-2">
+		<h2 class='font-medium'>{title}</h2>
+		<p class='text-zinc-400'>{formattedDate}</p>
 	</div>
-	<!-- {cover ? <Image src={cover} alt={title} class='rounded-xl mt-2 bg-neutral-200' /> : null} -->
 </a>

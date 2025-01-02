@@ -1,0 +1,16 @@
+---
+import Image from 'astro/components/Image.astro'
+
+interface Props {
+  src: string
+  id: string
+}
+
+const { src, pageTitle, pageDescription } = Astro.props
+---
+
+<Image
+  id='projectImage'
+  src={src}
+  class='rounded-3xl aspect-[1/1] md:aspect-[12/5] object-cover hover:brightness-90'
+/>

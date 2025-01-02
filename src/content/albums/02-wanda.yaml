@@ -2,7 +2,7 @@ title: Wanda
 description: Photographs taken around Wanda Beach in Cronulla, NSW.
 date: 2022-10-11
 cover: './01-wanda/Wanda_1.jpg'
-tags: ["wanda"]
+# tags: ["wanda"]
 draft: false
 images:
   - image: './01-wanda/Wanda_2.jpg'

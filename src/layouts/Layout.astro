@@ -1,37 +1,26 @@
 ---
-import '../styles/fonts.css';
-import Navigation from '../components/Navigation.astro';
-import ViewTransitions from 'astro/components/ViewTransitions.astro';
+// Client router
+import '../styles/fonts.css'
+import Navigation from '../components/Navigation/Navigation.astro'
+import Head from './Head.astro'
+import { fade } from 'astro:transitions'
+
 interface Props {
-	pageTitle: string;
-	pageDescription: string;
+  pageTitle: string
+  pageDescription: string
+  colourMode: string
 }
 
-const { pageTitle, pageDescription } = Astro.props;
+const { pageTitle, pageDescription, colourMode } = Astro.props
+
+const styles = `${colourMode} font-sans bg-white text-slate-950 bg-stone-50 dark:text-zinc-50 dark:bg-zinc-950 mx-4 md:mx-8 max-w-[100vw]`
 ---
 
 <!doctype html>
-<html lang='en' class='bg-neutral-100 text-slate-900 font-sans text-base px-4 md:px-8'>
-	<head>
-		<meta charset='UTF-8' />
-		<meta name='description' content={pageDescription} />
-		<meta name='viewport' content='width=device-width' />
-		<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
-		<meta name='generator' content={Astro.generator} />
-		<title>{pageTitle}</title>
-		<ViewTransitions />
-		<link rel='preconnect' href='https://fonts.googleapis.com' />
-		<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
-		<link
-		href='https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'
-		rel='stylesheet'
-	/>
-	</head>
-	<body transition:animate='fade'>
-		<Navigation />
-		<slot />
-	</body>
+<html lang='en' class='text-lg'>
+  <Head pageDescription={pageDescription} pageTitle={pageTitle} />
+  <body class={styles}>
+    <Navigation />
+    <slot />
+  </body>
 </html>

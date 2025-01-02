@@ -73,4 +73,5 @@ export const collections = {
 	albums,
 	posts,
 	team,
+	tags
 };

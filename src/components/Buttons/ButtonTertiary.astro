@@ -8,10 +8,10 @@ interface Props {
 	href: string;
 }
 
-const { href, target } = Astro.props;
+const {href, target } = Astro.props;
 
 ---
 
-<a class={'underline underline-offset-4 decoration-2 md:underline-offset-8 md:decoration-4'} href={href} target={target}><slot/></a>
+<a class={'text-lg no-underline hover:underline hover:underline-offset-4'} href={href} target={target}><slot/></a>
 
 

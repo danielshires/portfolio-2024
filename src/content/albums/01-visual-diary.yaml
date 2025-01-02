@@ -1,0 +1,28 @@
+title: Visual Diary
+description: Images taken on a Ricoh GX200
+date: 2025-01-01
+cover: './00-Visual-Diary/05-Visual-Diary01.jpg'
+draft: false
+# tags: ["diary"]
+images:
+  - image: './00-Visual-Diary/05-Visual-Diary01.jpg'
+    caption: '1.1'
+    alt: Moving through
+  - image: './00-Visual-Diary/05-Visual-Diary02.jpg'
+    caption: '1.2'
+    alt: Moving through
+  - image: './00-Visual-Diary/05-Visual-Diary03.jpg'
+    caption: '1.3'
+    alt: Moving through
+  - image: './00-Visual-Diary/05-Visual-Diary04.jpg'
+    caption: '1.3'
+    alt: Moving through
+  - image: './00-Visual-Diary/05-Visual-Diary05.jpg'
+    caption: '1.3'
+    alt: Moving through
+  - image: './00-Visual-Diary/05-Visual-Diary06.jpg'
+    caption: '1.3'
+    alt: Moving through
+  - image: './00-Visual-Diary/05-Visual-Diary07.jpg'
+    caption: '1.3'
+    alt: Moving through
