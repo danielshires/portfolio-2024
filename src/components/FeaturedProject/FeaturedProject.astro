@@ -18,17 +18,17 @@ const { projectImage, title, heading, outcomes, projectUrl } = Astro.props as Fe
 <!-- Content -->
 <div
   id='projectContent'
-  class='flex flex-row gap-4 justify-between mt-6'
+  class='flex flex-col md:flex-row gap-4 justify-between mt-6'
   transition:name='commbank-content'>
   <!-- Title -->
-  <div id='text' class='flex flex-col gap-2 w-2/4' transition:name='commbank-text'>
+  <div id='text' class='flex flex-col gap-2 md:w-2/4' transition:name='commbank-text'>
     <!-- Title -->
-    <h3 class='text-sm' transition:name='commbank-title'>
+    <h3 class='text-sm font-medium' transition:name='commbank-title'>
       {title}
     </h3>
     <!-- Heading -->
     <h2
-      class='row-start-2 col-span-3 md:col-span-3 lg:col-span-4 text-2xl md:text-4xl font-medium'
+      class='text-xl md:text-2xl lg:text-2xl'
       transition:name='commbank-heading'>
       {heading}
     </h2>

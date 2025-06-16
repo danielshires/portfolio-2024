@@ -1,4 +1,6 @@
 ---
+import { getPictureBySlug, urlFor } from '../../lib/sanity'
+
 interface Props {
   name: string
   jobTitle: string
@@ -11,23 +13,36 @@ interface Props {
     second: string
   }
 }
+const commBankLogo = await getPictureBySlug('commbank-logo')
+const logoUrl = commBankLogo?.mainImage ? urlFor(commBankLogo.mainImage).width(200).url() : null
 
 const { name, jobTitle, heading, introText } = Astro.props
 ---
 
 <section
   id='intro'
-  class='h-dvh flex flex-col gap-6 justify-center max-w-[100vw]'
+  class='h-dvh flex flex-col gap-12 justify-center max-w-[100vw]'
   aria-label='Introduction'>
   <h4 class='col-span-full'>
-    <span id='name' class='block font-bold'>{name}</span>
-    <span id='jobTitle' class='block'>{jobTitle}</span>
+    <span id='name' class='block font-bold font-fragment'>{name}</span>
+    <span id='jobTitle' class='flex items-center gap-1 font-fragment'>
+      {jobTitle} at CommBank
+      {
+        logoUrl && (
+          <img
+            src={logoUrl}
+            alt='Commonwealth Bank Logo'
+            class='h-6 w-auto inline-block align-middle relative '
+          />
+        )
+      }
+    </span>
   </h4>
-  <h1 class='font-serif text-5xl md:text-8xl lg:text-8xl text-balance col-span-full'>
+  <!-- <h1 class='font-serif text-5xl md:text-8xl lg:text-8xl text-balance col-span-full'>
     <span id='transformational' class='flex'>{heading.firstLine}</span>
     <span id='experiences' class='flex'>{heading.secondLine}</span>
-  </h1>
-  <div class='flex flex-col md:flex-row gap-4 md:w-3/4 lg:w-2/4 text-sm md:text-base'>
+  </h1> -->
+  <div class='flex flex-col md:flex-row gap-4 md:w-3/4 lg:w-2/4'>
     <p id='introOne' class='flex-1'>
       {introText.first}
     </p>
@@ -42,26 +57,135 @@ const { name, jobTitle, heading, introText } = Astro.props
 
 <script>
   import gsap from 'gsap'
+  import { SplitText } from 'gsap/SplitText'
+
+  // Register GSAP plugins
+  gsap.registerPlugin(SplitText)
+
+  // Animation Configuration
+  const config = {
+    // Timing
+    lineDuration: 1, // Duration for each line animation
+    lineStagger: 0.1, // Delay between each line
+    navDuration: 0.5, // Duration for navigation animation
+
+    // Section Overlaps (negative values mean overlap)
+    nameToJobTitle: -0.1, // Overlap between name and job title
+    jobTitleToIntroOne: -0.5, // Overlap between job title and first intro
+    introOneToIntroTwo: -0.5, // Overlap between first and second intro
+    introTwoToNav: -0.9, // Overlap between second intro and nav
+
+    // Easing
+    lineEase: 'power2.inOut', // Easing for text lines
+    navEase: 'power2.out', // Easing for navigation
+
+    // Initial States
+    initialClipPath: 'inset(100% 0 0 0)',
+    finalClipPath: 'inset(0% 0 0 0)',
+
+    // Animation Properties
+    navYOffset: -50, // Navigation drop distance
+  }
 
   function introAnimation() {
     let tl = gsap.timeline()
     const hasPlayed = sessionStorage.getItem('hasMyAnimationPlayed')
 
     if (!hasPlayed) {
-      const animateStart = {
-        y: 10,
-        opacity: 0,
-        duration: 1,
-        ease: 'power2.out',
-      }
-      const delayAnimation = `-=75%`
+      // Get elements
+      const name = document.getElementById('name')
+      const jobTitle = document.getElementById('jobTitle')
+      const introOne = document.getElementById('introOne')
+      const introTwo = document.getElementById('introTwo')
+      const navigation = document.getElementById('nav')
 
-      tl.from('#name', animateStart)
-        .from('#jobTitle', animateStart, delayAnimation)
-        .from('#transformational', animateStart, delayAnimation)
-        .from('#experiences', animateStart, delayAnimation)
-        .from('#introOne', animateStart, delayAnimation)
-        .from('#introTwo', animateStart, delayAnimation)
+      // Split text into lines
+      const nameSplit = new SplitText(name, { type: 'lines' })
+      const jobTitleSplit = new SplitText(jobTitle, { type: 'lines' })
+      const introOneSplit = new SplitText(introOne, { type: 'lines' })
+      const introTwoSplit = new SplitText(introTwo, { type: 'lines' })
+
+      // Initial state for all elements
+      gsap.set(
+        [
+          ...nameSplit.lines,
+          ...jobTitleSplit.lines,
+          ...introOneSplit.lines,
+          ...introTwoSplit.lines,
+        ],
+        {
+          clipPath: config.initialClipPath,
+          opacity: 0,
+        }
+      )
+
+      // Set initial state for navigation
+      gsap.set(navigation, {
+        y: config.navYOffset,
+        opacity: 0,
+      })
+
+      // Animation sequence
+      tl
+        // 1. Animate name lines
+        .to(nameSplit.lines, {
+          clipPath: config.finalClipPath,
+          opacity: 1,
+          duration: config.lineDuration,
+          stagger: config.lineStagger,
+          ease: config.lineEase,
+        })
+        // 2. Animate job title lines
+        .to(
+          jobTitleSplit.lines,
+          {
+            clipPath: config.finalClipPath,
+            opacity: 1,
+            duration: config.lineDuration,
+            stagger: config.lineStagger,
+            ease: config.lineEase,
+          },
+          config.nameToJobTitle
+        )
+        // 3. Animate first paragraph lines
+        .to(
+          introOneSplit.lines,
+          {
+            clipPath: config.finalClipPath,
+            opacity: 1,
+            duration: config.lineDuration,
+            stagger: config.lineStagger,
+            ease: config.lineEase,
+          },
+          config.jobTitleToIntroOne
+        )
+        // 4. Animate second paragraph lines
+        .to(
+          introTwoSplit.lines,
+          {
+            clipPath: config.finalClipPath,
+            opacity: 1,
+            duration: config.lineDuration,
+            stagger: config.lineStagger,
+            ease: config.lineEase,
+          },
+          config.introOneToIntroTwo
+        )
+        // 5. Animate navigation dropping down
+        .to(
+          navigation,
+          {
+            y: 0,
+            opacity: 1,
+            duration: config.navDuration,
+            ease: config.navEase,
+            onStart: () => {
+              // Remove any nav-hidden class that might be present
+              navigation?.classList.remove('nav-hidden')
+            },
+          },
+          config.introTwoToNav
+        )
 
       sessionStorage.setItem('hasMyAnimationPlayed', 'true')
     }

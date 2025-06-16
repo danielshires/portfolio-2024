@@ -4,6 +4,7 @@ import { getPostBySlug, getAllPosts } from '../../lib/sanity'
 import { urlFor } from '../../lib/sanity'
 import type { Post } from '../../lib/sanity'
 import { PortableText } from '@portabletext/react'
+import PageTransition from '../../components/Transitions/PageTransition.astro'
 
 export async function getStaticPaths() {
   const posts = await getAllPosts()
@@ -16,78 +17,49 @@ export async function getStaticPaths() {
 const { post } = Astro.props
 ---
 
-<Layout pageTitle={post.title} pageDescription={post.description || ''} colourMode='light'>
-  <article class='max-w-4xl mx-auto mt-24 py-12' transition:name={`post-${post.slug.current}`}>
-    {
-      post.mainImage && (
-        <div class='mb-8 overflow-hidden rounded-lg'>
-          <img
-            src={urlFor(post.mainImage).width(1200).url()}
-            alt={post.title}
-            class='w-full h-96 object-cover'
-            transition:name={`post-image-${post.slug.current}`}
-          />
-        </div>
-      )
-    }
-
-    <header class='mb-8' transition:name={`post-content-${post.slug.current}`}>
-      <h1 class='text-4xl font-bold mb-4'>{post.title}</h1>
-      <div class='flex items-center gap-2 text-gray-600'>
-        <time datetime={post.publishedAt}>
-          {
-            new Date(post.publishedAt).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
-          }
-        </time>
-        {post.author && <span>by {post.author}</span>}
-      </div>
+<Layout pageTitle={post.title} pageDescription={post.description || ''}>
+  <PageTransition>
+    <article class='mt-24 py-12'>
       {
-        post.tags && post.tags.length > 0 && (
-          <div class='mt-4 flex gap-2'>
-            {post.tags.map((tag: string) => (
-              <span class='px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700'>{tag}</span>
-            ))}
+        post.mainImage && (
+          <div class='mb-8 overflow-hidden rounded-lg'>
+            <img
+              src={urlFor(post.mainImage).width(1200).url()}
+              alt={post.title}
+              class='w-full h-96 object-cover'
+            />
           </div>
         )
       }
-    </header>
 
-    <div class='prose prose-lg max-w-none'>
-      <PortableText value={post.body} />
-    </div>
-  </article>
+      <header class='mb-8'>
+        <h1 class='text-4xl font-bold mb-4'>{post.title}</h1>
+        <div class='flex items-center gap-2 text-gray-600'>
+          <time datetime={post.publishedAt}>
+            {
+              new Date(post.publishedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            }
+          </time>
+          {post.author && <span>by {post.author}</span>}
+        </div>
+        {
+          post.tags && post.tags.length > 0 && (
+            <div class='mt-4 flex gap-2'>
+              {post.tags.map((tag: string) => (
+                <span class='px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700'>{tag}</span>
+              ))}
+            </div>
+          )
+        }
+      </header>
+
+      <div class='prose prose-lg max-w-none'>
+        <PortableText value={post.body} />
+      </div>
+    </article>
+  </PageTransition>
 </Layout>
-
-<style>
-  ::view-transition-old(post-*),
-  ::view-transition-new(post-*) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-
-  ::view-transition-old(post-image-*),
-  ::view-transition-new(post-image-*) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-
-  ::view-transition-old(post-content-*),
-  ::view-transition-new(post-content-*) {
-    animation: fade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes fade {
-    from {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-</style>

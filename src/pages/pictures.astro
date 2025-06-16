@@ -1,83 +1,53 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import TextBanner from '../components/Text/TextBanner.astro';
-import Image from 'astro/components/Image.astro';
-import { getCollection } from 'astro:content';
-const albums = await getCollection('albums');
-const tags = await getCollection('tags');
+import Layout from '../layouts/Layout.astro'
+import TextBanner from '../components/Text/TextBanner.astro'
+import Image from 'astro/components/Image.astro'
+import AlbumCard from '../components/Cards/AlbumCard.astro'
+import { getAllAlbums } from '../lib/sanity'
+import PageTransition from '../components/Transitions/PageTransition.astro'
 
-// Check if album is in draft
-const albumYear = await getCollection('albums', (entry: any) => {
-	const data = entry.data;
-	return data.draft !== true && new Date(data.date) < new Date();
-});
+let albums = []
+let error = null
 
-// Sort albums by date
-albumYear.sort((a, b) => new Date(b.data.date) - new Date(a.data.date));
+try {
+  albums = await getAllAlbums()
+} catch (e) {
+  error = e
+}
 
 // Front Matter
 const frontMatter = {
-	pageTitle: 'Pictures',
-	pageDescription: 'Some recent pictures, all shot on 35mm and 120mm film',
-};
-
+  pageTitle: 'Pictures',
+  pageDescription: 'Some recent pictures, all shot on 35mm and 120mm film',
+}
 ---
 
-<Layout
-	pageTitle={frontMatter.pageTitle}
-	pageDescription={frontMatter.pageDescription}
-	colourMode='light'
->
-	<main id="intro" class="col-span-12">
-		<TextBanner
-			pageTitle={frontMatter.pageTitle}
-			pageDescription={frontMatter.pageDescription}
-		>
-		</TextBanner>
-		{
-			albumYear.map((item : any) => (
-				<>
-					<div class='grid gap-4 grid-cols-1 md:grid-cols-4 lg:grid-cols-5 mb-48'>
-						<div class='albumStart flex flex-col gap-2'>
-							<h2 class="font-medium">{item.data.title}</h2>
-							<p class="font-normal">{item.data.description}</p>
-							<p class="text-base=">{item.data.date.getFullYear()}</p>
-						</div>
-						{item.data.images.map((i : any) => (
-							<div class='flex flex-col gap-2 albumImages'>
-								<Image class='bg-zinc-200' src={i.image} alt={i.alt} />
-							</div>
-						))}
-					</div>
-				</>
-			))
-		}
-	</main>
+<Layout pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription}>
+  <PageTransition>
+    <TextBanner pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription} />
+
+    <div class='py-8'>
+      {
+        error ? (
+          <div
+            class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'
+            role='alert'>
+            <strong class='font-bold'>Error!</strong>
+            <span class='block sm:inline'> Failed to load albums. Please try again later.</span>
+          </div>
+        ) : albums.length === 0 ? (
+          <div class='text-center py-12'>
+            <h2 class='text-2xl font-semibold text-gray-700'>No albums found</h2>
+            <p class='mt-2 text-gray-600'>Check back soon for new photography collections.</p>
+          </div>
+        ) : (
+          <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {albums.map((album) => (
+              <AlbumCard album={album} />
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </PageTransition>
 </Layout>
-
-<script>
-
-    const scrollDistance = 50
-
-	const animationOptions = { duration: 300, delay: 100, distance: `${scrollDistance}px`, easing: 'ease-out' }
-
-    function revealSection() {
-      const albumStart = document.querySelectorAll('.albumStart')
-      const albumImages = document.querySelectorAll('.albumImages')
-
-	  albumImages.forEach(album => {
-		ScrollReveal().reveal(album, animationOptions)
-	  })
-
-	  albumStart.forEach( album => {
-		ScrollReveal().reveal(album , animationOptions)
-	  })
-
-
-    }
-
-    window.addEventListener('load', function (event) {
-      revealSection()
-    })
-  </script>
-

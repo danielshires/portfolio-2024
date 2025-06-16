@@ -1,91 +1,44 @@
 ---
-import type { Post } from '../../lib/sanity'
 import { urlFor } from '../../lib/sanity'
-import fallbackImage from '../../../public/images/jpg/background.webp'
+import type { Post } from '../../lib/sanity'
+import Image from 'astro/components/Image.astro'
 
-type Props = {
+interface Props {
   post: Post
-  featured?: boolean
 }
 
-const { post, featured = false } = Astro.props as Props
-const formattedDate = new Intl.DateTimeFormat('en-GB', {
-  day: '2-digit',
-  month: 'long',
-  year: 'numeric',
-}).format(new Date(post.publishedAt))
+const { post } = Astro.props
 ---
 
 <a
   href={`/posts/${post.slug.current}`}
-  class={`flex flex-col ${featured ? 'w-full' : 'w-fit'}`}
-  transition:name={`post-${post.slug.current}`}
-  transition:animate='fade'>
+  class='block relative overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 rounded-lg'>
   {
-    post.mainImage ? (
-      <img
-        id='projectImage'
-        src={urlFor(post.mainImage)
-          .width(featured ? 1200 : 800)
-          .url()}
-        alt={post.title}
-        width='2600'
-        height='900'
-        decoding='async'
-        loading='lazy'
-        class={`rounded-2xl aspect-[3/2] object-cover hover:brightness-90 ${featured ? 'h-[400px]' : ''}`}
-        transition:name={`post-image-${post.slug.current}`}
-      />
-    ) : (
-      <img
-        id='projectImage'
-        src={fallbackImage.src}
-        alt={post.title}
-        width='2600'
-        height='900'
-        decoding='async'
-        loading='lazy'
-        class={`rounded-2xl aspect-[3/2] object-cover hover:opacity-90 ${featured ? 'h-[400px]' : ''}`}
-        transition:name={`post-image-${post.slug.current}`}
-      />
+    post.mainImage && (
+      <div class='w-full h-64 overflow-hidden'>
+        <Image
+          src={urlFor(post.mainImage).width(800).url()}
+          alt={post.title}
+          width={800}
+          height={600}
+          loading='lazy'
+          decoding='async'
+          class='object-cover w-full h-full transition-transform duration-300 group-hover:scale-105'
+        />
+      </div>
     )
   }
-  <div
-    class={`flex flex-col mt-4 ${featured ? 'max-w-2xl' : ''}`}
-    transition:name={`post-content-${post.slug.current}`}>
-    {post.tags && post.tags.length > 0 && <h4 class='text-zinc-600 text-xs'>{post.tags[0]}</h4>}
-    <h2 class={`font-medium ${featured ? 'text-2xl' : ''}`}>{post.title}</h2>
-	<h4 class='text-zinc-600 text-xs'>{formattedDate}</h4>
-    <p class={`font-normal text-xs ${featured ? 'text-base' : ''}`}>{post.description}</p>
+  <div class='p-4'>
+    <h3 class='text-lg font-medium'>{post.title}</h3>
+    {post.description && <p class='mt-2 text-sm text-gray-600 line-clamp-2'>{post.description}</p>}
   </div>
 </a>
 
 <style>
-  ::view-transition-old(post-*),
-  ::view-transition-new(post-*) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-
-  ::view-transition-old(post-image-*),
-  ::view-transition-new(post-image-*) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-
-  ::view-transition-old(post-content-*),
-  ::view-transition-new(post-content-*) {
-    animation: fade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes fade {
-    from {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 </style>

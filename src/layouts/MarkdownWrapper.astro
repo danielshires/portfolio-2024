@@ -5,7 +5,7 @@ import Layout from './Layout.astro';
 const { frontMatter } = Astro.props;
 ---
 
-<Layout pageTitle={frontMatter.title} pageDescription={frontMatter.description} colourMode="light">
+<Layout pageTitle={frontMatter.title} pageDescription={frontMatter.description}>
 	<Prose class='col-span-12'>
 		<div class='col-span-12 mt-48'>
 			<aside class="absolute top-0 mt-32">

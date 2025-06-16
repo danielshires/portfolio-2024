@@ -13,43 +13,32 @@ interface Props {
 
 const { pageTitle, pageDescription } = Astro.props
 
-const styles = `font-sans bg-white text-slate-950 bg-stone-50 dark:text-zinc-50 dark:bg-zinc-950 mx-4 lg:mx-16 xl:mx-32 max-w-[100vw] antialiased mb-20`
+const styles = `font-sans bg-white text-slate-950 bg-stone-50 dark:text-zinc-50 dark:bg-zinc-950 antialiased mb-20`
 ---
 
 <!doctype html>
-<html lang='en' class='text-lg'>
+<html lang='en' class='text-base'>
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
   <body class={styles}>
     <LoadingBar />
     <Navigation transition:persist />
-    <main transition:animate='slide'>
+    <main class='container mx-auto px-4 lg:px-8'>
       <slot />
     </main>
   </body>
 </html>
 
 <script>
-  // Enable View Transitions
+  // Initialize any client-side code here
   document.addEventListener('astro:page-load', () => {
-    // Initialize any client-side code here
+    // Any additional initialization can go here
   })
 </script>
 
 <style is:global>
-  @keyframes slide {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation: none;
+    animation: none !important;
     mix-blend-mode: normal;
   }
 

@@ -36,10 +36,22 @@ export interface Picture {
   mainImage?: SanityImage
 }
 
+export interface Album {
+  _id: string
+  title: string
+  slug: {
+    current: string
+  }
+  description?: string
+  coverImage?: SanityImage
+  pictures: Picture[]
+  publishedAt: string
+}
+
 // Sanity configuration with fallback values
 const config = {
-  projectId: '5fq3rcf6', // Your Sanity project ID
-  dataset: 'production',
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '5fq3rcf6',
+  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-03-19',
   useCdn: true,
 }
@@ -120,6 +132,51 @@ export async function getPictureBySlug(slug: string): Promise<Picture> {
       slug,
       description,
       mainImage
+    }
+  `,
+    { slug }
+  )
+}
+
+// Helper function to fetch all albums
+export async function getAllAlbums(): Promise<Album[]> {
+  return await client.fetch(`
+    *[_type == "album"] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      description,
+      coverImage,
+      publishedAt,
+      "pictures": pictures[]-> {
+        _id,
+        title,
+        slug,
+        description,
+        mainImage
+      }
+    }
+  `)
+}
+
+// Helper function to fetch a single album by slug
+export async function getAlbumBySlug(slug: string): Promise<Album> {
+  return await client.fetch(
+    `
+    *[_type == "album" && slug.current == $slug][0] {
+      _id,
+      title,
+      slug,
+      description,
+      coverImage,
+      publishedAt,
+      "pictures": pictures[]-> {
+        _id,
+        title,
+        slug,
+        description,
+        mainImage
+      }
     }
   `,
     { slug }

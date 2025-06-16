@@ -1,14 +1,10 @@
-import { images } from './images'
-
 export const projectsData = {
   featuredProject: {
     projectImage: {
-      src: images.background,
+      src: '/images/jpg/background.webp',
       alt: 'CommBank Yello project showcase - A modern banking interface design',
       width: 2600,
       height: 900,
-      format: 'webp',
-      quality: 80,
     },
     title: 'CommBank Yello',
     heading: "Reimagine customer loyalty for Australia's largest bank",
@@ -24,7 +20,7 @@ export const projectsData = {
   projects: [
     {
       projectImage: {
-        src: images.background,
+        src: '/images/jpg/background.webp',
         alt: 'NetBank project showcase',
         width: 2600,
         height: 900,
@@ -36,7 +32,7 @@ export const projectsData = {
     },
     {
       projectImage: {
-        src: images.background,
+        src: '/images/jpg/background.webp',
         alt: 'Formbay project showcase',
         width: 2600,
         height: 900,

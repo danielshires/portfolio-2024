@@ -1,17 +1,13 @@
-import type { ImageMetadata } from 'astro'
-
 export interface Outcome {
   value: string
   label: string
 }
 
 export interface ProjectImage {
-  src: ImageMetadata
+  src: string
   alt: string
   width: number
   height: number
-  format?: string
-  quality?: number
 }
 
 export interface FeaturedProjectProps {

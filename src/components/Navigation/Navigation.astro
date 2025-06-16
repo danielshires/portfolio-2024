@@ -2,6 +2,7 @@
 // Components
 import NavLink from '../Buttons/NavLink.astro'
 import Image from 'astro/components/Image.astro'
+import ThemeToggle from '../ThemeToggle'
 
 // Images
 import logoLM from '../../../public/images/svg/logo-LM.svg'
@@ -15,20 +16,21 @@ const colourModePath = currentPath.startsWith('experiments') ? logoDM : logoLM
 
 <nav
   id='nav'
-  class='fixed z-50 top-0 left-0 mt-8 lg:mx-16 xl:mx-32 h-12 flex items-center justify-start text-base rounded-full backdrop-blur-sm transition-transform duration-300'>
-  <div class='flex gap-4 justify-between items-center'>
-    <div class='flex flex-col md:flex-row gap-4 justify-start items-center'>
-      <!-- Home link -->
-      <NavLink path='' target='' href='/'>
-        Home
-      </NavLink>
-      <!-- Page links -->
-      <div class='flex flex-row md:flex-row gap-4'>
-        <NavLink path='design' target='_self' href='/design'>Design</NavLink>
-        <NavLink path='pictures' target='_self' href='/pictures'>Pictures</NavLink>
-        <NavLink path='posts' target='_self' href='/posts'>Thoughts</NavLink>
-        <NavLink path='experiments' target='_self' href='/experiments'>Experiments</NavLink>
+  class='fixed z-50 top-0 left-0 right-0 mt-8 h-12 flex items-center justify-start text-base rounded-full backdrop-blur-sm transition-transform duration-300'>
+  <div class='container mx-auto px-4 lg:px-8'>
+    <div class='flex gap-4 justify-between items-center'>
+      <div class='flex flex-col md:flex-row gap-4 justify-start items-center'>
+        <!-- Home link -->
+        <NavLink path='' target='' href='/'> Home </NavLink>
+        <!-- Page links -->
+        <div class='flex flex-row md:flex-row gap-4'>
+          <NavLink path='design' target='_self' href='/design'>Design</NavLink>
+          <NavLink path='pictures' target='_self' href='/pictures'>Pictures</NavLink>
+          <NavLink path='posts' target='_self' href='/posts'>Thoughts</NavLink>
+          <NavLink path='experiments' target='_self' href='/experiments'>Experiments</NavLink>
+        </div>
       </div>
+      <ThemeToggle client:load />
     </div>
   </div>
 </nav>

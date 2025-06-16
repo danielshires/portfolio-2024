@@ -4,36 +4,26 @@ import { getAllPosts } from '../../lib/sanity'
 import type { Post } from '../../lib/sanity'
 import TextBanner from '../../components/Text/TextBanner.astro'
 import PostCard from '../../components/Cards/PostCard.astro'
+import PageTransition from '../../components/Transitions/PageTransition.astro'
 
 const posts = await getAllPosts()
 const [featuredPost, ...remainingPosts] = posts
 
 // Front Matter
 const frontMatter = {
-  pageTitle: 'Thoughts',
-  pageDescription: 'Ideas, reflections, and musings',
+  pageTitle: 'Blog Posts',
+  pageDescription: 'Thoughts, insights, and updates from my journey in design and photography.',
 }
 ---
 
-<Layout pageTitle='Blog Posts' pageDescription='My thoughts and musings'>
-  <div class='flex flex-col'>
-    <div class=''>
+<Layout pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription}>
+  <PageTransition>
+    <div class='flex flex-col'>
       <TextBanner pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription} />
+      <!-- Remaining Posts Grid -->
+      <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+        {posts.map((post) => <PostCard post={post} />)}
+      </div>
     </div>
-
-    <!-- Featured Post -->
-    <!-- {
-      featuredPost && (
-        <div class='col-span-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8 gap-8'>
-
-          <PostCard post={featuredPost} featured={true} />
-        </div>
-      )
-    } -->
-
-    <!-- Remaining Posts Grid -->
-    <div class='flex flex-row gap-8 w-100'>
-      {posts.map((post: Post) => <PostCard post={post} />)}
-    </div>
-  </div>
+  </PageTransition>
 </Layout>
