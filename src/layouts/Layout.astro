@@ -29,10 +29,30 @@ const styles = `font-sans bg-white text-slate-950 bg-stone-50 dark:text-zinc-50 
 </html>
 
 <script>
-  // Initialize any client-side code here
-  document.addEventListener('astro:page-load', () => {
-    // Any additional initialization can go here
-  })
+  // Initialize theme
+  const root = document.documentElement
+  const savedTheme = localStorage.getItem('theme')
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    root.classList.add('dark')
+  } else {
+    root.classList.remove('dark')
+  }
+
+  // Handle theme toggle
+  window.toggleTheme = function () {
+    const root = document.documentElement
+    const isDark = root.classList.contains('dark')
+
+    if (isDark) {
+      root.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    } else {
+      root.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    }
+  }
 </script>
 
 <style is:global>

@@ -1,77 +1,70 @@
-import { FiSun, FiMoon } from 'react-icons/fi'
-import { useEffect, useState } from 'react'
+import { FiSun, FiMoon } from 'react-icons/fi';
+import { useState, useEffect } from 'react'
 
 export default function ThemeToggle() {
-    const [isDark, setIsDark] = useState(() => {
-        // Initialize state based on localStorage or system preference
-        if (typeof window !== 'undefined') {
-            const savedTheme = localStorage.getItem('theme')
-            if (savedTheme) {
-                return savedTheme === 'dark'
-            }
-            return window.matchMedia('(prefers-color-scheme: dark)').matches
-        }
-        return false
-    })
+    const [isDark, setIsDark] = useState(false)
 
     useEffect(() => {
-        // Apply initial theme
-        if (isDark) {
-            document.documentElement.classList.add('dark')
-            document.documentElement.classList.remove('light')
+        // Initialize theme
+        const root = document.documentElement
+        const savedTheme = localStorage.getItem('theme')
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            root.classList.add('dark')
+            setIsDark(true)
         } else {
-            document.documentElement.classList.add('light')
-            document.documentElement.classList.remove('dark')
+            root.classList.remove('dark')
+            setIsDark(false)
         }
 
-        // Listen for changes in system preference
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-        const handleChange = (e) => {
-            if (!localStorage.getItem('theme')) {
-                if (e.matches) {
-                    setIsDark(true)
-                    document.documentElement.classList.remove('light')
-                    document.documentElement.classList.add('dark')
+        // Add script to handle theme toggle
+        const script = document.createElement('script')
+        script.textContent = `
+            function toggleTheme() {
+                const root = document.documentElement
+                const isDark = root.classList.contains('dark')
+
+                if (isDark) {
+                    root.classList.remove('dark')
+                    localStorage.setItem('theme', 'light')
                 } else {
-                    setIsDark(false)
-                    document.documentElement.classList.remove('dark')
-                    document.documentElement.classList.add('light')
+                    root.classList.add('dark')
+                    localStorage.setItem('theme', 'dark')
                 }
             }
-        }
+        `
+        document.body.appendChild(script)
 
-        mediaQuery.addEventListener('change', handleChange)
-        return () => mediaQuery.removeEventListener('change', handleChange)
-    }, [isDark])
-
-    const toggleTheme = () => {
-        if (isDark) {
-            document.documentElement.classList.remove('dark')
-            document.documentElement.classList.add('light')
-            localStorage.setItem('theme', 'light')
-            setIsDark(false)
-        } else {
-            document.documentElement.classList.remove('light')
-            document.documentElement.classList.add('dark')
-            localStorage.setItem('theme', 'dark')
-            setIsDark(true)
+        return () => {
+            document.body.removeChild(script)
         }
+    }, [])
+
+    const handleClick = () => {
+        // Call the global toggle function
+        window.toggleTheme()
+        // Update React state
+        setIsDark(!isDark)
     }
 
     return (
         <button
-            id="theme-toggle"
-            onClick={toggleTheme}
-            className="w-10 h-10 rounded-full bg-white/10 dark:bg-black/10 flex items-center justify-center border border-white/10 dark:border-black/10 transition-colors duration-300 ease-in-out hover:bg-white/20 dark:hover:bg-black/20"
+            type="button"
+            onClick={handleClick}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            aria-label="Toggle theme"
         >
             <div className="relative w-5 h-5">
                 <FiSun
-                    className={`absolute inset-0 w-5 h-5 text-slate-900 dark:text-slate-100 transition-opacity duration-300 ease-in-out ${isDark ? 'opacity-0' : 'opacity-100'
+                    className={`absolute w-5 h-5 transition-all duration-300 ease-in-out ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'
                         }`}
+                    style={{ color: isDark ? 'white' : 'black' }}
                 />
                 <FiMoon
-                    className={`absolute inset-0 w-5 h-5 text-slate-900 dark:text-slate-100 transition-opacity duration-300 ease-in-out ${isDark ? 'opacity-100' : 'opacity-0'
+                    className={`absolute w-5 h-5 transition-all duration-300 ease-in-out ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
                         }`}
+                    style={{ color: isDark ? 'white' : 'black' }}
                 />
             </div>
         </button>

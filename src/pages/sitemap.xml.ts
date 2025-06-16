@@ -36,7 +36,7 @@ export async function GET() {
     .map(
       (album) => `
     <url>
-      <loc>${new URL(`/albums/${album.slug}`, 'https://danielshires.com').href}</loc>
+      <loc>${new URL(`/albums/${album.data.slug.current}`, 'https://danielshires.com').href}</loc>
       <lastmod>${album.data.date.toISOString()}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>

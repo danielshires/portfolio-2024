@@ -5,8 +5,9 @@ import Image from 'astro/components/Image.astro'
 import AlbumCard from '../components/Cards/AlbumCard.astro'
 import { getAllAlbums } from '../lib/sanity'
 import PageTransition from '../components/Transitions/PageTransition.astro'
+import type { Album } from '../lib/sanity'
 
-let albums = []
+let albums: Album[] = []
 let error = null
 
 try {

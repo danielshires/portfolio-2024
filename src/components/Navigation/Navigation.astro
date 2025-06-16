@@ -1,22 +1,16 @@
 ---
 // Components
 import NavLink from '../Buttons/NavLink.astro'
-import Image from 'astro/components/Image.astro'
 import ThemeToggle from '../ThemeToggle'
-
-// Images
-import logoLM from '../../../public/images/svg/logo-LM.svg'
-import logoDM from '../../../public/images/svg/logo-DM.svg'
 
 // Javascript
 const pathname = new URL(Astro.request.url).pathname
 const currentPath = pathname.slice(1)
-const colourModePath = currentPath.startsWith('experiments') ? logoDM : logoLM
 ---
 
 <nav
   id='nav'
-  class='fixed z-50 top-0 left-0 right-0 mt-8 h-12 flex items-center justify-start text-base rounded-full backdrop-blur-sm transition-transform duration-300'>
+  class='fixed z-50 top-0 left-0 right-0 mt-8 h-12 flex items-center justify-start text-base rounded-full transition-transform duration-300'>
   <div class='container mx-auto px-4 lg:px-8'>
     <div class='flex gap-4 justify-between items-center'>
       <div class='flex flex-col md:flex-row gap-4 justify-start items-center'>

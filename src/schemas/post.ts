@@ -7,7 +7,7 @@ export default {
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'slug',
@@ -17,19 +17,19 @@ export default {
         source: 'title',
         maxLength: 96,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'description',
       title: 'Description',
       type: 'text',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'mainImage',
@@ -83,7 +83,7 @@ export default {
       author: 'author.name',
       media: 'mainImage',
     },
-    prepare(selection) {
+    prepare(selection: any) {
       const { author } = selection
       return { ...selection, subtitle: author && `by ${author}` }
     },

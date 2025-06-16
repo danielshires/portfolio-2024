@@ -6,20 +6,20 @@
 </div>
 
 <script>
-  let loadingBar = null
-  let progressBar = null
-  let totalImages = 0
-  let loadedImages = 0
+  let loadingBar: HTMLElement | null = null
+  let progressBar: HTMLElement | null = null
+  let totalImages: number = 0
+  let loadedImages: number = 0
 
-  function setProgress(percent) {
+  function setProgress(percent: number) {
     if (progressBar) {
       progressBar.style.width = `${percent}%`
     }
   }
 
   function startImageLoadingProgress() {
-    loadingBar = document.getElementById('loading-bar')
-    progressBar = loadingBar?.querySelector('.loading-progress')
+    loadingBar = document.getElementById('loading-bar') as HTMLElement | null
+    progressBar = loadingBar?.querySelector('.loading-progress') as HTMLElement | null
     if (!loadingBar || !progressBar) return
 
     const images = Array.from(document.images)
@@ -31,12 +31,12 @@
     if (totalImages === 0) {
       setProgress(100)
       setTimeout(() => {
-        loadingBar.style.opacity = '0'
+        if (loadingBar) loadingBar.style.opacity = '0'
       }, 300)
       return
     }
 
-    images.forEach((img) => {
+    images.forEach((img: HTMLImageElement) => {
       if (img.complete) {
         handleImageLoad()
       } else {
@@ -52,7 +52,7 @@
     if (loadedImages >= totalImages) {
       setTimeout(() => {
         setProgress(100)
-        loadingBar.style.opacity = '0'
+        if (loadingBar) loadingBar.style.opacity = '0'
       }, 300)
     }
   }

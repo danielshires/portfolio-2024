@@ -7,7 +7,7 @@ export default {
       name: 'name',
       title: 'Name',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'slug',
@@ -17,7 +17,7 @@ export default {
         source: 'name',
         maxLength: 96,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'image',
