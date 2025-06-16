@@ -1,24 +1,25 @@
 ---
-const pathname = new URL(Astro.request.url).pathname;
+const pathname = new URL(Astro.request.url).pathname
+const currentPath = pathname.slice(1)
 
-const currentPath = pathname.slice(1);
-
-console.log('Current Path:', currentPath);
-
-
+console.log('Current Path:', currentPath)
 
 interface Props {
-	path: string;
-	target: string;
-	href: string;
+  path: string
+  target: string
+  href: string
 }
 
-const { href, path, target } = Astro.props;
+const { href, path, target } = Astro.props
 
 const styles =
-	currentPath === path
-		? 'underline underline-offset-8 dark:decoration-zinc-100'
-		: 'strong no-underline hover:underline underline-offset-8 dark:decoration-zinc-100';
+  path === ''
+    ? currentPath === ''
+      ? 'underline underline-offset-8 dark:decoration-zinc-100'
+      : 'strong no-underline hover:underline underline-offset-8 dark:decoration-zinc-100'
+    : currentPath.startsWith(path)
+      ? 'underline underline-offset-8 dark:decoration-zinc-100'
+      : 'strong no-underline hover:underline underline-offset-8 dark:decoration-zinc-100'
 ---
 
-<a data-astro-reload class={styles} href={href} target={target}><slot/></a>
+<a data-astro-reload class={styles} href={href} target={target}><slot /></a>

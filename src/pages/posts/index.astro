@@ -1,50 +1,39 @@
 ---
-import { getCollection } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import PostCard from '../../components/Cards/PostCard.astro';
-import TextBanner from '../../components/Text/TextBanner.astro';
+import Layout from '../../layouts/Layout.astro'
+import { getAllPosts } from '../../lib/sanity'
+import type { Post } from '../../lib/sanity'
+import TextBanner from '../../components/Text/TextBanner.astro'
+import PostCard from '../../components/Cards/PostCard.astro'
 
-interface Post {
-	id: string;
-	slug: string;
-	body: string;
-	collection: string;
-	data: {
-		title: string;
-		description: string;
-		date: Date;
-		tags: string[];
-		author: { id: string; collection: string };
-	};
-}
-
-const posts = await getCollection('posts');
-posts.sort((a, b) => {
-	const postA = a as Post;
-	const postB = b as Post;
-	return postB.data.date.getTime() - postA.data.date.getTime();
-});
+const posts = await getAllPosts()
+const [featuredPost, ...remainingPosts] = posts
 
 // Front Matter
 const frontMatter = {
-	pageTitle: 'Thoughts',
-	pageDescription:
-		'Collection of my recent and previous thought bubbles. Some short, some long',
-};
+  pageTitle: 'Thoughts',
+  pageDescription: 'Ideas, reflections, and musings',
+}
 ---
 
-<Layout
-	pageTitle='Thoughts'
-	pageDescription='Thoughts of my different ideasand works in progress'
-	colourMode='light'
->
-	<main id='intro' class='col-span-12'>
-		<TextBanner
-			pageTitle={frontMatter.pageTitle}
-			pageDescription={frontMatter.pageDescription}
-		/>
-		<div id='posts' class=' grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-8'>
-			{posts.map((p) => <PostCard post={p} />)}
-		</div>
-	</main>
+<Layout pageTitle='Blog Posts' pageDescription='My thoughts and musings'>
+  <div class='flex flex-col'>
+    <div class=''>
+      <TextBanner pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription} />
+    </div>
+
+    <!-- Featured Post -->
+    <!-- {
+      featuredPost && (
+        <div class='col-span-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-8 gap-8'>
+
+          <PostCard post={featuredPost} featured={true} />
+        </div>
+      )
+    } -->
+
+    <!-- Remaining Posts Grid -->
+    <div class='flex flex-row gap-8 w-100'>
+      {posts.map((post: Post) => <PostCard post={post} />)}
+    </div>
+  </div>
 </Layout>

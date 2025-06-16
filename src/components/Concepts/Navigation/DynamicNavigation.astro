@@ -1,0 +1,126 @@
+---
+// Components
+import NavLink from '../../Buttons/NavLink.astro'
+import Image from 'astro/components/Image.astro'
+
+// Images
+import logoLM from '../../../../public/images/svg/logo-LM.svg'
+import logoDM from '../../../../public/images/svg/logo-DM.svg'
+
+// Javascript
+const pathname = new URL(Astro.request.url).pathname
+const currentPath = pathname.slice(1)
+const colourModePath = currentPath.startsWith('experiments') ? logoDM : logoLM
+---
+
+<nav
+  id='nav'
+  transition:persist
+  transition:animate='none'
+  class='fixed z-50 top-0 left-0 mt-8 lg:mx-16 xl:mx-32 h-12 flex items-center px-4 md:px-4 justify-start text-base rounded-full'>
+  <div class='flex gap-4 justify-between items-center' id='navInnerContent'>
+    <div class='flex flex-col md:flex-row gap-4 justify-start items-center'>
+      <!-- Home link -->
+      <NavLink path='' target='' href='/'
+        ><p id='logo' class='font-semibold my-0 leading-none'>
+          <span class='flex justify-start items-center gap-2 nav-content'
+            ><Image id='dotlogo' src={colourModePath} alt='Logo' class='nav-logo' /><span
+              class='nav-text'>Dan Shires</span
+            ></span
+          >
+        </p></NavLink
+      >
+      <!-- Page links -->
+      <div id='navPageLinks' class='flex flex-row md:flex-row gap-4 nav-links'>
+        <NavLink path='design' target='_self' href='/design'>Design</NavLink>
+        <NavLink path='pictures' target='_self' href='/pictures'>Pictures</NavLink>
+        <NavLink path='posts' target='_self' href='/posts'>Thoughts</NavLink>
+        <NavLink path='experiments' target='_self' href='/experiments'>Experiments</NavLink>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+  #nav {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .nav-content {
+    transition: all 0.3s ease;
+  }
+
+  .nav-logo {
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .nav-text {
+    transition: all 0.3s ease;
+  }
+
+  .nav-links {
+    transition: all 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    #nav {
+      width: 100%;
+      left: 0;
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+</style>
+
+<script>
+  // Navigation scroll behavior
+  let lastScroll = 0
+  const nav = document.getElementById('nav')
+  const navInnerContent = document.getElementById('navInnerContent')
+  const logo = document.getElementById('logo')
+  const navPageLinks = document.getElementById('navPageLinks')
+
+  function handleScroll() {
+    const currentScroll = window.pageYOffset
+
+    if (currentScroll <= 0) {
+      nav?.classList.remove('scroll-up')
+      return
+    }
+
+    if (currentScroll > lastScroll && !nav?.classList.contains('scroll-down')) {
+      // Scroll Down
+      nav?.classList.remove('scroll-up')
+      nav?.classList.add('scroll-down')
+    } else if (currentScroll < lastScroll && nav?.classList.contains('scroll-down')) {
+      // Scroll Up
+      nav?.classList.remove('scroll-down')
+      nav?.classList.add('scroll-up')
+    }
+    lastScroll = currentScroll
+  }
+
+  // Throttle scroll event
+  let ticking = false
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        handleScroll()
+        ticking = false
+      })
+      ticking = true
+    }
+  })
+
+  // Handle mobile menu
+  const hamburger = document.getElementById('hamburger')
+  const mobileMenu = document.getElementById('mobileMenu')
+
+  hamburger?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden')
+  })
+</script>

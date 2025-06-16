@@ -1,0 +1,29 @@
+---
+import { Studio } from 'sanity'
+import config from '../../../sanity.config'
+---
+
+<div id='sanity-studio'>
+  <Studio config={config} />
+</div>
+
+<script>
+  // This ensures the Studio is only rendered on the client side
+  document.getElementById('sanity-studio')?.setAttribute('data-sanity', '')
+</script>
+
+<style is:global>
+  /* Sanity Studio styles */
+  :root {
+    --sanity-studio-background: #fff;
+  }
+
+  #sanity-studio {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+</style>

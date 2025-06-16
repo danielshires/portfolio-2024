@@ -6,23 +6,36 @@ draft: false
 # tags: ["diary"]
 images:
   - image: './00-Visual-Diary/05-Visual-Diary01.jpg'
-    caption: '1.1'
-    alt: Moving through
+    caption: 'Arching roof'
+    alt: Arching roof
   - image: './00-Visual-Diary/05-Visual-Diary02.jpg'
-    caption: '1.2'
-    alt: Moving through
+    caption: 'Flowers and architecture'
+    alt: Flowers and architecture
   - image: './00-Visual-Diary/05-Visual-Diary03.jpg'
-    caption: '1.3'
-    alt: Moving through
+    caption: 'Building with smiling cloud face'
+    alt: Building with smiling cloud face
   - image: './00-Visual-Diary/05-Visual-Diary04.jpg'
-    caption: '1.3'
-    alt: Moving through
+    caption: 'Look sign on pavement'
+    alt: Look sign on pavement
   - image: './00-Visual-Diary/05-Visual-Diary05.jpg'
-    caption: '1.3'
-    alt: Moving through
+    caption: 'Sunlight on decking'
+    alt: Sunlight on decking
   - image: './00-Visual-Diary/05-Visual-Diary06.jpg'
-    caption: '1.3'
-    alt: Moving through
+    caption: 'Street view'
+    alt: Street view
   - image: './00-Visual-Diary/05-Visual-Diary07.jpg'
-    caption: '1.3'
-    alt: Moving through
+    caption: 'Empty fireworks on grass'
+    alt: Empty fireworks on grass
+  - image: './00-Visual-Diary/05-Visual-Diary09.jpg'
+    caption: 'Sasauge dog on the ground'
+    alt: Sasauge dog on the ground
+  - image: './00-Visual-Diary/05-Visual-Diary10.jpg'
+    caption: 'Electrical lines'
+    alt: Electrical lines
+  - image: './00-Visual-Diary/05-Visual-Diary12.jpg'
+    caption: 'Diverging lines'
+    alt: Diverging lines on platform
+  - image: './00-Visual-Diary/05-Visual-Diary14.jpg'
+    caption: 'Diverging lines'
+    alt: Diverging lines on platform
+

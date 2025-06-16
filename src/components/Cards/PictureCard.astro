@@ -1,0 +1,48 @@
+---
+import { urlFor } from '../../lib/sanity'
+import type { Picture } from '../../lib/sanity'
+import Image from 'astro/components/Image.astro'
+
+interface Props {
+  picture: Picture
+}
+
+const { picture } = Astro.props
+---
+
+<a
+  href={`/pictures/${picture.slug.current}`}
+  class='group block relative overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 rounded-lg'>
+  {
+    picture.mainImage && (
+      <div class='w-full h-64 overflow-hidden'>
+        <Image
+          src={urlFor(picture.mainImage).width(800).url()}
+          alt={picture.title}
+          width={800}
+          height={600}
+          loading='lazy'
+          decoding='async'
+          class='object-cover w-full h-full transition-transform duration-300 group-hover:scale-105'
+        />
+      </div>
+    )
+  }
+  <div class='p-4'>
+    <h3 class='text-lg font-medium'>{picture.title}</h3>
+    {
+      picture.description && (
+        <p class='mt-2 text-sm text-gray-600 line-clamp-2'>{picture.description}</p>
+      )
+    }
+  </div>
+</a>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -5,9 +5,10 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                'sans': ['"Instrument Sans", "Inter"', 'sans-serif'],
-                'serif': ['"Instrument Serif", Serif'],
-                'mono': ["thermal"]
+                'sans': ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+                'serif': ['"Instrument Serif"', 'serif'],
+                'mono': ['Thermal', 'monospace'],
+                'fragment': ['"Fragment Mono"', 'monospace']
             },
             typography: (theme) => ({
                 DEFAULT: {
@@ -22,15 +23,11 @@ export default {
                         'li::marker': {
                             color: 'rgb(9,9,11);'
                         }
-
-
                     }
                 }
             }),
-            darkMode: 'selector',
         },
     },
     plugins: [require('@tailwindcss/typography')],
-    darkMode: 'selector',
-
+    darkMode: 'media',
 }

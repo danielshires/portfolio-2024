@@ -1,0 +1,27 @@
+---
+import ProjectCard from '../ProjectCard/ProjectCard.astro'
+import type { ImageMetadata } from 'astro'
+
+interface Project {
+  projectImage: {
+    src: ImageMetadata
+    alt: string
+    width: number
+    height: number
+  }
+  title: string
+  heading: string
+  description: string
+  projectUrl: string
+}
+
+interface Props {
+  projects: Project[]
+}
+
+const { projects } = Astro.props
+---
+
+<section class='flex flex-col md:flex-row gap-8 max-w-[100vw] mt-16'>
+  {projects.map((project: Project) => <ProjectCard {...project} />)}
+</section>

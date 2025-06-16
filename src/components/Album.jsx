@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Image from 'astro/components/Image.astro';
 
 export default function Album({ albums }) {

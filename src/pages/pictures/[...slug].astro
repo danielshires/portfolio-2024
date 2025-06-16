@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { getPictureBySlug, getAllPictures, urlFor } from '../../lib/sanity'
+import type { Picture } from '../../lib/sanity'
+
+export async function getStaticPaths() {
+  const pictures = await getAllPictures()
+  return pictures.map((picture: Picture) => ({
+    params: { slug: picture.slug.current },
+    props: { picture },
+  }))
+}
+
+const { picture } = Astro.props
+---
+
+<Layout pageTitle={picture.title} pageDescription={picture.description || ''}>
+  <article
+    class='max-w-4xl mx-auto mt-24 py-12'
+    transition:name={`picture-${picture.slug.current}`}>
+    {
+      picture.mainImage && (
+        <div class='mb-8 overflow-hidden rounded-lg'>
+          <img
+            src={urlFor(picture.mainImage).width(1200).url()}
+            alt={picture.title}
+            class='w-full h-auto object-cover rounded-lg'
+            transition:name={`picture-image-${picture.slug.current}`}
+          />
+        </div>
+      )
+    }
+
+    <header class='mb-8' transition:name={`picture-content-${picture.slug.current}`}>
+      <h1 class='text-4xl font-bold mb-4'>{picture.title}</h1>
+      {picture.description && <p class='text-lg text-gray-600'>{picture.description}</p>}
+    </header>
+  </article>
+</Layout>
+
+<style>
+  ::view-transition-old(picture-*),
+  ::view-transition-new(picture-*) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(picture-image-*),
+  ::view-transition-new(picture-image-*) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(picture-content-*),
+  ::view-transition-new(picture-content-*) {
+    animation: fade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

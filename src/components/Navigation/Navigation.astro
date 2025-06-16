@@ -10,29 +10,22 @@ import logoDM from '../../../public/images/svg/logo-DM.svg'
 // Javascript
 const pathname = new URL(Astro.request.url).pathname
 const currentPath = pathname.slice(1)
-const colourModePath = currentPath === 'experiments' ? logoDM : logoLM
+const colourModePath = currentPath.startsWith('experiments') ? logoDM : logoLM
 ---
 
 <nav
   id='nav'
-  transition:persist
-  class='w-full fixed z-50 top-0 left-0 px-4 md:px-8 py-4 md:py-8 dark:bg-zinc-950 bg-white text-base'
->
-  <div class='flex gap-4 justify-between'>
-    <div class='w-full md:w-auto flex flex-col md:flex-row gap-4 justify-between'>
+  class='fixed z-50 top-0 left-0 mt-8 lg:mx-16 xl:mx-32 h-12 flex items-center justify-start text-base rounded-full backdrop-blur-sm transition-transform duration-300'>
+  <div class='flex gap-4 justify-between items-center'>
+    <div class='flex flex-col md:flex-row gap-4 justify-start items-center'>
       <!-- Home link -->
-      <NavLink path='' target='' href='/'
-        ><p class='font-semibold'>
-          <!-- <span class='flex align-middle gap-2'
-						><Image src={colourModePath} alt='Logo' />Dan Shires</span
-					> -->
-          Daniel Shires
-        </p></NavLink
-      >
+      <NavLink path='' target='' href='/'>
+        Home
+      </NavLink>
       <!-- Page links -->
-      <div id='navPageLinks' class='flex flex-row md:flex-row gap-4'>
+      <div class='flex flex-row md:flex-row gap-4'>
         <NavLink path='design' target='_self' href='/design'>Design</NavLink>
-        <NavLink path='pictures' target='_self' href='/pictures'>Pitctures</NavLink>
+        <NavLink path='pictures' target='_self' href='/pictures'>Pictures</NavLink>
         <NavLink path='posts' target='_self' href='/posts'>Thoughts</NavLink>
         <NavLink path='experiments' target='_self' href='/experiments'>Experiments</NavLink>
       </div>
@@ -40,22 +33,55 @@ const colourModePath = currentPath === 'experiments' ? logoDM : logoLM
   </div>
 </nav>
 
+<style>
+  @media (max-width: 768px) {
+    nav {
+      width: 100%;
+      left: 0;
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+
+  .nav-hidden {
+    transform: translateY(-200%);
+  }
+</style>
+
 <script>
-  const navbar = document.getElementById('nav')
+  let lastScroll = 0
+  const nav = document.getElementById('nav')
+  const scrollThreshold = 1 // Minimum scroll before hiding nav
 
-  document.addEventListener('DOMContentLoaded', () => {
-    // Add scroll event listener
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 80) {
-        navbar.classList.add('transition-all')
-        navbar.classList.add('-translate-y-40')
-        console.log('scrolled')
-      } else {
-        navbar.classList.remove('transition-all')
-        navbar.classList.remove('-translate-y-40')
+  function handleScroll() {
+    const currentScroll = window.pageYOffset
 
-        console.log('not scrolled')
-      }
-    })
+    if (currentScroll <= 0) {
+      // At the top of the page
+      nav?.classList.remove('nav-hidden')
+      return
+    }
+
+    if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
+      // Scrolling down and past threshold
+      nav?.classList.add('nav-hidden')
+    } else if (currentScroll < lastScroll) {
+      // Scrolling up
+      nav?.classList.remove('nav-hidden')
+    }
+
+    lastScroll = currentScroll
+  }
+
+  // Throttle scroll event
+  let ticking = false
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        handleScroll()
+        ticking = false
+      })
+      ticking = true
+    }
   })
 </script>

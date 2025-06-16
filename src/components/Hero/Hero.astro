@@ -1,0 +1,73 @@
+---
+interface Props {
+  name: string
+  jobTitle: string
+  heading: {
+    firstLine: string
+    secondLine: string
+  }
+  introText: {
+    first: string
+    second: string
+  }
+}
+
+const { name, jobTitle, heading, introText } = Astro.props
+---
+
+<section
+  id='intro'
+  class='h-dvh flex flex-col gap-6 justify-center max-w-[100vw]'
+  aria-label='Introduction'>
+  <h4 class='col-span-full'>
+    <span id='name' class='block font-bold'>{name}</span>
+    <span id='jobTitle' class='block'>{jobTitle}</span>
+  </h4>
+  <h1 class='font-serif text-5xl md:text-8xl lg:text-8xl text-balance col-span-full'>
+    <span id='transformational' class='flex'>{heading.firstLine}</span>
+    <span id='experiences' class='flex'>{heading.secondLine}</span>
+  </h1>
+  <div class='flex flex-col md:flex-row gap-4 md:w-3/4 lg:w-2/4 text-sm md:text-base'>
+    <p id='introOne' class=''>
+      {introText.second}
+    </p>
+    <p id='introTwo' class=''>
+      {introText.second}
+    </p>
+  </div>
+  <div class='absolute bottom-8 text-sm opacity-50' role='status' aria-label='Scroll indicator'>
+    Scroll
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap'
+
+  function introAnimation() {
+    let tl = gsap.timeline()
+    const hasPlayed = sessionStorage.getItem('hasMyAnimationPlayed')
+
+    if (!hasPlayed) {
+      const animateStart = {
+        y: 10,
+        opacity: 0,
+        duration: 1,
+        ease: 'power2.out',
+      }
+      const delayAnimation = `-=75%`
+
+      tl.from('#name', animateStart)
+        .from('#jobTitle', animateStart, delayAnimation)
+        .from('#transformational', animateStart, delayAnimation)
+        .from('#experiences', animateStart, delayAnimation)
+        .from('#introOne', animateStart, delayAnimation)
+        .from('#introTwo', animateStart, delayAnimation)
+
+      sessionStorage.setItem('hasMyAnimationPlayed', 'true')
+    }
+  }
+
+  window.addEventListener('load', () => {
+    requestAnimationFrame(introAnimation)
+  })
+</script>

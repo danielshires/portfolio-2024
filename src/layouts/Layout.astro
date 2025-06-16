@@ -1,26 +1,69 @@
 ---
 // Client router
+import '../styles/global.css'
 import '../styles/fonts.css'
 import Navigation from '../components/Navigation/Navigation.astro'
 import Head from './Head.astro'
-import { fade } from 'astro:transitions'
+import LoadingBar from '../components/LoadingBar/LoadingBar.astro'
 
 interface Props {
   pageTitle: string
   pageDescription: string
-  colourMode: string
 }
 
-const { pageTitle, pageDescription, colourMode } = Astro.props
+const { pageTitle, pageDescription } = Astro.props
 
-const styles = `${colourMode} font-sans bg-white text-slate-950 bg-stone-50 dark:text-zinc-50 dark:bg-zinc-950 mx-4 md:mx-8 max-w-[100vw]`
+const styles = `font-sans bg-white text-slate-950 bg-stone-50 dark:text-zinc-50 dark:bg-zinc-950 mx-4 lg:mx-16 xl:mx-32 max-w-[100vw] antialiased mb-20`
 ---
 
 <!doctype html>
 <html lang='en' class='text-lg'>
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
   <body class={styles}>
-    <Navigation />
-    <slot />
+    <LoadingBar />
+    <Navigation transition:persist />
+    <main transition:animate='slide'>
+      <slot />
+    </main>
   </body>
 </html>
+
+<script>
+  // Enable View Transitions
+  document.addEventListener('astro:page-load', () => {
+    // Initialize any client-side code here
+  })
+</script>
+
+<style is:global>
+  @keyframes slide {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(root) {
+    z-index: 1;
+  }
+  ::view-transition-new(root) {
+    z-index: 2;
+  }
+
+  .dark::view-transition-old(root) {
+    z-index: 2;
+  }
+  .dark::view-transition-new(root) {
+    z-index: 1;
+  }
+</style>
