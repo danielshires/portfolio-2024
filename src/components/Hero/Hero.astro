@@ -28,10 +28,10 @@ const { name, jobTitle, heading, introText } = Astro.props
     <span id='experiences' class='flex'>{heading.secondLine}</span>
   </h1>
   <div class='flex flex-col md:flex-row gap-4 md:w-3/4 lg:w-2/4 text-sm md:text-base'>
-    <p id='introOne' class=''>
-      {introText.second}
+    <p id='introOne' class='flex-1'>
+      {introText.first}
     </p>
-    <p id='introTwo' class=''>
+    <p id='introTwo' class='flex-1'>
       {introText.second}
     </p>
   </div>
