@@ -46,11 +46,11 @@ export default function ThemeToggle() {
             <div className="relative w-5 h-5">
                 <FiSun
                     className={`absolute w-5 h-5 transition-all duration-300 ease-in-out ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'}`}
-                    style={{ color: isDark ? 'rgb(var(--zinc-50))' : 'rgb(var(--zinc-950))' }}
+                    style={{ color: isDark ? '#fafafa' : '#09090b' }}
                 />
                 <FiMoon
                     className={`absolute w-5 h-5 transition-all duration-300 ease-in-out ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'}`}
-                    style={{ color: isDark ? 'rgb(var(--zinc-50))' : 'rgb(var(--zinc-950))' }}
+                    style={{ color: isDark ? '#fafafa' : '#09090b' }}
                 />
             </div>
         </button>

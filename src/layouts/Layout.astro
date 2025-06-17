@@ -13,16 +13,15 @@ interface Props {
 
 const { pageTitle, pageDescription } = Astro.props
 
-const styles = `font-sans bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased mb-20`
 ---
 
 <!doctype html>
 <html lang='en' class='text-base'>
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
-  <body class={styles}>
+  <body class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased mb-20'>
     <LoadingBar />
     <Navigation transition:persist />
-    <main class='container mx-auto px-4 lg:px-8'>
+    <main class='container mx-auto px-4 lg:px-2'>
       <slot />
     </main>
   </body>
