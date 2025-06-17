@@ -1,84 +1,89 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+  --background-color: rgb(var(--zinc-50));
+}
+
+.dark {
+  --background-color: rgb(var(--zinc-950));
+}
 
 /* Custom styles below */
 
 .theme-toggle-button {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .dark .theme-toggle-button {
-    background-color: rgba(0, 0, 0, 0.1) !important;
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 .theme-toggle-button:hover {
-    background-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 .dark .theme-toggle-button:hover {
-    background-color: rgba(0, 0, 0, 0.2) !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
 }
-
 
 /* Theme Toggle Animation */
 
 @keyframes rotateIn {
-    from {
-        transform: rotate(-90deg) scale(0);
-        opacity: 0;
-    }
-    to {
-        transform: rotate(0) scale(1);
-        opacity: 1;
-    }
+  from {
+    transform: rotate(-90deg) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes rotateOut {
-    from {
-        transform: rotate(0) scale(1);
-        opacity: 1;
-    }
-    to {
-        transform: rotate(90deg) scale(0);
-        opacity: 0;
-    }
+  from {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: rotate(90deg) scale(0);
+    opacity: 0;
+  }
 }
 
 .theme-toggle-icon {
-    transition: all 300ms ease-in-out;
-    -webkit-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+  -webkit-transition: all 300ms ease-in-out;
 }
-
 
 /* View Transitions */
 
 ::view-transition-old(commbank-image),
 ::view-transition-new(commbank-image) {
-    animation: none;
-    mix-blend-mode: normal;
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 ::view-transition-old(commbank-image-content),
 ::view-transition-new(commbank-image-content) {
-    animation: none;
-    mix-blend-mode: normal;
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 ::view-transition-old(commbank-content),
 ::view-transition-new(commbank-content) {
-    animation: fade 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fade 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes fade {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

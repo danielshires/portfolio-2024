@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import TextBanner from '../components/Text/TextBanner.astro'
+import Hero from '../components/Hero/Hero.astro'
 import Image from 'astro/components/Image.astro'
 import AlbumCard from '../components/Cards/AlbumCard.astro'
 import { getAllAlbums } from '../lib/sanity'
@@ -16,39 +16,50 @@ try {
   error = e
 }
 
-// Front Matter
-const frontMatter = {
-  pageTitle: 'Pictures',
-  pageDescription: 'Some recent pictures, all shot on 35mm and 120mm film',
+const heroContent = {
+  name: 'Pictures',
+  jobTitle: 'Photographer',
+  heading: {
+    firstLine: 'Capturing moments',
+    secondLine: 'on film.',
+  },
+  introText: {
+    first:
+      'A collection of photographs shot on 35mm and 120mm film, capturing moments and memories.',
+    second:
+      'Each image tells a story, preserving memories through the unique character of film photography.',
+  },
 }
 ---
 
-<Layout pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription}>
+<Layout pageTitle={heroContent.name} pageDescription={heroContent.introText.first}>
   <PageTransition>
-    <TextBanner pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription} />
+    <div class='flex flex-col'>
+      <Hero {...heroContent} />
 
-    <div class='py-8'>
-      {
-        error ? (
-          <div
-            class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'
-            role='alert'>
-            <strong class='font-bold'>Error!</strong>
-            <span class='block sm:inline'> Failed to load albums. Please try again later.</span>
-          </div>
-        ) : albums.length === 0 ? (
-          <div class='text-center py-12'>
-            <h2 class='text-2xl font-semibold text-gray-700'>No albums found</h2>
-            <p class='mt-2 text-gray-600'>Check back soon for new photography collections.</p>
-          </div>
-        ) : (
-          <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-            {albums.map((album) => (
-              <AlbumCard album={album} />
-            ))}
-          </div>
-        )
-      }
+      <div class='py-8'>
+        {
+          error ? (
+            <div
+              class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'
+              role='alert'>
+              <strong class='font-bold'>Error!</strong>
+              <span class='block sm:inline'> Failed to load albums. Please try again later.</span>
+            </div>
+          ) : albums.length === 0 ? (
+            <div class='text-center py-12'>
+              <h2 class='text-2xl font-semibold text-gray-700'>No albums found</h2>
+              <p class='mt-2 text-gray-600'>Check back soon for new photography collections.</p>
+            </div>
+          ) : (
+            <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              {albums.map((album) => (
+                <AlbumCard album={album} />
+              ))}
+            </div>
+          )
+        }
+      </div>
     </div>
   </PageTransition>
 </Layout>

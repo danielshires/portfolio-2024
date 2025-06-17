@@ -20,7 +20,7 @@ interface Props {
 
 const { projects } = Astro.props
 ---
-
-<section class='flex flex-col md:flex-row gap-8 max-w-[100vw] mt-16'>
+<section class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-8 max-w-[100vw] mt-16'>
+  <h2 class="col-span-12 text-base text-zinc-800 font-medium">Featured</h2>
   {projects.map((project: Project) => <ProjectCard {...project} />)}
 </section>

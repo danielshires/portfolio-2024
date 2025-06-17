@@ -25,10 +25,15 @@ export const projectsData = {
         width: 2600,
         height: 900,
       },
-      title: 'NetBank',
-      heading: 'Visual uplift of the NetBank homepage',
+      title: 'CommBank Yello',
+      heading: 'Re-imagine customer loyalty for a big four bank',
       description: 'A brief description of the first project that showcases some interesting work.',
       projectUrl: '/design/project-one',
+      outcomes: [
+        { value: '6.5m', label: 'Engaged customers' },
+        { value: '+32', label: 'Net promoter score' },
+        { value: '2m', label: 'Visits per month' },
+      ],
     },
     {
       projectImage: {
@@ -37,10 +42,15 @@ export const projectsData = {
         width: 2600,
         height: 900,
       },
-      title: 'Formbay',
-      heading: 'Project Two',
+      title: 'NetBank',
+      heading: 'Visual refresh of the NetBank homescreen',
       description: 'Another fascinating project that demonstrates creative problem-solving.',
       projectUrl: '/design/project-two',
+      outcomes: [
+        { value: '6.5m', label: 'Engaged customers' },
+        { value: '+32', label: 'Net promoter score' },
+        { value: '2m', label: 'Visits per month' },
+      ],
     },
   ],
 }

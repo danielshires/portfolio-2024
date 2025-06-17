@@ -1,22 +1,26 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import TextBanner from '../../components/Text/TextBanner.astro';
+import Layout from '../../layouts/Layout.astro'
+import Hero from '../../components/Hero/Hero.astro'
 
 // Front Matter
-const frontMatter = {
-	pageTitle: 'Work',
-	pageDescription: 'Recent case studies and featured design work',
-};
+const heroContent = {
+  name: 'Work',
+  jobTitle: 'Product Designer',
+  heading: {
+    firstLine: 'Recent case studies',
+    secondLine: 'and featured work.',
+  },
+  introText: {
+    first:
+      'A collection of recent case studies and featured design work showcasing my approach to creating user-centered digital products.',
+    second:
+      'Each project represents a unique challenge and solution, demonstrating my expertise in UX/UI design and digital product development.',
+  },
+}
 ---
 
-<Layout
-	pageTitle={frontMatter.pageTitle}
-	pageDescription={frontMatter.pageDescription}
->
-	<main id="intro" class='col-span-12'>
-		<TextBanner
-			pageTitle={frontMatter.pageTitle}
-			pageDescription={frontMatter.pageDescription}
-		/>
-	</main>
+<Layout pageTitle={heroContent.name} pageDescription={heroContent.introText.first}>
+  <main id='intro' class='col-span-12'>
+    <Hero {...heroContent} />
+  </main>
 </Layout>

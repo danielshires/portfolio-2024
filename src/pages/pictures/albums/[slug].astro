@@ -2,7 +2,7 @@
 import Layout from '../../../layouts/Layout.astro'
 import { getAlbumBySlug, getAllAlbums } from '../../../lib/sanity'
 import type { Album } from '../../../lib/sanity'
-import TextBanner from '../../../components/Text/TextBanner.astro'
+import Hero from '../../../components/Hero/Hero.astro'
 import PictureCard from '../../../components/Cards/PictureCard.astro'
 import PageTransition from '../../../components/Transitions/PageTransition.astro'
 
@@ -21,12 +21,25 @@ const frontMatter = {
   pageTitle: album.title,
   pageDescription: album.description || `Photos from ${album.title}`,
 }
+
+const heroContent = {
+  name: album.title,
+  jobTitle: 'Photography',
+  heading: {
+    firstLine: album.title,
+    secondLine: 'Collection',
+  },
+  introText: {
+    first: album.description || `A collection of photographs from ${album.title}`,
+    second: 'Each image captures a unique moment, preserved through the lens of film photography.',
+  },
+}
 ---
 
-<Layout pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription}>
+<Layout pageTitle={heroContent.name} pageDescription={heroContent.introText.first}>
   <PageTransition>
     <div class='flex flex-col'>
-      <TextBanner pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription} />
+      <Hero {...heroContent} />
 
       <!-- Pictures Grid -->
       <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>

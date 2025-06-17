@@ -17,54 +17,40 @@ export default function ThemeToggle() {
             root.classList.remove('dark')
             setIsDark(false)
         }
-
-        // Add script to handle theme toggle
-        const script = document.createElement('script')
-        script.textContent = `
-            function toggleTheme() {
-                const root = document.documentElement
-                const isDark = root.classList.contains('dark')
-
-                if (isDark) {
-                    root.classList.remove('dark')
-                    localStorage.setItem('theme', 'light')
-                } else {
-                    root.classList.add('dark')
-                    localStorage.setItem('theme', 'dark')
-                }
-            }
-        `
-        document.body.appendChild(script)
-
-        return () => {
-            document.body.removeChild(script)
-        }
     }, [])
 
     const handleClick = () => {
-        // Call the global toggle function
-        window.toggleTheme()
-        // Update React state
-        setIsDark(!isDark)
+        const root = document.documentElement
+        const newIsDark = !isDark
+
+        // Update theme
+        if (newIsDark) {
+            root.classList.add('dark')
+            localStorage.setItem('theme', 'dark')
+        } else {
+            root.classList.remove('dark')
+            localStorage.setItem('theme', 'light')
+        }
+
+        // Update state
+        setIsDark(newIsDark)
     }
 
     return (
         <button
             type="button"
             onClick={handleClick}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
             aria-label="Toggle theme"
         >
             <div className="relative w-5 h-5">
                 <FiSun
-                    className={`absolute w-5 h-5 transition-all duration-300 ease-in-out ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'
-                        }`}
-                    style={{ color: isDark ? 'white' : 'black' }}
+                    className={`absolute w-5 h-5 transition-all duration-300 ease-in-out ${isDark ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'}`}
+                    style={{ color: isDark ? 'rgb(var(--zinc-50))' : 'rgb(var(--zinc-950))' }}
                 />
                 <FiMoon
-                    className={`absolute w-5 h-5 transition-all duration-300 ease-in-out ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
-                        }`}
-                    style={{ color: isDark ? 'white' : 'black' }}
+                    className={`absolute w-5 h-5 transition-all duration-300 ease-in-out ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'}`}
+                    style={{ color: isDark ? 'rgb(var(--zinc-50))' : 'rgb(var(--zinc-950))' }}
                 />
             </div>
         </button>

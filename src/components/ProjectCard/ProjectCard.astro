@@ -10,14 +10,14 @@ interface Props {
   }
   title: string
   heading: string
-  description: string
+  description?: string
   projectUrl: string
 }
 
-const { projectImage, title, heading, description, projectUrl } = Astro.props
+const { projectImage, title, heading, projectUrl } = Astro.props
 ---
 
-<div class='flex flex-col gap-6'>
+<div class='col-span-4'>
   <ProjectImage
     src={projectImage.src}
     alt={projectImage.alt}
@@ -26,9 +26,9 @@ const { projectImage, title, heading, description, projectUrl } = Astro.props
     width={projectImage.width}
     height={projectImage.height}
   />
-  <div class='flex flex-col'>
-    <h3 class='text-sm font-medium'>{title}</h3>
-    <h2 class='text-xl md:text-2xl mt-2'>{heading}</h2>
+  <div class=''>
+    <h3 class='text-xs uppercase mt-4 tracking-wider text-zinc-600'>{title}</h3>
+    <h2 class='text-xl md:text-xl mt-1'>{heading}</h2>
   </div>
 </div>
 

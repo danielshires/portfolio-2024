@@ -1,22 +1,33 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import ProjectGrid from '../components/ProjectGrid/ProjectGrid.astro'
-import TextBanner from '../components/Text/TextBanner.astro'
+import Hero from '../components/Hero/Hero.astro'
 import { projectsData } from '../data/projects'
 import PageTransition from '../components/Transitions/PageTransition.astro'
 
 const { projects } = projectsData
 
-// Front Matter
-const frontMatter = {
-  pageTitle: 'Design Work',
-  pageDescription: 'A collection of design projects showcasing my work in various disciplines.',
+const heroContent = {
+  name: 'Design Work',
+  jobTitle: 'Product Designer',
+  heading: {
+    firstLine: 'A collection of',
+    secondLine: 'design projects.',
+  },
+  introText: {
+    first:
+      '',
+    second:
+      '',
+  },
 }
 ---
 
-<Layout pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription}>
+<Layout pageTitle={heroContent.name} pageDescription={heroContent.introText.first}>
   <PageTransition>
-    <TextBanner pageTitle={frontMatter.pageTitle} pageDescription={frontMatter.pageDescription} />
-    <ProjectGrid projects={projects} />
+    <div class='flex flex-col'>
+      <Hero {...heroContent} />
+      <ProjectGrid projects={projects} />
+    </div>
   </PageTransition>
 </Layout>
