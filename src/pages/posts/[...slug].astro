@@ -4,6 +4,7 @@ import { getPostBySlug, getAllPosts } from '../../lib/sanity'
 import { urlFor } from '../../lib/sanity'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import { toHTML } from '@portabletext/to-html'
 
 export async function getStaticPaths() {
   const posts = await getAllPosts()
@@ -14,6 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props
+const bodyHtml = toHTML(post.body)
 ---
 
 <Layout pageTitle={post.title} pageDescription={post.description || post.title}>
@@ -58,7 +60,7 @@ const { post } = Astro.props
 
           {
             post.body ? (
-              <div class='prose prose-lg max-w-none' set:html={post.body} />
+              <div class='prose prose-lg max-w-none' set:html={bodyHtml} />
             ) : (
               <div class='prose prose-lg max-w-none'>
                 <p class='text-zinc-600 dark:text-zinc-400 italic'>Content coming soon...</p>
