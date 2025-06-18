@@ -2,33 +2,25 @@
 import Layout from '../../layouts/Layout.astro'
 import { getAllPosts } from '../../lib/sanity'
 import type { Post } from '../../lib/sanity'
-import Hero from '../../components/Hero/Hero.astro'
+import SimpleHero from '../../components/Hero/SimpleHero.astro'
 import PostCard from '../../components/Cards/PostCard.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
 
 const posts = await getAllPosts()
-const [featuredPost, ...remainingPosts] = posts
 
 const heroContent = {
-  name: 'Blog Posts',
-  jobTitle: 'Writer',
-  heading: {
-    firstLine: 'Thoughts and',
-    secondLine: 'insights.',
-  },
   introText: {
-    first:
-      'A collection of thoughts, insights, and updates from my journey in design and photography.',
+    first: 'Thoughts',
     second:
       'Sharing experiences, learnings, and perspectives on creating meaningful digital experiences.',
   },
 }
 ---
 
-<Layout pageTitle={heroContent.name} pageDescription={heroContent.introText.first}>
+<Layout pageTitle='Thoughts' pageDescription={heroContent.introText.first}>
   <PageTransition>
     <div class='flex flex-col'>
-      <Hero {...heroContent} />
+      <SimpleHero {...heroContent} />
       <!-- Remaining Posts Grid -->
       <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
         {posts.map((post) => <PostCard post={post} />)}

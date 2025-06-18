@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import Hero from '../components/Hero/Hero.astro'
+import SimpleHero from '../components/Hero/SimpleHero.astro'
 import Image from 'astro/components/Image.astro'
 import AlbumCard from '../components/Cards/AlbumCard.astro'
 import { getAllAlbums } from '../lib/sanity'
@@ -17,25 +17,17 @@ try {
 }
 
 const heroContent = {
-  name: 'Pictures',
-  jobTitle: 'Photographer',
-  heading: {
-    firstLine: 'Capturing moments',
-    secondLine: 'on film.',
-  },
   introText: {
-    first:
-      'A collection of photographs shot on 35mm and 120mm film, capturing moments and memories.',
-    second:
-      'Each image tells a story, preserving memories through the unique character of film photography.',
+    first: 'Pictures',
+    second: 'Capturing moments and memories through the lens.',
   },
 }
 ---
 
-<Layout pageTitle={heroContent.name} pageDescription={heroContent.introText.first}>
+<Layout pageTitle='Pictures' pageDescription={heroContent.introText.first}>
   <PageTransition>
     <div class='flex flex-col'>
-      <Hero {...heroContent} />
+      <SimpleHero {...heroContent} />
 
       <div class='py-8'>
         {
