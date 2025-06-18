@@ -1,11 +1,14 @@
 import { defineConfig } from 'astro/config'
 import { getCollection } from 'astro:content'
+import { getNavigationItems } from '../config/features'
 
 export async function GET() {
   const posts = await getCollection('posts')
   const albums = await getCollection('albums')
 
-  const pages = ['', '/pictures', '/albums', '/design', '/experiments']
+  // Get navigation items and filter by enabled/visible features
+  const navigationItems = getNavigationItems()
+  const pages = ['', ...navigationItems.map((item) => item.href), '/albums']
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -36,7 +39,7 @@ export async function GET() {
     .map(
       (album) => `
     <url>
-      <loc>${new URL(`/albums/${album.data.slug.current}`, 'https://danielshires.com').href}</loc>
+      <loc>${new URL(`/albums/${album.id}`, 'https://danielshires.com').href}</loc>
       <lastmod>${album.data.date.toISOString()}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>

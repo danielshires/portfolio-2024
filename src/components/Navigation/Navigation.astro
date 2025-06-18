@@ -2,10 +2,14 @@
 // Components
 import NavLink from '../Buttons/NavLink.astro'
 import ThemeToggle from '../ThemeToggle'
+import { getNavigationItems } from '../../config/features'
 
 // Javascript
 const pathname = new URL(Astro.request.url).pathname
 const currentPath = pathname.slice(1)
+
+// Get navigation items based on feature flags
+const navigationItems = getNavigationItems()
 ---
 
 <nav
@@ -18,10 +22,13 @@ const currentPath = pathname.slice(1)
         <NavLink path='' target='' href='/'> Home </NavLink>
         <!-- Page links -->
         <div class='flex flex-row md:flex-row gap-4'>
-          <NavLink path='design' target='_self' href='/design'>Design</NavLink>
-          <NavLink path='pictures' target='_self' href='/pictures'>Pictures</NavLink>
-          <NavLink path='posts' target='_self' href='/posts'>Thoughts</NavLink>
-          <NavLink path='experiments' target='_self' href='/experiments'>Experiments</NavLink>
+          {
+            navigationItems.map((item) => (
+              <NavLink path={item.path} target='_self' href={item.href}>
+                {item.label}
+              </NavLink>
+            ))
+          }
         </div>
       </div>
       <ThemeToggle client:load />

@@ -2,6 +2,7 @@
 // Components
 import NavLink from '../../Buttons/NavLink.astro'
 import Image from 'astro/components/Image.astro'
+import { getNavigationItems } from '../../../config/features'
 
 // Images
 import logoLM from '../../../../public/images/svg/logo-LM.svg'
@@ -11,6 +12,9 @@ import logoDM from '../../../../public/images/svg/logo-DM.svg'
 const pathname = new URL(Astro.request.url).pathname
 const currentPath = pathname.slice(1)
 const colourModePath = currentPath.startsWith('experiments') ? logoDM : logoLM
+
+// Get navigation items based on feature flags
+const navigationItems = getNavigationItems()
 ---
 
 <nav
@@ -32,10 +36,13 @@ const colourModePath = currentPath.startsWith('experiments') ? logoDM : logoLM
       >
       <!-- Page links -->
       <div id='navPageLinks' class='flex flex-row md:flex-row gap-4 nav-links'>
-        <NavLink path='design' target='_self' href='/design'>Design</NavLink>
-        <NavLink path='pictures' target='_self' href='/pictures'>Pictures</NavLink>
-        <NavLink path='posts' target='_self' href='/posts'>Thoughts</NavLink>
-        <NavLink path='experiments' target='_self' href='/experiments'>Experiments</NavLink>
+        {
+          navigationItems.map((item) => (
+            <NavLink path={item.path} target='_self' href={item.href}>
+              {item.label}
+            </NavLink>
+          ))
+        }
       </div>
     </div>
   </div>
