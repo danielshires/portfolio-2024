@@ -9,17 +9,17 @@ export default function PostCard({ post }) {
             className="group block relative overflow-hidden bg-background-light/5 dark:bg-background-dark/5 backdrop-blur-sm border border-border-light/10 dark:border-border-dark/10 hover:border-border-light/20 dark:hover:border-border-dark/20 transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
         >
             {post.mainImage ? (
-                <div className="w-full h-48 overflow-hidden">
+                <div className="w-full aspect-[2/1] overflow-hidden">
                     <img
-                        src={urlFor(post.mainImage).width(800).url()}
+                        src={urlFor(post.mainImage).width(1200).url()}
                         alt={post.title}
                         loading="lazy"
                         decoding="async"
-                        className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                        className="object-cover w-full h-full rounded transition-transform duration-300 group-hover:scale-105"
                     />
                 </div>
             ) : (
-                <div className="w-full h-48 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 text-4xl">📝</div>
+                <div className="w-full aspect-[2/1] flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 text-4xl">📝</div>
             )}
             <div className="flex flex-col justify-between pt-2">
                 <div className="">
