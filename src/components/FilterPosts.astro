@@ -1,0 +1,72 @@
+---
+import FilterBar from './FilterBar.astro'
+import PostCard from './Cards/PostCard.astro'
+interface Props {
+  posts: any[]
+  categories: string[]
+  tags: string[]
+}
+const { posts = [], categories = [], tags = [] } = Astro.props
+---
+
+<div id='filter-posts-root'>
+  <FilterBar categories={categories} tags={tags} activeFilter='all' />
+  <div id='posts-grid' class='grid grid-cols-1 md:grid-cols-2 gap-8 mt-4'>
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+  <script type='application/json' id='all-posts-data' set:html={JSON.stringify(posts)} />
+  <script type='application/json' id='all-categories-data' set:html={JSON.stringify(categories)} />
+  <script type='application/json' id='all-tags-data' set:html={JSON.stringify(tags)} />
+</div>
+
+<script type='module'>
+  // Minimal client-side filtering logic
+  const root = document.getElementById('filter-posts-root')
+  const postsGrid = root.querySelector('#posts-grid')
+  const allPosts = JSON.parse(document.getElementById('all-posts-data').textContent)
+  const categories = JSON.parse(document.getElementById('all-categories-data').textContent)
+  const tags = JSON.parse(document.getElementById('all-tags-data').textContent)
+
+  let activeFilter = 'all'
+
+  // Listen for filterchange events on the window object
+  window.addEventListener('filterchange', (e) => {
+    activeFilter = e.detail.filter
+    console.log('Filter changed to:', activeFilter)
+    renderPosts()
+  })
+
+  function renderPosts() {
+    let filtered = []
+    const filterLower = activeFilter.toLowerCase()
+
+    console.log('Filtering with:', activeFilter)
+    console.log('Available categories:', categories)
+    console.log('Available tags:', tags)
+    console.log('All posts:', allPosts)
+
+    if (activeFilter === 'all') {
+      filtered = allPosts
+    } else {
+      filtered = allPosts.filter(
+        (p) =>
+          (p.category || '').toLowerCase() === filterLower ||
+          (p.tags || []).map((t) => t.toLowerCase()).includes(filterLower)
+      )
+    }
+
+    console.log('Filtered posts:', filtered)
+
+    // Re-render the grid
+    postsGrid.innerHTML = ''
+    filtered.forEach((post) => {
+      const wrapper = document.createElement('div')
+      wrapper.innerHTML = `<div class='astro-postcard'></div>`
+      postsGrid.appendChild(wrapper.firstElementChild)
+      // Hydrate Astro PostCard component
+      window.dispatchEvent(
+        new CustomEvent('astro:hydrate', { detail: { post, el: wrapper.firstElementChild } })
+      )
+    })
+  }
+</script>

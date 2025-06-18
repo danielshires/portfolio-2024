@@ -1,12 +1,18 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getAllPosts } from '../../lib/sanity'
-import type { Post } from '../../lib/sanity'
+import { getAllPosts, getSiteSettings } from '../../lib/sanity'
+import FilterPostsReact from '../../components/FilterPostsReact.jsx'
 import SimpleHero from '../../components/Hero/SimpleHero.astro'
-import PostCard from '../../components/Cards/PostCard.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+// TODO: Create these components
+// import FilterBar from '../../components/FilterBar.astro'
+// import Sidebar from '../../components/Sidebar.astro'
 
 const posts = await getAllPosts()
+const siteSettings = await getSiteSettings()
+const categories = siteSettings?.categories || []
+// TODO: Derive tags from posts or Sanity if needed
+const tags = Array.from(new Set(posts?.flatMap((post) => post.tags || []) || []))
 
 const heroContent = {
   introText: {
@@ -15,16 +21,21 @@ const heroContent = {
       'Sharing experiences, learnings, and perspectives on creating meaningful digital experiences.',
   },
 }
+
+// For UI review: sample activeFilter
+const activeFilter = 'featured'
 ---
 
 <Layout pageTitle='Thoughts' pageDescription={heroContent.introText.first}>
   <PageTransition>
-    <div class='flex flex-col'>
+    <div class='min-h-screen flex flex-col gap-12 pb-20'>
       <SimpleHero {...heroContent} />
-      <!-- Remaining Posts Grid -->
-      <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-        {posts.map((post) => <PostCard post={post} />)}
-      </div>
+      <FilterPostsReact
+        client:only='react'
+        posts={posts || []}
+        categories={categories}
+        tags={tags}
+      />
     </div>
   </PageTransition>
 </Layout>

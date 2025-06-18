@@ -12,13 +12,13 @@ interface Props {
 }
 
 const { pageTitle, pageDescription } = Astro.props
-
 ---
 
 <!doctype html>
 <html lang='en' class='text-base'>
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
-  <body class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased mb-20'>
+  <body
+    class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased'>
     <LoadingBar />
     <Navigation transition:persist />
     <main class='container mx-auto px-4 lg:px-2'>
@@ -41,50 +41,44 @@ const { pageTitle, pageDescription } = Astro.props
 </script>
 
 <style is:global>
+  /* Disable default view transition animations to prevent flashing */
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation: fade 0.3s ease-in-out;
+    animation: none;
     mix-blend-mode: normal;
-    background-color: var(--background-color);
   }
 
-  @keyframes fade {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  ::view-transition-old(root) {
-    z-index: 1;
-  }
-  ::view-transition-new(root) {
-    z-index: 2;
-  }
-
-  .dark::view-transition-old(root) {
-    z-index: 2;
-  }
-  .dark::view-transition-new(root) {
-    z-index: 1;
-  }
-
-  /* Prevent flash during transition */
+  /* Ensure consistent background during transitions */
   html {
     background-color: var(--background-color);
   }
 
   body {
     background-color: var(--background-color);
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.2s ease-out;
   }
 
-  /* Ensure smooth color transitions */
-  * {
+  /* Targeted transitions for theme-sensitive elements only */
+  .theme-transition {
     transition:
-      background-color 0.3s ease-in-out,
-      color 0.3s ease-in-out;
+      background-color 0.2s ease-out,
+      color 0.2s ease-out,
+      border-color 0.2s ease-out;
+  }
+
+  /* Subtle page entrance animation */
+  main {
+    animation: gentleFadeIn 0.3s ease-out;
+  }
+
+  @keyframes gentleFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>

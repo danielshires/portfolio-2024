@@ -1,0 +1,62 @@
+---
+interface Props {
+  categories: string[]
+  tags: string[]
+  activeFilter: string
+}
+
+const { categories = [], tags = [], activeFilter = '' } = Astro.props
+
+function handleClick(filter: string) {
+  const event = new CustomEvent('filterchange', { detail: { filter } })
+  window.dispatchEvent(event)
+}
+---
+
+<nav class='flex flex-wrap gap-2 my-6' aria-label='Post filters'>
+  <button
+    class={`px-4 py-1 rounded-full border text-sm font-semibold transition-all duration-200
+      ${activeFilter === 'featured' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}
+    `}
+    aria-pressed={activeFilter === 'featured'}
+    data-filter='featured'
+    type='button'>
+    Featured
+  </button>
+  {
+    categories.map((category) => (
+      <button
+        class={`px-4 py-1 rounded-full border text-sm font-semibold transition-all duration-200
+        ${activeFilter === category ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}
+      `}
+        aria-pressed={activeFilter === category}
+        data-filter={category}
+        type='button'>
+        {category}
+      </button>
+    ))
+  }
+  {
+    tags.map((tag) => (
+      <button
+        class={`px-4 py-1 rounded-full border text-sm font-normal transition-all duration-200
+        ${activeFilter === tag ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}
+      `}
+        aria-pressed={activeFilter === tag}
+        data-filter={tag}
+        type='button'>
+        {tag}
+      </button>
+    ))
+  }
+</nav>
+
+<script type='module'>
+  // Attach click listeners to all filter buttons
+  document.querySelectorAll('nav[aria-label="Post filters"] button[data-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter')
+      window.dispatchEvent(new CustomEvent('filterchange', { detail: { filter } }))
+    })
+  })
+</script>

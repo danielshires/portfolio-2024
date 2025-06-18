@@ -10,98 +10,26 @@ const { class: className = '' } = Astro.props
   <slot />
 </div>
 
-<script>
-  import gsap from 'gsap'
-
-  // Create overlay element
-  function createOverlay() {
-    const overlay = document.createElement('div')
-    overlay.id = 'page-transition-overlay'
-    overlay.style.position = 'fixed'
-    overlay.style.inset = '0'
-    overlay.style.backgroundColor = '#000'
-    overlay.style.zIndex = '1000'
-    overlay.style.pointerEvents = 'none'
-    document.body.appendChild(overlay)
-    return overlay
-  }
-
-  // Handle page transitions
-  function handlePageTransition() {
-    const pageTransition = document.getElementById('page-transition')
-    const overlay = createOverlay()
-
-    // Ensure new page is hidden initially
-    gsap.set(pageTransition, {
-      opacity: 0,
-      visibility: 'visible', // Make sure it's visible but transparent
-    })
-    gsap.set(overlay, { opacity: 1 })
-
-    // Animate in
-    gsap
-      .timeline()
-      .to(overlay, {
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power2.inOut',
-        onComplete: () => overlay.remove(),
-      })
-      .to(
-        pageTransition,
-        {
-          opacity: 1,
-          duration: 0.6,
-          ease: 'power2.inOut',
-        },
-        '-=0.3'
-      )
-  }
-
-  // Handle page navigation
-  document.addEventListener('astro:before-preparation', () => {
-    const pageTransition = document.getElementById('page-transition')
-    const overlay = createOverlay()
-
-    gsap
-      .timeline()
-      .to(pageTransition, {
-        opacity: 0,
-        duration: 0.3,
-        ease: 'power2.in',
-      })
-      .to(
-        overlay,
-        {
-          opacity: 1,
-          duration: 0.3,
-          ease: 'power2.in',
-        },
-        '-=0.1'
-      )
-  })
-
-  // Run on page load
-  document.addEventListener('astro:page-load', handlePageTransition)
-
-  // Initial page load
-  document.addEventListener('DOMContentLoaded', () => {
-    const pageTransition = document.getElementById('page-transition')
-    if (pageTransition) {
-      gsap.set(pageTransition, { opacity: 1 })
-    }
-  })
-</script>
-
 <style>
   #page-transition {
     min-height: 100vh;
-    will-change: opacity;
-    opacity: 0; /* Start hidden */
+    opacity: 1;
+    animation: smoothFadeIn 0.3s ease-out;
   }
 
-  #page-transition-overlay {
-    background-color: #000;
-    opacity: 0;
+  @keyframes smoothFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Ensure content transitions smoothly */
+  #page-transition > * {
+    transition: opacity 0.2s ease-out;
   }
 </style>

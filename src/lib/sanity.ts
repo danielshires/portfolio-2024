@@ -23,7 +23,11 @@ export interface Post {
   author?: string
   relatedPosts?: Post[]
   excerpt?: string
-  categories?: string[]
+  category?: string
+  views?: number
+  featured?: boolean
+  pinned?: boolean
+  readingTime?: string
 }
 
 export interface Picture {
@@ -76,7 +80,13 @@ export async function getAllPosts(): Promise<Post[]> {
       mainImage,
       body,
       "tags": tags,
-      "author": author->name
+      "author": author->name,
+      excerpt,
+      category,
+      views,
+      featured,
+      pinned,
+      readingTime
     }
   `)
 }
@@ -95,14 +105,20 @@ export async function getPostBySlug(slug: string): Promise<Post> {
       body,
       "tags": tags,
       "author": author->name,
-      "relatedPosts": relatedPosts[]-> {
+      relatedPosts: relatedPosts[]-> {
         _id,
         title,
         slug,
         publishedAt,
         description,
         mainImage
-      }
+      },
+      excerpt,
+      category,
+      views,
+      featured,
+      pinned,
+      readingTime
     }
   `,
     { slug }
@@ -180,5 +196,15 @@ export async function getAlbumBySlug(slug: string): Promise<Album> {
     }
   `,
     { slug }
+  )
+}
+
+// Helper function to fetch site settings singleton (for categories, OG image, etc.)
+export async function getSiteSettings() {
+  return await client.fetch(
+    `*[_type == "siteSettings"][0]{
+      categories,
+      defaultOgImage
+    }`
   )
 }

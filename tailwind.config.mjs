@@ -40,7 +40,76 @@ export default {
                         },
                         'li::marker': {
                             color: 'rgb(var(--zinc-950))',
-                        }
+                        },
+                        'h1, h2, h3, h4, h5, h6': {
+                            color: 'rgb(var(--zinc-950))',
+                        },
+                        'p, li, blockquote': {
+                            color: 'rgb(var(--zinc-700))',
+                        },
+                        'strong': {
+                            color: 'rgb(var(--zinc-950))',
+                        },
+                        'a': {
+                            color: 'rgb(var(--zinc-950))',
+                        },
+                        'code': {
+                            color: 'rgb(var(--zinc-950))',
+                            backgroundColor: 'rgb(var(--zinc-100))',
+                        },
+                        'pre': {
+                            backgroundColor: 'rgb(var(--zinc-100))',
+                        },
+                        'blockquote': {
+                            borderLeftColor: 'rgb(var(--zinc-300))',
+                        },
+                        'hr': {
+                            borderColor: 'rgb(var(--zinc-300))',
+                        },
+                        'thead': {
+                            borderBottomColor: 'rgb(var(--zinc-300))',
+                        },
+                        'tbody tr': {
+                            borderBottomColor: 'rgb(var(--zinc-200))',
+                        },
+                    }
+                },
+                dark: {
+                    css: {
+                        'li::marker': {
+                            color: 'rgb(var(--zinc-50))',
+                        },
+                        'h1, h2, h3, h4, h5, h6': {
+                            color: 'rgb(var(--zinc-50))',
+                        },
+                        'p, li, blockquote': {
+                            color: 'rgb(var(--zinc-300))',
+                        },
+                        'strong': {
+                            color: 'rgb(var(--zinc-50))',
+                        },
+                        'a': {
+                            color: 'rgb(var(--zinc-50))',
+                        },
+                        'code': {
+                            color: 'rgb(var(--zinc-50))',
+                            backgroundColor: 'rgb(var(--zinc-800))',
+                        },
+                        'pre': {
+                            backgroundColor: 'rgb(var(--zinc-800))',
+                        },
+                        'blockquote': {
+                            borderLeftColor: 'rgb(var(--zinc-700))',
+                        },
+                        'hr': {
+                            borderColor: 'rgb(var(--zinc-700))',
+                        },
+                        'thead': {
+                            borderBottomColor: 'rgb(var(--zinc-700))',
+                        },
+                        'tbody tr': {
+                            borderBottomColor: 'rgb(var(--zinc-800))',
+                        },
                     }
                 }
             }),

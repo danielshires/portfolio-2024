@@ -40,7 +40,7 @@ export default function ThemeToggle() {
         <button
             type="button"
             onClick={handleClick}
-            className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+            className="p-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors theme-transition"
             aria-label="Toggle theme"
         >
             <div className="relative w-5 h-5">
