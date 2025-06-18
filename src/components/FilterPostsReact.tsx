@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import type { Post } from '../lib/sanity';
 import PostCard from './Cards/PostCard.jsx';
 
-export default function FilterPostsReact({ posts = [], categories = [], tags = [] }) {
+interface FilterPostsReactProps {
+    posts: Post[];
+    categories: string[];
+    tags: string[];
+}
+
+export default function FilterPostsReact({ posts = [], categories = [], tags = [] }: FilterPostsReactProps) {
     const [activeFilter, setActiveFilter] = useState('all');
 
     const filterLower = activeFilter.toLowerCase();
@@ -61,9 +67,3 @@ export default function FilterPostsReact({ posts = [], categories = [], tags = [
         </div>
     );
 }
-
-FilterPostsReact.propTypes = {
-    posts: PropTypes.array,
-    categories: PropTypes.array,
-    tags: PropTypes.array,
-};

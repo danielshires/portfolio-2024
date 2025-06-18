@@ -1,18 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getAllPosts, getSiteSettings } from '../../lib/sanity'
-import FilterPostsReact from '../../components/FilterPostsReact.jsx'
+import FilterPostsReact from '../../components/FilterPostsReact.tsx'
 import SimpleHero from '../../components/Hero/SimpleHero.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import type { Post } from '../../lib/sanity'
 // TODO: Create these components
 // import FilterBar from '../../components/FilterBar.astro'
 // import Sidebar from '../../components/Sidebar.astro'
 
-const posts = await getAllPosts()
+const posts: Post[] = await getAllPosts()
 const siteSettings = await getSiteSettings()
-const categories = siteSettings?.categories || []
+const categories: string[] = siteSettings?.categories || []
 // TODO: Derive tags from posts or Sanity if needed
-const tags = Array.from(new Set(posts?.flatMap((post) => post.tags || []) || []))
+const tags: string[] = Array.from(new Set(posts?.flatMap((post) => post.tags || []) || []))
 
 const heroContent = {
   introText: {

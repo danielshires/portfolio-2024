@@ -4,6 +4,7 @@ import { getPostBySlug, getAllPosts } from '../../lib/sanity'
 import { urlFor } from '../../lib/sanity'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import RelatedPosts from '../../components/RelatedPosts.astro'
 import { toHTML } from '@portabletext/to-html'
 
 export async function getStaticPaths() {
@@ -78,6 +79,18 @@ const bodyHtml = toHTML(post.body, {
             )
           }
         </article>
+      </div>
+
+      <!-- Related Posts Section -->
+      <div class='grid grid-cols-12 gap-8'>
+        <div class='col-span-12 lg:col-start-4 lg:col-span-6'>
+          <RelatedPosts
+            relatedPosts={post.relatedPosts || []}
+            currentPostSlug={post.slug.current}
+            currentPostCategory={post.category}
+            currentPostTags={post.tags || []}
+          />
+        </div>
       </div>
     </div>
   </PageTransition>
