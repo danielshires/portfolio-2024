@@ -23,7 +23,7 @@ export default function FilterPostsReact({ posts = [], categories = [], tags = [
         <div className="w-full">
             <nav className="flex flex-wrap gap-2 mt-12" aria-label="Post filters">
                 <button
-                    className={`px-4 py-1 rounded-full border text-sm font-semibold transition-all duration-200 ${activeFilter === 'all' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}`}
+                    className={`px-4 py-1 rounded-full border text-sm font-mono uppercase transition-all duration-200 ${activeFilter === 'all' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}`}
                     aria-pressed={activeFilter === 'all'}
                     onClick={() => setActiveFilter('all')}
                     type="button"
@@ -33,7 +33,7 @@ export default function FilterPostsReact({ posts = [], categories = [], tags = [
                 {categories.map(category => (
                     <button
                         key={category}
-                        className={`px-4 py-1 rounded-full border text-sm font-semibold transition-all duration-200 ${activeFilter === category ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}`}
+                        className={`px-4 py-1 rounded-full border text-sm font-mono uppercase transition-all duration-200 ${activeFilter === category ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}`}
                         aria-pressed={activeFilter === category}
                         onClick={() => setActiveFilter(category)}
                         type="button"
