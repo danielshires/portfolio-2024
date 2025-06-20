@@ -17,7 +17,7 @@ interface Props {
 const { projectImage, title, heading, projectUrl } = Astro.props
 ---
 
-<div class='col-span-4'>
+<div class='col-span-1 md:col-span-3 lg:col-span-4'>
   <ProjectImage
     src={projectImage.src}
     alt={projectImage.alt}

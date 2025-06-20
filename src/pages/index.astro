@@ -4,20 +4,16 @@ import Hero from '../components/Hero/Hero.astro'
 import FeaturedProject from '../components/FeaturedProject/FeaturedProject.astro'
 import ProjectGrid from '../components/ProjectGrid/ProjectGrid.astro'
 import { projectsData } from '../data/projects'
+import { getAuthorBySlug, urlFor } from '../lib/sanity'
+
+const author = await getAuthorBySlug('daniel-shires')
+const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).url() : undefined
 
 const heroContent = {
-  // name: 'Design with purpose',
-  jobTitle: 'Design with purpose',
-  heading: {
-    firstLine: 'Human centred.',
-    secondLine: 'Digital experiences.',
-  },
-  introText: {
-    first:
-      "Hi, I'm Dan — a Product Designer with 5+ years' experience designing cohesive, user-centered digital products.",
-    second:
-      'My work blends UX strategy, interaction design, and branding to deliver products that are thoughtful, usable, and cohesive at every touchpoint.',
-  },
+  name:'',
+  tagline: 'Design with purpose',
+  intro: 'Hi, Im Dan — a Product Designer with 5+ years experience designing cohesive, user-centered digital products.',
+  avatar: avatarUrl,
 }
 
 const { projects } = projectsData
