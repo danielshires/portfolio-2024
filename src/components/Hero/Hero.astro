@@ -3,34 +3,37 @@ import { getPictureBySlug, urlFor } from '../../lib/sanity'
 
 interface Props {
   name: string
-  jobTitle: string
-  heading: {
-    firstLine: string
-    secondLine: string
-  }
-  introText: {
-    first: string
-    second: string
-  }
+  tagline: string
+  intro: string
+  avatar?: string // Optional avatar image path or URL
 }
-const commBankLogo = await getPictureBySlug('commbank-logo')
-const logoUrl = commBankLogo?.mainImage ? urlFor(commBankLogo.mainImage).width(200).url() : null
 
-const { name, jobTitle, heading, introText } = Astro.props
+const { name, tagline, intro, avatar } = Astro.props
 ---
 
 <section
   id='intro'
-  class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 justify-center mt-48 gap-8'
+  class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 justify-center mt-48 gap-4'
   aria-label='Introduction'>
-  <h4 class='col-span-full uppercase text-sm'>
-    <span id='name' class='block font-bold font-fragment'>{name}</span>
-    <span id='jobTitle' class='flex items-center gap-1 font-fragment'>
-      {jobTitle}
-    </span>
+  {
+    avatar && (
+      <img
+        src={avatar}
+        alt={name + ' avatar'}
+        width='80'
+        height='80'
+        class='rounded-full mb-2'
+        style='width:80px;height:80px;object-fit:cover;'
+      />
+    )
+  }
+  <h4 class='col-span-full uppercase text-sm flex flex-col gap-2 mt-2 tracking-wider'>
+    {tagline}
   </h4>
-  <h1 id='introOne' class='col-span-8 gap-4 text-4xl leading-normal' text-4xl leading-normal'>
-    {introText.first}
+  <h1
+    id='intro'
+    class='col-span-1 md:col-span-8 gap-4 text-2xl md:text-4xl leading-normal md:leading-relaxed'>
+    {intro}
   </h1>
 </section>
 

@@ -208,3 +208,17 @@ export async function getSiteSettings() {
     }`
   )
 }
+
+// Helper function to fetch a single author by slug
+export async function getAuthorBySlug(slug: string) {
+  return await client.fetch(
+    `*[_type == "author" && slug.current == $slug][0]{
+      _id,
+      name,
+      slug,
+      image,
+      bio
+    }`,
+    { slug }
+  )
+}
