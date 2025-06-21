@@ -76,24 +76,21 @@ const { name, tagline, intro, avatar } = Astro.props
     if (!hasPlayed) {
       // Get elements
       const name = document.getElementById('name')
-      const jobTitle = document.getElementById('jobTitle')
-      const introOne = document.getElementById('introOne')
-      const introTwo = document.getElementById('introTwo')
+      const tagline = document.getElementById('tagline')
+      const intro = document.getElementById('intro')
       const navigation = document.getElementById('nav')
 
       // Split text into lines
       const nameSplit = new SplitText(name, { type: 'lines' })
-      const jobTitleSplit = new SplitText(jobTitle, { type: 'lines' })
-      const introOneSplit = new SplitText(introOne, { type: 'lines' })
-      const introTwoSplit = new SplitText(introTwo, { type: 'lines' })
+      const taglineSplit = new SplitText(tagline, { type: 'lines' })
+      const introSplit = new SplitText(intro, { type: 'lines' })
 
       // Initial state for all elements
       gsap.set(
         [
           ...nameSplit.lines,
-          ...jobTitleSplit.lines,
-          ...introOneSplit.lines,
-          ...introTwoSplit.lines,
+          ...taglineSplit.lines,
+          ...introSplit.lines,
         ],
         {
           clipPath: config.initialClipPath,
@@ -119,7 +116,7 @@ const { name, tagline, intro, avatar } = Astro.props
         })
         // 2. Animate job title lines
         .to(
-          jobTitleSplit.lines,
+          taglineSplit.lines,
           {
             clipPath: config.finalClipPath,
             opacity: 1,
@@ -131,7 +128,7 @@ const { name, tagline, intro, avatar } = Astro.props
         )
         // 3. Animate first paragraph lines
         .to(
-          introOneSplit.lines,
+          introSplit.lines,
           {
             clipPath: config.finalClipPath,
             opacity: 1,
@@ -140,18 +137,6 @@ const { name, tagline, intro, avatar } = Astro.props
             ease: config.lineEase,
           },
           config.jobTitleToIntroOne
-        )
-        // 4. Animate second paragraph lines
-        .to(
-          introTwoSplit.lines,
-          {
-            clipPath: config.finalClipPath,
-            opacity: 1,
-            duration: config.lineDuration,
-            stagger: config.lineStagger,
-            ease: config.lineEase,
-          },
-          config.introOneToIntroTwo
         )
         // 5. Animate navigation dropping down
         .to(

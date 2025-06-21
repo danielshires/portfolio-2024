@@ -5,21 +5,12 @@ import Hero from '../../components/Hero/Hero.astro'
 // Front Matter
 const heroContent = {
   name: 'Work',
-  jobTitle: 'Product Designer',
-  heading: {
-    firstLine: 'Recent case studies',
-    secondLine: 'and featured work.',
-  },
-  introText: {
-    first:
-      'A collection of recent case studies and featured design work showcasing my approach to creating user-centered digital products.',
-    second:
-      'Each project represents a unique challenge and solution, demonstrating my expertise in UX/UI design and digital product development.',
-  },
+  tagline: 'Product Designer',
+  intro: 'A collection of recent case studies and featured design work showcasing my approach to creating user-centered digital products. Each project represents a unique challenge and solution, demonstrating my expertise in UX/UI design and digital product development.',
 }
 ---
 
-<Layout pageTitle={heroContent.name} pageDescription={heroContent.introText.first}>
+<Layout pageTitle={heroContent.name} pageDescription={heroContent.intro}>
   <main id='intro' class='col-span-12'>
     <Hero {...heroContent} />
   </main>

@@ -24,19 +24,12 @@ const frontMatter = {
 
 const heroContent = {
   name: album.title,
-  jobTitle: 'Photography',
-  heading: {
-    firstLine: album.title,
-    secondLine: 'Collection',
-  },
-  introText: {
-    first: album.description || `A collection of photographs from ${album.title}`,
-    second: 'Each image captures a unique moment, preserved through the lens of film photography.',
-  },
+  tagline: 'Photography',
+  intro: `${album.description || `A collection of photographs from ${album.title}`}. Each image captures a unique moment, preserved through the lens of film photography.`,
 }
 ---
 
-<Layout pageTitle={heroContent.name} pageDescription={heroContent.introText.first}>
+<Layout pageTitle={heroContent.name} pageDescription={heroContent.intro}>
   <PageTransition>
     <div class='flex flex-col'>
       <Hero {...heroContent} />
