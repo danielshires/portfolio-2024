@@ -1,0 +1,82 @@
+<div
+  id='loading-bar'
+  class='fixed top-0 left-0 w-full h-1 bg-zinc-200 dark:bg-zinc-800 z-[9999] pointer-events-none'
+  transition:persist>
+  <div
+    class='loading-progress h-full w-0 bg-primary dark:bg-primary-light transition-all duration-300'>
+  </div>
+</div>
+
+<script>
+  let loadingBar: HTMLElement | null = null
+  let progressBar: HTMLElement | null = null
+  let totalImages: number = 0
+  let loadedImages: number = 0
+
+  function setProgress(percent: number) {
+    if (progressBar) {
+      progressBar.style.width = `${percent}%`
+    }
+  }
+
+  function startImageLoadingProgress() {
+    loadingBar = document.getElementById('loading-bar') as HTMLElement | null
+    progressBar = loadingBar?.querySelector('.loading-progress') as HTMLElement | null
+    if (!loadingBar || !progressBar) return
+
+    const images = Array.from(document.images)
+    totalImages = images.length
+    loadedImages = 0
+    setProgress(0)
+    loadingBar.style.opacity = '1'
+
+    if (totalImages === 0) {
+      setProgress(100)
+      setTimeout(() => {
+        if (loadingBar) loadingBar.style.opacity = '0'
+      }, 300)
+      return
+    }
+
+    images.forEach((img: HTMLImageElement) => {
+      if (img.complete) {
+        handleImageLoad()
+      } else {
+        img.addEventListener('load', handleImageLoad, { once: true })
+        img.addEventListener('error', handleImageLoad, { once: true })
+      }
+    })
+  }
+
+  function handleImageLoad() {
+    loadedImages++
+    setProgress((loadedImages / totalImages) * 100)
+    if (loadedImages >= totalImages) {
+      setTimeout(() => {
+        setProgress(100)
+        if (loadingBar) loadingBar.style.opacity = '0'
+      }, 300)
+    }
+  }
+
+  // Initial load
+  window.addEventListener('load', () => {
+    startImageLoadingProgress()
+  })
+
+  // On navigation (Astro View Transitions or SPA)
+  document.addEventListener('astro:after-swap', () => {
+    startImageLoadingProgress()
+  })
+</script>
+
+<style>
+  #loading-bar {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .loading-progress {
+    transition: width 0.3s ease;
+  }
+</style>

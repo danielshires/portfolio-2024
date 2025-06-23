@@ -1,0 +1,84 @@
+---
+// Client router
+import '../styles/global.css'
+import '../styles/fonts.css'
+import Navigation from '../components/Navigation/Navigation.astro'
+import Head from './Head.astro'
+import LoadingBar from '../components/LoadingBar/LoadingBar.astro'
+
+interface Props {
+  pageTitle: string
+  pageDescription: string
+}
+
+const { pageTitle, pageDescription } = Astro.props
+---
+
+<!doctype html>
+<html lang='en' class='text-base'>
+  <Head pageDescription={pageDescription} pageTitle={pageTitle} />
+  <body
+    class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased'>
+    <LoadingBar />
+    <Navigation transition:persist />
+    <main class='container mx-auto px-4 lg:px-2'>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<script>
+  // Initialize theme
+  const root = document.documentElement
+  const savedTheme = localStorage.getItem('theme')
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    root.classList.add('dark')
+  } else {
+    root.classList.remove('dark')
+  }
+</script>
+
+<style is:global>
+  /* Disable default view transition animations to prevent flashing */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  /* Ensure consistent background during transitions */
+  html {
+    background-color: var(--background-color);
+  }
+
+  body {
+    background-color: var(--background-color);
+    transition: background-color 0.2s ease-out;
+  }
+
+  /* Targeted transitions for theme-sensitive elements only */
+  .theme-transition {
+    transition:
+      background-color 0.2s ease-out,
+      color 0.2s ease-out,
+      border-color 0.2s ease-out;
+  }
+
+  /* Subtle page entrance animation */
+  main {
+    animation: gentleFadeIn 0.3s ease-out;
+  }
+
+  @keyframes gentleFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

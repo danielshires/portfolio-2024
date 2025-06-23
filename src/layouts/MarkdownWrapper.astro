@@ -1,0 +1,20 @@
+---
+import ButtonTertiary from '../components/Buttons/ButtonTertiary.astro';
+import Prose from '../components/Prose.astro';
+import Layout from './Layout.astro';
+const { frontMatter } = Astro.props;
+---
+
+<Layout pageTitle={frontMatter.title} pageDescription={frontMatter.description}>
+	<Prose class='col-span-12'>
+		<div class='col-span-12 mt-48'>
+			<aside class="absolute top-0 mt-32">
+				<ButtonTertiary path="posts" href="/posts" target="">Back</ButtonTertiary>
+			</aside>
+			<article class="prose-p:text-xl prose-p:leading-relaxed">
+				<h1>{frontMatter.title}</h1>
+				<slot />
+			</article>
+		</div>
+	</Prose>
+</Layout>

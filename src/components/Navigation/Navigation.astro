@@ -1,0 +1,90 @@
+---
+// Components
+import NavLink from '../Buttons/NavLink.astro'
+import ThemeToggle from '../ThemeToggle'
+import { getNavigationItems } from '../../config/features'
+
+// Javascript
+const pathname = new URL(Astro.request.url).pathname
+const currentPath = pathname.slice(1)
+
+// Get navigation items based on feature flags
+const navigationItems = getNavigationItems()
+---
+
+<nav
+  id='nav'
+  class='fixed z-50 top-0 left-0 right-0 mt-8 h-12 flex items-center justify-start theme-transition'>
+  <div class='container mx-auto px-4 lg:px-2'>
+    <div class='flex gap-4 justify-between items-center'>
+      <div class='flex flex-col md:flex-row gap-4 justify-start items-center'>
+        <!-- Home link -->
+        <NavLink path='' target='' href='/'> Home </NavLink>
+        <!-- Page links -->
+        <div class='flex flex-row md:flex-row gap-4'>
+          {
+            navigationItems.map((item) => (
+              <NavLink path={item.path} target='_self' href={item.href}>
+                {item.label}
+              </NavLink>
+            ))
+          }
+        </div>
+      </div>
+      <ThemeToggle client:load />
+    </div>
+  </div>
+</nav>
+
+<style>
+  @media (max-width: 768px) {
+    nav {
+      width: 100%;
+      left: 0;
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+
+  .nav-hidden {
+    transform: translateY(-200%);
+  }
+</style>
+
+<script>
+  let lastScroll = 0
+  const nav = document.getElementById('nav')
+  const scrollThreshold = 1 // Minimum scroll before hiding nav
+
+  function handleScroll() {
+    const currentScroll = window.pageYOffset
+
+    if (currentScroll <= 0) {
+      // At the top of the page
+      nav?.classList.remove('nav-hidden')
+      return
+    }
+
+    if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
+      // Scrolling down and past threshold
+      nav?.classList.add('nav-hidden')
+    } else if (currentScroll < lastScroll) {
+      // Scrolling up
+      nav?.classList.remove('nav-hidden')
+    }
+
+    lastScroll = currentScroll
+  }
+
+  // Throttle scroll event
+  let ticking = false
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        handleScroll()
+        ticking = false
+      })
+      ticking = true
+    }
+  })
+</script>

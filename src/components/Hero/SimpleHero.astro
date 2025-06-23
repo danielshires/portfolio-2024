@@ -1,0 +1,80 @@
+---
+interface Props {
+  introText: {
+    first: string
+    second: string
+  }
+}
+
+const { introText } = Astro.props
+---
+
+<section
+  id='intro'
+  class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 justify-center mt-48'
+  aria-label='Introduction'>
+  <h1 id='introOne' class='col-span-8 gap-4 text-4xl leading-normal'>
+    {introText.first}
+  </h1>
+  <p id='introTwo' class='col-span-8 mt-4 text-lg text-zinc-600 dark:text-zinc-400'>
+    {introText.second}
+  </p>
+</section>
+
+<script>
+  import gsap from 'gsap'
+  import { SplitText } from 'gsap/SplitText'
+
+  // Register GSAP plugins
+  gsap.registerPlugin(SplitText)
+
+  function introAnimation() {
+    let tl = gsap.timeline()
+    const hasPlayed = sessionStorage.getItem('hasSimpleHeroAnimationPlayed')
+
+    if (!hasPlayed) {
+      // Get elements
+      const introOne = document.getElementById('introOne')
+      const introTwo = document.getElementById('introTwo')
+
+      // Split text into lines
+      const introOneSplit = new SplitText(introOne, { type: 'lines' })
+      const introTwoSplit = new SplitText(introTwo, { type: 'lines' })
+
+      // Initial state for all elements
+      gsap.set([...introOneSplit.lines, ...introTwoSplit.lines], {
+        clipPath: 'inset(100% 0 0 0)',
+        opacity: 0,
+      })
+
+      // Animation sequence
+      tl
+        // 1. Animate first paragraph lines
+        .to(introOneSplit.lines, {
+          clipPath: 'inset(0% 0 0 0)',
+          opacity: 1,
+          duration: 1,
+          stagger: 0.1,
+          ease: 'power2.inOut',
+        })
+        // 2. Animate second paragraph lines
+        .to(
+          introTwoSplit.lines,
+          {
+            clipPath: 'inset(0% 0 0 0)',
+            opacity: 1,
+            duration: 1,
+            stagger: 0.1,
+            ease: 'power2.inOut',
+          },
+          -0.5
+        )
+
+      sessionStorage.setItem('hasSimpleHeroAnimationPlayed', 'true')
+    }
+  }
+
+  window.addEventListener('load', () => {
+    requestAnimationFrame(introAnimation)
+  })
+</script>

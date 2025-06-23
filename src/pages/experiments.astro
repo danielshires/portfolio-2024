@@ -1,0 +1,18 @@
+---
+import Link from '../components/Buttons/Link.astro'
+import Layout from '../layouts/Layout.astro'
+import { features } from '../config/features'
+
+// Check if experiments feature is enabled
+if (!features.experiments.enabled) {
+  return Astro.redirect('/404')
+}
+---
+
+<Layout pageTitle='Experiements' pageDescription='Experiements'>
+  <main id='intro' class='h-dvh overflow-hidden col-span-12 content-center font-mono text-4xl'>
+    <Link path='spinnerstudio' target='' href='/experiments/spinnerstudio' target='_blank'
+      >spinnerstudio</Link
+    >
+  </main>
+</Layout>

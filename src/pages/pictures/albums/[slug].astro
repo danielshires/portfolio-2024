@@ -1,0 +1,43 @@
+---
+import Layout from '../../../layouts/Layout.astro'
+import { getAlbumBySlug, getAllAlbums } from '../../../lib/sanity'
+import type { Album } from '../../../lib/sanity'
+import Hero from '../../../components/Hero/Hero.astro'
+import PictureCard from '../../../components/Cards/PictureCard.astro'
+import PageTransition from '../../../components/Transitions/PageTransition.astro'
+
+export async function getStaticPaths() {
+  const albums = await getAllAlbums()
+  return albums.map((album) => ({
+    params: { slug: album.slug.current },
+    props: { album },
+  }))
+}
+
+const { album } = Astro.props
+
+// Front Matter
+const frontMatter = {
+  pageTitle: album.title,
+  pageDescription: album.description || `Photos from ${album.title}`,
+}
+
+const heroContent = {
+  name: album.title,
+  tagline: 'Photography',
+  intro: `${album.description || `A collection of photographs from ${album.title}`}. Each image captures a unique moment, preserved through the lens of film photography.`,
+}
+---
+
+<Layout pageTitle={heroContent.name} pageDescription={heroContent.intro}>
+  <PageTransition>
+    <div class='flex flex-col'>
+      <Hero {...heroContent} />
+
+      <!-- Pictures Grid -->
+      <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+        {album.pictures.map((picture) => <PictureCard picture={picture} />)}
+      </div>
+    </div>
+  </PageTransition>
+</Layout>

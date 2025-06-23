@@ -1,0 +1,42 @@
+---
+import ProjectImage from '../FeaturedProject/ProjectImage.astro'
+
+interface Props {
+  projectImage: {
+    src: string
+    alt: string
+    width: number
+    height: number
+  }
+  title: string
+  heading: string
+  description?: string
+  projectUrl: string
+}
+
+const { projectImage, title, heading, projectUrl } = Astro.props
+---
+
+<div class='col-span-1 md:col-span-3 lg:col-span-4'>
+  <ProjectImage
+    src={projectImage.src}
+    alt={projectImage.alt}
+    title={heading}
+    projectUrl={projectUrl}
+    width={projectImage.width}
+    height={projectImage.height}
+  />
+  <div class=''>
+    <h3 class='text-xs uppercase mt-4 tracking-wider text-zinc-600 dark:text-zinc-400'>{title}</h3>
+    <h2 class='text-xl md:text-xl mt-1'>{heading}</h2>
+  </div>
+</div>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

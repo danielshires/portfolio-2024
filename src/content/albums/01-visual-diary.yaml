@@ -1,0 +1,41 @@
+title: Visual Diary
+description: Images taken on a Ricoh GX200
+date: 2025-01-01
+cover: './00-Visual-Diary/05-Visual-Diary01.jpg'
+draft: false
+# tags: ["diary"]
+images:
+  - image: './00-Visual-Diary/05-Visual-Diary01.jpg'
+    caption: 'Arching roof'
+    alt: Arching roof
+  - image: './00-Visual-Diary/05-Visual-Diary02.jpg'
+    caption: 'Flowers and architecture'
+    alt: Flowers and architecture
+  - image: './00-Visual-Diary/05-Visual-Diary03.jpg'
+    caption: 'Building with smiling cloud face'
+    alt: Building with smiling cloud face
+  - image: './00-Visual-Diary/05-Visual-Diary04.jpg'
+    caption: 'Look sign on pavement'
+    alt: Look sign on pavement
+  - image: './00-Visual-Diary/05-Visual-Diary05.jpg'
+    caption: 'Sunlight on decking'
+    alt: Sunlight on decking
+  - image: './00-Visual-Diary/05-Visual-Diary06.jpg'
+    caption: 'Street view'
+    alt: Street view
+  - image: './00-Visual-Diary/05-Visual-Diary07.jpg'
+    caption: 'Empty fireworks on grass'
+    alt: Empty fireworks on grass
+  - image: './00-Visual-Diary/05-Visual-Diary09.jpg'
+    caption: 'Sasauge dog on the ground'
+    alt: Sasauge dog on the ground
+  - image: './00-Visual-Diary/05-Visual-Diary10.jpg'
+    caption: 'Electrical lines'
+    alt: Electrical lines
+  - image: './00-Visual-Diary/05-Visual-Diary12.jpg'
+    caption: 'Diverging lines'
+    alt: Diverging lines on platform
+  - image: './00-Visual-Diary/05-Visual-Diary14.jpg'
+    caption: 'Diverging lines'
+    alt: Diverging lines on platform
+

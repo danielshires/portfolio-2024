@@ -1,0 +1,81 @@
+---
+// Components
+import NavLink from '../Buttons/NavLink.astro'
+import Image from 'astro/components/Image.astro'
+import { getNavigationItems } from '../../config/features'
+
+// Images
+import logoLM from '../../../public/images/svg/logo-LM.svg'
+import logoDM from '../../../public/images/svg/logo-DM.svg'
+
+// Icons
+import { Icon } from 'astro-icon/components'
+
+// Javascript
+const pathname = new URL(Astro.request.url).pathname
+const currentPath = pathname.slice(1)
+const colourModePath = currentPath === 'experiments' ? logoDM : logoLM
+
+// Get navigation items based on feature flags
+const navigationItems = getNavigationItems()
+---
+
+<nav transition:persist class='w-full fixed z-50 top-0 px-4 md:px-8 py-4 md:py-8 bg-zinc-500'>
+  <div class='flex gap-4 justify-between'>
+    <div class='w-full md:w-auto flex flex-col md:flex-row gap-4 justify-between'>
+      <!-- Home link -->
+      <NavLink path='' target='' href='/'
+        ><p class='font-semibold'>
+          <span class='flex align-middle gap-2'
+            ><Image src={colourModePath} alt='Logo' />Dan Shires</span
+          >
+        </p></NavLink
+      >
+      <!-- Page links -->
+      <div id='navPageLinks' class='hidden md:flex flex-col md:flex-row gap-4'>
+        {
+          navigationItems.map((item) => (
+            <NavLink path={item.path} target='' href={item.href}>
+              {item.label}
+            </NavLink>
+          ))
+        }
+      </div>
+      <!-- Menu icon -->
+      <Icon id='hamburger' name='menu' class='absolute top-6 right-4 md:hidden h-6 w-6' />
+    </div>
+  </div>
+</nav>
+
+<script is:inline>
+  function init() {
+    // Elements
+    const hamburgerIcon = document.getElementById('hamburger')
+    const navPageLinks = document.getElementById('navPageLinks')
+    const navAnchorLinks = navPageLinks.querySelectorAll('div > a')
+
+    // When clicking on menu, reveal links
+    hamburgerIcon.addEventListener('click', () => {
+      // Toggle reveal when clicking on menu
+      navPageLinks.classList.toggle('hidden')
+      navPageLinks.classList.toggle('flex')
+
+      // Hiding menu after clicking on link
+      navAnchorLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          navPageLinks.classList.add('hidden')
+          navPageLinks.classList.remove('flex')
+        })
+      })
+    })
+
+    // Clean up by destroying instances and removing event listeners
+    document.addEventListener('astro:before-swap', () => {}, { once: true })
+  }
+
+  // Initialize on first load
+  init()
+
+  // Re-initialize after swapping pages
+  document.addEventListener('astro:after-swap', init)
+</script>

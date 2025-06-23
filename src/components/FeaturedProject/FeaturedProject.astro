@@ -1,0 +1,44 @@
+---
+import ProjectImage from './ProjectImage.astro'
+import Statistic from './Statistic.astro'
+import type { FeaturedProjectProps, Outcome } from './types'
+import type { ImageMetadata } from 'astro'
+
+const { projectImage, title, heading, outcomes, projectUrl } = Astro.props as FeaturedProjectProps
+---
+
+<ProjectImage
+  src={projectImage.src}
+  alt={projectImage.alt}
+  title={title}
+  projectUrl={projectUrl}
+  width={projectImage.width}
+  height={projectImage.height}
+/>
+<!-- Content -->
+<div
+  id='projectContent'
+  class='flex flex-col md:flex-row gap-4 justify-between mt-6'
+  transition:name='commbank-content'>
+  <!-- Title -->
+  <div id='text' class='flex flex-col gap-2 md:w-2/4' transition:name='commbank-text'>
+    <!-- Title -->
+    <h3 class='text-sm font-medium' transition:name='commbank-title'>
+      {title}
+    </h3>
+    <!-- Heading -->
+    <h2
+      class='text-xl md:text-2xl lg:text-2xl'
+      transition:name='commbank-heading'>
+      {heading}
+    </h2>
+  </div>
+  <!-- Outcomes -->
+  <div id='outcomes' class='flex flex-row gap-8' transition:name='commbank-outcomes'>
+    {
+      outcomes.map((outcome: Outcome, index: number) => (
+        <Statistic value={outcome.value} label={outcome.label} index={index} />
+      ))
+    }
+  </div>
+</div>

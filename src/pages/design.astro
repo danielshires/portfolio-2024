@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro'
+import ProjectGrid from '../components/ProjectGrid/ProjectGrid.astro'
+import SimpleHero from '../components/Hero/SimpleHero.astro'
+import { projectsData } from '../data/projects'
+import PageTransition from '../components/Transitions/PageTransition.astro'
+
+const { projects } = projectsData
+
+const heroContent = {
+  introText: {
+    first: 'Design',
+    second: 'Creating meaningful digital experiences through thoughtful design.',
+  },
+}
+---
+
+<Layout pageTitle='Design' pageDescription={heroContent.introText.first}>
+  <PageTransition>
+    <div class='flex flex-col'>
+      <SimpleHero {...heroContent} />
+      <ProjectGrid projects={projects} />
+    </div>
+  </PageTransition>
+</Layout>

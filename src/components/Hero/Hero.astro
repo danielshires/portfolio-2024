@@ -1,0 +1,164 @@
+---
+import { getPictureBySlug, urlFor } from '../../lib/sanity'
+
+interface Props {
+  name: string
+  tagline: string
+  intro: string
+  avatar?: string // Optional avatar image path or URL
+}
+
+const { name, tagline, intro, avatar } = Astro.props
+---
+
+<section
+  id='intro'
+  class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 justify-center mt-48 gap-4'
+  aria-label='Introduction'>
+  {
+    avatar && (
+      <img
+        src={avatar}
+        alt={name + ' avatar'}
+        width='80'
+        height='80'
+        class='rounded-full mb-2'
+        style='width:80px;height:80px;object-fit:cover;'
+      />
+    )
+  }
+  <h4 
+    id='tagline'
+    class='col-span-full uppercase text-sm flex flex-col gap-2 mt-2 tracking-wider'>
+    {tagline}
+  </h4>
+  <h1
+    id='intro-text'
+    class='col-span-1 md:col-span-8 gap-4 text-2xl md:text-4xl leading-normal md:leading-relaxed'>
+    {intro}
+  </h1>
+</section>
+
+<script>
+  import gsap from 'gsap'
+  import { SplitText } from 'gsap/SplitText'
+
+  // Register GSAP plugins
+  gsap.registerPlugin(SplitText)
+
+  // Animation Configuration
+  const config = {
+    // Timing
+    lineDuration: 0.8, // Duration for each line animation
+    lineStagger: 0.1, // Delay between each line
+    navDuration: 0.5, // Duration for navigation animation
+
+    // Section Overlaps (negative values mean overlap)
+    taglineToIntro: -0.3, // Overlap between tagline and intro
+    introToNav: -0.5, // Overlap between intro and nav
+
+    // Easing
+    lineEase: 'power2.out', // Easing for text lines
+    navEase: 'power2.out', // Easing for navigation
+
+    // Initial States
+    initialClipPath: 'inset(100% 0 0 0)',
+    finalClipPath: 'inset(0% 0 0 0)',
+
+    // Animation Properties
+    navYOffset: -30, // Navigation drop distance
+  }
+
+  function introAnimation() {
+    const hasPlayed = sessionStorage.getItem('hasMyAnimationPlayed')
+
+    if (!hasPlayed) {
+      // Get elements with null checks
+      const tagline = document.getElementById('tagline')
+      const intro = document.getElementById('intro-text')
+      const navigation = document.getElementById('nav')
+
+      // Verify elements exist before animating
+      if (!tagline || !intro) {
+        console.warn('Hero animation: Required elements not found')
+        return
+      }
+
+      const tl = gsap.timeline()
+      
+      // Split text into lines with error handling
+      let taglineSplit, introSplit
+      
+      try {
+        taglineSplit = new SplitText(tagline, { type: 'lines' })
+        introSplit = new SplitText(intro, { type: 'lines' })
+      } catch (error) {
+        console.error('SplitText initialization failed:', error)
+        return
+      }
+
+      // Collect all lines for initial state
+      const allLines = [...taglineSplit.lines, ...introSplit.lines]
+
+      // Initial state for all text elements
+      gsap.set(allLines, {
+        clipPath: config.initialClipPath,
+        opacity: 0,
+      })
+
+      // Set initial state for navigation if it exists
+      if (navigation) {
+        gsap.set(navigation, {
+          y: config.navYOffset,
+          opacity: 0,
+        })
+      }
+
+      // Animation sequence
+      tl
+        // 1. Animate tagline lines
+        .to(taglineSplit.lines, {
+          clipPath: config.finalClipPath,
+          opacity: 1,
+          duration: config.lineDuration,
+          stagger: config.lineStagger,
+          ease: config.lineEase,
+        })
+        // 2. Animate intro lines
+        .to(
+          introSplit.lines,
+          {
+            clipPath: config.finalClipPath,
+            opacity: 1,
+            duration: config.lineDuration,
+            stagger: config.lineStagger,
+            ease: config.lineEase,
+          },
+          config.taglineToIntro
+        )
+
+      // 3. Animate navigation if it exists
+      if (navigation) {
+        tl.to(
+          navigation,
+          {
+            y: 0,
+            opacity: 1,
+            duration: config.navDuration,
+            ease: config.navEase,
+            onStart: () => {
+              navigation.classList.remove('nav-hidden')
+            },
+          },
+          config.introToNav
+        )
+      }
+
+      sessionStorage.setItem('hasMyAnimationPlayed', 'true')
+    }
+  }
+
+  window.addEventListener('load', () => {
+    requestAnimationFrame(introAnimation)
+  })
+</script>

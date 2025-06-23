@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { getPictureBySlug, getAllPictures } from '../../lib/sanity'
+import { urlFor } from '../../lib/sanity'
+import Image from 'astro/components/Image.astro'
+import PageTransition from '../../components/Transitions/PageTransition.astro'
+
+export async function getStaticPaths() {
+  const pictures = await getAllPictures()
+  return pictures.map((picture) => ({
+    params: { slug: picture.slug.current },
+    props: { picture },
+  }))
+}
+
+const { picture } = Astro.props
+---
+
+<Layout pageTitle={picture.title} pageDescription={picture.description || picture.title}>
+  <PageTransition>
+    <article class='mt-32'>
+      <header class='mb-8'>
+        <h1 class='text-4xl font-bold mb-4'>{picture.title}</h1>
+        {
+          picture.description && (
+            <p class='text-lg text-zinc-600 dark:text-zinc-400'>{picture.description}</p>
+          )
+        }
+      </header>
+
+      {
+        picture.mainImage && (
+          <div class='mb-8'>
+            <Image
+              src={urlFor(picture.mainImage).width(1200).url()}
+              alt={picture.title}
+              width={1200}
+              height={800}
+              class='w-full rounded-lg'
+            />
+          </div>
+        )
+      }
+    </article>
+  </PageTransition>
+</Layout>

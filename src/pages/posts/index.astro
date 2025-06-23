@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { getAllPosts, getSiteSettings } from '../../lib/sanity'
+import FilterPostsReact from '../../components/FilterPostsReact.tsx'
+import SimpleHero from '../../components/Hero/SimpleHero.astro'
+import PageTransition from '../../components/Transitions/PageTransition.astro'
+import type { Post } from '../../lib/sanity'
+// TODO: Create these components
+// import FilterBar from '../../components/FilterBar.astro'
+// import Sidebar from '../../components/Sidebar.astro'
+
+const posts: Post[] = await getAllPosts()
+const siteSettings = await getSiteSettings()
+const categories: string[] = siteSettings?.categories || []
+// TODO: Derive tags from posts or Sanity if needed
+const tags: string[] = Array.from(new Set(posts?.flatMap((post) => post.tags || []) || []))
+
+const heroContent = {
+  introText: {
+    first: 'Thoughts',
+    second:
+      'Sharing experiences, learnings, and perspectives on creating meaningful digital experiences.',
+  },
+}
+
+// For UI review: sample activeFilter
+const activeFilter = 'featured'
+---
+
+<Layout pageTitle='Thoughts' pageDescription={heroContent.introText.first}>
+  <PageTransition>
+    <div class='min-h-screen flex flex-col gap-12 mb-20'>
+      <SimpleHero {...heroContent} />
+      <FilterPostsReact
+        client:only='react'
+        posts={posts || []}
+        categories={categories}
+        tags={tags}
+      />
+    </div>
+  </PageTransition>
+</Layout>

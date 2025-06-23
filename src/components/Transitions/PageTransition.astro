@@ -1,0 +1,35 @@
+---
+interface Props {
+  class?: string
+}
+
+const { class: className = '' } = Astro.props
+---
+
+<div id='page-transition' class={className}>
+  <slot />
+</div>
+
+<style>
+  #page-transition {
+    min-height: 100vh;
+    opacity: 1;
+    animation: smoothFadeIn 0.3s ease-out;
+  }
+
+  @keyframes smoothFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Ensure content transitions smoothly */
+  #page-transition > * {
+    transition: opacity 0.2s ease-out;
+  }
+</style>
