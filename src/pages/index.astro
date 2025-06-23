@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Hero from '../components/Hero/Hero.astro'
-import FeaturedProject from '../components/FeaturedProject/FeaturedProject.astro'
 import ProjectGrid from '../components/ProjectGrid/ProjectGrid.astro'
 import { projectsData } from '../data/projects'
 import { getAuthorBySlug, urlFor } from '../lib/sanity'
@@ -33,7 +32,6 @@ const { projects } = projectsData
 <script>
   import ScrollReveal from 'scrollreveal'
 
-  const scrollDistance = 20
 
   function revealSection() {
     const featuredWork = document.getElementById('featuredWork')

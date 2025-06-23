@@ -27,11 +27,13 @@ const { name, tagline, intro, avatar } = Astro.props
       />
     )
   }
-  <h4 class='col-span-full uppercase text-sm flex flex-col gap-2 mt-2 tracking-wider'>
+  <h4 
+    id='tagline'
+    class='col-span-full uppercase text-sm flex flex-col gap-2 mt-2 tracking-wider'>
     {tagline}
   </h4>
   <h1
-    id='intro'
+    id='intro-text'
     class='col-span-1 md:col-span-8 gap-4 text-2xl md:text-4xl leading-normal md:leading-relaxed'>
     {intro}
   </h1>
@@ -47,18 +49,16 @@ const { name, tagline, intro, avatar } = Astro.props
   // Animation Configuration
   const config = {
     // Timing
-    lineDuration: 1, // Duration for each line animation
+    lineDuration: 0.8, // Duration for each line animation
     lineStagger: 0.1, // Delay between each line
     navDuration: 0.5, // Duration for navigation animation
 
     // Section Overlaps (negative values mean overlap)
-    nameToJobTitle: -0.1, // Overlap between name and job title
-    jobTitleToIntroOne: -0.5, // Overlap between job title and first intro
-    introOneToIntroTwo: -0.5, // Overlap between first and second intro
-    introTwoToNav: -0.9, // Overlap between second intro and nav
+    taglineToIntro: -0.3, // Overlap between tagline and intro
+    introToNav: -0.5, // Overlap between intro and nav
 
     // Easing
-    lineEase: 'power2.inOut', // Easing for text lines
+    lineEase: 'power2.out', // Easing for text lines
     navEase: 'power2.out', // Easing for navigation
 
     // Initial States
@@ -66,67 +66,65 @@ const { name, tagline, intro, avatar } = Astro.props
     finalClipPath: 'inset(0% 0 0 0)',
 
     // Animation Properties
-    navYOffset: -50, // Navigation drop distance
+    navYOffset: -30, // Navigation drop distance
   }
 
   function introAnimation() {
-    let tl = gsap.timeline()
     const hasPlayed = sessionStorage.getItem('hasMyAnimationPlayed')
 
     if (!hasPlayed) {
-      // Get elements
-      const name = document.getElementById('name')
+      // Get elements with null checks
       const tagline = document.getElementById('tagline')
-      const intro = document.getElementById('intro')
+      const intro = document.getElementById('intro-text')
       const navigation = document.getElementById('nav')
 
-      // Split text into lines
-      const nameSplit = new SplitText(name, { type: 'lines' })
-      const taglineSplit = new SplitText(tagline, { type: 'lines' })
-      const introSplit = new SplitText(intro, { type: 'lines' })
+      // Verify elements exist before animating
+      if (!tagline || !intro) {
+        console.warn('Hero animation: Required elements not found')
+        return
+      }
 
-      // Initial state for all elements
-      gsap.set(
-        [
-          ...nameSplit.lines,
-          ...taglineSplit.lines,
-          ...introSplit.lines,
-        ],
-        {
-          clipPath: config.initialClipPath,
-          opacity: 0,
-        }
-      )
+      const tl = gsap.timeline()
+      
+      // Split text into lines with error handling
+      let taglineSplit, introSplit
+      
+      try {
+        taglineSplit = new SplitText(tagline, { type: 'lines' })
+        introSplit = new SplitText(intro, { type: 'lines' })
+      } catch (error) {
+        console.error('SplitText initialization failed:', error)
+        return
+      }
 
-      // Set initial state for navigation
-      gsap.set(navigation, {
-        y: config.navYOffset,
+      // Collect all lines for initial state
+      const allLines = [...taglineSplit.lines, ...introSplit.lines]
+
+      // Initial state for all text elements
+      gsap.set(allLines, {
+        clipPath: config.initialClipPath,
         opacity: 0,
       })
 
+      // Set initial state for navigation if it exists
+      if (navigation) {
+        gsap.set(navigation, {
+          y: config.navYOffset,
+          opacity: 0,
+        })
+      }
+
       // Animation sequence
       tl
-        // 1. Animate name lines
-        .to(nameSplit.lines, {
+        // 1. Animate tagline lines
+        .to(taglineSplit.lines, {
           clipPath: config.finalClipPath,
           opacity: 1,
           duration: config.lineDuration,
           stagger: config.lineStagger,
           ease: config.lineEase,
         })
-        // 2. Animate job title lines
-        .to(
-          taglineSplit.lines,
-          {
-            clipPath: config.finalClipPath,
-            opacity: 1,
-            duration: config.lineDuration,
-            stagger: config.lineStagger,
-            ease: config.lineEase,
-          },
-          config.nameToJobTitle
-        )
-        // 3. Animate first paragraph lines
+        // 2. Animate intro lines
         .to(
           introSplit.lines,
           {
@@ -136,10 +134,12 @@ const { name, tagline, intro, avatar } = Astro.props
             stagger: config.lineStagger,
             ease: config.lineEase,
           },
-          config.jobTitleToIntroOne
+          config.taglineToIntro
         )
-        // 5. Animate navigation dropping down
-        .to(
+
+      // 3. Animate navigation if it exists
+      if (navigation) {
+        tl.to(
           navigation,
           {
             y: 0,
@@ -147,12 +147,12 @@ const { name, tagline, intro, avatar } = Astro.props
             duration: config.navDuration,
             ease: config.navEase,
             onStart: () => {
-              // Remove any nav-hidden class that might be present
-              navigation?.classList.remove('nav-hidden')
+              navigation.classList.remove('nav-hidden')
             },
           },
-          config.introTwoToNav
+          config.introToNav
         )
+      }
 
       sessionStorage.setItem('hasMyAnimationPlayed', 'true')
     }

@@ -22,3 +22,14 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+src/icons/
+
+.vscode/
+.cursor/
+.claude/
+portfolio-25/.sanity/
+portfolio-25/node_modules/
+portfolio-25/dist/
+portfolio-25/static/
+.env.*

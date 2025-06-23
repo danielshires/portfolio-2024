@@ -1,0 +1,94 @@
+---
+import PostCard from '../../components/Cards/PostCard.jsx'
+import Layout from '../../layouts/Layout.astro'
+import ButtonPrimary from '../../components/Buttons/ButtonPrimary.astro'
+import Image from 'astro/components/Image.astro'
+import PageTransition from '../../components/Transitions/PageTransition.astro'
+---
+
+<Layout
+  pageTitle='NetBank'
+  pageDescription='NetBank digital banking platform redesign - creating intuitive financial experiences for millions of users across Australia.'>
+  <PageTransition>
+    <main class='min-h-screen'>
+      <section id='netBank' class='w-full'>
+        <a href='/design' class='block w-full' transition:name='netbank-image'>
+          <Image
+            id='projectImage'
+            src='https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'
+            alt='NetBank project overview'
+            width='2400'
+            height='900'
+            decoding='async'
+            loading='lazy'
+            class='w-full aspect-[1/1] md:aspect-[12/5] object-cover'
+            transition:name='netbank-image-content'
+          />
+        </a>
+        <div class='container-default mt-32'>
+          <div id='projectContent' class='grid-default' transition:name='netbank-content'>
+            <div
+              id='text'
+              class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-col gap-4'
+              transition:name='netbank-text'>
+              <h3 class='text-sm' transition:name='netbank-title'>NetBank</h3>
+              <h2 class='text-4xl' transition:name='netbank-heading'>
+                Transforming digital banking for millions of Australians
+              </h2>
+              <p class='text-lg' transition:name='netbank-description'>
+                NetBank is Australia's leading digital banking platform. As Lead UX Designer, I redesigned the core banking experience to improve usability, accessibility, and user satisfaction across web and mobile platforms.
+              </p>
+            </div>
+            <div
+              id='outcomes'
+              class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-row gap-12 justify-start lg:justify-end'
+              transition:name='netbank-outcomes'>
+              <div transition:name='netbank-stat-1'>
+                <p class='text-4xl font-medium'>8.2m</p>
+                <p class='text-sm opacity-75'>active users</p>
+              </div>
+              <div transition:name='netbank-stat-2'>
+                <p class='text-4xl font-medium'>+28%</p>
+                <p class='text-sm opacity-75'>task completion</p>
+              </div>
+              <div transition:name='netbank-stat-3'>
+                <p class='text-4xl font-medium'>4.8</p>
+                <p class='text-sm opacity-75'>app store rating</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </PageTransition>
+</Layout>
+
+<style>
+  /* Add smooth transitions for all elements */
+  ::view-transition-old(netbank-image),
+  ::view-transition-new(netbank-image) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(netbank-image-content),
+  ::view-transition-new(netbank-image-content) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  /* Add fade animation for content */
+  ::view-transition-old(netbank-content),
+  ::view-transition-new(netbank-content) {
+    animation: fade 0.5s ease-in-out;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
