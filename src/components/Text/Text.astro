@@ -1,0 +1,34 @@
+---
+import type { TextVariant, TextSize, TextWeight, TextColor, TextAlign } from './styles'
+import { variantElements, combineStyles } from './styles'
+
+interface Props {
+  variant?: TextVariant
+  size?: TextSize
+  weight?: TextWeight
+  color?: TextColor
+  align?: TextAlign
+  class?: string
+}
+
+const {
+  variant = 'body',
+  size,
+  weight,
+  color = 'default',
+  align = 'left',
+  class: className,
+  ...rest
+} = Astro.props
+
+const Tag = variantElements[variant]
+const combinedClassName = combineStyles(variant, color, align, size, weight, className)
+---
+
+<Tag class={combinedClassName} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  /* Add any additional custom styles here */
+</style>

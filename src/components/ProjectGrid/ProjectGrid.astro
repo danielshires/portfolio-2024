@@ -2,6 +2,7 @@
 import ProjectCard from '../ProjectCard/ProjectCard.astro'
 import { urlFor } from '../../lib/sanity'
 import type { Project } from '../../lib/sanity'
+import Text from '../Text/Text.astro'
 
 interface Props {
   projects: Project[]
@@ -24,6 +25,6 @@ const transformedProjects = projects.map(project => ({
 }))
 ---
 <section class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-8 max-w-[100vw] mt-16'>
-  <h2 class="col-span-1 md:col-span-6 lg:col-span-12 text-base text-zinc-800 font-medium">Featured</h2>
+  <Text variant='h5' class="col-span-full">Featured</Text>
   {transformedProjects.map((project) => <ProjectCard {...project} />)}
 </section>

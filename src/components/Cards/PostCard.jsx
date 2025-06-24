@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { urlFor } from '../../lib/sanity';
+import Text from '../Text/Text';
 
 export default function PostCard({ post }) {
     return (
@@ -23,22 +24,24 @@ export default function PostCard({ post }) {
             )}
             <div className="flex flex-col justify-between pt-2">
                 <div className="">
-                    <h3 className="text-xs uppercase mt-4 tracking-wider text-zinc-600 dark:text-zinc-400">{post.category || 'Post'}</h3>
-                    <h2 className="text-xl md:text-xl mt-1 group-hover:text-primary transition-colors duration-200">{post.title}</h2>
+                    <Text variant="overline" color='muted' className="mt-4">{post.category || 'Post'}</Text>
+                    <Text variant="h4" className="mt-1 group-hover:text-primary transition-colors duration-200">{post.title}</Text>
                     {post.description && (
-                        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">{post.description}</p>
+                        <Text variant="body" color="muted" className="mt-1 line-clamp-2">{post.description}</Text>
                     )}
-                    <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center gap-4 mt-4">
                         {post.publishedAt && (
-                            <span>
+                            <Text variant="caption" color="muted">
                                 {new Date(post.publishedAt).toLocaleDateString('en-US', {
                                     year: 'numeric',
                                     month: 'short',
                                     day: 'numeric',
                                 })}
-                            </span>
+                            </Text>
                         )}
-                        {typeof post.views === 'number' && post.views > 0 && <span>{post.views} views</span>}
+                        {typeof post.views === 'number' && post.views > 0 && (
+                            <Text variant="caption" color="muted">{post.views} views</Text>
+                        )}
                     </div>
                 </div>
                 <style>{`

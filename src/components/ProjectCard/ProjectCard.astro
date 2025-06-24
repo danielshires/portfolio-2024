@@ -1,5 +1,6 @@
 ---
 import ProjectImage from '../FeaturedProject/ProjectImage.astro'
+import Text from '../Text/Text'
 
 interface Props {
   projectImage: {
@@ -26,9 +27,9 @@ const { projectImage, title, heading, projectUrl } = Astro.props
     width={projectImage.width}
     height={projectImage.height}
   />
-  <div class=''>
-    <h3 class='text-xs uppercase mt-4 tracking-wider text-zinc-600 dark:text-zinc-400'>{title}</h3>
-    <h2 class='text-xl md:text-xl mt-1'>{heading}</h2>
+  <div class='pt-2'>
+    <Text variant='overline' color='muted' className='mt-4'>{title}</Text>
+    <Text variant='h4' className='mt-1'>{heading}</Text>
   </div>
 </div>
 

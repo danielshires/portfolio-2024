@@ -1,4 +1,6 @@
 ---
+import MetaDetail from './MetaDetail.astro';
+
 interface Props {
   client?: string
   role?: string[]
@@ -18,80 +20,49 @@ function formatArray(arr?: string[]): string {
 }
 ---
 
-<div class="space-y-8">
-  <h2 class="text-sm uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-medium">
-    Project Details
-  </h2>
-  
-  <div class="space-y-6">
-    <!-- Client -->
-    {client && (
-      <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4">
-        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
-          Client
-        </dt>
-        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
-          {client}
-        </dd>
-      </div>
-    )}
+<dl class="flex flex-row flex-wrap gap-6 text-sm">
+  <!-- Client -->
+  {client && (
+    <MetaDetail label="Client">
+      {client}
+    </MetaDetail>
+  )}
 
-    <!-- Role -->
-    {role && role.length > 0 && (
-      <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4">
-        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
-          Role{role.length > 1 ? 's' : ''}
-        </dt>
-        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
-          {formatArray(role)}
-        </dd>
-      </div>
-    )}
+  <!-- Role -->
+  {role && role.length > 0 && (
+    <MetaDetail label={`Role${role.length > 1 ? 's' : ''}`}>
+      {formatArray(role)}
+    </MetaDetail>
+  )}
 
-    <!-- Team -->
-    {team && team.length > 0 && (
-      <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4">
-        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
-          Team
-        </dt>
-        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
-          {formatArray(team)}
-        </dd>
-      </div>
-    )}
+  <!-- Team -->
+  {team && team.length > 0 && (
+    <MetaDetail label="Team">
+      {formatArray(team)}
+    </MetaDetail>
+  )}
 
-    <!-- Year -->
-    {year && (
-      <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4">
-        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
-          Year
-        </dt>
-        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
-          {year}
-        </dd>
-      </div>
-    )}
+  <!-- Year -->
+  {year && (
+    <MetaDetail label="Year">
+      {year}
+    </MetaDetail>
+  )}
 
-    <!-- Duration -->
-    {duration && (
-      <div class="pb-4">
-        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
-          Duration
-        </dt>
-        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
-          {duration}
-        </dd>
-      </div>
-    )}
-  </div>
-</div>
+  <!-- Duration -->
+  {duration && (
+    <MetaDetail label="Duration">
+      {duration}
+    </MetaDetail>
+  )}
+</dl>
 
 <style>
   /* Custom definition list styling for better semantic markup */
   dt {
     font-weight: 500;
   }
-  
+
   dd {
     margin: 0;
   }

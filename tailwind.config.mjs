@@ -41,36 +41,80 @@ export default {
                         'li::marker': {
                             color: 'rgb(var(--zinc-950))',
                         },
-                        'h1, h2, h3, h4, h5, h6': {
-                            color: 'rgb(var(--zinc-950))',
+                        h1: {
+                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontWeight: '400',
+                            fontSize: theme('fontSize.4xl')[0],
+                            color: theme('colors.zinc.900'),
                         },
-                        'p, li, blockquote': {
-                            color: 'rgb(var(--zinc-700))',
+                        h2: {
+                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontWeight: '400',
+                            fontSize: theme('fontSize.3xl')[0],
+                            color: theme('colors.zinc.900'),
+                        },
+                        h3: {
+                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontWeight: '400',
+                            fontSize: theme('fontSize.2xl')[0],
+                            color: theme('colors.zinc.900'),
+                        },
+                        h4: {
+                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontWeight: '400',
+                            fontSize: theme('fontSize.xl')[0],
+                            color: theme('colors.zinc.900'),
+                        },
+                        h5: {
+                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontWeight: '400',
+                            fontSize: theme('fontSize.lg')[0],
+                            color: theme('colors.zinc.900'),
+                        },
+                        p: {
+                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontWeight: '400',
+                            fontSize: theme('fontSize.base')[0],
+                            color: theme('colors.zinc.700'),
+                        },
+                        '.prose-caption': {
+                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontWeight: '400',
+                            fontSize: theme('fontSize.sm')[0],
+                            color: theme('colors.zinc.600'),
+                        },
+                        '.prose-overline': {
+                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontWeight: '400',
+                            fontSize: theme('fontSize.xs')[0],
+                            textTransform: 'uppercase',
+                            letterSpacing: theme('letterSpacing.wide'),
+                            color: theme('colors.zinc.600'),
                         },
                         'strong': {
-                            color: 'rgb(var(--zinc-950))',
+                            color: theme('colors.zinc.900'),
                         },
                         'a': {
-                            color: 'rgb(var(--zinc-950))',
+                            color: theme('colors.zinc.900'),
                         },
                         'code': {
-                            color: 'rgb(var(--zinc-950))',
-                            backgroundColor: 'rgb(var(--zinc-100))',
+                            color: theme('colors.zinc.900'),
+                            backgroundColor: theme('colors.zinc.100'),
                         },
                         'pre': {
-                            backgroundColor: 'rgb(var(--zinc-100))',
+                            backgroundColor: theme('colors.zinc.100'),
                         },
                         'blockquote': {
-                            borderLeftColor: 'rgb(var(--zinc-300))',
+                            borderLeftColor: theme('colors.zinc.300'),
                         },
                         'hr': {
-                            borderColor: 'rgb(var(--zinc-300))',
+                            borderColor: theme('colors.zinc.300'),
                         },
                         'thead': {
-                            borderBottomColor: 'rgb(var(--zinc-300))',
+                            borderBottomColor: theme('colors.zinc.300'),
                         },
                         'tbody tr': {
-                            borderBottomColor: 'rgb(var(--zinc-200))',
+                            borderBottomColor: theme('colors.zinc.200'),
                         },
                     }
                 },
@@ -79,36 +123,54 @@ export default {
                         'li::marker': {
                             color: 'rgb(var(--zinc-50))',
                         },
-                        'h1, h2, h3, h4, h5, h6': {
-                            color: 'rgb(var(--zinc-50))',
+                        h1: {
+                            color: theme('colors.zinc.100'),
                         },
-                        'p, li, blockquote': {
-                            color: 'rgb(var(--zinc-300))',
+                        h2: {
+                            color: theme('colors.zinc.100'),
+                        },
+                        h3: {
+                            color: theme('colors.zinc.100'),
+                        },
+                        h4: {
+                            color: theme('colors.zinc.100'),
+                        },
+                        h5: {
+                            color: theme('colors.zinc.100'),
+                        },
+                        p: {
+                            color: theme('colors.zinc.300'),
+                        },
+                        '.prose-caption': {
+                            color: theme('colors.zinc.400'),
+                        },
+                        '.prose-overline': {
+                            color: theme('colors.zinc.400'),
                         },
                         'strong': {
-                            color: 'rgb(var(--zinc-50))',
+                            color: theme('colors.zinc.50'),
                         },
                         'a': {
-                            color: 'rgb(var(--zinc-50))',
+                            color: theme('colors.zinc.50'),
                         },
                         'code': {
-                            color: 'rgb(var(--zinc-50))',
-                            backgroundColor: 'rgb(var(--zinc-800))',
+                            color: theme('colors.zinc.50'),
+                            backgroundColor: theme('colors.zinc.800'),
                         },
                         'pre': {
-                            backgroundColor: 'rgb(var(--zinc-800))',
+                            backgroundColor: theme('colors.zinc.800'),
                         },
                         'blockquote': {
-                            borderLeftColor: 'rgb(var(--zinc-700))',
+                            borderLeftColor: theme('colors.zinc.700'),
                         },
                         'hr': {
-                            borderColor: 'rgb(var(--zinc-700))',
+                            borderColor: theme('colors.zinc.700'),
                         },
                         'thead': {
-                            borderBottomColor: 'rgb(var(--zinc-700))',
+                            borderBottomColor: theme('colors.zinc.700'),
                         },
                         'tbody tr': {
-                            borderBottomColor: 'rgb(var(--zinc-800))',
+                            borderBottomColor: theme('colors.zinc.800'),
                         },
                     }
                 }

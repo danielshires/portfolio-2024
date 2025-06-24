@@ -1,13 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Text from '../components/Text/Text'
 ---
 
 <Layout pageTitle='Page Not Found' pageDescription='The page you are looking for does not exist.'>
   <div class='min-h-screen flex items-center justify-center'>
     <div class='text-center'>
-      <h1 class='text-6xl font-bold mb-4'>404</h1>
-      <p class='text-xl mb-8'>Page not found</p>
-      <a href='/' class='text-primary hover:underline'>Go back home</a>
+      <Text variant='h1' size='5xl' className='mb-4'>404</Text>
+      <Text variant='subtitle' className='mb-8'>Page not found</Text>
+      <Text variant='body' color='muted'>
+        <a href='/' class='hover:underline'>Go back home</a>
+      </Text>
     </div>
   </div>
 </Layout>

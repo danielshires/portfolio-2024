@@ -1,42 +1,50 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getAllPosts, getSiteSettings } from '../../lib/sanity'
-import FilterPostsReact from '../../components/FilterPostsReact.tsx'
-import SimpleHero from '../../components/Hero/SimpleHero.astro'
-import PageTransition from '../../components/Transitions/PageTransition.astro'
-import type { Post } from '../../lib/sanity'
-// TODO: Create these components
-// import FilterBar from '../../components/FilterBar.astro'
-// import Sidebar from '../../components/Sidebar.astro'
+import { getAllPosts } from '../../lib/sanity'
+import PostCard from '../../components/Cards/PostCard.jsx'
+import Text from '../../components/Text/Text'
 
-const posts: Post[] = await getAllPosts()
-const siteSettings = await getSiteSettings()
-const categories: string[] = siteSettings?.categories || []
-// TODO: Derive tags from posts or Sanity if needed
-const tags: string[] = Array.from(new Set(posts?.flatMap((post) => post.tags || []) || []))
-
-const heroContent = {
-  introText: {
-    first: 'Thoughts',
-    second:
-      'Sharing experiences, learnings, and perspectives on creating meaningful digital experiences.',
-  },
-}
-
-// For UI review: sample activeFilter
-const activeFilter = 'featured'
+const posts = await getAllPosts()
 ---
 
-<Layout pageTitle='Thoughts' pageDescription={heroContent.introText.first}>
-  <PageTransition>
-    <div class='min-h-screen flex flex-col gap-12 mb-20'>
-      <SimpleHero {...heroContent} />
-      <FilterPostsReact
-        client:only='react'
-        posts={posts || []}
-        categories={categories}
-        tags={tags}
-      />
-    </div>
-  </PageTransition>
+<Layout
+  pageTitle='Blog'
+  pageDescription='Thoughts and insights on design, development, and the digital world.'>
+  <main class='min-h-screen pt-20 pb-16'>
+    <!-- Header -->
+    <section class='py-16 md:py-24'>
+      <div class='container mx-auto'>
+        <div class='text-center space-y-6'>
+          <Text variant='h1' size='5xl' className='font-bold'>Blog</Text>
+          <Text variant='body' size='lg' color='muted'>
+            Thoughts and insights on design, development, and the digital world.
+          </Text>
+        </div>
+      </div>
+    </section>
+
+    <!-- Posts Grid -->
+    <section class='pb-16'>
+      <div class='container mx-auto'>
+        {
+          posts.length > 0 ? (
+            <div class='grid grid-cols-1 md:grid-cols-3 gap-8'>
+              {posts.map((post) => (
+                <PostCard post={post} />
+              ))}
+            </div>
+          ) : (
+            <div class='text-center py-16'>
+              <Text variant='h3' className='mb-2'>
+                No posts yet
+              </Text>
+              <Text variant='body' color='muted'>
+                Check back soon for new content.
+              </Text>
+            </div>
+          )
+        }
+      </div>
+    </section>
+  </main>
 </Layout>

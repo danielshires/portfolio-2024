@@ -1,97 +1,117 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getPostBySlug, getAllPosts } from '../../lib/sanity'
-import { urlFor } from '../../lib/sanity'
+import { getPostBySlug, getAllPosts, urlFor, type Post } from '../../lib/sanity'
+import { toHTML } from '@portabletext/to-html'
+import type { PortableTextComponents } from '@portabletext/to-html'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import Text from '../../components/Text/Text.astro'
 import RelatedPosts from '../../components/RelatedPosts.astro'
-import { toHTML } from '@portabletext/to-html'
+import SEO from '../../components/Shared/SEO.astro'
 
 export async function getStaticPaths() {
   const posts = await getAllPosts()
-  return posts.map((post) => ({
-    params: { slug: post.slug.current },
-    props: { post },
-  }))
+  return posts
+    .filter((post: Post) => post.slug?.current)
+    .map((post: Post) => ({
+      params: { slug: post.slug.current },
+      props: { post },
+    }))
 }
 
-const { post } = Astro.props
-const bodyHtml = toHTML(post.body, {
-  components: {
-    types: {
-      image: ({ value }) => {
-        const src = urlFor(value).width(800).url()
-        const alt = value.alt || ''
-        return `<img src="${src}" alt="${alt}" style="max-width:100%;height:auto;border-radius:0.5rem;margin:2rem 0;" />`
-      },
+const { post: initialPost } = Astro.props
+const { slug } = Astro.params
+
+if (!slug) {
+  Astro.redirect('/404')
+}
+
+const post = await getPostBySlug(slug)
+
+if (!post) {
+  return Astro.redirect('/404')
+}
+
+const portableTextComponents: Partial<PortableTextComponents> = {
+  types: {
+    image: ({ value }) => {
+      if (!value?.asset?._ref) {
+        return ''
+      }
+      return `
+        <img
+          src="${urlFor(value).width(800).fit('max').auto('format').url()}"
+          alt="${value.alt || ' '}"
+          loading="lazy"
+          class="rounded-lg shadow-lg"
+        />`
     },
   },
-})
+}
+
+const html = post.body ? toHTML(post.body, { components: portableTextComponents }) : null
+
+const relatedPostsToShow = post.relatedPosts || []
+
+const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : undefined
 ---
 
-<Layout pageTitle={post.title} pageDescription={post.description || post.title}>
-  <PageTransition>
-    <div class='container mx-auto px-4 my-32'>
-      <div class='grid grid-cols-12 gap-8'>
-        <article class='col-span-12 lg:col-start-4 lg:col-span-6 prose prose-lg max-w-none'>
-          <header class='mb-8'>
-            <h1 class='text-4xl font-bold mb-4'>{post.title}</h1>
-            {
-              post.description && (
-                <p class='text-lg text-zinc-600 dark:text-zinc-400'>{post.description}</p>
-              )
-            }
-            <div class='flex items-center gap-2 text-zinc-600 dark:text-zinc-400'>
-              <time datetime={post.publishedAt}>
-                {
-                  new Date(post.publishedAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })
-                }
-              </time>
-              {post.category && <span>· {post.category}</span>}
+<Layout pageTitle={post.title} pageDescription={post.description}>
+  <SEO slot='head' title={post.title} description={post.description} image={seoImage} />
+  <main class='min-h-screen'>
+    <!-- <PageTransition /> -->
+    <div class='container mx-auto px-4 py-16 lg:py-24'>
+      <article class='prose mx-auto max-w-4xl dark:prose-invert text-base'>
+        <header class='text-center mt-12 mb-12'>
+          <Text variant='h1'>{post.title}</Text>
+          {
+            post.description && (
+              <Text variant='subtitle' class='mt-4'>
+                {post.description}
+              </Text>
+            )
+          }
+        </header>
+
+        {
+          post.mainImage && (
+            <div class='mb-12'>
+              <img
+                src={urlFor(post.mainImage).width(1200).url()}
+                alt={post.title}
+                class='w-full h-auto rounded-lg shadow-lg'
+              />
             </div>
-          </header>
+          )
+        }
 
-          {
-            post.mainImage && (
-              <div class='mb-8'>
-                <Image
-                  src={urlFor(post.mainImage).width(1200).url()}
-                  alt={post.title}
-                  width={1200}
-                  height={600}
-                  class='w-full rounded-lg'
-                />
-              </div>
-            )
-          }
+        {html && <div set:html={html} />}
+      </article>
 
-          {
-            post.body ? (
-              <div class='prose prose-lg max-w-none' set:html={bodyHtml} />
-            ) : (
-              <div class='prose prose-lg max-w-none'>
-                <p class='text-zinc-600 dark:text-zinc-400 italic'>Content coming soon...</p>
-              </div>
-            )
-          }
-        </article>
-      </div>
+      <!-- Related Posts -->
+      <!-- {
+        relatedPostsToShow.length > 0 && (
+          <section class='mt-16 pt-16 border-t border-zinc-200 dark:border-zinc-800'>
+            <RelatedPosts projects={relatedPostsToShow} />
+          </section>
+        )
+      } -->
 
-      <!-- Related Posts Section -->
-      <div class='grid grid-cols-12 gap-8'>
-        <div class='col-span-12 lg:col-start-4 lg:col-span-6'>
-          <RelatedPosts
-            relatedPosts={post.relatedPosts || []}
-            currentPostSlug={post.slug.current}
-            currentPostCategory={post.category}
-            currentPostTags={post.tags || []}
-          />
-        </div>
+      <!-- Navigation Back -->
+      <div class='mt-16 text-center'>
+        <a
+          href='/posts'
+          class='inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors'>
+          <svg class='w-4 h-4 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <path
+              stroke-linecap='round'
+              stroke-linejoin='round'
+              stroke-width='2'
+              d='M10 19l-7-7m0 0l7-7m-7 7h18'></path>
+          </svg>
+          <Text variant='body' color='muted'>Back to Posts</Text>
+        </a>
       </div>
     </div>
-  </PageTransition>
+  </main>
 </Layout>

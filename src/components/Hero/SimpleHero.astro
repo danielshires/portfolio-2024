@@ -1,4 +1,6 @@
 ---
+import Text from '../Text/Text'
+
 interface Props {
   introText: {
     first: string
@@ -13,12 +15,16 @@ const { introText } = Astro.props
   id='intro'
   class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 justify-center mt-48'
   aria-label='Introduction'>
-  <h1 id='introOne' class='col-span-8 gap-4 text-4xl leading-normal'>
-    {introText.first}
-  </h1>
-  <p id='introTwo' class='col-span-8 mt-4 text-lg text-zinc-600 dark:text-zinc-400'>
-    {introText.second}
-  </p>
+  <div id='introOne' class='col-span-8 gap-4'>
+    <Text variant='h1' className='leading-normal'>
+      {introText.first}
+    </Text>
+  </div>
+  <div id='introTwo' class='col-span-8 mt-4'>
+    <Text variant='body' color='muted'>
+      {introText.second}
+    </Text>
+  </div>
 </section>
 
 <script>
@@ -74,7 +80,5 @@ const { introText } = Astro.props
     }
   }
 
-  window.addEventListener('load', () => {
-    requestAnimationFrame(introAnimation)
-  })
+  introAnimation()
 </script>

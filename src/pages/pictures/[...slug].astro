@@ -4,6 +4,7 @@ import { getPictureBySlug, getAllPictures } from '../../lib/sanity'
 import { urlFor } from '../../lib/sanity'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import Text from '../../components/Text/Text'
 
 export async function getStaticPaths() {
   const pictures = await getAllPictures()
@@ -20,10 +21,12 @@ const { picture } = Astro.props
   <PageTransition>
     <article class='mt-32'>
       <header class='mb-8'>
-        <h1 class='text-4xl font-bold mb-4'>{picture.title}</h1>
+        <Text variant='h1' className='mb-4'>{picture.title}</Text>
         {
           picture.description && (
-            <p class='text-lg text-zinc-600 dark:text-zinc-400'>{picture.description}</p>
+            <Text variant='body' color='muted' size='lg'>
+              {picture.description}
+            </Text>
           )
         }
       </header>

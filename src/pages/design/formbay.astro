@@ -4,11 +4,13 @@ import Layout from '../../layouts/Layout.astro'
 import ButtonPrimary from '../../components/Buttons/ButtonPrimary.astro'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import Text from '../../components/Text/Text.astro'
+import Statistic from '../../components/FeaturedProject/Statistic.astro'
 ---
 
 <Layout
   pageTitle='Formbay'
-  pageDescription='Formbay form builder platform - empowering businesses to create beautiful, functional forms without code.'>
+  pageDescription='Formbay no-code form builder - simplifying form creation for modern businesses.'>
   <PageTransition>
     <main class='min-h-screen'>
       <section id='formbay' class='w-full'>
@@ -25,36 +27,30 @@ import PageTransition from '../../components/Transitions/PageTransition.astro'
             transition:name='formbay-image-content'
           />
         </a>
+
         <div class='container-default mt-32'>
           <div id='projectContent' class='grid-default' transition:name='formbay-content'>
             <div
               id='text'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-col gap-4'
               transition:name='formbay-text'>
-              <h3 class='text-sm' transition:name='formbay-title'>Formbay</h3>
-              <h2 class='text-4xl' transition:name='formbay-heading'>
+              <Text variant='overline' transition:name='formbay-title'>Formbay</Text>
+              <Text variant='h1' transition:name='formbay-heading'>
                 Simplifying form creation for modern businesses
-              </h2>
-              <p class='text-lg' transition:name='formbay-description'>
-                Formbay is a no-code form builder that enables businesses to create sophisticated forms and surveys. As Product Designer, I led the UX strategy and interface design to make form creation intuitive and powerful.
-              </p>
+              </Text>
+              <Text variant='body' size='lg' transition:name='formbay-description'>
+                Formbay is a no-code form builder that enables businesses to create sophisticated
+                forms and surveys. As Product Designer, I led the UX strategy and interface design
+                to make form creation intuitive and powerful.
+              </Text>
             </div>
             <div
               id='outcomes'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-row gap-12 justify-start lg:justify-end'
               transition:name='formbay-outcomes'>
-              <div transition:name='formbay-stat-1'>
-                <p class='text-4xl font-medium'>150k</p>
-                <p class='text-sm opacity-75'>forms created</p>
-              </div>
-              <div transition:name='formbay-stat-2'>
-                <p class='text-4xl font-medium'>+85%</p>
-                <p class='text-sm opacity-75'>user retention</p>
-              </div>
-              <div transition:name='formbay-stat-3'>
-                <p class='text-4xl font-medium'>12s</p>
-                <p class='text-sm opacity-75'>avg. form creation</p>
-              </div>
+              <Statistic value='150k' label='forms created' index={1} />
+              <Statistic value='+85%' label='user retention' index={2} />
+              <Statistic value='12s' label='avg. form creation' index={3} />
             </div>
           </div>
         </div>

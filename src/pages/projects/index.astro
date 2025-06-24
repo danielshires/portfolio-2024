@@ -2,135 +2,88 @@
 import Layout from '../../layouts/Layout.astro'
 import { getAllProjects, urlFor } from '../../lib/sanity'
 import SEO from '../../components/Shared/SEO.astro'
+import Text from '../../components/Text/Text'
 
 const projects = await getAllProjects()
 ---
 
-<Layout title="Projects" description="Explore my design and development projects">
+<Layout pageTitle='Projects' pageDescription='Explore my design and development projects'>
   <SEO
-    title="Projects | Your Portfolio"
-    description="Explore my latest design and development projects, featuring UI/UX design, web development, and digital experiences."
-    slot="head"
+    title='Projects | Your Portfolio'
+    description='Explore my latest design and development projects, featuring UI/UX design, web development, and digital experiences.'
+    slot='head'
   />
 
-  <main class="min-h-screen pt-20 pb-16">
+  <main class='min-h-screen pt-20 pb-16'>
     <!-- Header -->
-    <section class="py-16 md:py-24">
-      <div class="container mx-auto px-4 max-w-6xl">
-        <div class="text-center space-y-6">
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-zinc-100">
-            Projects
-          </h1>
-          <p class="text-lg md:text-xl text-zinc-600 dark:text-zinc-300 max-w-3xl mx-auto">
-            A collection of my design and development work, showcasing solutions to real-world problems.
-          </p>
+    <section class='py-16 md:py-24'>
+      <div class='container mx-auto px-4 max-w-6xl'>
+        <div class='text-center space-y-6'>
+          <Text variant='h1' size='5xl' className='font-bold'>Projects</Text>
+          <Text variant='body' size='lg' color='muted' className='max-w-3xl mx-auto'>
+            A collection of my design and development work, showcasing solutions to real-world
+            problems.
+          </Text>
         </div>
       </div>
     </section>
 
     <!-- Projects Grid -->
-    <section class="py-8">
-      <div class="container mx-auto px-4 max-w-6xl">
-        {projects.length > 0 ? (
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-            {projects.map((project, index) => (
-              <article 
-                class="group cursor-pointer"
-                style={`animation-delay: ${index * 0.1}s`}
-              >
-                <a href={`/projects/${project.slug.current}`} class="block space-y-6">
-                  <!-- Project Image -->
-                  <div class="aspect-video w-full overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800 group-hover:shadow-xl transition-all duration-300">
-                    {project.heroImage ? (
+    <section class='pb-16'>
+      <div class='container mx-auto px-4 max-w-6xl'>
+        {
+          projects.length > 0 ? (
+            <div class='grid grid-cols-1 md:grid-cols-2 gap-8'>
+              {projects.map((project) => (
+                <a
+                  href={`/projects/${project.slug.current}`}
+                  class='block group relative overflow-hidden bg-background-light/5 dark:bg-background-dark/5 backdrop-blur-sm border border-border-light/10 dark:border-border-dark/10 hover:border-border-light/20 dark:hover:border-border-dark/20 transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer'>
+                  {project.heroImage ? (
+                    <div class='w-full aspect-[2/1] overflow-hidden'>
                       <img
-                        src={urlFor(project.heroImage).width(500).height(280).url()}
-                        alt={project.title + ' preview'}
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
+                        src={urlFor(project.heroImage).width(1200).url()}
+                        alt={project.title}
+                        loading='lazy'
+                        decoding='async'
+                        class='object-cover w-full h-full rounded transition-transform duration-300 group-hover:scale-105'
                       />
-                    ) : (
-                      <div class="w-full h-full flex items-center justify-center">
-                        <div class="text-zinc-400 dark:text-zinc-600">
-                          <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <!-- Project Details -->
-                  <div class="space-y-3">
-                    <!-- Featured Badge -->
-                    {project.featured && (
-                      <span class="inline-block text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 px-2 py-1 rounded">
-                        Featured
-                      </span>
-                    )}
-                    
-                    <!-- Tags -->
-                    {project.tags && project.tags.length > 0 && (
-                      <div class="flex flex-wrap gap-2">
-                        {project.tags.slice(0, 3).map((tag) => (
-                          <span class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    
-                    <!-- Title and Client -->
-                    <div class="space-y-2">
-                      <h2 class="text-xl md:text-2xl font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
-                        {project.title}
-                      </h2>
-                      
-                      {project.client && (
-                        <p class="text-base text-zinc-600 dark:text-zinc-400">
-                          {project.client}
-                        </p>
-                      )}
-                      
-                      {project.subtitle && (
-                        <p class="text-base text-zinc-600 dark:text-zinc-400 line-clamp-2">
-                          {project.subtitle}
-                        </p>
-                      )}
                     </div>
-                    
-                    <!-- Metadata -->
-                    <div class="flex items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
-                      {project.year && (
-                        <span>{project.year}</span>
-                      )}
-                      {project.duration && (
-                        <>
-                          <span>•</span>
-                          <span>{project.duration}</span>
-                        </>
+                  ) : (
+                    <div class='w-full aspect-[2/1] flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 text-4xl'>
+                      📝
+                    </div>
+                  )}
+                  <div class='flex flex-col justify-between pt-2'>
+                    <div class=''>
+                      <Text variant='overline' className='mt-4'>
+                        {project.client || 'Project'}
+                      </Text>
+                      <Text
+                        variant='h3'
+                        className='mt-1 group-hover:text-primary transition-colors duration-200'>
+                        {project.title}
+                      </Text>
+                      {project.subtitle && (
+                        <Text variant='body' color='muted' className='mt-2 line-clamp-2'>
+                          {project.subtitle}
+                        </Text>
                       )}
                     </div>
                   </div>
                 </a>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <!-- Empty State -->
-          <div class="text-center py-16">
-            <div class="text-zinc-400 dark:text-zinc-600 mb-4">
-              <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
+              ))}
             </div>
-            <h3 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">
-              No projects yet
-            </h3>
-            <p class="text-zinc-600 dark:text-zinc-400">
-              Projects will appear here once they're added to your CMS.
-            </p>
-          </div>
-        )}
+          ) : (
+            <div class='text-center py-16'>
+              <Text variant='h3' className='mb-2'>
+                No projects yet
+              </Text>
+              <Text variant='body' color='muted'>
+                Check back soon for new content.
+              </Text>
+            </div>
+          )
+        }
       </div>
     </section>
   </main>
@@ -148,11 +101,11 @@ const projects = await getAllProjects()
       transform: translateY(0);
     }
   }
-  
+
   article {
     animation: fadeInUp 0.6s ease-out both;
   }
-  
+
   /* Line clamp utility */
   .line-clamp-2 {
     display: -webkit-box;
@@ -160,7 +113,7 @@ const projects = await getAllProjects()
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   .container {
     @apply mx-auto px-4;
   }

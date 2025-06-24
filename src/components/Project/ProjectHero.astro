@@ -1,6 +1,7 @@
 ---
 import { urlFor } from '../../lib/sanity'
 import type { SanityImage } from '../../lib/sanity'
+import Text from '../Text/Text.astro'
 
 interface Props {
   title: string
@@ -11,36 +12,19 @@ interface Props {
 const { title, subtitle, heroImage } = Astro.props
 ---
 
-<div class="space-y-8">
+<div class='space-y-8'>
   <!-- Hero Image -->
-  {heroImage && (
-    <div class="aspect-video w-full overflow-hidden rounded-lg shadow-lg bg-zinc-100 dark:bg-zinc-800">
-      <img
-        src={urlFor(heroImage).width(1200).height(675).url()}
-        alt={title + ' hero image'}
-        class="w-full h-full object-cover"
-        loading="eager"
-      />
-    </div>
-  )}
 
   <!-- Title and Subtitle -->
-  <div class="space-y-4 text-center md:text-left">
-    <h1 
-      id="project-title"
-      class="text-3xl md:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-zinc-100 leading-tight"
-    >
-      {title}
-    </h1>
-    
-    {subtitle && (
-      <p 
-        id="project-subtitle"
-        class="text-lg md:text-xl text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-3xl"
-      >
-        {subtitle}
-      </p>
-    )}
+  <div class='space-y-4 text-left pt-16'>
+    <Text variant='h1' class=''>{title}</Text>
+    {
+      subtitle && (
+        <Text variant='h3' color="muted">
+          {subtitle}
+        </Text>
+      )
+    }
   </div>
 </div>
 
@@ -54,7 +38,7 @@ const { title, subtitle, heroImage } = Astro.props
   function projectHeroAnimation() {
     // Check if animation has already played
     const hasPlayed = sessionStorage.getItem('hasProjectHeroPlayed')
-    
+
     if (!hasPlayed) {
       const title = document.getElementById('project-title')
       const subtitle = document.getElementById('project-subtitle')
@@ -65,7 +49,7 @@ const { title, subtitle, heroImage } = Astro.props
 
       // Split text for animation
       let titleSplit, subtitleSplit
-      
+
       try {
         titleSplit = new SplitText(title, { type: 'lines' })
         if (subtitle) {
@@ -99,13 +83,17 @@ const { title, subtitle, heroImage } = Astro.props
       })
 
       if (subtitleSplit) {
-        tl.to(subtitleSplit.lines, {
-          clipPath: 'inset(0% 0 0 0)',
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.05,
-          ease: 'power2.out',
-        }, '-=0.3')
+        tl.to(
+          subtitleSplit.lines,
+          {
+            clipPath: 'inset(0% 0 0 0)',
+            opacity: 1,
+            duration: 0.6,
+            stagger: 0.05,
+            ease: 'power2.out',
+          },
+          '-=0.3'
+        )
       }
 
       sessionStorage.setItem('hasProjectHeroPlayed', 'true')

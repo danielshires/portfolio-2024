@@ -4,6 +4,7 @@ import { ViewTransitions } from 'astro:transitions'
 interface Props {
   pageTitle: string
   pageDescription: string
+  children?: any
 }
 
 const { pageTitle, pageDescription } = Astro.props
@@ -18,4 +19,5 @@ const { pageTitle, pageDescription } = Astro.props
   <title>{pageTitle}</title>
   <ViewTransitions />
   <script src='https://unpkg.com/scrollreveal'></script>
+  <slot />
 </head>

@@ -8,17 +8,24 @@ import ProjectProblem from '../../components/Project/ProjectProblem.astro'
 import ProjectSolution from '../../components/Project/ProjectSolution.astro'
 import RelatedProjects from '../../components/Project/RelatedProjects.astro'
 import SEO from '../../components/Shared/SEO.astro'
+import Text from '../../components/Text/Text.astro'
 
 export async function getStaticPaths() {
   const projects = await getAllProjects()
-  return projects.map((project) => ({
-    params: { slug: project.slug.current },
-    props: { project },
-  }))
+  return projects
+    .filter((project) => project.slug?.current)
+    .map((project) => ({
+      params: { slug: project.slug.current },
+      props: { project },
+    }))
 }
 
 const { project } = Astro.props
 const { slug } = Astro.params
+
+if (!slug) {
+  return Astro.redirect('/404')
+}
 
 // Fetch full project data with all fields
 const fullProject = await getProjectBySlug(slug)
@@ -30,25 +37,19 @@ if (!fullProject) {
 // Prepare SEO data
 const seoTitle = fullProject.title + (fullProject.client ? ` | ${fullProject.client}` : '')
 const seoDescription = fullProject.subtitle || `${fullProject.title} project case study`
-const seoImage = fullProject.heroImage ? urlFor(fullProject.heroImage).width(1200).height(630).url() : undefined
+const seoImage = fullProject.heroImage
+  ? urlFor(fullProject.heroImage).width(1200).height(630).url()
+  : undefined
 ---
 
-<Layout 
-  title={seoTitle}
-  description={seoDescription}
->
-  <SEO
-    title={seoTitle}
-    description={seoDescription}
-    image={seoImage}
-    slot="head"
-  />
+<Layout pageTitle={seoTitle} pageDescription={seoDescription}>
+  <SEO title={seoTitle} description={seoDescription} image={seoImage} slot='head' />
 
-  <main class="min-h-screen">
+  <main class='min-h-screen'>
     <!-- Hero Section -->
-    <section class="pt-20 pb-12 md:pt-32 md:pb-20">
-      <div class="container mx-auto px-4 max-w-6xl">
-        <ProjectHero 
+    <section class='pt-24 pb-8'>
+      <div class='container mx-auto px-4 lg:px-2'>
+        <ProjectHero
           title={fullProject.title}
           subtitle={fullProject.subtitle}
           heroImage={fullProject.heroImage}
@@ -57,88 +58,94 @@ const seoImage = fullProject.heroImage ? urlFor(fullProject.heroImage).width(120
     </section>
 
     <!-- Metadata and Content Section -->
-    <section class="py-12 md:py-20">
-      <div class="container mx-auto px-4 max-w-6xl">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+    <section class='pb-12 md:pb-20'>
+      <div class='container mx-auto px-4 lg:px-2'>
+        <div class='grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16'>
           <!-- Metadata Sidebar -->
-          <div class="lg:col-span-4">
-            <ProjectMeta 
+          <div class='col-span-12'>
+            <ProjectMeta
               client={fullProject.client}
               role={fullProject.role}
               team={fullProject.team}
-              year={fullProject.year}
               duration={fullProject.duration}
+              year={fullProject.year}
             />
           </div>
 
           <!-- Main Content -->
-          <div class="lg:col-span-8 space-y-16">
+          <div class='col-span-12'>
             <!-- Outcomes -->
-            {fullProject.outcomes && fullProject.outcomes.length > 0 && (
-              <ProjectOutcomes outcomes={fullProject.outcomes} />
-            )}
+            {
+              fullProject.outcomes && fullProject.outcomes.length > 0 && (
+                <ProjectOutcomes outcomes={fullProject.outcomes} />
+              )
+            }
 
-            <!-- Problem Statement -->
-            {fullProject.problem && (
-              <ProjectProblem problem={fullProject.problem} />
-            )}
+            <!-- Problem and Solution Grid -->
+            <div class='grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16'>
+              <!-- Problem Statement -->
+              {fullProject.problem && <ProjectProblem problem={fullProject.problem} />}
 
-            <!-- Solution -->
-            {fullProject.solution && (
-              <ProjectSolution solution={fullProject.solution} />
-            )}
+              <!-- Solution -->
+              {fullProject.solution && <ProjectSolution solution={fullProject.solution} />}
+            </div>
 
             <!-- Project Images -->
-            {fullProject.images && fullProject.images.length > 0 && (
-              <section class="space-y-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-                  Project Visuals
-                </h2>
-                <div class="grid gap-8">
-                  {fullProject.images.map((image, index) => (
-                    <div class="space-y-4">
-                      <img
-                        src={urlFor(image.asset).width(800).height(600).url()}
-                        alt={image.alt}
-                        class="w-full rounded-lg shadow-lg"
-                        loading="lazy"
-                      />
-                      {image.caption && (
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400 text-center">
-                          {image.caption}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
+            {
+              fullProject.images && fullProject.images.length > 0 && (
+                <section class='space-y-8'>
+                  <Text variant='h4'>Project Visuals</Text>
+                  <div class='grid gap-8'>
+                    {fullProject.images.map((image) => (
+                      <div class='space-y-4'>
+                        <img
+                          src={urlFor(image.asset).width(800).height(600).url()}
+                          alt={image.alt}
+                          class='w-full rounded-lg shadow-lg'
+                          loading='lazy'
+                        />
+                        {image.caption && (
+                          <Text variant='caption' color='muted' class='text-center'>
+                            {image.caption}
+                          </Text>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )
+            }
           </div>
         </div>
       </div>
     </section>
 
     <!-- Related Projects -->
-    {fullProject.relatedProjects && fullProject.relatedProjects.length > 0 && (
-      <section class="py-20 bg-zinc-50 dark:bg-zinc-900">
-        <div class="container mx-auto px-4 max-w-6xl">
-          <RelatedProjects projects={fullProject.relatedProjects} />
-        </div>
-      </section>
-    )}
+    {
+      fullProject.relatedProjects && fullProject.relatedProjects.length > 0 && (
+        <section class='py-20 bg-zinc-50 dark:bg-zinc-900'>
+          <div class='container mx-auto px-4 max-w-6xl'>
+            <RelatedProjects projects={fullProject.relatedProjects} />
+          </div>
+        </section>
+      )
+    }
 
     <!-- Navigation Back -->
-    <section class="py-16">
-      <div class="container mx-auto px-4 max-w-6xl">
-        <div class="text-center">
-          <a 
-            href="/projects" 
-            class="inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-          >
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    <section class='py-16'>
+      <div class='container mx-auto px-4 lg:px-2'>
+        <div class='text-center'>
+          <a
+            href='/projects'
+            class='inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors'>
+            <svg class='w-4 h-4 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path
+                stroke-linecap='round'
+                stroke-linejoin='round'
+                stroke-width='2'
+                d='M10 19l-7-7m0 0l7-7m-7 7h18'></path>
             </svg>
-            Back to Projects
+            <Text variant='body' color='muted'>Back to Projects</Text>
           </a>
         </div>
       </div>

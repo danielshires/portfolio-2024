@@ -4,19 +4,24 @@ import Layout from '../../layouts/Layout.astro'
 import ButtonPrimary from '../../components/Buttons/ButtonPrimary.astro'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import Text from '../../components/Text/Text.astro'
+import Statistic from '../../components/FeaturedProject/Statistic.astro'
 ---
 
 <Layout
   pageTitle='CommBank Yello'
-  pageDescription='UX/UI Designer and Front-End Developer based in Sydney Australia. I use the principles of human centred design to create simple, impactful experiences in pixels and code.'>
+  pageDescription='CommBank Yello customer engagement and loyalty program - reimagining customer loyalty for Australia'
+  s
+  largest
+  bank.'>
   <PageTransition>
     <main class='min-h-screen'>
-      <section id='commBank' class='w-full'>
+      <section id='commbank' class='w-full'>
         <a href='/design' class='block w-full' transition:name='commbank-image'>
           <Image
             id='projectImage'
             src='https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'
-            alt='image'
+            alt='CommBank Yello project overview'
             width='2400'
             height='900'
             decoding='async'
@@ -25,38 +30,30 @@ import PageTransition from '../../components/Transitions/PageTransition.astro'
             transition:name='commbank-image-content'
           />
         </a>
+
         <div class='container-default mt-32'>
           <div id='projectContent' class='grid-default' transition:name='commbank-content'>
             <div
               id='text'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-col gap-4'
               transition:name='commbank-text'>
-              <h3 class='text-sm' transition:name='commbank-title'>CommBank Yello</h3>
-              <h2 class='text-4xl' transition:name='commbank-heading'>
+              <Text variant='overline' transition:name='commbank-title'>CommBank Yello</Text>
+              <Text variant='h1' transition:name='commbank-heading'>
                 Reimagine customer loyalty for Australia's largest bank
-              </h2>
-              <p class='text-lg' transition:name='commbank-description'>
+              </Text>
+              <Text variant='body' size='lg' transition:name='commbank-description'>
                 CommBank Yello is CommBanks customer engagement and loyalty program. As the Senior
                 UX Designer, I led the design and delivery of Yello 2.0, the next iteration of
                 CommBank Yello
-              </p>
+              </Text>
             </div>
             <div
               id='outcomes'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-row gap-12 justify-start lg:justify-end'
               transition:name='commbank-outcomes'>
-              <div transition:name='commbank-stat-1'>
-                <p class='text-4xl font-medium'>6.5m</p>
-                <p class='text-sm opacity-75'>engaged customers</p>
-              </div>
-              <div transition:name='commbank-stat-2'>
-                <p class='text-4xl font-medium'>+32</p>
-                <p class='text-sm opacity-75'>Net promoter score</p>
-              </div>
-              <div transition:name='commbank-stat-3'>
-                <p class='text-4xl font-medium'>2m</p>
-                <p class='text-sm opacity-75'>visits per week</p>
-              </div>
+              <Statistic value='6.5m' label='engaged customers' index={1} />
+              <Statistic value='+32' label='Net promoter score' index={2} />
+              <Statistic value='2m' label='visits per week' index={3} />
             </div>
           </div>
         </div>

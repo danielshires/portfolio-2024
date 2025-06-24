@@ -4,11 +4,13 @@ import Layout from '../../layouts/Layout.astro'
 import ButtonPrimary from '../../components/Buttons/ButtonPrimary.astro'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import Text from '../../components/Text/Text.astro'
+import Statistic from '../../components/FeaturedProject/Statistic.astro'
 ---
 
 <Layout
   pageTitle='Scenic'
-  pageDescription='Scenic travel platform - connecting adventurers with unique destinations and unforgettable experiences worldwide.'>
+  pageDescription='Scenic travel platform - transforming travel planning through immersive design.'>
   <PageTransition>
     <main class='min-h-screen'>
       <section id='scenic' class='w-full'>
@@ -31,30 +33,23 @@ import PageTransition from '../../components/Transitions/PageTransition.astro'
               id='text'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-col gap-4'
               transition:name='scenic-text'>
-              <h3 class='text-sm' transition:name='scenic-title'>Scenic</h3>
-              <h2 class='text-4xl' transition:name='scenic-heading'>
-                Crafting immersive travel experiences through design
-              </h2>
-              <p class='text-lg' transition:name='scenic-description'>
-                Scenic is a premium travel platform showcasing luxury cruises and tours. As UX/UI Designer, I created an elegant digital experience that captures the wonder of travel and simplifies the booking journey.
-              </p>
+              <Text variant='overline' transition:name='scenic-title'>Scenic</Text>
+              <Text variant='h1' transition:name='scenic-heading'>
+                Transforming travel planning through immersive design
+              </Text>
+              <Text variant='body' size='lg' transition:name='scenic-description'>
+                Scenic is a modern travel planning platform that helps users discover and book
+                unique experiences. As Product Designer, I created an immersive interface that
+                inspires wanderlust while making travel planning effortless.
+              </Text>
             </div>
             <div
               id='outcomes'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-row gap-12 justify-start lg:justify-end'
               transition:name='scenic-outcomes'>
-              <div transition:name='scenic-stat-1'>
-                <p class='text-4xl font-medium'>3.2m</p>
-                <p class='text-sm opacity-75'>annual visitors</p>
-              </div>
-              <div transition:name='scenic-stat-2'>
-                <p class='text-4xl font-medium'>+42%</p>
-                <p class='text-sm opacity-75'>booking conversion</p>
-              </div>
-              <div transition:name='scenic-stat-3'>
-                <p class='text-4xl font-medium'>95%</p>
-                <p class='text-sm opacity-75'>customer satisfaction</p>
-              </div>
+              <Statistic value='750k' label='active travelers' index={1} />
+              <Statistic value='+89%' label='booking rate' index={2} />
+              <Statistic value='4.8' label='user rating' index={3} />
             </div>
           </div>
         </div>

@@ -4,14 +4,16 @@ import Layout from '../../layouts/Layout.astro'
 import ButtonPrimary from '../../components/Buttons/ButtonPrimary.astro'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
+import Text from '../../components/Text/Text.astro'
+import Statistic from '../../components/FeaturedProject/Statistic.astro'
 ---
 
 <Layout
   pageTitle='Maso Fitness'
-  pageDescription='Maso Fitness app - revolutionizing personal training with AI-powered workouts and community-driven motivation.'>
+  pageDescription='Maso Fitness AI-powered fitness app - reimagining fitness through intelligent app design.'>
   <PageTransition>
     <main class='min-h-screen'>
-      <section id='masoFitness' class='w-full'>
+      <section id='maso-fitness' class='w-full'>
         <a href='/design' class='block w-full' transition:name='maso-fitness-image'>
           <Image
             id='projectImage'
@@ -31,30 +33,23 @@ import PageTransition from '../../components/Transitions/PageTransition.astro'
               id='text'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-col gap-4'
               transition:name='maso-fitness-text'>
-              <h3 class='text-sm' transition:name='maso-fitness-title'>Maso Fitness</h3>
-              <h2 class='text-4xl' transition:name='maso-fitness-heading'>
+              <Text variant='overline' transition:name='maso-fitness-title'>Maso Fitness</Text>
+              <Text variant='h1' transition:name='maso-fitness-heading'>
                 Reimagining fitness through intelligent app design
-              </h2>
-              <p class='text-lg' transition:name='maso-fitness-description'>
-                Maso Fitness is an AI-powered fitness app that personalizes workouts and nutrition plans. As Lead Product Designer, I designed an engaging experience that motivates users to achieve their fitness goals through smart technology.
-              </p>
+              </Text>
+              <Text variant='body' size='lg' transition:name='maso-fitness-description'>
+                Maso Fitness is an AI-powered fitness app that personalizes workouts and nutrition
+                plans. As Lead Product Designer, I designed an engaging experience that motivates
+                users to achieve their fitness goals through smart technology.
+              </Text>
             </div>
             <div
               id='outcomes'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-row gap-12 justify-start lg:justify-end'
               transition:name='maso-fitness-outcomes'>
-              <div transition:name='maso-fitness-stat-1'>
-                <p class='text-4xl font-medium'>500k</p>
-                <p class='text-sm opacity-75'>active users</p>
-              </div>
-              <div transition:name='maso-fitness-stat-2'>
-                <p class='text-4xl font-medium'>+67%</p>
-                <p class='text-sm opacity-75'>workout completion</p>
-              </div>
-              <div transition:name='maso-fitness-stat-3'>
-                <p class='text-4xl font-medium'>4.7</p>
-                <p class='text-sm opacity-75'>app store rating</p>
-              </div>
+              <Statistic value='500k' label='active users' index={1} />
+              <Statistic value='+67%' label='workout completion' index={2} />
+              <Statistic value='4.7' label='app store rating' index={3} />
             </div>
           </div>
         </div>

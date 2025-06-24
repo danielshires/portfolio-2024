@@ -1,4 +1,6 @@
 ---
+import Text from '../Text/Text'
+
 interface Props {
   path: string
   target: string
@@ -11,6 +13,8 @@ const { href, target } = Astro.props
 <a
   href={href}
   target={target}
-  class='bg-primary hover:bg-zinc-800 hover:underline text-primary-light rounded-full w-fit py-3 px-4 text-sm md:text-lg transition'
-  ><slot /></a
->
+  class='bg-primary hover:bg-zinc-800 hover:underline text-primary-light rounded-full w-fit py-3 px-4 transition'>
+  <Text variant='body' color='inverted'>
+    <slot />
+  </Text>
+</a>

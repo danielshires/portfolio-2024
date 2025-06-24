@@ -79,10 +79,10 @@ export interface Project {
   tags?: string[]
 }
 
-// Sanity configuration with fallback values
+// Sanity configuration
 const config = {
-  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '5fq3rcf6',
-  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
+  projectId: '5fq3rcf6',
+  dataset: 'production',
   apiVersion: '2024-03-19',
   useCdn: true,
 }
@@ -132,14 +132,14 @@ export async function getPostBySlug(slug: string): Promise<Post> {
       body,
       "tags": tags,
       "author": author->name,
-      relatedPosts: relatedPosts[]-> {
-        _id,
-        title,
-        slug,
-        publishedAt,
-        description,
-        mainImage
-      },
+      "relatedPosts": select(
+        count(relatedPosts[defined(_ref)]) > 0 => relatedPosts[defined(_ref)]->{
+            _id, title, slug, mainImage, publishedAt
+        }[defined(slug.current)][0..1],
+        *[_type == "post" && slug.current != $slug] | order(publishedAt desc) [0..1] {
+            _id, title, slug, mainImage, publishedAt
+        }
+      ),
       excerpt,
       category,
       views,
