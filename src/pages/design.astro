@@ -2,10 +2,10 @@
 import Layout from '../layouts/Layout.astro'
 import ProjectGrid from '../components/ProjectGrid/ProjectGrid.astro'
 import SimpleHero from '../components/Hero/SimpleHero.astro'
-import { projectsData } from '../data/projects'
+import { getAllProjects } from '../lib/sanity'
 import PageTransition from '../components/Transitions/PageTransition.astro'
 
-const { projects } = projectsData
+const projects = await getAllProjects()
 
 const heroContent = {
   introText: {

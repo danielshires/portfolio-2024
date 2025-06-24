@@ -52,6 +52,33 @@ export interface Album {
   publishedAt: string
 }
 
+export interface Project {
+  _id: string
+  title: string
+  subtitle?: string
+  slug: {
+    current: string
+  }
+  client?: string
+  role?: string[]
+  team?: string[]
+  year?: number
+  duration?: string
+  heroImage?: SanityImage
+  outcomes?: string[]
+  problem?: any // Portable Text content
+  solution?: any // Portable Text content
+  images?: Array<{
+    asset: SanityImage
+    alt: string
+    caption?: string
+  }>
+  relatedProjects?: Project[]
+  featured?: boolean
+  publishedAt: string
+  tags?: string[]
+}
+
 // Sanity configuration with fallback values
 const config = {
   projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || '5fq3rcf6',
@@ -221,4 +248,84 @@ export async function getAuthorBySlug(slug: string) {
     }`,
     { slug }
   )
+}
+
+// Helper function to fetch all projects
+export async function getAllProjects(): Promise<Project[]> {
+  return await client.fetch(`
+    *[_type == "project"] | order(publishedAt desc) {
+      _id,
+      title,
+      subtitle,
+      slug,
+      client,
+      role,
+      team,
+      year,
+      duration,
+      heroImage,
+      outcomes,
+      featured,
+      publishedAt,
+      tags
+    }
+  `)
+}
+
+// Helper function to fetch a single project by slug
+export async function getProjectBySlug(slug: string): Promise<Project> {
+  return await client.fetch(
+    `
+    *[_type == "project" && slug.current == $slug][0] {
+      _id,
+      title,
+      subtitle,
+      slug,
+      client,
+      role,
+      team,
+      year,
+      duration,
+      heroImage,
+      outcomes,
+      problem,
+      solution,
+      images[] {
+        asset,
+        alt,
+        caption
+      },
+      relatedProjects[]-> {
+        _id,
+        title,
+        subtitle,
+        slug,
+        client,
+        heroImage,
+        tags,
+        year
+      },
+      featured,
+      publishedAt,
+      tags
+    }
+  `,
+    { slug }
+  )
+}
+
+// Helper function to fetch featured projects
+export async function getFeaturedProjects(): Promise<Project[]> {
+  return await client.fetch(`
+    *[_type == "project" && featured == true] | order(publishedAt desc) {
+      _id,
+      title,
+      subtitle,
+      slug,
+      client,
+      heroImage,
+      tags,
+      year
+    }
+  `)
 }

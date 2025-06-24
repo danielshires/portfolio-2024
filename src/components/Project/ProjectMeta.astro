@@ -1,0 +1,98 @@
+---
+interface Props {
+  client?: string
+  role?: string[]
+  team?: string[]
+  year?: number
+  duration?: string
+}
+
+const { client, role, team, year, duration } = Astro.props
+
+// Helper function to format array as string
+function formatArray(arr?: string[]): string {
+  if (!arr || arr.length === 0) return ''
+  if (arr.length === 1) return arr[0]
+  if (arr.length === 2) return arr.join(' & ')
+  return arr.slice(0, -1).join(', ') + ' & ' + arr[arr.length - 1]
+}
+---
+
+<div class="space-y-8">
+  <h2 class="text-sm uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-medium">
+    Project Details
+  </h2>
+  
+  <div class="space-y-6">
+    <!-- Client -->
+    {client && (
+      <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4">
+        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
+          Client
+        </dt>
+        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
+          {client}
+        </dd>
+      </div>
+    )}
+
+    <!-- Role -->
+    {role && role.length > 0 && (
+      <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4">
+        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
+          Role{role.length > 1 ? 's' : ''}
+        </dt>
+        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
+          {formatArray(role)}
+        </dd>
+      </div>
+    )}
+
+    <!-- Team -->
+    {team && team.length > 0 && (
+      <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4">
+        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
+          Team
+        </dt>
+        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
+          {formatArray(team)}
+        </dd>
+      </div>
+    )}
+
+    <!-- Year -->
+    {year && (
+      <div class="border-b border-zinc-200 dark:border-zinc-700 pb-4">
+        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
+          Year
+        </dt>
+        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
+          {year}
+        </dd>
+      </div>
+    )}
+
+    <!-- Duration -->
+    {duration && (
+      <div class="pb-4">
+        <dt class="text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
+          Duration
+        </dt>
+        <dd class="text-base font-medium text-zinc-900 dark:text-zinc-100">
+          {duration}
+        </dd>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  /* Custom definition list styling for better semantic markup */
+  dt {
+    font-weight: 500;
+  }
+  
+  dd {
+    margin: 0;
+  }
+</style>

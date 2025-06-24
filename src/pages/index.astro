@@ -2,8 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 import Hero from '../components/Hero/Hero.astro'
 import ProjectGrid from '../components/ProjectGrid/ProjectGrid.astro'
-import { projectsData } from '../data/projects'
-import { getAuthorBySlug, urlFor } from '../lib/sanity'
+import { getAuthorBySlug, getAllProjects, getFeaturedProjects, urlFor } from '../lib/sanity'
 
 const author = await getAuthorBySlug('daniel-shires')
 const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).url() : undefined
@@ -15,7 +14,12 @@ const heroContent = {
   avatar: avatarUrl,
 }
 
-const { projects } = projectsData
+// Get projects from Sanity
+const allProjects = await getAllProjects()
+const featuredProjects = await getFeaturedProjects()
+
+// Use featured projects if available, otherwise show first 6 regular projects
+const projectsToShow = featuredProjects.length > 0 ? featuredProjects.slice(0, 6) : allProjects.slice(0, 6)
 ---
 
 <Layout
@@ -24,7 +28,7 @@ const { projects } = projectsData
   <main class='grid gap-8 overflow-hidden h-max'>
     <Hero {...heroContent} />
     <div class='mt-auto'>
-      <ProjectGrid projects={projects} />
+      <ProjectGrid projects={projectsToShow} />
     </div>
   </main>
 </Layout>

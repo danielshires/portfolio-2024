@@ -1,0 +1,153 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { getProjectBySlug, getAllProjects, urlFor } from '../../lib/sanity'
+import ProjectHero from '../../components/Project/ProjectHero.astro'
+import ProjectMeta from '../../components/Project/ProjectMeta.astro'
+import ProjectOutcomes from '../../components/Project/ProjectOutcomes.astro'
+import ProjectProblem from '../../components/Project/ProjectProblem.astro'
+import ProjectSolution from '../../components/Project/ProjectSolution.astro'
+import RelatedProjects from '../../components/Project/RelatedProjects.astro'
+import SEO from '../../components/Shared/SEO.astro'
+
+export async function getStaticPaths() {
+  const projects = await getAllProjects()
+  return projects.map((project) => ({
+    params: { slug: project.slug.current },
+    props: { project },
+  }))
+}
+
+const { project } = Astro.props
+const { slug } = Astro.params
+
+// Fetch full project data with all fields
+const fullProject = await getProjectBySlug(slug)
+
+if (!fullProject) {
+  return Astro.redirect('/404')
+}
+
+// Prepare SEO data
+const seoTitle = fullProject.title + (fullProject.client ? ` | ${fullProject.client}` : '')
+const seoDescription = fullProject.subtitle || `${fullProject.title} project case study`
+const seoImage = fullProject.heroImage ? urlFor(fullProject.heroImage).width(1200).height(630).url() : undefined
+---
+
+<Layout 
+  title={seoTitle}
+  description={seoDescription}
+>
+  <SEO
+    title={seoTitle}
+    description={seoDescription}
+    image={seoImage}
+    slot="head"
+  />
+
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="pt-20 pb-12 md:pt-32 md:pb-20">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <ProjectHero 
+          title={fullProject.title}
+          subtitle={fullProject.subtitle}
+          heroImage={fullProject.heroImage}
+        />
+      </div>
+    </section>
+
+    <!-- Metadata and Content Section -->
+    <section class="py-12 md:py-20">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+          <!-- Metadata Sidebar -->
+          <div class="lg:col-span-4">
+            <ProjectMeta 
+              client={fullProject.client}
+              role={fullProject.role}
+              team={fullProject.team}
+              year={fullProject.year}
+              duration={fullProject.duration}
+            />
+          </div>
+
+          <!-- Main Content -->
+          <div class="lg:col-span-8 space-y-16">
+            <!-- Outcomes -->
+            {fullProject.outcomes && fullProject.outcomes.length > 0 && (
+              <ProjectOutcomes outcomes={fullProject.outcomes} />
+            )}
+
+            <!-- Problem Statement -->
+            {fullProject.problem && (
+              <ProjectProblem problem={fullProject.problem} />
+            )}
+
+            <!-- Solution -->
+            {fullProject.solution && (
+              <ProjectSolution solution={fullProject.solution} />
+            )}
+
+            <!-- Project Images -->
+            {fullProject.images && fullProject.images.length > 0 && (
+              <section class="space-y-8">
+                <h2 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+                  Project Visuals
+                </h2>
+                <div class="grid gap-8">
+                  {fullProject.images.map((image, index) => (
+                    <div class="space-y-4">
+                      <img
+                        src={urlFor(image.asset).width(800).height(600).url()}
+                        alt={image.alt}
+                        class="w-full rounded-lg shadow-lg"
+                        loading="lazy"
+                      />
+                      {image.caption && (
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400 text-center">
+                          {image.caption}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Projects -->
+    {fullProject.relatedProjects && fullProject.relatedProjects.length > 0 && (
+      <section class="py-20 bg-zinc-50 dark:bg-zinc-900">
+        <div class="container mx-auto px-4 max-w-6xl">
+          <RelatedProjects projects={fullProject.relatedProjects} />
+        </div>
+      </section>
+    )}
+
+    <!-- Navigation Back -->
+    <section class="py-16">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <div class="text-center">
+          <a 
+            href="/projects" 
+            class="inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Projects
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .container {
+    @apply mx-auto px-4;
+  }
+</style>
