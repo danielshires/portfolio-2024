@@ -9,13 +9,13 @@ interface Props {
 
 const { solution } = Astro.props
 const containerClass = 'col-span-1 md:col-span-6 pb-12'
-const proseClass = 'prose prose-zinc dark:prose-invert max-w-none'
+const proseClass = 'prose prose-zinc dark:prose-invert max-w-none text-base'
 ---
 
 <div class={containerClass}>
   <Text variant='h4' className='pb-6'>Solution</Text>
 
   <div class={proseClass}>
-    {<PortableText value={solution} />}
+    {(<PortableText value={solution} />)}
   </div>
 </div>

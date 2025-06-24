@@ -36,7 +36,8 @@ export default {
                             maxWidth: '60ch',
                         },
                         li: {
-                            fontSize: '1.25rem',
+                            fontSize: '1.125rem',
+                            lineHeight: theme('lineHeight.relaxed'),
                         },
                         'li::marker': {
                             color: 'rgb(var(--zinc-950))',
@@ -74,8 +75,10 @@ export default {
                         p: {
                             fontFamily: theme('fontFamily.sans').join(','),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.base')[0],
-                            color: theme('colors.zinc.700'),
+                            fontSize: theme('fontSize.lg')[0],
+                            color: theme('colors.zinc.900'),
+                            lineHeight: theme('lineHeight.relaxed'),
+
                         },
                         '.prose-caption': {
                             fontFamily: theme('fontFamily.sans').join(','),
@@ -139,7 +142,7 @@ export default {
                             color: theme('colors.zinc.100'),
                         },
                         p: {
-                            color: theme('colors.zinc.300'),
+                            color: theme('colors.zinc.100'),
                         },
                         '.prose-caption': {
                             color: theme('colors.zinc.400'),

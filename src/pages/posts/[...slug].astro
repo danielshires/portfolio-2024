@@ -1,13 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getPostBySlug, getAllPosts, urlFor, type Post } from '../../lib/sanity'
-import { toHTML } from '@portabletext/to-html'
-import type { PortableTextComponents } from '@portabletext/to-html'
 import Image from 'astro/components/Image.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
 import Text from '../../components/Text/Text.astro'
 import RelatedPosts from '../../components/RelatedPosts.astro'
 import SEO from '../../components/Shared/SEO.astro'
+import { PortableText } from 'astro-portabletext'
 
 export async function getStaticPaths() {
   const posts = await getAllPosts()
@@ -32,25 +31,6 @@ if (!post) {
   return Astro.redirect('/404')
 }
 
-const portableTextComponents: Partial<PortableTextComponents> = {
-  types: {
-    image: ({ value }) => {
-      if (!value?.asset?._ref) {
-        return ''
-      }
-      return `
-        <img
-          src="${urlFor(value).width(800).fit('max').auto('format').url()}"
-          alt="${value.alt || ' '}"
-          loading="lazy"
-          class="rounded-lg shadow-lg"
-        />`
-    },
-  },
-}
-
-const html = post.body ? toHTML(post.body, { components: portableTextComponents }) : null
-
 const relatedPostsToShow = post.relatedPosts || []
 
 const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : undefined
@@ -61,18 +41,44 @@ const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630)
   <main class='min-h-screen'>
     <!-- <PageTransition /> -->
     <div class='container mx-auto px-4 py-16 lg:py-24'>
-      <article class='prose mx-auto max-w-4xl dark:prose-invert text-base'>
+      <article class='prose prose-zinc dark:prose-invert max-w-[75ch] mx-auto text-base'>
         <header class='text-center mt-12 mb-12'>
-          <Text variant='h1'>{post.title}</Text>
+          <Text variant='h1'class='mb-2'>{post.title} </Text>
           {
             post.description && (
-              <Text variant='subtitle' class='mt-4'>
+              <Text variant='subtitle' color="muted" class='mt-0 mb-1'>
                 {post.description}
               </Text>
             )
           }
+          <div class='mt-0 flex gap-2 items-center text-sm text-zinc-500 dark:text-zinc-400'>
+            {
+              post.author && (
+                <Text variant='overline' color='muted'>
+                  By {post.author}
+                </Text>
+              )
+            } ·
+            {
+              post.publishedAt && (
+                <Text variant='overline' color='muted'>
+                  {new Date(post.publishedAt).toLocaleDateString(undefined, {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                </Text>
+              )
+            }
+            {
+              post.readingTime && (
+                <Text variant='overline' color='muted'>
+                  {post.readingTime} min read
+                </Text>
+              )
+            }
+          </div>
         </header>
-
         {
           post.mainImage && (
             <div class='mb-12'>
@@ -84,8 +90,9 @@ const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630)
             </div>
           )
         }
-
-        {html && <div set:html={html} />}
+        <div class='prose prose-zinc dark:prose-invert max-w-none text-base mt-12'>
+          {post.body && <PortableText value={post.body} />}
+        </div>
       </article>
 
       <!-- Related Posts -->
@@ -98,7 +105,7 @@ const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630)
       } -->
 
       <!-- Navigation Back -->
-      <div class='mt-16 text-center'>
+      <div class='mt-16 text-center col-span-full'>
         <a
           href='/posts'
           class='inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors'>
