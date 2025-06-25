@@ -35,14 +35,14 @@ export default {
       name: 'role',
       title: 'Role',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
       description: 'Your roles in this project (e.g., "UI Designer", "Product Designer")'
     },
     {
       name: 'team',
       title: 'Team',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
       description: 'Team members and collaborators'
     },
     {
@@ -70,9 +70,27 @@ export default {
       name: 'outcomes',
       title: 'Outcomes',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'statistic',
+              title: 'Statistic',
+              type: 'string',
+              description: 'The number value e.g. 20+',
+            },
+            {
+              name: 'description',
+              title: 'Description',
+              type: 'string',
+              description: "The description of the statistic e.g. 'increase to NPS'",
+            },
+          ],
+        },
+      ],
       description: 'Key outcomes, stats, or achievements (2-4 bullet points)',
-      validation: Rule => Rule.max(4).min(1)
+      validation: (Rule) => Rule.max(4).min(1),
     },
     {
       name: 'problem',
@@ -82,13 +100,13 @@ export default {
         {
           type: 'block',
           styles: [
-            {title: 'Normal', value: 'normal'},
-            {title: 'H4', value: 'h4'},
+            { title: 'Normal', value: 'normal' },
+            { title: 'H4', value: 'h4' },
           ],
           marks: {
             decorators: [
-              {title: 'Strong', value: 'strong'},
-              {title: 'Emphasis', value: 'em'},
+              { title: 'Strong', value: 'strong' },
+              { title: 'Emphasis', value: 'em' },
             ],
           },
         }
@@ -103,18 +121,18 @@ export default {
         {
           type: 'block',
           styles: [
-            {title: 'Normal', value: 'normal'},
-            {title: 'H4', value: 'h4'},
+            { title: 'Normal', value: 'normal' },
+            { title: 'H4', value: 'h4' },
           ],
           marks: {
             decorators: [
-              {title: 'Strong', value: 'strong'},
-              {title: 'Emphasis', value: 'em'},
+              { title: 'Strong', value: 'strong' },
+              { title: 'Emphasis', value: 'em' },
             ],
           },
           lists: [
-            {title: 'Bullet', value: 'bullet'},
-            {title: 'Number', value: 'number'}
+            { title: 'Bullet', value: 'bullet' },
+            { title: 'Number', value: 'number' }
           ]
         }
       ],
@@ -153,7 +171,7 @@ export default {
       name: 'relatedProjects',
       title: 'Related Projects',
       type: 'array',
-      of: [{type: 'reference', to: {type: 'project'}}],
+      of: [{ type: 'reference', to: { type: 'project' } }],
       description: 'Other projects to display at the bottom (2-3 recommended)',
       validation: Rule => Rule.max(3)
     },
@@ -173,7 +191,7 @@ export default {
       name: 'tags',
       title: 'Tags',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [{ type: 'string' }],
       description: 'Tags for categorizing projects (e.g., "UI/UX", "Web Design", "Mobile")'
     }
   ],
@@ -185,7 +203,7 @@ export default {
       client: 'client'
     },
     prepare(selection) {
-      const {title, subtitle, client, media} = selection
+      const { title, subtitle, client, media } = selection
       return {
         title: title,
         subtitle: client ? `${client}${subtitle ? ` • ${subtitle}` : ''}` : subtitle,
@@ -198,21 +216,21 @@ export default {
       title: 'Newest first',
       name: 'publishedAtDesc',
       by: [
-        {field: 'publishedAt', direction: 'desc'}
+        { field: 'publishedAt', direction: 'desc' }
       ]
     },
     {
       title: 'Oldest first',
       name: 'publishedAtAsc',
       by: [
-        {field: 'publishedAt', direction: 'asc'}
+        { field: 'publishedAt', direction: 'asc' }
       ]
     },
     {
       title: 'Title A-Z',
       name: 'titleAsc',
       by: [
-        {field: 'title', direction: 'asc'}
+        { field: 'title', direction: 'asc' }
       ]
     }
   ]

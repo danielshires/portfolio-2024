@@ -2,7 +2,10 @@
 import Text from '../Text/Text.astro';
 
 interface Props {
-  outcomes: string[]
+  outcomes: {
+    statistic: string;
+    description: string;
+  }[];
 }
 
 const { outcomes } = Astro.props
@@ -19,7 +22,8 @@ const { outcomes } = Astro.props
       >
         <!-- Outcome Text -->
         <div class="space-y-2">
-          <Text variant="body" weight="medium">{outcome}</Text>
+          <Text variant="h3" weight="bold">{outcome.statistic}</Text>
+          <Text variant="body" weight="medium">{outcome.description}</Text>
         </div>
       </div>
     ))}

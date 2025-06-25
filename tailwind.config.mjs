@@ -36,8 +36,9 @@ export default {
                             maxWidth: '60ch',
                         },
                         li: {
-                            fontSize: '1.125rem',
+                            fontSize: theme('fontSize.base')[0],
                             lineHeight: theme('lineHeight.relaxed'),
+                            color: theme('colors.zinc.900'),
                         },
                         'li::marker': {
                             color: 'rgb(var(--zinc-950))',
