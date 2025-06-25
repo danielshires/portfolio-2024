@@ -22,9 +22,9 @@ export const features = {
 // Helper function to get navigation items
 export function getNavigationItems() {
   return [
-    { path: 'design', href: '/design', label: 'Design', ...features.design },
+    { path: 'projects', href: '/projects', label: 'Projects', ...features.design },
     { path: 'pictures', href: '/pictures', label: 'Pictures', ...features.pictures },
-    { path: 'posts', href: '/posts', label: 'Thoughts', ...features.posts },
+    { path: 'journal', href: '/journal', label: 'Journal', ...features.posts },
     { path: 'experiments', href: '/experiments', label: 'Experiments', ...features.experiments },
   ].filter((item) => item.enabled && item.visible)
 }
