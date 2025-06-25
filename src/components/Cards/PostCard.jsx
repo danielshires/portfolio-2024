@@ -6,7 +6,7 @@ import Text from '../Text/Text';
 export default function PostCard({ post }) {
     return (
         <a
-            href={`/posts/${post.slug?.current || post._id}`}
+            href={`/journal/${post.slug?.current || post._id}`}
             className="group block relative overflow-hidden transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
         >
             {post.mainImage ? (

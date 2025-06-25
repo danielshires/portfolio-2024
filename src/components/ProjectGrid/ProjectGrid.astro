@@ -24,7 +24,7 @@ const transformedProjects = projects.map(project => ({
   projectUrl: `/projects/${project.slug.current}`,
 }))
 ---
-<section class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-8 max-w-[100vw] mt-16'>
-  <Text variant='h5' class="col-span-full">Featured</Text>
+<section class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8 max-w-[100vw] mt-16'>
+  <Text variant='overline' class="col-span-full">Recent projects</Text>
   {transformedProjects.map((project) => <ProjectCard {...project} />)}
 </section>

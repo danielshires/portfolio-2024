@@ -1,10 +1,11 @@
 import { defineConfig } from 'astro/config'
 import { getCollection } from 'astro:content'
 import { getNavigationItems } from '../config/features'
+import { getAllAlbums, getAllPosts, type Post, type Album } from '../lib/sanity'
 
 export async function GET() {
-  const posts = await getCollection('posts')
-  const albums = await getCollection('albums')
+  const posts = await getAllPosts()
+  const albums = await getAllAlbums()
 
   // Get navigation items and filter by enabled/visible features
   const navigationItems = getNavigationItems()
@@ -25,22 +26,22 @@ export async function GET() {
     .join('')}
   ${posts
     .map(
-      (post) => `
+      (post: Post) => `
     <url>
-      <loc>${new URL(`/posts/${post.slug}`, 'https://danielshires.com').href}</loc>
-      <lastmod>${post.data.date.toISOString()}</lastmod>
-      <changefreq>monthly</changefreq>
-      <priority>0.7</priority>
+      <loc>${new URL(`/journal/${post.slug.current}`, 'https://danielshires.com').href}</loc>
+      <lastmod>${new Date(post.publishedAt).toISOString()}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
     </url>
   `
     )
     .join('')}
   ${albums
     .map(
-      (album) => `
+      (album: Album) => `
     <url>
-      <loc>${new URL(`/albums/${album.id}`, 'https://danielshires.com').href}</loc>
-      <lastmod>${album.data.date.toISOString()}</lastmod>
+      <loc>${new URL(`/albums/${album.slug.current}`, 'https://danielshires.com').href}</loc>
+      <lastmod>${new Date(album.publishedAt).toISOString()}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>
     </url>

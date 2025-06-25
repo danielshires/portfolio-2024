@@ -1,8 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getAllPosts } from '../../lib/sanity'
-import FilterPostsReact from '../../components/FilterPostsReact.tsx'
-import Text from '../../components/Text/Text.tsx'
+import FilterPostsReact from '../../components/FilterPostsReact'
+import SimpleHero from '../../components/Hero/SimpleHero.astro'
 
 const posts = await getAllPosts()
 
@@ -20,18 +20,14 @@ const tags = Array.from(new Set(posts.flatMap((post) => post.tags || [])))
 <Layout
   pageTitle='Journal'
   pageDescription='Notes, stories, and reflections on design, development, and the digital world.'>
-  <main class='min-h-screen pt-20 pb-16'>
-    <!-- Header -->
-    <section class='py-16 md:py-24'>
-      <div class='container mx-auto'>
-        <div class='text-center space-y-6'>
-          <Text variant='h1' size='5xl' className='font-bold'>Journal</Text>
-          <Text variant='body' size='lg' color='muted'>
-            Notes, stories, and reflections on design, development, and the digital world.
-          </Text>
-        </div>
-      </div>
-    </section>
+  <main class='min-h-screen'>
+    <!-- Hero Section -->
+    <SimpleHero
+      introText={{
+        first: 'Journal',
+        second: 'Notes, stories, and reflections on design, development, and the digital world.',
+      }}
+    />
 
     <!-- Filters and Posts Grid -->
     <section class='pb-16'>

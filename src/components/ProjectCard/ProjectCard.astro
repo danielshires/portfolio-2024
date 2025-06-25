@@ -18,7 +18,7 @@ interface Props {
 const { projectImage, title, heading, projectUrl } = Astro.props
 ---
 
-<div class='col-span-1 md:col-span-3 lg:col-span-4'>
+<div class='col-span-1 md:col-span-3 lg:col-span-1'>
   <ProjectImage
     src={projectImage.src}
     alt={projectImage.alt}
@@ -28,8 +28,8 @@ const { projectImage, title, heading, projectUrl } = Astro.props
     height={projectImage.height}
   />
   <div class='pt-2'>
-    <Text variant='overline' color='muted' className='mt-4'>{title}</Text>
-    <Text variant='h4' className='mt-1'>{heading}</Text>
+    <Text variant='h5' color='default' className='mt-4'>{title}</Text>
+    <Text variant='body' color="muted" className='mt-1'>{heading}</Text>
   </div>
 </div>
 

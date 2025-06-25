@@ -20,9 +20,9 @@ export const variantStyles: Record<TextVariant, string> = {
   h2: 'text-3xl font-normal',
   h3: 'text-2xl font-normal',
   h4: 'text-xl font-normal',
-  h5: 'text-lg font-normal',
-  subtitle: 'text-lg font-normal',
-  body: 'text-lg font-normal',
+  h5: 'text-base font-medium',
+  subtitle: 'text-lg font-medium',
+  body: 'text-base font-normal',
   caption: 'text-sm font-normal',
   overline: 'text-xs font-normal uppercase tracking-wider',
 }

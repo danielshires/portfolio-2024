@@ -68,14 +68,14 @@ export default {
                         },
                         h5: {
                             fontFamily: theme('fontFamily.sans').join(','),
-                            fontWeight: '400',
-                            fontSize: theme('fontSize.lg')[0],
+                            fontWeight: '500',
+                            fontSize: theme('fontSize.base')[0],
                             color: theme('colors.zinc.900'),
                         },
                         p: {
                             fontFamily: theme('fontFamily.sans').join(','),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.lg')[0],
+                            fontSize: theme('fontSize.base')[0],
                             color: theme('colors.zinc.900'),
                             lineHeight: theme('lineHeight.relaxed'),
 
