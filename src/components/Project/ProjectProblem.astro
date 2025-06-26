@@ -8,12 +8,12 @@ interface Props {
 }
 
 const { problem } = Astro.props
-const containerClass = 'col-span-1 md:col-span-6 pb-12'
-const proseClass = 'prose prose-lg prose-zinc dark:prose-invert max-w-none'
+
+const proseClass = 'prose prose-lg dark:prose-invert max-w-none py-4'
 ---
 
-<div class={containerClass}>
-  <Text variant='h4' className='pb-6'>Problem</Text>
+<div class=''>
+  <Text variant='h4' className='pb-0'>Overview</Text>
   <div class={proseClass}>
     <PortableText value={problem} />
   </div>

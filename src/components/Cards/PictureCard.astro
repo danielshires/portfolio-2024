@@ -1,7 +1,7 @@
 ---
 import { urlFor } from '../../lib/sanity'
 import type { Picture } from '../../lib/sanity'
-import Image from 'astro/components/Image.astro'
+import SanityImage from '../Shared/SanityImage.astro'
 
 interface Props {
   picture: Picture
@@ -16,14 +16,13 @@ const { picture } = Astro.props
   {
     picture.mainImage && (
       <div class='w-full h-64 overflow-hidden'>
-        <Image
-          src={urlFor(picture.mainImage).width(800).url()}
+        <SanityImage
+          image={picture.mainImage}
           alt={picture.title}
           width={800}
           height={600}
-          loading='lazy'
-          decoding='async'
           class='object-cover w-full h-full transition-transform duration-300 group-hover:scale-105'
+          sizes='(min-width: 1280px) 384px, (min-width: 1024px) 300px, (min-width: 768px) 50vw, 100vw'
         />
       </div>
     )

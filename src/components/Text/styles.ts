@@ -16,14 +16,14 @@ export type TextAlign = 'left' | 'center' | 'right'
 
 // Define default styles for each variant
 export const variantStyles: Record<TextVariant, string> = {
-  h1: 'text-4xl font-normal',
-  h2: 'text-3xl font-normal',
-  h3: 'text-2xl font-normal',
+  h1: 'text-3xl md:text-4xl font-normal leading-normal md:leading-normal',
+  h2: 'text-2xl md:text-3xl font-normal',
+  h3: 'text-2xl md:text-2xl font-normal',
   h4: 'text-xl font-normal',
   h5: 'text-base font-medium',
-  subtitle: 'text-lg font-medium',
+  subtitle: 'text-base font-medium',
   body: 'text-base font-normal',
-  caption: 'text-sm font-normal',
+  caption: 'text-base font-normal',
   overline: 'text-xs font-normal uppercase tracking-wider',
 }
 

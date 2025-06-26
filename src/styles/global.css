@@ -136,36 +136,3 @@ a {
 * {
     box-sizing: border-box;
 }
-
-
-/* Dark mode specific overrides for better contrast */
-
-.dark .prose {
-    color: rgb(var(--zinc-300));
-}
-
-.dark .prose h1,
-.dark .prose h2,
-.dark .prose h3,
-.dark .prose h4,
-.dark .prose h5,
-.dark .prose h6 {
-    color: rgb(var(--zinc-50));
-}
-
-.dark .prose strong {
-    color: rgb(var(--zinc-50));
-}
-
-.dark .prose a {
-    color: rgb(var(--zinc-50));
-}
-
-.dark .prose code {
-    color: rgb(var(--zinc-50));
-    background-color: rgb(var(--zinc-800));
-}
-
-.dark .prose pre {
-    background-color: rgb(var(--zinc-800));
-}

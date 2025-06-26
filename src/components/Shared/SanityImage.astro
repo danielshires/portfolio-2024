@@ -1,1 +1,58 @@
- 
+import { urlFor } from '../../lib/sanity'
+import type { SanityImage as SanityImageType } from '../../lib/sanity'
+import { Image } from 'astro:assets'
+
+interface Props {
+  image: SanityImageType
+  alt: string
+  width?: number
+  height?: number
+  class?: string
+  sizes?: string
+}
+
+const {
+  image,
+  alt,
+  width = 800,
+  height = 600,
+  class: className = '',
+  sizes = '(min-width: 1024px) 1024px, 100vw'
+} = Astro.props
+
+// Calculate optimal quality based on image size
+const quality = width >= 1200 ? 85 : 80
+
+// Generate image URL with optimizations
+const imageUrl = urlFor(image)
+  .width(width)
+  .quality(quality)
+  .auto('format')
+  .fit('max')
+  .url()
+
+// Generate srcset for responsive images
+const widths = [400, 800, 1200, 1600]
+const srcset = widths
+  .map(w => {
+    const url = urlFor(image)
+      .width(w)
+      .quality(quality)
+      .auto('format')
+      .fit('max')
+      .url()
+    return `${url} ${w}w`
+  })
+  .join(', ')
+
+<img
+  src={imageUrl}
+  alt={alt}
+  width={width}
+  height={height}
+  class={className}
+  loading="lazy"
+  decoding="async"
+  srcset={srcset}
+  sizes={sizes}
+/>

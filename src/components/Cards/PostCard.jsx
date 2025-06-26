@@ -22,16 +22,14 @@ export default function PostCard({ post }) {
             ) : (
                 <div className="w-full aspect-[2/1] flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 text-4xl">📝</div>
             )}
-            <div className="flex flex-col justify-between pt-2">
+            <div className="flex flex-col justify-between pt-6">
                 <div className="">
 
-                    <Text variant="h5" className="mt-4 group-hover:text-primary transition-colors duration-200">{post.title}</Text>
+                    <Text variant="h5">{post.title}</Text>
                     {post.description && (
                         <Text variant="body" color="muted" className="mt-1 line-clamp-2">{post.description}</Text>
                     )}
-                    <div className="flex items-center gap-2 mt-4">
-
-
+                    <div className="flex items-center gap-2 pt-2">
                         {post.publishedAt && (
                             <Text variant="overline" color="muted">
                                 {new Date(post.publishedAt).toLocaleDateString('en-US', {

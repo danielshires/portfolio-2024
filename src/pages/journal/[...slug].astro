@@ -40,8 +40,8 @@ const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630)
   <SEO slot='head' title={post.title} description={post.description} image={seoImage} />
   <main class='min-h-screen'>
     <!-- <PageTransition /> -->
-    <div class='container mx-auto px-4 py-16 lg:py-24'>
-      <article class='prose prose-zinc dark:prose-invert max-w-[75ch] mx-auto text-base'>
+    <div class='container mx-auto py-16 lg:py-24'>
+      <article class='prose dark:prose-invert max-w-[75ch] mx-auto text-base'>
         <header class='text-center mt-12 mb-12'>
           <Text variant='h1' class='mb-2'>{post.title} </Text>
           {
@@ -90,7 +90,7 @@ const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630)
             </div>
           )
         }
-        <div class='prose prose-zinc dark:prose-invert max-w-none text-base mt-12'>
+        <div class='prose dark:prose-invert max-w-none text-base mt-12'>
           {post.body && <PortableText value={post.body} />}
         </div>
       </article>

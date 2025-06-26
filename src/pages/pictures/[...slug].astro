@@ -1,8 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getPictureBySlug, getAllPictures } from '../../lib/sanity'
-import { urlFor } from '../../lib/sanity'
-import Image from 'astro/components/Image.astro'
+import SanityImage from '../../components/Shared/SanityImage.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
 import Text from '../../components/Text/Text'
 
@@ -34,12 +33,13 @@ const { picture } = Astro.props
       {
         picture.mainImage && (
           <div class='mb-8'>
-            <Image
-              src={urlFor(picture.mainImage).width(1200).url()}
+            <SanityImage
+              image={picture.mainImage}
               alt={picture.title}
               width={1200}
               height={800}
               class='w-full rounded-lg'
+              sizes='(min-width: 1200px) 1200px, 100vw'
             />
           </div>
         )

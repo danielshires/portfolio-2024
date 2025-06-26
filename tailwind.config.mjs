@@ -85,7 +85,7 @@ export default {
                             fontFamily: theme('fontFamily.sans').join(','),
                             fontWeight: '400',
                             fontSize: theme('fontSize.sm')[0],
-                            color: theme('colors.zinc.600'),
+                            color: theme('colors.zinc.900'),
                         },
                         '.prose-overline': {
                             fontFamily: theme('fontFamily.sans').join(','),
@@ -93,7 +93,7 @@ export default {
                             fontSize: theme('fontSize.xs')[0],
                             textTransform: 'uppercase',
                             letterSpacing: theme('letterSpacing.wide'),
-                            color: theme('colors.zinc.600'),
+                            color: theme('colors.zinc.900'),
                         },
                         'strong': {
                             color: theme('colors.zinc.900'),
@@ -122,8 +122,9 @@ export default {
                         },
                     }
                 },
-                dark: {
+                invert: {
                     css: {
+                        color: theme('colors.zinc.300'),
                         'li::marker': {
                             color: 'rgb(var(--zinc-50))',
                         },
@@ -143,7 +144,7 @@ export default {
                             color: theme('colors.zinc.100'),
                         },
                         p: {
-                            color: theme('colors.zinc.100'),
+                            color: theme('colors.zinc.300'),
                         },
                         '.prose-caption': {
                             color: theme('colors.zinc.400'),
@@ -152,13 +153,13 @@ export default {
                             color: theme('colors.zinc.400'),
                         },
                         'strong': {
-                            color: theme('colors.zinc.50'),
+                            color: theme('colors.zinc.100'),
                         },
                         'a': {
-                            color: theme('colors.zinc.50'),
+                            color: theme('colors.zinc.100'),
                         },
                         'code': {
-                            color: theme('colors.zinc.50'),
+                            color: theme('colors.zinc.100'),
                             backgroundColor: theme('colors.zinc.800'),
                         },
                         'pre': {
