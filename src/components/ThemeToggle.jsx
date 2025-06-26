@@ -4,6 +4,16 @@ import { useState, useEffect } from 'react'
 export default function ThemeToggle() {
     const [isDark, setIsDark] = useState(false)
 
+    function updateBgStyle(newIsDark) {
+        let styleTag = document.getElementById('theme-bg-style');
+        if (!styleTag) {
+            styleTag = document.createElement('style');
+            styleTag.id = 'theme-bg-style';
+            document.head.appendChild(styleTag);
+        }
+        styleTag.innerHTML = `html,body{background:${newIsDark ? '#09090b' : '#fafafa'} !important;}`;
+    }
+
     useEffect(() => {
         // Initialize theme
         const root = document.documentElement
@@ -13,9 +23,11 @@ export default function ThemeToggle() {
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
             root.classList.add('dark')
             setIsDark(true)
+            updateBgStyle(true)
         } else {
             root.classList.remove('dark')
             setIsDark(false)
+            updateBgStyle(false)
         }
     }, [])
 
@@ -34,6 +46,7 @@ export default function ThemeToggle() {
 
         // Update state
         setIsDark(newIsDark)
+        updateBgStyle(newIsDark)
     }
 
     return (
