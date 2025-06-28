@@ -1,5 +1,5 @@
 ---
-import Text from '../Text/Text'
+import Text from '../Text/Text.astro'
 
 interface Props {
   value: string
@@ -11,7 +11,7 @@ const { value, label, index } = Astro.props as Props
 ---
 
 <div class='flex flex-col items-start md:items-start' transition:name={`commbank-outcome-${index}`}>
-  <Text variant='h4' className='font-fragment' transition:name={`commbank-outcome-value-${index}`}>
+  <Text variant='h4' class='font-fragment' transition:name={`commbank-outcome-value-${index}`}>
     {value}
   </Text>
   <Text variant='caption' color='muted' transition:name={`commbank-outcome-label-${index}`}>

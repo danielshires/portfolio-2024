@@ -1,6 +1,6 @@
 ---
 import ProjectImage from '../FeaturedProject/ProjectImage.astro'
-import Text from '../Text/Text'
+import Text from '../Text/Text.astro'
 
 interface Props {
   projectImage: {
@@ -29,7 +29,7 @@ const { projectImage, title, heading, projectUrl } = Astro.props
     transitionName={`${title.toLowerCase().replace(/\s+/g, '-')}-image`}
   />
   <div class='pt-2'>
-    <Text variant='h5' color='default' className='mt-4'>{title}</Text>
-    <Text variant='body' color='muted' className='mt-1'>{heading}</Text>
+    <Text variant='h5' color='default' class='mt-4'>{title}</Text>
+    <Text variant='body' color='muted' class='mt-1'>{heading}</Text>
   </div>
 </div>

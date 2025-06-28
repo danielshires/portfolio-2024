@@ -1,11 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getProjectBySlug, getAllProjects, urlFor } from '../../lib/sanity'
-import ProjectHero from '../../components/Project/ProjectHero.astro'
 import ProjectMeta from '../../components/Project/ProjectMeta.astro'
 import ProjectOutcomes from '../../components/Project/ProjectOutcomes.astro'
 import ProjectProblem from '../../components/Project/ProjectProblem.astro'
-import ProjectSolution from '../../components/Project/ProjectSolution.astro'
 import RelatedProjects from '../../components/Project/RelatedProjects.astro'
 import SEO from '../../components/Shared/SEO.astro'
 import Text from '../../components/Text/Text.astro'
@@ -21,7 +19,7 @@ export async function getStaticPaths() {
     }))
 }
 
-const { project } = Astro.props
+const { project: _ } = Astro.props
 const { slug } = Astro.params
 
 // Redirect to 404 if no slug provided

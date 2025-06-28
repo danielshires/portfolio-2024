@@ -1,7 +1,7 @@
 ---
 import type { PortableTextBlock } from '@portabletext/types'
 import { PortableText } from 'astro-portabletext'
-import Text from '../Text/Text'
+import Text from '../Text/Text.astro'
 
 interface Props {
   problem: PortableTextBlock[]
@@ -13,7 +13,7 @@ const proseClass = 'prose prose-lg dark:prose-invert max-w-none py-4'
 ---
 
 <div class=''>
-  <Text variant='h4' className='pb-0'>Overview</Text>
+  <Text variant='h4' class='pb-0'>Overview</Text>
   <div class={proseClass}>
     <PortableText value={problem} />
   </div>

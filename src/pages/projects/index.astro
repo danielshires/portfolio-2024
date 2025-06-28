@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro'
 import { getAllProjects, urlFor } from '../../lib/sanity'
 import SEO from '../../components/Shared/SEO.astro'
-import Text from '../../components/Text/Text'
+import Text from '../../components/Text/Text.astro'
 import SimpleHero from '../../components/Hero/SimpleHero.astro'
 import ProjectCard from '../../components/ProjectCard/ProjectCard.astro'
 
@@ -68,7 +68,7 @@ const projects = await getAllProjects()
             </div>
           ) : (
             <div class='text-center py-16'>
-              <Text variant='h3' className='mb-2'>
+              <Text variant='h3' class='mb-2'>
                 No projects yet
               </Text>
               <Text variant='body' color='muted'>

@@ -2,9 +2,7 @@
 import Layout from '../../layouts/Layout.astro'
 import { getPostBySlug, getAllPosts, urlFor, type Post } from '../../lib/sanity'
 import SanityImage from '../../components/Shared/SanityImage.astro'
-import PageTransition from '../../components/Transitions/PageTransition.astro'
 import Text from '../../components/Text/Text.astro'
-import RelatedPosts from '../../components/RelatedPosts.astro'
 import SEO from '../../components/Shared/SEO.astro'
 import { PortableText } from 'astro-portabletext'
 
@@ -18,20 +16,16 @@ export async function getStaticPaths() {
     }))
 }
 
-const { post: initialPost } = Astro.props
+const { post } = Astro.props
 const { slug } = Astro.params
 
 if (!slug) {
   Astro.redirect('/404')
 }
 
-const post = await getPostBySlug(slug)
-
 if (!post) {
   return Astro.redirect('/404')
 }
-
-const relatedPostsToShow = post.relatedPosts || []
 
 const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : undefined
 ---
