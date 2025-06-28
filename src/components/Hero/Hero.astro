@@ -14,7 +14,7 @@ const { name, tagline, intro, avatar } = Astro.props
 
 <section
   id='intro'
-  class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 justify-center mt-48 gap-4'
+  class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center mt-40 gap-4'
   aria-label='Introduction'>
   {
     avatar && (
@@ -33,7 +33,7 @@ const { name, tagline, intro, avatar } = Astro.props
       {tagline}
     </Text>
   </div> -->
-  <div class='col-span-1 md:col-span-8 gap-4'>
+  <div class='col-span-1 md:col-span-2 lg:col-span-3 gap-4'>
     <Text variant='h1'>
       {intro}
     </Text>

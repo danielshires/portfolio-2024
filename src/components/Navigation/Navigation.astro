@@ -14,14 +14,14 @@ const navigationItems = getNavigationItems()
 
 <nav
   id='nav'
-  class='fixed z-50 top-4 md:top-0 left-0 right-0 mt-8 h-12 flex items-center justify-start theme-transition'>
+  class='fixed z-50 top-0 left-0 right-0 flex items-center justify-start theme-transition nav-transition pt-4 md:pt-6 pb-3 border-b border-zinc-200/20 dark:border-zinc-800/20'>
   <div class='container mx-auto px-8 lg:px-16'>
-    <div class='flex gap-4 justify-between items-center'>
-      <div class='flex flex-row gap-4 justify-start items-center'>
+    <div class='flex gap-8 justify-between items-center'>
+      <div class='flex flex-row gap-6 justify-start items-center'>
         <!-- Home link -->
-        <NavLink path='' target='' href='/'> Home </NavLink>
+        <NavLink path='' target='' href='/'>Home</NavLink>
         <!-- Page links -->
-        <div class='flex flex-row md:flex-row gap-4'>
+        <div class='flex flex-row md:flex-row gap-6'>
           {
             navigationItems.map((item) => (
               <NavLink path={item.path} target='_self' href={item.href}>
@@ -46,45 +46,60 @@ const navigationItems = getNavigationItems()
     }
   }
 
-  .nav-hidden {
-    transform: translateY(-200%);
+  .nav-transition {
+    transition:
+      opacity 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
   }
+
+  .nav-hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+  }
+
 </style>
 
 <script>
-  let lastScroll = 0
-  const nav = document.getElementById('nav')
-  const scrollThreshold = 1 // Minimum scroll before hiding nav
+  function initNavScroll() {
+    const nav = document.getElementById('nav')
+    if (!nav) return
 
-  function handleScroll() {
-    const currentScroll = window.pageYOffset
+    let lastScrollY = window.scrollY
 
-    if (currentScroll <= 0) {
-      // At the top of the page
-      nav?.classList.remove('nav-hidden')
-      return
+    function updateNav() {
+      if (!nav) return
+
+      const currentScrollY = window.scrollY
+
+      // Show nav at top of page
+      if (currentScrollY <= 1) {
+        nav.classList.remove('nav-hidden')
+        return
+      }
+
+      // Hide nav when scrolling down
+      if (currentScrollY > lastScrollY) {
+        nav.classList.add('nav-hidden')
+      }
+      // Show nav when scrolling up
+      else {
+        nav.classList.remove('nav-hidden')
+      }
+
+      lastScrollY = currentScrollY
     }
 
-    if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
-      // Scrolling down and past threshold
-      nav?.classList.add('nav-hidden')
-    } else if (currentScroll < lastScroll) {
-      // Scrolling up
-      nav?.classList.remove('nav-hidden')
-    }
+    // Remove existing listener if any
+    window.removeEventListener('scroll', updateNav)
 
-    lastScroll = currentScroll
+    // Add scroll listener
+    window.addEventListener('scroll', updateNav, { passive: true })
   }
 
-  // Throttle scroll event
-  let ticking = false
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        handleScroll()
-        ticking = false
-      })
-      ticking = true
-    }
-  })
+  // Initialize on page load
+  initNavScroll()
+
+  // Re-initialize after view transitions
+  document.addEventListener('astro:page-load', initNavScroll)
 </script>

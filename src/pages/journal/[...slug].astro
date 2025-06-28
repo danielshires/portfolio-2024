@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getPostBySlug, getAllPosts, urlFor, type Post } from '../../lib/sanity'
-import Image from 'astro/components/Image.astro'
+import SanityImage from '../../components/Shared/SanityImage.astro'
 import PageTransition from '../../components/Transitions/PageTransition.astro'
 import Text from '../../components/Text/Text.astro'
 import RelatedPosts from '../../components/RelatedPosts.astro'
@@ -82,10 +82,14 @@ const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630)
         {
           post.mainImage && (
             <div class='mb-12'>
-              <img
-                src={urlFor(post.mainImage).width(1200).url()}
+              <SanityImage
+                image={post.mainImage}
                 alt={post.title}
-                class='w-full h-auto rounded-lg shadow-lg'
+                width={1200}
+                height={800}
+                preset='hero'
+                class='w-full h-auto rounded-lg'
+                sizes='(min-width: 1200px) 1200px, 100vw'
               />
             </div>
           )

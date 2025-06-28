@@ -28,7 +28,16 @@ export default defineConfig({
     image: {
         service: {
             entrypoint: 'astro/assets/services/sharp'
-        }
+        },
+        quality: 100,
+        format: 'avif',
+        densities: [1, 2],
+        remotePatterns: [{
+            protocol: 'https',
+            hostname: 'letsenhance.io',
+            port: '',
+            pathname: '/static/**'
+        }]
     },
     prefetch: {
         prefetchAll: false

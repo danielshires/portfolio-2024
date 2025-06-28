@@ -10,6 +10,7 @@ import RelatedProjects from '../../components/Project/RelatedProjects.astro'
 import SEO from '../../components/Shared/SEO.astro'
 import Text from '../../components/Text/Text.astro'
 
+// Generate static paths for all projects
 export async function getStaticPaths() {
   const projects = await getAllProjects()
   return projects
@@ -23,18 +24,20 @@ export async function getStaticPaths() {
 const { project } = Astro.props
 const { slug } = Astro.params
 
+// Redirect to 404 if no slug provided
 if (!slug) {
   return Astro.redirect('/404')
 }
 
-// Fetch full project data with all fields
+// Fetch complete project data with all fields
 const fullProject = await getProjectBySlug(slug)
 
+// Redirect to 404 if project not found
 if (!fullProject) {
   return Astro.redirect('/404')
 }
 
-// Prepare SEO data
+// Prepare SEO metadata
 const seoTitle = fullProject.title + (fullProject.client ? ` | ${fullProject.client}` : '')
 const seoDescription = fullProject.subtitle || `${fullProject.title} project case study`
 const seoImage = fullProject.heroImage
@@ -45,108 +48,95 @@ const seoImage = fullProject.heroImage
 <Layout pageTitle={seoTitle} pageDescription={seoDescription}>
   <SEO title={seoTitle} description={seoDescription} image={seoImage} slot='head' />
 
-  <main class='min-h-screen'>
-    <!-- Main Content Section -->
-    <section
-      class='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center pt-24 pb-12 md:pb-20 min-h-svh'>
-      <!-- Left Column: Title, Subtitle, and Metadata -->
-      <div class='grid grid-cols-1 lg:grid-cols-2 col-span-1 md:col-span-2 gap-16'>
-        <div class='lg:col-span-1'>
-          <Text variant='h2' class='mb-2'>{fullProject.title}</Text>
-          <Text variant='body' color='muted' class='mb-8'>{fullProject.subtitle}</Text>
-          <ProjectMeta
-            client={fullProject.client}
-            role={fullProject.role}
-            team={fullProject.team}
-            <!-- duration={fullProject.duration} -->
-            year={fullProject.year}
-          />
-        </div>
-
-        <!-- Right Column: Problem and Outcomes -->
-        <div class='lg:col-span-1'>
-          <!-- Problem Statement -->
-          {fullProject.problem && <ProjectProblem problem={fullProject.problem} />}
-
-          <!-- Outcomes -->
-          {
-            fullProject.outcomes && fullProject.outcomes.length > 0 && (
-              <div class='lg:col-span-1'>
-                <ProjectOutcomes outcomes={fullProject.outcomes} />
-              </div>
-            )
-          }
-        </div>
+  <!-- Project Header Section -->
+  <section
+    class='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center pt-24 md:pt-32 lg:pt-64 pb-12 md:pb-20'>
+    <!-- Left Column: Project Title, Subtitle, and Metadata -->
+    <div class='grid grid-cols-1 lg:grid-cols-2 col-span-1 md:col-span-2 gap-16'>
+      <div class='lg:col-span-1'>
+        <Text variant='h2' class='mb-2'>{fullProject.title}</Text>
+        <Text variant='body' color='muted' class='mb-8'>{fullProject.subtitle}</Text>
+        <ProjectMeta
+          client={fullProject.client}
+          role={fullProject.role}
+          team={fullProject.team}
+          year={fullProject.year}
+        />
       </div>
-    </section>
 
-    <!-- Project Images Section -->
-    {
-      fullProject.images && fullProject.images.length > 0 && (
-        <section class='col-span-full py-12 bg-zinc-50 dark:bg-zinc-900'>
-          <div class='mx-auto px-4'>
-            <div class=''>
-              <Text variant='h4' class='mb-8'>
-                Project Visuals
-              </Text>
-              <div class='space-y-8'>
-                {fullProject.images.map((image) => (
-                  <div class='space-y-4'>
-                    <img
-                      src={urlFor(image.asset).width(1200).url()}
-                      alt={image.alt}
-                      class='w-full rounded-lg shadow-lg'
-                      loading='lazy'
-                    />
-                    {image.caption && (
-                      <Text variant='caption' color='muted' class='text-center'>
-                        {image.caption}
-                      </Text>
-                    )}
-                  </div>
-                ))}
-              </div>
+      <!-- Right Column: Problem Statement and Outcomes -->
+      <div class='lg:col-span-1'>
+        <!-- Problem Statement -->
+        {fullProject.problem && <ProjectProblem problem={fullProject.problem} />}
+
+        <!-- Project Outcomes -->
+        {
+          fullProject.outcomes && fullProject.outcomes.length > 0 && (
+            <div class='lg:col-span-1'>
+              <ProjectOutcomes outcomes={fullProject.outcomes} />
             </div>
-          </div>
-        </section>
-      )
-    }
-
-    <!-- Related Projects -->
-    {
-      fullProject.relatedProjects && fullProject.relatedProjects.length > 0 && (
-        <section class='py-20 bg-zinc-50 dark:bg-zinc-900'>
-          <div class='container mx-auto px-4 max-w-6xl'>
-            <RelatedProjects projects={fullProject.relatedProjects} />
-          </div>
-        </section>
-      )
-    }
-
-    <!-- Navigation Back -->
-    <section class='py-16'>
-      <div class='container mx-auto px-4 lg:px-2'>
-        <div class='text-center'>
-          <a
-            href='/projects'
-            class='inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors'>
-            <svg class='w-4 h-4 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path
-                stroke-linecap='round'
-                stroke-linejoin='round'
-                stroke-width='2'
-                d='M10 19l-7-7m0 0l7-7m-7 7h18'></path>
-            </svg>
-            <Text variant='body' color='muted'>Back to Projects</Text>
-          </a>
-        </div>
+          )
+        }
       </div>
-    </section>
-  </main>
-</Layout>
+    </div>
+  </section>
 
-<style>
-  .container {
-    @apply mx-auto px-4;
+  <!-- Project Gallery Section -->
+  {
+    fullProject.images && fullProject.images.length > 0 && (
+      <section class='col-span-full py-12'>
+        <div class='space-y-8'>
+          {fullProject.images.map((image) => (
+            <div class='space-y-4 w-full aspect-[3/2] rounded-xl'>
+              <img
+                src={urlFor(image.asset)
+                  .width(3840)
+                  .quality(90) // High quality for detailed project images
+                  .auto('format')
+                  .fit('max')
+                  .url()}
+                alt={image.alt}
+                class='w-full'
+                loading='lazy'
+              />
+              {image.caption && (
+                <Text variant='caption' color='muted' class='text-center'>
+                  {image.caption}
+                </Text>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+    )
   }
-</style>
+
+  <!-- Related Projects Section -->
+  {
+    fullProject.relatedProjects && fullProject.relatedProjects.length > 0 && (
+      <section class='py-20'>
+        <RelatedProjects projects={fullProject.relatedProjects} />
+      </section>
+    )
+  }
+
+  <!-- Navigation Back to Projects -->
+  <section class='py-16'>
+    <div class='container mx-auto px-4 lg:px-2'>
+      <div class='text-center'>
+        <a
+          href='/projects'
+          class='inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors'>
+          <svg class='w-4 h-4 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <path
+              stroke-linecap='round'
+              stroke-linejoin='round'
+              stroke-width='2'
+              d='M10 19l-7-7m0 0l7-7m-7 7h18'></path>
+          </svg>
+          <Text variant='body' color='muted'>Back to Projects</Text>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

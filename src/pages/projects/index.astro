@@ -37,7 +37,13 @@ const projects = await getAllProjects()
                 let projectImage
                 if (project.heroImage) {
                   projectImage = {
-                    src: urlFor(project.heroImage).width(800).height(533).url(),
+                    src: urlFor(project.heroImage)
+                      .width(800)
+                      .height(533)
+                      .quality(85) // Standard quality for project thumbnails
+                      .auto('format')
+                      .fit('max')
+                      .url(),
                     alt: project.title || 'Project image',
                     width: 800,
                     height: 533,

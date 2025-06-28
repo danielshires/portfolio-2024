@@ -4,6 +4,16 @@ import { urlFor } from '../../lib/sanity';
 import Text from '../Text/Text';
 
 export default function PostCard({ post }) {
+    // Generate optimized image URL with quality control
+    const imageUrl = post.mainImage
+        ? urlFor(post.mainImage)
+            .width(1200)
+            .quality(75) // Optimized quality for thumbnails
+            .auto('format')
+            .fit('max')
+            .url()
+        : null;
+
     return (
         <a
             href={`/journal/${post.slug?.current || post._id}`}
@@ -12,7 +22,7 @@ export default function PostCard({ post }) {
             {post.mainImage ? (
                 <div className="w-full aspect-[2/1] overflow-hidden rounded-lg">
                     <img
-                        src={urlFor(post.mainImage).width(1200).url()}
+                        src={imageUrl}
                         alt={post.title}
                         loading="lazy"
                         decoding="async"
@@ -49,19 +59,6 @@ export default function PostCard({ post }) {
                         )} */}
                     </div>
                 </div>
-                <style>{`
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        .truncate {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      `}</style>
             </div>
         </a>
     );

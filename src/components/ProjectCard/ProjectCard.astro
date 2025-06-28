@@ -26,18 +26,10 @@ const { projectImage, title, heading, projectUrl } = Astro.props
     projectUrl={projectUrl}
     width={projectImage.width}
     height={projectImage.height}
+    transitionName={`${title.toLowerCase().replace(/\s+/g, '-')}-image`}
   />
   <div class='pt-2'>
     <Text variant='h5' color='default' className='mt-4'>{title}</Text>
-    <Text variant='body' color="muted" className='mt-1'>{heading}</Text>
+    <Text variant='body' color='muted' className='mt-1'>{heading}</Text>
   </div>
 </div>
-
-<style>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>
