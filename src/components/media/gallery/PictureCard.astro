@@ -1,0 +1,50 @@
+---
+import { urlFor } from '../../../lib/sanity'
+import type { Picture } from '../../../lib/sanity'
+import SanityImage from '../images/SanityImage.astro'
+
+interface Props {
+  picture: Picture
+}
+
+const { picture } = Astro.props
+---
+
+<a
+  href={`/pictures/${picture.slug.current}`}
+  class='group block relative overflow-hidden bg-background-light/5 dark:bg-background-dark/5 backdrop-blur-sm border border-border-light/10 dark:border-border-dark/10 hover:border-border-light/20 dark:hover:border-border-dark/20 transition-all duration-300 rounded-lg'>
+  {
+    picture.mainImage && (
+      <div class='w-full h-64 overflow-hidden'>
+        <SanityImage
+          image={picture.mainImage}
+          alt={picture.title}
+          width={800}
+          height={600}
+          preset='gallery'
+          class='object-cover w-full h-full transition-transform duration-300 group-hover:scale-105'
+          sizes='(min-width: 1280px) 384px, (min-width: 1024px) 300px, (min-width: 768px) 50vw, 100vw'
+        />
+      </div>
+    )
+  }
+  <div class='p-4'>
+    <h3 class='text-lg font-medium'>{picture.title}</h3>
+    {
+      picture.description && (
+        <p class='mt-2 text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2'>
+          {picture.description}
+        </p>
+      )
+    }
+  </div>
+</a>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

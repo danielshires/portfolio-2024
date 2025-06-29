@@ -1,0 +1,17 @@
+---
+import Text from '../text/Text.astro'
+
+interface Props {
+  path: string
+  target: string
+  href: string
+}
+
+const { href, target } = Astro.props
+---
+
+<a class='hover:underline hover:underline-offset-4' href={href} target={target}>
+  <Text variant='body'>
+    <slot />
+  </Text>
+</a>

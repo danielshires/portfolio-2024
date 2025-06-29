@@ -1,10 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getAllProjects, urlFor } from '../../lib/sanity'
-import SEO from '../../components/Shared/SEO.astro'
-import Text from '../../components/Text/Text.astro'
-import SimpleHero from '../../components/Hero/SimpleHero.astro'
-import ProjectCard from '../../components/ProjectCard/ProjectCard.astro'
+import SEO from '../../components/shared/seo/SEO.astro'
+import Text from '../../components/ui/text/Text.astro'
+import SimpleHero from '../../components/content/featured/SimpleHero.astro'
+import ProjectCard from '../../components/content/projects/ProjectCard.astro'
 
 const projects = await getAllProjects()
 ---

@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import ProjectGrid from '../components/ProjectGrid/ProjectGrid.astro'
-import SimpleHero from '../components/Hero/SimpleHero.astro'
+import ProjectGrid from '../components/content/projects/ProjectGrid.astro'
+import SimpleHero from '../components/content/featured/SimpleHero.astro'
 import { getAllProjects } from '../lib/sanity'
-import PageTransition from '../components/Transitions/PageTransition.astro'
+import PageTransition from '../components/layout/transitions/PageTransition.astro'
 
 const projects = await getAllProjects()
 

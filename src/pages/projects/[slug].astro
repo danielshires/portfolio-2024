@@ -1,12 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getProjectBySlug, getAllProjects, urlFor } from '../../lib/sanity'
-import ProjectMeta from '../../components/Project/ProjectMeta.astro'
-import ProjectOutcomes from '../../components/Project/ProjectOutcomes.astro'
-import ProjectProblem from '../../components/Project/ProjectProblem.astro'
-import RelatedProjects from '../../components/Project/RelatedProjects.astro'
-import SEO from '../../components/Shared/SEO.astro'
-import Text from '../../components/Text/Text.astro'
+import ProjectMeta from '../../components/content/projects/ProjectMeta.astro'
+import ProjectOutcomes from '../../components/content/projects/ProjectOutcomes.astro'
+import ProjectProblem from '../../components/content/projects/ProjectProblem.astro'
+import RelatedProjects from '../../components/content/projects/RelatedProjects.astro'
+import SEO from '../../components/shared/seo/SEO.astro'
+import Text from '../../components/ui/text/Text.astro'
 
 // Generate static paths for all projects
 export async function getStaticPaths() {

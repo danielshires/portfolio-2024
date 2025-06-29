@@ -1,0 +1,35 @@
+---
+import ProjectImage from '../featured/ProjectImage.astro'
+import Text from '../../ui/text/Text.astro'
+
+interface Props {
+  projectImage: {
+    src: string
+    alt: string
+    width: number
+    height: number
+  }
+  title: string
+  heading: string
+  description?: string
+  projectUrl: string
+}
+
+const { projectImage, title, heading, projectUrl } = Astro.props
+---
+
+<div class='col-span-1 md:col-span-3 lg:col-span-1'>
+  <ProjectImage
+    src={projectImage.src}
+    alt={projectImage.alt}
+    title={heading}
+    projectUrl={projectUrl}
+    width={projectImage.width}
+    height={projectImage.height}
+    transitionName={`${title.toLowerCase().replace(/\s+/g, '-')}-image`}
+  />
+  <div class='pt-2'>
+    <Text variant='h5' color='default' class='mt-4'>{title}</Text>
+    <Text variant='body' color='muted' class='mt-1'>{heading}</Text>
+  </div>
+</div>

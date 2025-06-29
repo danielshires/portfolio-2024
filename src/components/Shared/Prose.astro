@@ -1,1 +1,11 @@
- 
+---
+export interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<div class={`prose prose-zinc dark:prose-invert max-w-none ${className || ''}`}>
+  <slot />
+</div>

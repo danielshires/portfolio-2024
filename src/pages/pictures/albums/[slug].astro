@@ -2,9 +2,9 @@
 import Layout from '../../../layouts/Layout.astro'
 import { getAlbumBySlug, getAllAlbums } from '../../../lib/sanity'
 import type { Album } from '../../../lib/sanity'
-import Hero from '../../../components/Hero/Hero.astro'
-import PictureCard from '../../../components/Cards/PictureCard.astro'
-import PageTransition from '../../../components/Transitions/PageTransition.astro'
+import Hero from '../../../components/content/featured/Hero.astro'
+import PictureCard from '../../../components/media/gallery/PictureCard.astro'
+import PageTransition from '../../../components/layout/transitions/PageTransition.astro'
 
 export async function getStaticPaths() {
   const albums = await getAllAlbums()

@@ -1,0 +1,21 @@
+---
+import type { PortableTextBlock } from '@portabletext/types'
+import { PortableText } from 'astro-portabletext'
+import Text from '../../ui/text/Text.astro'
+
+interface Props {
+  solution: PortableTextBlock[]
+}
+
+const { solution } = Astro.props
+const containerClass = 'col-span-1 md:col-span-6 pb-12'
+const proseClass = 'prose dark:prose-invert max-w-none text-base'
+---
+
+<div class={containerClass}>
+  <Text variant='h4' class='pb-6'>Solution</Text>
+
+  <div class={proseClass}>
+    {(<PortableText value={solution} />)}
+  </div>
+</div>

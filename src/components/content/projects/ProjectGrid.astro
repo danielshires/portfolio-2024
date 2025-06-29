@@ -1,0 +1,39 @@
+---
+import ProjectCard from './ProjectCard.astro'
+import { urlFor } from '../../../lib/sanity'
+import type { Project } from '../../../lib/sanity'
+import Text from '../../ui/text/Text.astro'
+
+interface Props {
+  projects: Project[]
+}
+
+const { projects } = Astro.props
+
+// Transform Sanity projects to match ProjectCard interface
+const transformedProjects = projects.map((project) => ({
+  projectImage: {
+    src: project.heroImage
+      ? urlFor(project.heroImage)
+          .width(800)
+          .height(600)
+          .quality(85) // Standard quality for project thumbnails
+          .auto('format')
+          .fit('max')
+          .url()
+      : '/images/jpg/background.webp',
+    alt: project.title + ' project showcase',
+    width: 800,
+    height: 600,
+  },
+  title: project.client || project.tags?.[0] || 'Project',
+  heading: project.title,
+  description: project.subtitle || 'View project details',
+  projectUrl: `/projects/${project.slug.current}`,
+}))
+---
+
+<section class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8 max-w-[100vw] mt-16'>
+  <Text variant='overline' class='col-span-full'>Recent projects</Text>
+  {transformedProjects.map((project) => <ProjectCard {...project} />)}
+</section>

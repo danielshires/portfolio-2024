@@ -1,0 +1,119 @@
+---
+import { getPictureBySlug, urlFor } from '../../../lib/sanity'
+import Text from '../../ui/text/Text.astro'
+
+interface Props {
+  name: string
+  tagline: string
+  intro: string
+  avatar?: string // Optional avatar image path or URL
+}
+
+const { name, tagline, intro, avatar } = Astro.props
+---
+
+<section
+  id='intro'
+  class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center mt-40 gap-4'
+  aria-label='Introduction'>
+  {
+    avatar && (
+      <img
+        src={avatar}
+        alt={name + ' avatar'}
+        width='80'
+        height='80'
+        class='rounded-full mb-2 col-span-full'
+        style='width:80px;height:80px;object-fit:cover;'
+      />
+    )
+  }
+  <!-- <div class='col-span-full flex flex-col gap-2 mt-2'>
+    <Text variant='overline'>
+      {tagline}
+    </Text>
+  </div> -->
+  <div class='col-span-1 md:col-span-2 lg:col-span-3 gap-4'>
+    <Text variant='h1'>
+      {intro}
+    </Text>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap'
+  import { SplitText } from 'gsap/SplitText'
+
+  // Register GSAP plugins
+  gsap.registerPlugin(SplitText)
+
+  // Animation Configuration
+  const config = {
+    // Timing
+    lineDuration: 0.8, // Duration for each line animation
+    lineStagger: 0.1, // Delay between each line
+    navDuration: 0.5, // Duration for navigation animation
+
+    // Section Overlaps (negative values mean overlap)
+    taglineToIntro: -0.3, // Overlap between tagline and intro
+    introToNav: -0.5, // Overlap between intro and nav
+
+    // Easing
+    lineEase: 'power2.out', // Easing for text lines
+    navEase: 'power2.out', // Easing for navigation
+
+    // Initial States
+    initialClipPath: 'inset(100% 0 0 0)',
+    finalClipPath: 'inset(0% 0 0 0)',
+
+    // Animation Properties
+    navYOffset: -30, // Navigation drop distance
+  }
+
+  // Initialize animation
+  function initAnimation() {
+    // Get elements
+    const tagline = document.querySelector('[data-tagline]')
+    const intro = document.querySelector('[data-intro]')
+
+    // Create timeline
+    const tl = gsap.timeline()
+
+    // Split text
+    const taglineSplit = new SplitText(tagline, { type: 'lines' })
+    const introSplit = new SplitText(intro, { type: 'lines' })
+
+    // Set initial states
+    gsap.set([taglineSplit.lines, introSplit.lines], {
+      clipPath: config.initialClipPath,
+      opacity: 0,
+    })
+
+    // Animate tagline
+    tl.to(taglineSplit.lines, {
+      clipPath: config.finalClipPath,
+      opacity: 1,
+      duration: config.lineDuration,
+      stagger: config.lineStagger,
+      ease: config.lineEase,
+    })
+
+    // Animate intro
+    tl.to(
+      introSplit.lines,
+      {
+        clipPath: config.finalClipPath,
+        opacity: 1,
+        duration: config.lineDuration,
+        stagger: config.lineStagger,
+        ease: config.lineEase,
+      },
+      config.taglineToIntro
+    )
+  }
+
+  // Run animation on load
+  window.addEventListener('load', () => {
+    requestAnimationFrame(initAnimation)
+  })
+</script>

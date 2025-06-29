@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getPictureBySlug, getAllPictures } from '../../lib/sanity'
-import SanityImage from '../../components/Shared/SanityImage.astro'
-import PageTransition from '../../components/Transitions/PageTransition.astro'
-import Text from '../../components/Text/Text.astro'
+import SanityImage from '../../components/media/images/SanityImage.astro'
+import PageTransition from '../../components/layout/transitions/PageTransition.astro'
+import Text from '../../components/ui/text/Text.astro'
 
 export async function getStaticPaths() {
   const pictures = await getAllPictures()

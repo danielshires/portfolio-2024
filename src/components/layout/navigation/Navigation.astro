@@ -1,0 +1,104 @@
+---
+// Components
+import NavLink from '../../ui/buttons/NavLink.astro'
+import ThemeToggle from '../../shared/theme-toggle/ThemeToggle.jsx'
+import { getNavigationItems } from '../../../config/features'
+
+// Javascript
+const pathname = new URL(Astro.request.url).pathname
+const currentPath = pathname.slice(1)
+
+// Get navigation items based on feature flags
+const navigationItems = getNavigationItems()
+---
+
+<nav
+  id='nav'
+  class='fixed z-50 top-0 left-0 right-0 flex items-center justify-start theme-transition nav-transition pt-4 md:pt-6 pb-3 border-b border-zinc-200/20 dark:border-zinc-800/20'>
+  <div class='container mx-auto px-8 lg:px-16'>
+    <div class='flex gap-8 justify-between items-center'>
+      <div class='flex flex-row gap-6 justify-start items-center'>
+        <!-- Home link -->
+        <NavLink path='' target='' href='/'>Home</NavLink>
+        <!-- Page links -->
+        <div class='flex flex-row md:flex-row gap-6'>
+          {
+            navigationItems.map((item) => (
+              <NavLink path={item.path} target='_self' href={item.href}>
+                {item.label}
+              </NavLink>
+            ))
+          }
+        </div>
+      </div>
+      <ThemeToggle client:load />
+    </div>
+  </div>
+</nav>
+
+<style>
+  @media (max-width: 768px) {
+    nav {
+      width: 100%;
+      left: 0;
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+
+  .nav-transition {
+    transition:
+      opacity 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
+  }
+
+  .nav-hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  function initNavScroll() {
+    const nav = document.getElementById('nav')
+    if (!nav) return
+
+    let lastScrollY = window.scrollY
+
+    function updateNav() {
+      if (!nav) return
+
+      const currentScrollY = window.scrollY
+
+      // Show nav at top of page
+      if (currentScrollY <= 1) {
+        nav.classList.remove('nav-hidden')
+        return
+      }
+
+      // Hide nav when scrolling down
+      if (currentScrollY > lastScrollY) {
+        nav.classList.add('nav-hidden')
+      }
+      // Show nav when scrolling up
+      else {
+        nav.classList.remove('nav-hidden')
+      }
+
+      lastScrollY = currentScrollY
+    }
+
+    // Remove existing listener if any
+    window.removeEventListener('scroll', updateNav)
+
+    // Add scroll listener
+    window.addEventListener('scroll', updateNav, { passive: true })
+  }
+
+  // Initialize on page load
+  initNavScroll()
+
+  // Re-initialize after view transitions
+  document.addEventListener('astro:page-load', initNavScroll)
+</script>

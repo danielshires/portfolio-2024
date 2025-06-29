@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import Hero from '../components/Hero/Hero.astro'
-import ProjectGrid from '../components/ProjectGrid/ProjectGrid.astro'
+import Hero from '../components/content/featured/Hero.astro'
+import ProjectGrid from '../components/content/projects/ProjectGrid.astro'
 import { getAuthorBySlug, getAllProjects, getFeaturedProjects, urlFor } from '../lib/sanity'
 
 const author = await getAuthorBySlug('daniel-shires')
 const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).url() : undefined
 
 const heroContent = {
-  name:'',
+  name: '',
   tagline: 'Design with purpose',
   intro: `Hi, I'm Dan — a Product Designer with 5+ years experience designing cohesive, user-centered digital products.`,
   avatar: avatarUrl,
@@ -19,7 +19,8 @@ const allProjects = await getAllProjects()
 const featuredProjects = await getFeaturedProjects()
 
 // Use featured projects if available, otherwise show first 6 regular projects
-const projectsToShow = featuredProjects.length > 0 ? featuredProjects.slice(0, 6) : allProjects.slice(0, 6)
+const projectsToShow =
+  featuredProjects.length > 0 ? featuredProjects.slice(0, 6) : allProjects.slice(0, 6)
 ---
 
 <Layout
@@ -35,7 +36,6 @@ const projectsToShow = featuredProjects.length > 0 ? featuredProjects.slice(0, 6
 
 <script>
   import ScrollReveal from 'scrollreveal'
-
 
   function revealSection() {
     const featuredWork = document.getElementById('featuredWork')

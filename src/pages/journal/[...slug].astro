@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getPostBySlug, getAllPosts, urlFor, type Post } from '../../lib/sanity'
-import SanityImage from '../../components/Shared/SanityImage.astro'
-import Text from '../../components/Text/Text.astro'
-import SEO from '../../components/Shared/SEO.astro'
+import SanityImage from '../../components/media/images/SanityImage.astro'
+import Text from '../../components/ui/text/Text.astro'
+import SEO from '../../components/shared/seo/SEO.astro'
 import { PortableText } from 'astro-portabletext'
 
 export async function getStaticPaths() {

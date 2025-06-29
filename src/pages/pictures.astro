@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import { getAllPictures } from '../lib/sanity'
-import PictureCard from '../components/Cards/PictureCard.astro'
-import SimpleHero from '../components/Hero/SimpleHero.astro'
-import PageTransition from '../components/Transitions/PageTransition.astro'
+import PictureCard from '../components/media/gallery/PictureCard.astro'
+import SimpleHero from '../components/content/featured/SimpleHero.astro'
+import PageTransition from '../components/layout/transitions/PageTransition.astro'
 
 const pictures = await getAllPictures()
 

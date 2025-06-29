@@ -1,14 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import Hero from '../../components/Hero/Hero.astro'
-import ProjectGrid from '../../components/ProjectGrid/ProjectGrid.astro'
+import Hero from '../../components/content/featured/Hero.astro'
+import ProjectGrid from '../../components/content/projects/ProjectGrid.astro'
 import { getAllProjects } from '../../lib/sanity'
 
 // Front Matter
 const heroContent = {
   name: 'Work',
   tagline: 'Product Designer',
-  intro: 'A collection of recent case studies and featured design work showcasing my approach to creating user-centered digital products. Each project represents a unique challenge and solution, demonstrating my expertise in UX/UI design and digital product development.',
+  intro:
+    'A collection of recent case studies and featured design work showcasing my approach to creating user-centered digital products. Each project represents a unique challenge and solution, demonstrating my expertise in UX/UI design and digital product development.',
 }
 
 const projects = await getAllProjects()

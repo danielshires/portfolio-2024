@@ -1,11 +1,11 @@
 ---
-import PostCard from '../../components/Cards/PostCard.jsx'
+import PostCard from '../../components/ui/cards/PostCard.jsx'
 import Layout from '../../layouts/Layout.astro'
-import ButtonPrimary from '../../components/Buttons/ButtonPrimary.astro'
+import ButtonPrimary from '../../components/ui/buttons/ButtonPrimary.astro'
 import Image from 'astro/components/Image.astro'
-import PageTransition from '../../components/Transitions/PageTransition.astro'
-import Text from '../../components/Text/Text.astro'
-import Statistic from '../../components/FeaturedProject/Statistic.astro'
+import PageTransition from '../../components/layout/transitions/PageTransition.astro'
+import Text from '../../components/ui/text/Text.astro'
+import Statistic from '../../components/content/featured/Statistic.astro'
 ---
 
 <Layout
@@ -33,21 +33,23 @@ import Statistic from '../../components/FeaturedProject/Statistic.astro'
               id='text'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-col gap-4'
               transition:name='mutavi-text'>
-              <Text variant="overline" transition:name='mutavi-title'>Mutavi</Text>
-              <Text variant="h1" transition:name='mutavi-heading'>
+              <Text variant='overline' transition:name='mutavi-title'>Mutavi</Text>
+              <Text variant='h1' transition:name='mutavi-heading'>
                 Democratizing video editing through thoughtful design
               </Text>
-              <Text variant="body" size="lg" transition:name='mutavi-description'>
-                Mutavi is a comprehensive video editing suite that makes professional-grade editing accessible to everyone. As Lead UX Designer, I simplified complex workflows while maintaining powerful functionality for content creators of all skill levels.
+              <Text variant='body' size='lg' transition:name='mutavi-description'>
+                Mutavi is a comprehensive video editing suite that makes professional-grade editing
+                accessible to everyone. As Lead UX Designer, I simplified complex workflows while
+                maintaining powerful functionality for content creators of all skill levels.
               </Text>
             </div>
             <div
               id='outcomes'
               class='col-span-1 md:col-span-3 lg:col-span-6 flex flex-row gap-12 justify-start lg:justify-end'
               transition:name='mutavi-outcomes'>
-              <Statistic value="1.8m" label="monthly users" index={1} />
-              <Statistic value="+73%" label="task efficiency" index={2} />
-              <Statistic value="4.6" label="user satisfaction" index={3} />
+              <Statistic value='1.8m' label='monthly users' index={1} />
+              <Statistic value='+73%' label='task efficiency' index={2} />
+              <Statistic value='4.6' label='user satisfaction' index={3} />
             </div>
           </div>
         </div>

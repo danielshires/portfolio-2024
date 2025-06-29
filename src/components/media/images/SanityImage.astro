@@ -1,0 +1,56 @@
+---
+import { urlFor } from '../../../lib/sanity'
+import type { SanityImage } from '../../../lib/sanity'
+
+export interface Props {
+  image: SanityImage
+  alt: string
+  width?: number
+  height?: number
+  preset?: 'hero' | 'thumbnail' | 'gallery'
+  class?: string
+  sizes?: string
+}
+
+const {
+  image,
+  alt,
+  width = 800,
+  height = 600,
+  preset = 'gallery',
+  class: className,
+  sizes = '100vw',
+} = Astro.props
+
+// Generate image URL based on preset
+let imageUrl: string
+switch (preset) {
+  case 'hero':
+    imageUrl = urlFor(image).width(1200).height(800).quality(90).auto('format').fit('max').url()
+    break
+  case 'thumbnail':
+    imageUrl = urlFor(image).width(400).height(300).quality(80).auto('format').fit('crop').url()
+    break
+  default: // gallery
+    imageUrl = urlFor(image).width(width).height(height).quality(85).auto('format').fit('max').url()
+}
+
+// Generate srcset for responsive images
+const srcset = [
+  `${urlFor(image).width(400).height(300).quality(80).auto('format').fit('max').url()} 400w`,
+  `${urlFor(image).width(800).height(600).quality(85).auto('format').fit('max').url()} 800w`,
+  `${urlFor(image).width(1200).height(900).quality(90).auto('format').fit('max').url()} 1200w`,
+].join(', ')
+---
+
+<img
+  src={imageUrl}
+  alt={alt}
+  width={width}
+  height={height}
+  srcset={srcset}
+  sizes={sizes}
+  class={className}
+  loading='lazy'
+  decoding='async'
+/>

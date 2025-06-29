@@ -1,8 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getAllPosts } from '../../lib/sanity'
-import FilterPostsReact from '../../components/FilterPostsReact'
-import SimpleHero from '../../components/Hero/SimpleHero.astro'
+import FilterPostsReact from '../../components/forms/filters/FilterPostsReact.tsx'
+import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 
 const posts = await getAllPosts()
 
