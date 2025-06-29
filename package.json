@@ -18,6 +18,7 @@
         "@iconify/react": "^6.0.0",
         "@portabletext/react": "^3.2.1",
         "@portabletext/to-html": "^2.0.14",
+        "@portabletext/types": "^2.0.13",
         "@sanity/astro": "^3.2.6",
         "@sanity/client": "^6.29.1",
         "@sanity/image-url": "^1.1.0",

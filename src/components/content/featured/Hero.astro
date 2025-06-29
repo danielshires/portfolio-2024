@@ -42,10 +42,6 @@ const { name, tagline, intro, avatar } = Astro.props
 
 <script>
   import gsap from 'gsap'
-  import { SplitText } from 'gsap/SplitText'
-
-  // Register GSAP plugins
-  gsap.registerPlugin(SplitText)
 
   // Animation Configuration
   const config = {
@@ -62,10 +58,6 @@ const { name, tagline, intro, avatar } = Astro.props
     lineEase: 'power2.out', // Easing for text lines
     navEase: 'power2.out', // Easing for navigation
 
-    // Initial States
-    initialClipPath: 'inset(100% 0 0 0)',
-    finalClipPath: 'inset(0% 0 0 0)',
-
     // Animation Properties
     navYOffset: -30, // Navigation drop distance
   }
@@ -73,43 +65,28 @@ const { name, tagline, intro, avatar } = Astro.props
   // Initialize animation
   function initAnimation() {
     // Get elements
-    const tagline = document.querySelector('[data-tagline]')
-    const intro = document.querySelector('[data-intro]')
+    const intro = document.querySelector('#intro')
+    const textElements = intro?.querySelectorAll('h1, p, span')
+
+    if (!intro || !textElements) return
 
     // Create timeline
     const tl = gsap.timeline()
 
-    // Split text
-    const taglineSplit = new SplitText(tagline, { type: 'lines' })
-    const introSplit = new SplitText(intro, { type: 'lines' })
-
     // Set initial states
-    gsap.set([taglineSplit.lines, introSplit.lines], {
-      clipPath: config.initialClipPath,
+    gsap.set(textElements, {
       opacity: 0,
+      y: 20,
     })
 
-    // Animate tagline
-    tl.to(taglineSplit.lines, {
-      clipPath: config.finalClipPath,
+    // Animate text elements
+    tl.to(textElements, {
       opacity: 1,
+      y: 0,
       duration: config.lineDuration,
       stagger: config.lineStagger,
       ease: config.lineEase,
     })
-
-    // Animate intro
-    tl.to(
-      introSplit.lines,
-      {
-        clipPath: config.finalClipPath,
-        opacity: 1,
-        duration: config.lineDuration,
-        stagger: config.lineStagger,
-        ease: config.lineEase,
-      },
-      config.taglineToIntro
-    )
   }
 
   // Run animation on load

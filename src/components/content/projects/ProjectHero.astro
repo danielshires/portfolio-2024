@@ -1,107 +1,57 @@
 ---
 import { urlFor } from '../../../lib/sanity'
-import type { SanityImage } from '../../../lib/sanity'
+import type { SanityImage, Project } from '../../../lib/sanity'
 import Text from '../../ui/text/Text.astro'
 
 interface Props {
-  title: string
-  subtitle?: string
-  heroImage?: SanityImage
+  project: Project
 }
 
-const { title, subtitle, heroImage } = Astro.props
+const { project } = Astro.props
 ---
 
-<div class='space-y-8'>
-  <!-- Hero Image -->
-
-  <!-- Title and Subtitle -->
-  <div class='space-y-4 text-left pt-16'>
-    <Text variant='h1' class=''>{title}</Text>
-    {
-      subtitle && (
-        <Text variant='h3' color='muted'>
-          {subtitle}
-        </Text>
-      )
-    }
+<section class='flex flex-col gap-4 mt-40' aria-label='Project Hero'>
+  <div class='flex flex-col gap-2'>
+    <Text variant='h1'>{project.title}</Text>
+    {project.subtitle && <Text variant='body'>{project.subtitle}</Text>}
   </div>
-</div>
+</section>
 
 <script>
   import gsap from 'gsap'
-  import { SplitText } from 'gsap/SplitText'
 
-  // Register GSAP plugins
-  gsap.registerPlugin(SplitText)
-
-  function projectHeroAnimation() {
-    // Check if animation has already played
-    const hasPlayed = sessionStorage.getItem('hasProjectHeroPlayed')
-
-    if (!hasPlayed) {
-      const title = document.getElementById('project-title')
-      const subtitle = document.getElementById('project-subtitle')
-
-      if (!title) return
-
-      const tl = gsap.timeline()
-
-      // Split text for animation
-      let titleSplit, subtitleSplit
-
-      try {
-        titleSplit = new SplitText(title, { type: 'lines' })
-        if (subtitle) {
-          subtitleSplit = new SplitText(subtitle, { type: 'lines' })
-        }
-      } catch (error) {
-        console.warn('SplitText failed for project hero:', error)
-        return
-      }
-
-      // Set initial states
-      gsap.set(titleSplit.lines, {
-        clipPath: 'inset(100% 0 0 0)',
-        opacity: 0,
-      })
-
-      if (subtitleSplit) {
-        gsap.set(subtitleSplit.lines, {
-          clipPath: 'inset(100% 0 0 0)',
-          opacity: 0,
-        })
-      }
-
-      // Animation sequence
-      tl.to(titleSplit.lines, {
-        clipPath: 'inset(0% 0 0 0)',
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: 'power2.out',
-      })
-
-      if (subtitleSplit) {
-        tl.to(
-          subtitleSplit.lines,
-          {
-            clipPath: 'inset(0% 0 0 0)',
-            opacity: 1,
-            duration: 0.6,
-            stagger: 0.05,
-            ease: 'power2.out',
-          },
-          '-=0.3'
-        )
-      }
-
-      sessionStorage.setItem('hasProjectHeroPlayed', 'true')
-    }
+  // Animation Configuration
+  const config = {
+    duration: 0.8,
+    stagger: 0.1,
+    ease: 'power2.out',
   }
 
-  // Run animation when page loads
+  // Initialize animation
+  function initAnimation() {
+    const heroSection = document.querySelector('section[aria-label="Project Hero"]')
+    const textElements = heroSection?.querySelectorAll('h1, p')
+
+    if (!heroSection || !textElements) return
+
+    // Set initial states
+    gsap.set(textElements, {
+      opacity: 0,
+      y: 20,
+    })
+
+    // Animate text elements
+    gsap.to(textElements, {
+      opacity: 1,
+      y: 0,
+      duration: config.duration,
+      stagger: config.stagger,
+      ease: config.ease,
+    })
+  }
+
+  // Run animation on load
   window.addEventListener('load', () => {
-    requestAnimationFrame(projectHeroAnimation)
+    requestAnimationFrame(initAnimation)
   })
 </script>

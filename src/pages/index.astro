@@ -10,7 +10,7 @@ const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).ur
 const heroContent = {
   name: '',
   tagline: 'Design with purpose',
-  intro: `Hi, I'm Dan — a Product Designer with 5+ years experience designing cohesive, user-centered digital products.`,
+  intro: `Hi, I'm Dan — a Product Designer with 5+ years experience designing cohesive, user-centered digital products.`,
   avatar: avatarUrl,
 }
 
@@ -21,11 +21,50 @@ const featuredProjects = await getFeaturedProjects()
 // Use featured projects if available, otherwise show first 6 regular projects
 const projectsToShow =
   featuredProjects.length > 0 ? featuredProjects.slice(0, 6) : allProjects.slice(0, 6)
+
+// SEO optimized content
+const pageTitle = 'Daniel Shires | Product Designer & Photographer | Sydney, Australia'
+const pageDescription =
+  'Product Designer with 5+ years experience creating user-centered digital experiences. Based in Sydney, working at Commonwealth Bank. View my design portfolio and photography collections.'
+const pageImage = avatarUrl || '/images/jpg/background.webp'
+const pageUrl = '/'
+
+// Structured data for the homepage
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Daniel Shires',
+  jobTitle: 'Product Designer',
+  url: 'https://danielshires.com',
+  image: pageImage,
+  description: pageDescription,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Sydney',
+    addressCountry: 'AU',
+  },
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Commonwealth Bank',
+  },
+  knowsAbout: [
+    'UX Design',
+    'UI Design',
+    'Product Design',
+    'Photography',
+    'Front-end Development',
+    'Human Centered Design',
+  ],
+  sameAs: ['https://linkedin.com/in/danielshires', 'https://twitter.com/danielshires'],
+}
 ---
 
 <Layout
-  pageTitle='Daniel Shires | Product Designer based in Sydney currently working for Commonwealth Bank'
-  pageDescription='UX/UI Designer and Front-End Developer based in Sydney Australia. I use the principles of human centred design to create simple, impactful experiences in pixels and code.'>
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  pageImage={pageImage}
+  pageUrl={pageUrl}
+  pageType='website'>
   <main class='grid gap-8 overflow-hidden h-max'>
     <Hero {...heroContent} />
     <div class='mt-auto'>

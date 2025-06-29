@@ -5,12 +5,37 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# CRITICAL SEO: 301 redirects to preserve rankings
+# These redirects ensure your current Google rankings are maintained
+# Add any URL changes here to maintain SEO value
+
+# Preserve existing URL structures (add specific redirects if URLs change)
+# Example: if you change /old-page to /new-page, add:
+# [[redirects]]
+#   from = "/old-page"
+#   to = "/new-page"
+#   status = 301
+
+# Studio redirects (for Sanity CMS)
 [[redirects]]
   from = "/studio/*"
   to = "/studio/index.html"
   status = 200
 
+# SPA fallback for client-side routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# SEO: Ensure www redirects to non-www (if needed)
+# [[redirects]]
+#   from = "https://www.danielshires.com/*"
+#   to = "https://danielshires.com/:splat"
+#   status = 301
+
+# SEO: Ensure HTTPS redirects (if needed)
+# [[redirects]]
+#   from = "http://danielshires.com/*"
+#   to = "https://danielshires.com/:splat"
+#   status = 301

@@ -13,9 +13,56 @@ const heroContent = {
     second: 'Creating meaningful digital experiences through thoughtful design.',
   },
 }
+
+// SEO optimized content
+const pageTitle = 'Design Portfolio | UX/UI Projects | Daniel Shires'
+const pageDescription =
+  'Browse my design portfolio featuring UX/UI projects, case studies, and digital product designs. Product designer with expertise in user-centered design, working at Commonwealth Bank.'
+const pageImage = '/images/jpg/background.webp'
+const pageUrl = '/design'
+
+// Structured data for design portfolio
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Design Portfolio',
+  description: pageDescription,
+  url: 'https://danielshires.com/design',
+  image: 'https://danielshires.com' + pageImage,
+  author: {
+    '@type': 'Person',
+    name: 'Daniel Shires',
+    jobTitle: 'Product Designer',
+  },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: projects.length,
+    itemListElement: projects.slice(0, 10).map((project, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'CreativeWork',
+        name: project.title,
+        description: project.subtitle || 'Design project by Daniel Shires',
+        url: `https://danielshires.com/projects/${project.slug.current}`,
+        creator: {
+          '@type': 'Person',
+          name: 'Daniel Shires',
+        },
+        dateCreated: project.publishedAt,
+        keywords: project.tags?.join(', ') || 'UX Design, UI Design, Product Design',
+      },
+    })),
+  },
+}
 ---
 
-<Layout pageTitle='Design' pageDescription={heroContent.introText.first}>
+<Layout
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  pageImage={pageImage}
+  pageUrl={pageUrl}
+  pageType='website'>
   <PageTransition>
     <div class='flex flex-col'>
       <SimpleHero {...heroContent} />

@@ -5,14 +5,18 @@ import '../styles/fonts.css'
 import Navigation from '../components/layout/navigation/Navigation.astro'
 import Head from './Head.astro'
 import LoadingBar from '../components/ui/loading/LoadingBar.astro'
+import SEO from '../components/shared/seo/SEO.astro'
 
 interface Props {
   pageTitle: string
   pageDescription: string
+  pageImage?: string
+  pageUrl?: string
+  pageType?: 'website' | 'article'
   children?: any
 }
 
-const { pageTitle, pageDescription } = Astro.props
+const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } = Astro.props
 ---
 
 <!doctype html>
@@ -101,11 +105,39 @@ const { pageTitle, pageDescription } = Astro.props
       } catch (e) {}
     })
   </script>
+
+  <!-- Performance Monitoring for SEO -->
+  <script is:inline>
+    // Monitor Core Web Vitals for SEO
+    if ('web-vital' in window) {
+      import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+        getCLS(console.log)
+        getFID(console.log)
+        getFCP(console.log)
+        getLCP(console.log)
+        getTTFB(console.log)
+      })
+    }
+
+    // Track page load performance
+    window.addEventListener('load', () => {
+      const navigation = performance.getEntriesByType('navigation')[0]
+      if (navigation) {
+        console.log('Page Load Time:', navigation.loadEventEnd - navigation.loadEventStart)
+        console.log(
+          'DOM Content Loaded:',
+          navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart
+        )
+      }
+    })
+  </script>
+
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
+  <SEO title={pageTitle} description={pageDescription} image={pageImage} type={pageType} />
   <body
     class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased'>
     <LoadingBar />
-    <Navigation transition:persist />
+    <Navigation />
     <main class='container mx-auto px-8 lg:px-16'>
       <slot />
     </main>
@@ -113,13 +145,6 @@ const { pageTitle, pageDescription } = Astro.props
 </html>
 
 <style is:global>
-  /* Disable default view transition animations to prevent flashing */
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-
   /* Ensure consistent background during transitions */
   html {
     background-color: var(--background-color) !important;
@@ -128,24 +153,6 @@ const { pageTitle, pageDescription } = Astro.props
   body {
     background-color: var(--background-color) !important;
     transition: background-color 0.2s ease-out;
-  }
-
-  /* Force background color during view transitions */
-  ::view-transition-old(root) {
-    background-color: rgb(250, 250, 250) !important;
-  }
-
-  ::view-transition-new(root) {
-    background-color: rgb(250, 250, 250) !important;
-  }
-
-  /* Dark mode view transitions */
-  .dark ::view-transition-old(root) {
-    background-color: rgb(9, 9, 11) !important;
-  }
-
-  .dark ::view-transition-new(root) {
-    background-color: rgb(9, 9, 11) !important;
   }
 
   /* Targeted transitions for theme-sensitive elements only */

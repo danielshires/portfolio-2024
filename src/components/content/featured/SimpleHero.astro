@@ -11,74 +11,48 @@ interface Props {
 const { introText } = Astro.props
 ---
 
-<section
-  id='intro'
-  class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 justify-center mt-48'
-  aria-label='Introduction'>
-  <div id='introOne' class='col-span-full gap-4'>
-    <Text variant='h1' class='leading-normal'>
-      {introText.first}
-    </Text>
-  </div>
-  <div id='introTwo' class='col-span-full mt-4'>
-    <Text variant='body'>
-      {introText.second}
-    </Text>
+<section class='flex flex-col gap-4 mt-40' aria-label='Hero Section'>
+  <div class='flex flex-col gap-2'>
+    <Text variant='h1'>{introText.first}</Text>
+    <Text variant='body'>{introText.second}</Text>
   </div>
 </section>
 
 <script>
   import gsap from 'gsap'
-  import { SplitText } from 'gsap/SplitText'
 
-  // Register GSAP plugins
-  gsap.registerPlugin(SplitText)
-
-  function introAnimation() {
-    let tl = gsap.timeline()
-    const hasPlayed = sessionStorage.getItem('hasSimpleHeroAnimationPlayed')
-
-    if (!hasPlayed) {
-      // Get elements
-      const introOne = document.getElementById('introOne')
-      const introTwo = document.getElementById('introTwo')
-
-      // Split text into lines
-      const introOneSplit = new SplitText(introOne, { type: 'lines' })
-      const introTwoSplit = new SplitText(introTwo, { type: 'lines' })
-
-      // Initial state for all elements
-      gsap.set([...introOneSplit.lines, ...introTwoSplit.lines], {
-        clipPath: 'inset(100% 0 0 0)',
-        opacity: 0,
-      })
-
-      // Animation sequence
-      tl
-        // 1. Animate first paragraph lines
-        .to(introOneSplit.lines, {
-          clipPath: 'inset(0% 0 0 0)',
-          opacity: 1,
-          duration: 1,
-          stagger: 0.1,
-          ease: 'power2.inOut',
-        })
-        // 2. Animate second paragraph lines
-        .to(
-          introTwoSplit.lines,
-          {
-            clipPath: 'inset(0% 0 0 0)',
-            opacity: 1,
-            duration: 1,
-            stagger: 0.1,
-            ease: 'power2.inOut',
-          },
-          -0.5
-        )
-
-      sessionStorage.setItem('hasSimpleHeroAnimationPlayed', 'true')
-    }
+  // Animation Configuration
+  const config = {
+    duration: 0.8,
+    stagger: 0.1,
+    ease: 'power2.out',
   }
 
-  introAnimation()
+  // Initialize animation
+  function initAnimation() {
+    const heroSection = document.querySelector('section[aria-label="Hero Section"]')
+    const textElements = heroSection?.querySelectorAll('h1, p')
+
+    if (!heroSection || !textElements) return
+
+    // Set initial states
+    gsap.set(textElements, {
+      opacity: 0,
+      y: 20,
+    })
+
+    // Animate text elements
+    gsap.to(textElements, {
+      opacity: 1,
+      y: 0,
+      duration: config.duration,
+      stagger: config.stagger,
+      ease: config.ease,
+    })
+  }
+
+  // Run animation on load
+  window.addEventListener('load', () => {
+    requestAnimationFrame(initAnimation)
+  })
 </script>

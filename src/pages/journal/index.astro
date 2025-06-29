@@ -15,11 +15,53 @@ const categories = Array.from(
   )
 )
 const tags = Array.from(new Set(posts.flatMap((post) => post.tags || [])))
+
+// SEO optimized content
+const pageTitle = 'Journal | Design & Development Blog | Daniel Shires'
+const pageDescription =
+  'Read insights on UX/UI design, product development, and digital experiences. Articles on design thinking, user research, and creating impactful digital products.'
+const pageImage = '/images/jpg/background.webp'
+const pageUrl = '/journal'
+
+// Structured data for blog
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Daniel Shires Journal',
+  description: pageDescription,
+  url: 'https://danielshires.com/journal',
+  image: 'https://danielshires.com' + pageImage,
+  author: {
+    '@type': 'Person',
+    name: 'Daniel Shires',
+    jobTitle: 'Product Designer',
+  },
+  publisher: {
+    '@type': 'Person',
+    name: 'Daniel Shires',
+  },
+  blogPost: posts.slice(0, 10).map((post) => ({
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.description,
+    author: {
+      '@type': 'Person',
+      name: 'Daniel Shires',
+    },
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    url: `https://danielshires.com/journal/${post.slug.current}`,
+    keywords: post.tags?.join(', ') || 'design, development, UX, UI',
+  })),
+}
 ---
 
 <Layout
-  pageTitle='Journal'
-  pageDescription='Notes, stories, and reflections on design, development, and the digital world.'>
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  pageImage={pageImage}
+  pageUrl={pageUrl}
+  pageType='website'>
   <main class='min-h-screen'>
     <!-- Hero Section -->
     <SimpleHero

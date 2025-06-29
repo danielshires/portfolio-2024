@@ -3,6 +3,7 @@
 import NavLink from '../../ui/buttons/NavLink.astro'
 import Image from 'astro/components/Image.astro'
 import { getNavigationItems } from '../../../config/features'
+import ThemeToggle from '../../shared/theme-toggle/ThemeToggle.jsx'
 
 // Images
 import logoLM from '../../../public/images/svg/logo-LM.svg'
@@ -20,29 +21,22 @@ const colourModePath = currentPath === 'experiments' ? logoDM : logoLM
 const navigationItems = getNavigationItems()
 ---
 
-<nav transition:persist class='w-full fixed z-50 top-0 px-4 md:px-8 py-4 md:py-8 bg-zinc-500'>
-  <div class='flex gap-4 justify-between'>
-    <div class='w-full md:w-auto flex flex-col md:flex-row gap-4 justify-between'>
-      <!-- Home link -->
-      <NavLink path='' target='' href='/'
-        ><p class='font-semibold'>
-          <span class='flex align-middle gap-2'
-            ><Image src={colourModePath} alt='Logo' />Dan Shires</span
-          >
-        </p></NavLink
-      >
-      <!-- Page links -->
-      <div id='navPageLinks' class='hidden md:flex flex-col md:flex-row gap-4'>
+<nav class='w-full fixed z-50 top-0 px-4 md:px-8 py-4 md:py-8 bg-zinc-500'>
+  <div class='flex items-center justify-between'>
+    <div class='flex items-center space-x-8'>
+      <a href='/' class='text-xl font-bold text-white'> Daniel Shires </a>
+      <div class='hidden md:flex space-x-6'>
         {
           navigationItems.map((item) => (
-            <NavLink path={item.path} target='' href={item.href}>
+            <NavLink href={item.href} path={item.path} target=''>
               {item.label}
             </NavLink>
           ))
         }
       </div>
-      <!-- Menu icon -->
-      <Icon id='hamburger' name='menu' class='absolute top-6 right-4 md:hidden h-6 w-6' />
+    </div>
+    <div class='flex items-center space-x-4'>
+      <ThemeToggle client:load />
     </div>
   </div>
 </nav>

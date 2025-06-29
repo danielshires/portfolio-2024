@@ -10,6 +10,7 @@ This portfolio features:
 - **Responsive Design**: Optimized for all devices
 - **Performance Focused**: Fast loading with optimized images
 - **Content Management**: Powered by Sanity CMS
+- **SEO Optimized**: Comprehensive search engine optimization
 
 ## 🚀 Tech Stack
 
@@ -31,6 +32,7 @@ This portfolio features:
 │   │   ├── content/        # Content-specific components
 │   │   ├── layout/         # Layout and navigation
 │   │   ├── media/          # Image and gallery components
+│   │   ├── shared/         # Shared components including SEO
 │   │   └── ui/             # Base UI components
 │   ├── content/            # Static content (albums, posts)
 │   ├── layouts/            # Page layouts
@@ -94,6 +96,34 @@ SANITY_DATASET=production
 - **Sanity Studio**: Visual content editor at `/studio`
 - **Portable Text**: Rich text content with custom components
 - **Image Management**: Optimized image handling with Sanity
+
+## 🔍 SEO Optimization
+
+### Meta Tags & Social Media
+- **Open Graph**: Optimized for Facebook, LinkedIn, and social sharing
+- **Twitter Cards**: Enhanced Twitter sharing with large image cards
+- **Meta Descriptions**: Unique, compelling descriptions for each page
+- **Canonical URLs**: Proper canonical tags to prevent duplicate content
+
+### Structured Data
+- **Person Schema**: Rich snippets for personal information
+- **BlogPosting Schema**: Enhanced blog post listings
+- **CreativeWork Schema**: Design project structured data
+- **CollectionPage Schema**: Photography collections markup
+- **Organization Schema**: Professional affiliations
+
+### Technical SEO
+- **XML Sitemap**: Comprehensive sitemap with priorities and change frequencies
+- **Robots.txt**: Optimized crawl directives
+- **Page Speed**: Optimized images and code splitting
+- **Mobile-First**: Responsive design with mobile optimization
+- **Semantic HTML**: Proper heading hierarchy and semantic markup
+
+### Content Optimization
+- **Keyword Integration**: Strategic keyword placement in titles and descriptions
+- **Internal Linking**: Cross-linking between related content
+- **Image Alt Text**: Descriptive alt text for all images
+- **URL Structure**: Clean, SEO-friendly URLs
 
 ## 🎨 Design System
 

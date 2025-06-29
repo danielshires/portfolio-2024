@@ -1,6 +1,4 @@
 ---
-import { ViewTransitions } from 'astro:transitions'
-
 interface Props {
   pageTitle: string
   pageDescription: string
@@ -17,7 +15,5 @@ const { pageTitle, pageDescription } = Astro.props
   <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
   <meta name='generator' content={Astro.generator} />
   <title>{pageTitle}</title>
-  <ViewTransitions />
-  <script src='https://unpkg.com/scrollreveal'></script>
   <slot />
 </head>

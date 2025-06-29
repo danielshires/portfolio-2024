@@ -1,5 +1,21 @@
 User-agent: *
 Allow: /
 
+# Disallow admin and private areas
+Disallow: /studio/
+Disallow: /admin/
+Disallow: /private/
+
+# Allow important directories
+Allow: /images/
+Allow: /fonts/
+Allow: /public/
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
 # Sitemap
+Sitemap: https://danielshires.com/sitemap.xml
+
+# Additional sitemaps for specific content types
 Sitemap: https://danielshires.com/sitemap.xml

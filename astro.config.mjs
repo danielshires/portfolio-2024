@@ -17,6 +17,7 @@ const sanityConfig = {
 
 // https://astro.build/config
 export default defineConfig({
+    site: 'https://danielshires.com',
     integrations: [
         tailwind(),
         react({
