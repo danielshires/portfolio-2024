@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FiSun, FiMoon } from 'react-icons/fi';
 
 const getInitialTheme = () => {
     if (typeof window !== 'undefined') {
@@ -25,9 +26,9 @@ export default function ThemeToggle() {
         <button
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             onClick={toggleTheme}
-            style={{ padding: '0.5em 1em', borderRadius: '0.5em', border: '1px solid #ccc', background: 'none', cursor: 'pointer' }}
+            className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
         >
-            {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
+            {theme === 'dark' ? <FiSun size={20} className="text-gray-700 dark:text-gray-300" /> : <FiMoon className="text-gray-700 dark:text-gray-300" size={20} />}
         </button>
     );
 }
