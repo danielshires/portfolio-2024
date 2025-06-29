@@ -74,7 +74,6 @@ Each project in Sanity includes:
 - Supports dark/light mode themes
 
 ### Animations
-- GSAP text animations for hero section
 - Staggered entrance animations for cards
 - Hover effects on interactive elements
 
@@ -171,7 +170,6 @@ The template seamlessly integrates with your existing:
 - ✅ Typography settings
 - ✅ Component patterns
 - ✅ SEO setup
-- ✅ Animation system (GSAP)
 
 ## 📝 Notes
 
@@ -179,4 +177,3 @@ The template seamlessly integrates with your existing:
 - All images are optimized through Sanity's image pipeline
 - SEO metadata is automatically generated
 - Components follow your existing naming and structure patterns
-- Animations respect user's existing session storage for performance

@@ -44,9 +44,6 @@ export default defineConfig({
         prefetchAll: false
     },
     vite: {
-        optimizeDeps: {
-            include: ['gsap'],
-        },
         build: {
             chunkSizeWarningLimit: 1000,
             rollupOptions: {

@@ -72,31 +72,3 @@ const structuredData = {
     </div>
   </main>
 </Layout>
-
-<script>
-  import ScrollReveal from 'scrollreveal'
-
-  function revealSection() {
-    const featuredWork = document.getElementById('featuredWork')
-    const sectionThree = document.getElementById('sectionThree')
-
-    const animationOptions = {
-      duration: 1200,
-      delay: 200,
-      distance: '0px',
-      opacity: 0,
-      easing: 'ease-in-out',
-      origin: 'bottom',
-    }
-
-    ScrollReveal().reveal(featuredWork, animationOptions)
-    ScrollReveal().reveal(sectionThree, animationOptions)
-  }
-
-  // Use requestAnimationFrame for better performance
-  window.addEventListener('load', () => {
-    requestAnimationFrame(() => {
-      revealSection()
-    })
-  })
-</script>

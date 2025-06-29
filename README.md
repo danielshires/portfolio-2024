@@ -18,7 +18,6 @@ This portfolio features:
 - **Frontend**: React, Preact, TypeScript
 - **Styling**: Tailwind CSS
 - **CMS**: [Sanity](https://www.sanity.io/) - Headless content management
-- **Animations**: GSAP, ScrollReveal, AOS
 - **Icons**: Iconify, Remix Icons
 - **Images**: Sharp image optimization with AVIF format
 
