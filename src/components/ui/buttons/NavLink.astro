@@ -15,11 +15,11 @@ const { href, path, target } = Astro.props
 const styles =
   path === ''
     ? currentPath === ''
-      ? 'underline underline-offset-8 dark:decoration-zinc-100'
-      : 'strong no-underline hover:underline underline-offset-8 dark:decoration-zinc-100'
+      ? 'underline text-zinc-900 dark:text-zinc-100 underline-offset-8'
+      : 'no-underline text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-8'
     : currentPath.startsWith(path)
-      ? 'underline underline-offset-8 dark:decoration-zinc-100'
-      : 'strong no-underline hover:underline underline-offset-8 dark:decoration-zinc-100'
+      ? 'underline text-zinc-900 dark:text-zinc-100 underline-offset-8'
+      : 'no-underline text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-8'
 ---
 
 <a class={styles} href={href} target={target}><slot /></a>
