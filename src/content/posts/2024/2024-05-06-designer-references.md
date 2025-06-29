@@ -4,7 +4,6 @@ description: An ongoing collection of some of my favourite desigers
 tags: ["design", "references"]
 date: 2024-06-05
 author: dan-shires
-cover: ../../albums/01-wanda/Wanda_1.jpg
 ---
 
 I come across a lot of design work and portfolios online. This is a list of some of the best that I've seen so far this year.
