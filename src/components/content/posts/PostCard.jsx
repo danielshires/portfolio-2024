@@ -18,6 +18,7 @@ export default function PostCard({ post }) {
         <a
             href={`/journal/${post.slug?.current || post._id}`}
             className="group block relative overflow-hidden transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+            data-swup-preload
         >
             {post.mainImage ? (
                 <div className="w-full aspect-[3/2] overflow-hidden rounded-lg">

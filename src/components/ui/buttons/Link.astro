@@ -8,8 +8,11 @@ interface Props {
 
 const {href, target } = Astro.props;
 
+// Check if it's an internal link (starts with / but not //)
+const isInternal = href.startsWith('/') && !href.startsWith('//');
+
 ---
 
-<a class={''} href={href} target={target}><slot/></a>
+<a class={''} href={href} target={target} data-swup-preload={isInternal}><slot/></a>
 
 

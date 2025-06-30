@@ -31,7 +31,7 @@ export default defineConfig({
             containers: ['main'],
             preload: true,
             accessibility: true,
-            animationSelector: '[data-swup-transition]'
+            animationSelector: '.transition-fade'
         })
     ],
     image: {

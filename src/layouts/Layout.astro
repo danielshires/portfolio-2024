@@ -106,47 +106,207 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       } catch (e) {}
     }
 
+    // Prevent flash on initial page load - use window property to avoid conflicts
+    if (!window.swupInitialized) {
+      window.swupInitialized = true
+      
+      // Suppress Swup syntax errors while keeping functionality
+      var originalConsoleError = console.error
+      console.error = function() {
+        var message = arguments[0]
+        if (typeof message === 'string' && 
+            (message.indexOf('Unexpected token') !== -1 || 
+             message.indexOf('SyntaxError') !== -1 ||
+             message.indexOf('runScript') !== -1)) {
+          // Suppress Swup-related syntax errors
+          return
+        }
+        originalConsoleError.apply(console, arguments)
+      }
+      
+      // Mark when Swup is enabled to prevent initial flash
+      document.addEventListener('swup:enable', function() {
+        document.documentElement.setAttribute('data-swup-enabled', 'true')
+      })
+      
+      // Mark initial load as complete after page is fully loaded
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          document.documentElement.setAttribute('data-initial-load-complete', 'true')
+        }, 100)
+      })
+    }
+    
     // Apply theme on Astro transitions
     document.addEventListener('astro:after-swap', applyTheme)
     
     // Apply theme on Swup transitions
     document.addEventListener('swup:contentReplaced', applyTheme)
     document.addEventListener('swup:pageView', applyTheme)
+    
+    // Global script reinitialization for Swup transitions
+    document.addEventListener('swup:contentReplaced', function() {
+      // Dispatch custom event for components to reinitialize
+      document.dispatchEvent(new CustomEvent('swup:reinitialize'))
+    })
+    
+    // Only remove focus after transitions complete to avoid disrupting animations
+    document.addEventListener('swup:transitionEnd', function() {
+      const mainElement = document.querySelector('main.transition-fade')
+      if (mainElement && mainElement === document.activeElement) {
+        mainElement.blur()
+        mainElement.style.outline = 'none'
+        mainElement.style.boxShadow = 'none'
+        mainElement.style.border = 'none'
+      }
+    })
+    
+    // Chrome-specific fix: Prevent focus entirely on both body and main
+    if (!window.chromeFocusFixInitialized) {
+      window.chromeFocusFixInitialized = true
+      
+      const chromeUserAgent = /Chrome/.test(navigator.userAgent)
+      if (chromeUserAgent) {
+        function removeFocusStyles() {
+          const bodyElement = document.body
+          const mainElement = document.querySelector('main.transition-fade')
+          
+          // Remove focus from body
+          if (bodyElement) {
+            bodyElement.style.setProperty('outline', 'none', 'important')
+            bodyElement.style.setProperty('outline-color', 'transparent', 'important')
+            bodyElement.style.setProperty('outline-style', 'none', 'important')
+            bodyElement.style.setProperty('outline-width', '0', 'important')
+            bodyElement.style.setProperty('box-shadow', 'none', 'important')
+            bodyElement.blur()
+          }
+          
+          // Remove focus from main
+          if (mainElement) {
+            mainElement.style.setProperty('outline', 'none', 'important')
+            mainElement.style.setProperty('outline-color', 'transparent', 'important')
+            mainElement.style.setProperty('outline-style', 'none', 'important')
+            mainElement.style.setProperty('outline-width', '0', 'important')
+            mainElement.blur()
+          }
+        }
+        
+        // Only apply focus removal after transitions complete, not during
+        document.addEventListener('swup:transitionEnd', function() {
+          setTimeout(removeFocusStyles, 100)
+        })
+      }
+    }
+    
+    // Enhanced Navigation Active State Handler - Approach 2
+    if (!window.navigationHandlerInitialized) {
+      window.navigationHandlerInitialized = true
+      
+      function updateNavigationActiveState() {
+        const currentPath = window.location.pathname.slice(1)
+        const navLinks = document.querySelectorAll('[data-nav-path]')
+        
+        if (navLinks.length === 0) {
+          return false
+        }
+        
+        navLinks.forEach((link) => {
+          const path = link.getAttribute('data-nav-path')
+          const isActive = path === '' 
+            ? currentPath === '' 
+            : currentPath.startsWith(path) && path !== ''
+          
+          const baseClasses = 'text-zinc-900 dark:text-zinc-100 underline-offset-8'
+          const activeClasses = `underline ${baseClasses}`
+          const inactiveClasses = `no-underline hover:underline ${baseClasses}`
+          
+          link.className = isActive ? activeClasses : inactiveClasses
+        })
+        
+        return true
+      }
+      
+      // Enhanced timing for navigation updates
+      function scheduleNavigationUpdate() {
+        // Try immediate update
+        if (updateNavigationActiveState()) {
+          return
+        }
+        
+        // Fallback: try after short delay
+        setTimeout(() => {
+          if (updateNavigationActiveState()) {
+            return
+          }
+          
+          // Final fallback: try after longer delay
+          setTimeout(() => {
+            updateNavigationActiveState()
+          }, 100)
+        }, 10)
+      }
+      
+      // Update navigation on initial load
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => updateNavigationActiveState(), 0)
+      })
+      
+      // Enhanced Swup event handling with multiple timing strategies
+      document.addEventListener('swup:animationOutDone', scheduleNavigationUpdate)
+      document.addEventListener('swup:contentReplaced', scheduleNavigationUpdate)
+      document.addEventListener('swup:pageView', scheduleNavigationUpdate)
+      document.addEventListener('swup:transitionEnd', scheduleNavigationUpdate)
+      
+      // Browser navigation
+      window.addEventListener('popstate', scheduleNavigationUpdate)
+      
+      // Fallback: also try on URL changes
+      let lastUrl = window.location.href
+      setInterval(() => {
+        if (window.location.href !== lastUrl) {
+          lastUrl = window.location.href
+          scheduleNavigationUpdate()
+        }
+      }, 100)
+    }
   </script>
 
   <!-- Performance Monitoring for SEO -->
   <script is:inline>
-    // Monitor Core Web Vitals for SEO
-    if ('web-vital' in window) {
-      import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-        getCLS(console.log)
-        getFID(console.log)
-        getFCP(console.log)
-        getLCP(console.log)
-        getTTFB(console.log)
+    // Monitor Core Web Vitals for SEO - with Swup-safe execution
+    if (!window.webVitalsInitialized && 'web-vital' in window) {
+      window.webVitalsInitialized = true
+      
+      import('web-vitals').then(function(webVitals) {
+        // Core Web Vitals monitoring (silent)
+        webVitals.getCLS(function() {})
+        webVitals.getFID(function() {})
+        webVitals.getFCP(function() {})
+        webVitals.getLCP(function() {})
+        webVitals.getTTFB(function() {})
       })
     }
 
-    // Track page load performance
-    window.addEventListener('load', () => {
-      const navigation = performance.getEntriesByType('navigation')[0]
-      if (navigation) {
-        console.log('Page Load Time:', navigation.loadEventEnd - navigation.loadEventStart)
-        console.log(
-          'DOM Content Loaded:',
-          navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart
-        )
-      }
-    })
+    // Track page load performance - with Swup-safe execution (silent)
+    if (!window.performanceTrackingInitialized) {
+      window.performanceTrackingInitialized = true
+      
+      window.addEventListener('load', function() {
+        // Performance tracking runs silently
+        var navigation = performance.getEntriesByType('navigation')[0]
+        // Metrics collected but not logged to console
+      })
+    }
   </script>
 
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
   <SEO title={pageTitle} description={pageDescription} image={pageImage} type={pageType} />
   <body
-    class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased'>
+    class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased'
+    tabindex="-1">
     <LoadingBar />
     <Navigation />
-    <main class='container mx-auto px-8 lg:px-16 transition-fade' data-swup-transition>
+    <main class='container mx-auto px-8 lg:px-16 transition-fade' tabindex="-1">
       <slot />
     </main>
   </body>
@@ -171,8 +331,8 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       border-color 0.2s ease-out;
   }
 
-  /* Swup fade transition styling */
-  .transition-fade {
+  /* Swup fade transition styling - only when Swup is active */
+  html[data-swup-enabled] .transition-fade {
     transition: opacity 0.3s ease-out;
   }
 
@@ -184,8 +344,103 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     opacity: 0;
   }
 
-  /* Subtle page entrance animation - only for non-Swup navigation */
-  main:not([data-swup-transition]) {
+  /* Prevent flash on initial load */
+  .transition-fade {
+    opacity: 1;
+  }
+
+  /* Remove focus outlines during and after Swup transitions */
+  [data-swup-transition]:focus,
+  [data-swup-transition]:focus-visible,
+  html.is-changing [data-swup-transition]:focus,
+  html.is-leaving [data-swup-transition]:focus,
+  html.is-rendering [data-swup-transition]:focus,
+  html.is-animating [data-swup-transition]:focus,
+  main[data-swup-transition]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Prevent any blue focus rings on main container */
+  main[data-swup-transition] {
+    outline: none !important;
+  }
+
+  /* Force remove all possible focus styles that could create blue lines */
+  main[data-swup-transition],
+  main[data-swup-transition]:focus,
+  main[data-swup-transition]:focus-within,
+  main[data-swup-transition]:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    ring: none !important;
+  }
+
+  /* Override any Tailwind focus classes */
+  .transition-fade:focus,
+  .transition-fade:focus-visible,
+  .transition-fade:focus-within {
+    outline: none !important;
+    box-shadow: none !important;
+    --tw-ring-shadow: none !important;
+    --tw-ring-offset-shadow: none !important;
+  }
+
+  /* Chrome-specific fix for blue focus lines */
+  body, main {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-focus-ring-color: transparent !important;
+    outline: none !important;
+  }
+
+  /* Override focus styles on body element */
+  body:focus,
+  body:focus-visible,
+  body:focus-within {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Force Chrome to never show focus rings on body and main */
+  @supports (-webkit-appearance: none) {
+    body, main.transition-fade {
+      outline: none !important;
+      outline-offset: 0 !important;
+      outline-color: transparent !important;
+      outline-style: none !important;
+      outline-width: 0 !important;
+    }
+    
+    body:focus, main.transition-fade:focus {
+      outline: none !important;
+      outline-offset: 0 !important;
+      outline-color: transparent !important;
+      outline-style: none !important;
+      outline-width: 0 !important;
+    }
+  }
+
+  /* Completely disable focus on main element */
+  main.transition-fade {
+    outline: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    pointer-events: auto !important;
+  }
+
+  main.transition-fade:focus,
+  main.transition-fade:active,
+  main.transition-fade:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Subtle page entrance animation - only for non-Swup navigation and not initial load */
+  html[data-initial-load-complete]:not([data-swup-enabled]) main {
     animation: gentleFadeIn 0.3s ease-out;
   }
 

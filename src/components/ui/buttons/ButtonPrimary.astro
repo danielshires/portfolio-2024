@@ -8,12 +8,16 @@ interface Props {
 }
 
 const { href, target } = Astro.props
+
+// Check if it's an internal link
+const isInternal = href.startsWith('/') && !href.startsWith('//')
 ---
 
 <a
   href={href}
   target={target}
-  class='bg-primary hover:bg-zinc-800 hover:underline text-primary-light rounded-full w-fit py-3 px-4 transition'>
+  class='bg-primary hover:bg-zinc-800 hover:underline text-primary-light rounded-full w-fit py-3 px-4 transition'
+  data-swup-preload={isInternal}>
   <Text variant='body' color='inverted'>
     <slot />
   </Text>

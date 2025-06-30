@@ -101,4 +101,8 @@ const navigationItems = getNavigationItems()
 
   // Re-initialize after view transitions
   document.addEventListener('astro:page-load', initNavScroll)
+  
+  // Re-initialize after Swup transitions
+  document.addEventListener('swup:contentReplaced', initNavScroll)
+  document.addEventListener('swup:pageView', initNavScroll)
 </script>

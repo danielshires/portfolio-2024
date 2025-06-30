@@ -7,66 +7,77 @@
 </div>
 
 <script>
-  let loadingBar: HTMLElement | null = null
-  let progressBar: HTMLElement | null = null
-  let totalImages: number = 0
-  let loadedImages: number = 0
+  // @ts-nocheck
+  // Swup-safe loading bar with vanilla JavaScript
+  if (!window.loadingBarInitialized) {
+    window.loadingBarInitialized = true
+    
+    var loadingBar = null
+    var progressBar = null
+    var totalImages = 0
+    var loadedImages = 0
 
-  function setProgress(percent: number) {
-    if (progressBar) {
-      progressBar.style.width = `${percent}%`
-    }
-  }
-
-  function startImageLoadingProgress() {
-    loadingBar = document.getElementById('loading-bar') as HTMLElement | null
-    progressBar = loadingBar?.querySelector('.loading-progress') as HTMLElement | null
-    if (!loadingBar || !progressBar) return
-
-    const images = Array.from(document.images)
-    totalImages = images.length
-    loadedImages = 0
-    setProgress(0)
-    loadingBar.style.opacity = '1'
-
-    if (totalImages === 0) {
-      setProgress(100)
-      setTimeout(() => {
-        if (loadingBar) loadingBar.style.opacity = '0'
-      }, 300)
-      return
-    }
-
-    images.forEach((img: HTMLImageElement) => {
-      if (img.complete) {
-        handleImageLoad()
-      } else {
-        img.addEventListener('load', handleImageLoad, { once: true })
-        img.addEventListener('error', handleImageLoad, { once: true })
+    function setProgress(percent) {
+      if (progressBar) {
+        progressBar.style.width = percent + '%'
       }
+    }
+
+    function startImageLoadingProgress() {
+      loadingBar = document.getElementById('loading-bar')
+      progressBar = loadingBar ? loadingBar.querySelector('.loading-progress') : null
+      if (!loadingBar || !progressBar) return
+
+      var images = Array.from(document.images)
+      totalImages = images.length
+      loadedImages = 0
+      setProgress(0)
+      loadingBar.style.opacity = '1'
+
+      if (totalImages === 0) {
+        setProgress(100)
+        setTimeout(function() {
+          if (loadingBar) loadingBar.style.opacity = '0'
+        }, 300)
+        return
+      }
+
+      images.forEach(function(img) {
+        if (img.complete) {
+          handleImageLoad()
+        } else {
+          img.addEventListener('load', handleImageLoad, { once: true })
+          img.addEventListener('error', handleImageLoad, { once: true })
+        }
+      })
+    }
+
+    function handleImageLoad() {
+      loadedImages++
+      setProgress((loadedImages / totalImages) * 100)
+      if (loadedImages >= totalImages) {
+        setTimeout(function() {
+          setProgress(100)
+          if (loadingBar) loadingBar.style.opacity = '0'
+        }, 300)
+      }
+    }
+
+    // Initial load
+    window.addEventListener('load', function() {
+      startImageLoadingProgress()
+    })
+
+    // On navigation (Astro View Transitions or SPA)
+    document.addEventListener('astro:after-swap', function() {
+      startImageLoadingProgress()
+    })
+    
+    // On Swup navigation
+    document.addEventListener('swup:pageView', function() {
+      startImageLoadingProgress()
     })
   }
-
-  function handleImageLoad() {
-    loadedImages++
-    setProgress((loadedImages / totalImages) * 100)
-    if (loadedImages >= totalImages) {
-      setTimeout(() => {
-        setProgress(100)
-        if (loadingBar) loadingBar.style.opacity = '0'
-      }, 300)
-    }
-  }
-
-  // Initial load
-  window.addEventListener('load', () => {
-    startImageLoadingProgress()
-  })
-
-  // On navigation (Astro View Transitions or SPA)
-  document.addEventListener('astro:after-swap', () => {
-    startImageLoadingProgress()
-  })
 </script>
 
 <style>

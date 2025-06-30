@@ -12,7 +12,8 @@ const { picture } = Astro.props
 
 <a
   href={`/pictures/${picture.slug.current}`}
-  class='group block relative overflow-hidden bg-background-light/5 dark:bg-background-dark/5 backdrop-blur-sm border border-border-light/10 dark:border-border-dark/10 hover:border-border-light/20 dark:hover:border-border-dark/20 transition-all duration-300 rounded-lg'>
+  class='group block relative overflow-hidden bg-background-light/5 dark:bg-background-dark/5 backdrop-blur-sm border border-border-light/10 dark:border-border-dark/10 hover:border-border-light/20 dark:hover:border-border-dark/20 transition-all duration-300 rounded-lg'
+  data-swup-preload>
   {
     picture.mainImage && (
       <div class='w-full h-64 overflow-hidden'>
