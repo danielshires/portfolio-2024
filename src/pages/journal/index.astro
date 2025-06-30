@@ -62,7 +62,6 @@ const structuredData = {
   pageImage={pageImage}
   pageUrl={pageUrl}
   pageType='website'>
-  <main class='min-h-screen'>
     <!-- Hero Section -->
     <SimpleHero
       introText={{
@@ -73,9 +72,6 @@ const structuredData = {
 
     <!-- Filters and Posts Grid -->
     <section class='pb-16'>
-      <div class='container mx-auto'>
         <FilterPostsReact client:only='react' posts={posts} categories={categories} tags={tags} />
-      </div>
     </section>
-  </main>
 </Layout>

@@ -20,7 +20,7 @@ function formatArray(arr?: string[]): string {
 }
 ---
 
-<dl class="flex flex-row flex-wrap gap-6 text-sm">
+<div class="flex flex-row flex-wrap gap-6 text-sm gap-y-4">
   <!-- Client -->
   {client && (
     <MetaDetail label="Client">
@@ -55,15 +55,4 @@ function formatArray(arr?: string[]): string {
       {duration}
     </MetaDetail>
   )}
-</dl>
-
-<style>
-  /* Custom definition list styling for better semantic markup */
-  dt {
-    font-weight: 500;
-  }
-
-  dd {
-    margin: 0;
-  }
-</style>
+</div>

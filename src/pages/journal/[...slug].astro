@@ -32,69 +32,67 @@ const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630)
 
 <Layout pageTitle={post.title} pageDescription={post.description}>
   <SEO slot='head' title={post.title} description={post.description} image={seoImage} />
-  <main class='min-h-screen'>
-    <!-- <PageTransition /> -->
-    <div class='container mx-auto py-16 lg:py-24'>
-      <article class='prose dark:prose-invert max-w-[75ch] mx-auto text-base'>
-        <header class='text-center mt-12 mb-12'>
-          <Text variant='h1' class='mb-2'>{post.title} </Text>
+  <div class='min-h-screen py-16 lg:py-24'>
+    <article class='prose dark:prose-invert max-w-[75ch] mx-auto text-base'>
+      <header class='text-center mt-12 mb-12'>
+        <Text variant='h1' class='mb-2'>{post.title} </Text>
+        {
+          post.description && (
+            <Text variant='h4' color='muted' class='mt-0 mb-1'>
+              {post.description}
+            </Text>
+          )
+        }
+        <div class='mt-0 flex gap-2 items-center text-sm text-zinc-500 dark:text-zinc-400'>
           {
-            post.description && (
-              <Text variant='subtitle' color='muted' class='mt-0 mb-1'>
-                {post.description}
+            post.author && (
+              <Text variant='overline' color='muted'>
+                By {post.author}
+              </Text>
+            )
+          } ·
+          {
+            post.publishedAt && (
+              <Text variant='overline' color='muted'>
+                {new Date(post.publishedAt).toLocaleDateString(undefined, {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
               </Text>
             )
           }
-          <div class='mt-0 flex gap-2 items-center text-sm text-zinc-500 dark:text-zinc-400'>
-            {
-              post.author && (
-                <Text variant='overline' color='muted'>
-                  By {post.author}
-                </Text>
-              )
-            } ·
-            {
-              post.publishedAt && (
-                <Text variant='overline' color='muted'>
-                  {new Date(post.publishedAt).toLocaleDateString(undefined, {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}
-                </Text>
-              )
-            }
-            {
-              post.readingTime && (
-                <Text variant='overline' color='muted'>
-                  {post.readingTime} min read
-                </Text>
-              )
-            }
-          </div>
-        </header>
-        {
-          post.mainImage && (
-            <div class='mb-12'>
-              <SanityImage
-                image={post.mainImage}
-                alt={post.title}
-                width={1200}
-                height={800}
-                preset='hero'
-                class='w-full h-auto rounded-lg'
-                sizes='(min-width: 1200px) 1200px, 100vw'
-              />
-            </div>
-          )
-        }
-        <div class='prose dark:prose-invert max-w-none text-base mt-12'>
-          {post.body && <PortableText value={post.body} />}
+          {
+            post.readingTime && (
+              <Text variant='overline' color='muted'>
+                {post.readingTime} min read
+              </Text>
+            )
+          }
         </div>
-      </article>
+      </header>
+      {
+        post.mainImage && (
+          <div class='mb-12'>
+            <SanityImage
+              image={post.mainImage}
+              alt={post.title}
+              width={1200}
+              height={800}
+              preset='hero'
+              class='w-full h-auto rounded-lg'
+              sizes='(min-width: 1200px) 1200px, 100vw'
+            />
+          </div>
+        )
+      }
+      <div class='prose dark:prose-invert max-w-none text-base mt-12'>
+        {post.body && <PortableText value={post.body} />}
+      </div>
+    </article>
 
-      <!-- Related Posts -->
-      <!-- {
+    <!-- Related Posts -->
+    <!-- {
         relatedPostsToShow.length > 0 && (
           <section class='mt-16 pt-16 border-t border-zinc-200 dark:border-zinc-800'>
             <RelatedPosts projects={relatedPostsToShow} />
@@ -102,21 +100,20 @@ const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630)
         )
       } -->
 
-      <!-- Navigation Back -->
-      <div class='mt-16 text-center col-span-full'>
-        <a
-          href='/journal'
-          class='inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors'>
-          <svg class='w-4 h-4 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-            <path
-              stroke-linecap='round'
-              stroke-linejoin='round'
-              stroke-width='2'
-              d='M10 19l-7-7m0 0l7-7m-7 7h18'></path>
-          </svg>
-          <Text variant='body' color='muted'>Back to Journal</Text>
-        </a>
-      </div>
+    <!-- Navigation Back -->
+    <div class='mt-16 text-center col-span-full'>
+      <a
+        href='/journal'
+        class='inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors'>
+        <svg class='w-4 h-4 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <path
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            stroke-width='2'
+            d='M10 19l-7-7m0 0l7-7m-7 7h18'></path>
+        </svg>
+        <Text variant='body' color='muted'>Back to Journal</Text>
+      </a>
     </div>
-  </main>
+  </div>
 </Layout>
