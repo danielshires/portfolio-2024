@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { urlFor } from '../../../lib/sanity';
-import Text from '../text/Text';
+import Text from '../../ui/text/Text'
 
 export default function PostCard({ post }) {
     // Generate optimized image URL with quality control
