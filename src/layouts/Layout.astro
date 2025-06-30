@@ -297,6 +297,105 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         // Metrics collected but not logged to console
       })
     }
+    
+    // THEME TOGGLE MANAGEMENT - Comprehensive solution
+    if (!window.globalThemeManagerInitialized) {
+      window.globalThemeManagerInitialized = true
+      
+      function getInitialTheme() {
+        if (typeof window === 'undefined') return 'light'
+        var stored = localStorage.getItem('theme')
+        if (stored) return stored
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      }
+      
+      function applyThemeComplete(theme) {
+        if (typeof window === 'undefined') return
+        
+        // Update class on document element
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+        
+        // Update background colors immediately
+        var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
+        document.documentElement.style.backgroundColor = color
+        document.body.style.backgroundColor = color
+        
+        // Save to localStorage
+        localStorage.setItem('theme', theme)
+        
+        // Update all theme toggle buttons on the page
+        updateAllThemeToggleButtons(theme)
+      }
+      
+      function updateAllThemeToggleButtons(theme) {
+        var buttons = document.querySelectorAll('[data-theme-toggle]')
+        buttons.forEach(function(button) {
+          var sunIcon = button.querySelector('[data-sun-icon]')
+          var moonIcon = button.querySelector('[data-moon-icon]')
+          
+          if (!sunIcon || !moonIcon) return
+          
+          if (theme === 'dark') {
+            sunIcon.classList.remove('hidden')
+            moonIcon.classList.add('hidden')
+            button.setAttribute('aria-label', 'Switch to light mode')
+          } else {
+            sunIcon.classList.add('hidden')
+            moonIcon.classList.remove('hidden')
+            button.setAttribute('aria-label', 'Switch to dark mode')
+          }
+        })
+      }
+      
+      function handleThemeToggle() {
+        var currentTheme = localStorage.getItem('theme') || getInitialTheme()
+        var newTheme = currentTheme === 'dark' ? 'light' : 'dark'
+        applyThemeComplete(newTheme)
+      }
+      
+      function initializeGlobalThemeManager() {
+        // Apply initial theme
+        var currentTheme = getInitialTheme()
+        applyThemeComplete(currentTheme)
+        
+        // Use event delegation to handle all theme toggle clicks
+        document.removeEventListener('click', delegatedThemeToggleHandler)
+        document.addEventListener('click', delegatedThemeToggleHandler)
+      }
+      
+      function delegatedThemeToggleHandler(event) {
+        if (event.target.closest('[data-theme-toggle]')) {
+          event.preventDefault()
+          handleThemeToggle()
+        }
+      }
+      
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', initializeGlobalThemeManager)
+      
+      // Re-initialize after Swup transitions
+      document.addEventListener('swup:contentReplaced', function() {
+        var currentTheme = localStorage.getItem('theme') || getInitialTheme()
+        applyThemeComplete(currentTheme)
+      })
+      
+      document.addEventListener('swup:pageView', function() {
+        var currentTheme = localStorage.getItem('theme') || getInitialTheme()
+        applyThemeComplete(currentTheme)
+      })
+      
+      // Listen for storage changes from other tabs
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'theme') {
+          var newTheme = e.newValue || getInitialTheme()
+          applyThemeComplete(newTheme)
+        }
+      })
+    }
   </script>
 
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
