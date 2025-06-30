@@ -10,16 +10,64 @@ const getInitialTheme = () => {
     return 'light';
 };
 
+const applyTheme = (theme) => {
+    if (typeof window === 'undefined') return;
+    
+    // Update class on document element
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+    
+    // Update background colors immediately
+    const color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)';
+    document.documentElement.style.backgroundColor = color;
+    document.body.style.backgroundColor = color;
+    
+    // Save to localStorage
+    localStorage.setItem('theme', theme);
+};
+
 export default function ThemeToggle() {
     const [theme, setTheme] = useState(getInitialTheme());
 
     useEffect(() => {
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-        localStorage.setItem('theme', theme);
+        applyTheme(theme);
+    }, [theme]);
+
+    // Listen for external theme changes (like from other components or page loads)
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const newTheme = localStorage.getItem('theme') || getInitialTheme();
+            if (newTheme !== theme) {
+                setTheme(newTheme);
+            }
+        };
+
+        // Listen for storage changes from other tabs
+        window.addEventListener('storage', handleStorageChange);
+        
+        // Listen for Swup transitions and recheck theme
+        const handleSwupTransition = () => {
+            const currentTheme = localStorage.getItem('theme') || getInitialTheme();
+            setTheme(currentTheme);
+            applyTheme(currentTheme);
+        };
+        
+        document.addEventListener('swup:pageView', handleSwupTransition);
+        document.addEventListener('swup:contentReplaced', handleSwupTransition);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            document.removeEventListener('swup:pageView', handleSwupTransition);
+            document.removeEventListener('swup:contentReplaced', handleSwupTransition);
+        };
     }, [theme]);
 
     const toggleTheme = () => {
-        setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+        const newTheme = theme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
     };
 
     return (
