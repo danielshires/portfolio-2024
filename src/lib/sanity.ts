@@ -84,7 +84,9 @@ const config = {
   projectId: '5fq3rcf6',
   dataset: 'production',
   apiVersion: '2024-03-19',
-  useCdn: true,
+  // Use CDN in production for performance, but with API token for cache-busting when needed
+  useCdn: import.meta.env.PROD && !import.meta.env.SANITY_API_TOKEN,
+  token: import.meta.env.SANITY_API_TOKEN,
 }
 
 export const client = createClient(config)
@@ -98,7 +100,7 @@ export function urlFor(source: SanityImage) {
 // Helper function to fetch all posts
 export async function getAllPosts(): Promise<Post[]> {
   return await client.fetch(`
-    *[_type == "post"] | order(publishedAt desc) {
+    *[_type == "post" && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) {
       _id,
       title,
       slug,
@@ -122,7 +124,7 @@ export async function getAllPosts(): Promise<Post[]> {
 export async function getPostBySlug(slug: string): Promise<Post> {
   return await client.fetch(
     `
-    *[_type == "post" && slug.current == $slug][0] {
+    *[_type == "post" && slug.current == $slug && defined(publishedAt) && publishedAt <= now()][0] {
       _id,
       title,
       slug,
@@ -135,8 +137,8 @@ export async function getPostBySlug(slug: string): Promise<Post> {
       "relatedPosts": select(
         count(relatedPosts[defined(_ref)]) > 0 => relatedPosts[defined(_ref)]->{
             _id, title, slug, mainImage, publishedAt
-        }[defined(slug.current)][0..1],
-        *[_type == "post" && slug.current != $slug] | order(publishedAt desc) [0..1] {
+        }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()][0..1],
+        *[_type == "post" && slug.current != $slug && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) [0..1] {
             _id, title, slug, mainImage, publishedAt
         }
       ),

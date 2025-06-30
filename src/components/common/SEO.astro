@@ -5,6 +5,7 @@ interface Props {
   image?: string
   type?: 'website' | 'article'
   twitterHandle?: string
+  googleTagId?: string
 }
 
 const {
@@ -13,6 +14,7 @@ const {
   image = '/images/jpg/background.webp',
   type = 'website',
   twitterHandle = '@danielshires',
+  googleTagId,
 } = Astro.props
 
 const siteUrl = Astro.site || 'https://danielshires.com'
@@ -52,3 +54,16 @@ const imageURL = new URL(image, siteUrl)
 <meta name='viewport' content='width=device-width, initial-scale=1.0' />
 <meta name='theme-color' content='#ffffff' media='(prefers-color-scheme: light)' />
 <meta name='theme-color' content='#09090b' media='(prefers-color-scheme: dark)' />
+
+{googleTagId && (
+  <>
+    <!-- Google tag (gtag.js) -->
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${googleTagId}`}></script>
+    <script set:html={`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${googleTagId}');
+    `}></script>
+  </>
+)}
