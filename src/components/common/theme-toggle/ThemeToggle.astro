@@ -1,0 +1,118 @@
+---
+// Convert to Astro component with vanilla JS for Swup compatibility
+---
+
+<button
+  id="theme-toggle"
+  class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+>
+  <!-- Icons will be injected via JavaScript -->
+  <svg id="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-700 dark:text-gray-300 hidden">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+  <svg id="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-700 dark:text-gray-300 hidden">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<script>
+  // @ts-nocheck
+  // Swup-safe theme toggle with vanilla JavaScript
+  if (!window.themeToggleInitialized) {
+    window.themeToggleInitialized = true
+    
+    function getInitialTheme() {
+      if (typeof window === 'undefined') return 'light'
+      var stored = localStorage.getItem('theme')
+      if (stored) return stored
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+    
+    function applyTheme(theme) {
+      if (typeof window === 'undefined') return
+      
+      // Update class on document element
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+      
+      // Update background colors immediately
+      var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
+      document.documentElement.style.backgroundColor = color
+      document.body.style.backgroundColor = color
+      
+      // Save to localStorage
+      localStorage.setItem('theme', theme)
+      
+      // Update button icons
+      updateThemeToggleIcons(theme)
+    }
+    
+    function updateThemeToggleIcons(theme) {
+      var sunIcon = document.getElementById('sun-icon')
+      var moonIcon = document.getElementById('moon-icon')
+      var button = document.getElementById('theme-toggle')
+      
+      if (!sunIcon || !moonIcon || !button) return
+      
+      if (theme === 'dark') {
+        sunIcon.classList.remove('hidden')
+        moonIcon.classList.add('hidden')
+        button.setAttribute('aria-label', 'Switch to light mode')
+      } else {
+        sunIcon.classList.add('hidden')
+        moonIcon.classList.remove('hidden')
+        button.setAttribute('aria-label', 'Switch to dark mode')
+      }
+    }
+    
+    function initThemeToggle() {
+      var button = document.getElementById('theme-toggle')
+      if (!button) return
+      
+      var currentTheme = getInitialTheme()
+      applyTheme(currentTheme)
+      
+      // Remove existing listener to avoid duplicates
+      button.removeEventListener('click', handleThemeToggle)
+      button.addEventListener('click', handleThemeToggle)
+    }
+    
+    function handleThemeToggle() {
+      var currentTheme = localStorage.getItem('theme') || getInitialTheme()
+      var newTheme = currentTheme === 'dark' ? 'light' : 'dark'
+      applyTheme(newTheme)
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initThemeToggle)
+    
+    // Re-initialize after Swup transitions
+    document.addEventListener('swup:contentReplaced', function() {
+      // Small delay to ensure DOM is ready
+      setTimeout(initThemeToggle, 10)
+    })
+    
+    document.addEventListener('swup:pageView', function() {
+      setTimeout(initThemeToggle, 10)
+    })
+    
+    // Listen for storage changes from other tabs
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'theme') {
+        var newTheme = e.newValue || getInitialTheme()
+        applyTheme(newTheme)
+      }
+    })
+  }
+</script>

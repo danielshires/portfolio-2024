@@ -3,7 +3,7 @@
 import NavLink from '../../ui/buttons/NavLink.astro'
 import Image from 'astro/components/Image.astro'
 import { getNavigationItems } from '../../../config/features'
-import ThemeToggle from '../../common/theme-toggle/ThemeToggle.jsx'
+import ThemeToggle from '../../common/theme-toggle/ThemeToggle.astro'
 
 // Images
 import logoLM from '../../../public/images/svg/logo-LM.svg'
@@ -36,7 +36,7 @@ const navigationItems = getNavigationItems()
       </div>
     </div>
     <div class='flex items-center space-x-4'>
-      <ThemeToggle client:only="react" />
+      <ThemeToggle />
     </div>
   </div>
 </nav>
