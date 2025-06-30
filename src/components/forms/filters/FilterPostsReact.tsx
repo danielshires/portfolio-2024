@@ -29,7 +29,7 @@ export default function FilterPostsReact({
     <div className="w-full">
       <nav className="flex flex-wrap gap-2 mt-12" aria-label="Post filters">
         <button
-          className={`px-4 py-1 rounded-full border text-sm font-mono uppercase transition-all duration-200 ${activeFilter === 'all' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}`}
+          className={`px-4 py-1 rounded-full border text-sm font-mono uppercase transition-all duration-200 ${activeFilter === 'all' ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900' : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700'}`}
           aria-pressed={activeFilter === 'all'}
           onClick={() => setActiveFilter('all')}
           type="button"
@@ -39,7 +39,7 @@ export default function FilterPostsReact({
         {categories.map((category) => (
           <button
             key={category}
-            className={`px-4 py-1 rounded-full border text-sm font-mono uppercase transition-all duration-200 ${activeFilter === category ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}`}
+            className={`px-4 py-1 rounded-full border text-sm font-mono uppercase transition-all duration-200 ${activeFilter === category ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900' : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700'}`}
             aria-pressed={activeFilter === category}
             onClick={() => setActiveFilter(category)}
             type="button"
@@ -50,7 +50,7 @@ export default function FilterPostsReact({
         {tags.map((tag) => (
           <button
             key={tag}
-            className={`px-4 py-1 rounded-full border text-sm font-normal transition-all duration-200 ${activeFilter === tag ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-900 border-zinc-200'}`}
+            className={`px-4 py-1 rounded-full border text-sm font-normal transition-all duration-200 ${activeFilter === tag ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900' : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700'}`}
             aria-pressed={activeFilter === tag}
             onClick={() => setActiveFilter(tag)}
             type="button"

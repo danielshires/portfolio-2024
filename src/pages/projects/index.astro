@@ -16,68 +16,64 @@ const projects = await getAllProjects()
     slot='head'
   />
 
-  <main class='min-h-screen'>
-    <!-- Hero Section -->
-    <SimpleHero
-      introText={{
-        first: 'Projects',
-        second:
-          'A collection of my design and development work, showcasing solutions to real-world problems.',
-      }}
-    />
+  <!-- Hero Section -->
+  <SimpleHero
+    introText={{
+      first: 'Projects',
+      second:
+        'A collection of my design and development work, showcasing solutions to real-world problems.',
+    }}
+  />
 
-    <!-- Projects Grid -->
-    <section class='py-16 md:py-24'>
-      <div class='mx-auto'>
-        {
-          projects.length > 0 ? (
-            <div class='grid grid-cols-1 md:grid-cols-3 gap-8 overflow-hidden'>
-              {projects.map((project) => {
-                // Prepare image props
-                let projectImage
-                if (project.heroImage) {
-                  projectImage = {
-                    src: urlFor(project.heroImage)
-                      .width(800)
-                      .height(533)
-                      .quality(85) // Standard quality for project thumbnails
-                      .auto('format')
-                      .fit('max')
-                      .url(),
-                    alt: project.title || 'Project image',
-                    width: 800,
-                    height: 533,
-                  }
-                } else {
-                  projectImage = {
-                    src: '',
-                    alt: 'No image',
-                    width: 800,
-                    height: 533,
-                  }
+  <!-- Projects Grid -->
+  <section class='my-16 md:my-24'>
+      {
+        projects.length > 0 ? (
+          <div class='grid grid-cols-1 md:grid-cols-3 gap-8 overflow-hidden'>
+            {projects.map((project) => {
+              // Prepare image props
+              let projectImage
+              if (project.heroImage) {
+                projectImage = {
+                  src: urlFor(project.heroImage)
+                    .width(800)
+                    .height(533)
+                    .quality(85) // Standard quality for project thumbnails
+                    .auto('format')
+                    .fit('max')
+                    .url(),
+                  alt: project.title || 'Project image',
+                  width: 800,
+                  height: 533,
                 }
-                return (
-                  <ProjectCard
-                    projectImage={projectImage}
-                    title={project.client || 'Project'}
-                    heading={project.subtitle}
-                    projectUrl={`/projects/${project.slug.current}`}
-                  />
-                )
-              })}
-            </div>
-          ) : (
-            <div class='text-center py-16'>
-              <Text variant='h3' class='mb-2'>
-                No projects yet
-              </Text>
-              <Text variant='body' color='muted'>
-                Check back soon for new content.
-              </Text>
-            </div>
-          )
-        }
-      </div>
-    </section>
-  </main>
+              } else {
+                projectImage = {
+                  src: '',
+                  alt: 'No image',
+                  width: 800,
+                  height: 533,
+                }
+              }
+              return (
+                <ProjectCard
+                  projectImage={projectImage}
+                  title={project.client || 'Project'}
+                  heading={project.subtitle || project.title}
+                  projectUrl={`/projects/${project.slug.current}`}
+                />
+              )
+            })}
+          </div>
+        ) : (
+          <div class='text-center py-16'>
+            <Text variant='h3' class='mb-2'>
+              No projects yet
+            </Text>
+            <Text variant='body' color='muted'>
+              Check back soon for new content.
+            </Text>
+          </div>
+        )
+      }
+  </section>
 </Layout>
