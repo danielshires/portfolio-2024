@@ -10,7 +10,7 @@ interface Props {
     height: number
   }
   title: string
-  heading: string
+  heading?: string
   description?: string
   projectUrl: string
 }
@@ -22,7 +22,7 @@ const { projectImage, title, heading, projectUrl } = Astro.props
   <ProjectImage
     src={projectImage.src}
     alt={projectImage.alt}
-    title={heading}
+    title={heading || title}
     projectUrl={projectUrl}
     width={projectImage.width}
     height={projectImage.height}
@@ -30,6 +30,6 @@ const { projectImage, title, heading, projectUrl } = Astro.props
   />
   <div class='pt-2'>
     <Text variant='h5' color='default' class='mt-4'>{title}</Text>
-    <Text variant='body' color='muted' class='mt-1'>{heading}</Text>
+    {heading && <Text variant='body' color='muted' class='mt-1'>{heading}</Text>}
   </div>
 </div>
