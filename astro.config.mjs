@@ -5,6 +5,7 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import icon from "astro-icon";
 import sanity from '@sanity/astro';
+import swup from '@swup/astro';
 
 // Sanity configuration
 const sanityConfig = {
@@ -24,7 +25,14 @@ export default defineConfig({
             include: ['**/*.jsx', '**/*.tsx', '**/*.js', '**/*.ts']
         }),
         icon(),
-        sanity(sanityConfig)
+        sanity(sanityConfig),
+        swup({
+            theme: 'fade',
+            containers: ['main'],
+            preload: true,
+            accessibility: true,
+            animationSelector: '[data-swup-transition]'
+        })
     ],
     image: {
         service: {

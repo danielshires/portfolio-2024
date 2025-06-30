@@ -86,7 +86,8 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     })()
   </script>
   <script is:inline>
-    document.addEventListener('astro:after-swap', () => {
+    // Function to apply theme
+    function applyTheme() {
       try {
         var theme = localStorage.getItem('theme')
         if (!theme) {
@@ -103,7 +104,14 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         document.documentElement.style.backgroundColor = color
         document.body.style.backgroundColor = color
       } catch (e) {}
-    })
+    }
+
+    // Apply theme on Astro transitions
+    document.addEventListener('astro:after-swap', applyTheme)
+    
+    // Apply theme on Swup transitions
+    document.addEventListener('swup:contentReplaced', applyTheme)
+    document.addEventListener('swup:pageView', applyTheme)
   </script>
 
   <!-- Performance Monitoring for SEO -->
@@ -138,7 +146,7 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased'>
     <LoadingBar />
     <Navigation />
-    <main class='container mx-auto px-8 lg:px-16'>
+    <main class='container mx-auto px-8 lg:px-16 transition-fade' data-swup-transition>
       <slot />
     </main>
   </body>
@@ -163,8 +171,21 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       border-color 0.2s ease-out;
   }
 
-  /* Subtle page entrance animation */
-  main {
+  /* Swup fade transition styling */
+  .transition-fade {
+    transition: opacity 0.3s ease-out;
+  }
+
+  html.is-leaving .transition-fade {
+    opacity: 0;
+  }
+
+  html.is-rendering .transition-fade {
+    opacity: 0;
+  }
+
+  /* Subtle page entrance animation - only for non-Swup navigation */
+  main:not([data-swup-transition]) {
     animation: gentleFadeIn 0.3s ease-out;
   }
 

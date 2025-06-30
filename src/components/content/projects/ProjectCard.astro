@@ -10,7 +10,7 @@ interface Props {
     height: number
   }
   title: string
-  heading: string
+  heading?: string
   description?: string
   projectUrl: string
 }
@@ -22,7 +22,7 @@ const { projectImage, title, heading, projectUrl } = Astro.props
   <ProjectImage
     src={projectImage.src}
     alt={projectImage.alt}
-    title={heading}
+    title={heading || title}
     projectUrl={projectUrl}
     width={projectImage.width}
     height={projectImage.height}
