@@ -60,7 +60,7 @@ const projects = await getAllProjects()
                   <ProjectCard
                     projectImage={projectImage}
                     title={project.client || 'Project'}
-                    heading={project.title}
+                    heading={project.subtitle}
                     projectUrl={`/projects/${project.slug.current}`}
                   />
                 )

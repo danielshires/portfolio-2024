@@ -27,7 +27,7 @@ const transformedProjects = projects.map((project) => ({
     height: 600,
   },
   title: project.client || project.tags?.[0] || 'Project',
-  heading: project.title,
+  heading: project.subtitle,
   description: project.subtitle || 'View project details',
   projectUrl: `/projects/${project.slug.current}`,
 }))
