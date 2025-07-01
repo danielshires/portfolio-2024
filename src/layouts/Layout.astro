@@ -363,29 +363,54 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         applyThemeComplete(currentTheme)
         
         // Use event delegation to handle all theme toggle clicks
-        document.removeEventListener('click', delegatedThemeToggleHandler)
-        document.addEventListener('click', delegatedThemeToggleHandler)
+        // Remove all existing listeners to prevent duplicates
+        document.removeEventListener('click', delegatedThemeToggleHandler, true)
+        document.removeEventListener('click', delegatedThemeToggleHandler, false)
+        
+        // Add event listener with capture phase for more reliable handling
+        document.addEventListener('click', delegatedThemeToggleHandler, true)
       }
       
       function delegatedThemeToggleHandler(event) {
-        if (event.target.closest('[data-theme-toggle]')) {
+        var themeButton = event.target.closest('[data-theme-toggle]')
+        if (themeButton) {
           event.preventDefault()
+          event.stopPropagation()
+          console.log('Theme toggle clicked') // Debug log
           handleThemeToggle()
         }
       }
       
-      // Initialize on page load
-      document.addEventListener('DOMContentLoaded', initializeGlobalThemeManager)
+      // Enhanced initialization with multiple trigger points
+      function ensureThemeManagerInitialized() {
+        initializeGlobalThemeManager()
+      }
       
-      // Re-initialize after Swup transitions
+      // Initialize on page load - multiple events for reliability
+      document.addEventListener('DOMContentLoaded', ensureThemeManagerInitialized)
+      window.addEventListener('load', ensureThemeManagerInitialized)
+      
+      // Re-initialize after Swup transitions with improved timing
       document.addEventListener('swup:contentReplaced', function() {
-        var currentTheme = localStorage.getItem('theme') || getInitialTheme()
-        applyThemeComplete(currentTheme)
+        setTimeout(function() {
+          var currentTheme = localStorage.getItem('theme') || getInitialTheme()
+          applyThemeComplete(currentTheme)
+          ensureThemeManagerInitialized()
+        }, 0)
       })
       
       document.addEventListener('swup:pageView', function() {
-        var currentTheme = localStorage.getItem('theme') || getInitialTheme()
-        applyThemeComplete(currentTheme)
+        setTimeout(function() {
+          var currentTheme = localStorage.getItem('theme') || getInitialTheme()
+          applyThemeComplete(currentTheme)
+          ensureThemeManagerInitialized()
+        }, 10)
+      })
+      
+      document.addEventListener('swup:transitionEnd', function() {
+        setTimeout(function() {
+          ensureThemeManagerInitialized()
+        }, 50)
       })
       
       // Listen for storage changes from other tabs
