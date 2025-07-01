@@ -21,8 +21,17 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
 
 <!doctype html>
 <html lang='en' class='text-base'>
+  <!-- Safari Mobile Status Bar and Navigation Colors -->
   <meta name='theme-color' content='#fafafa' media='(prefers-color-scheme: light)' />
   <meta name='theme-color' content='#09090b' media='(prefers-color-scheme: dark)' />
+  
+  <!-- iOS Safari Status Bar Style -->
+  <meta name='apple-mobile-web-app-status-bar-style' content='default' />
+  <meta name='apple-mobile-web-app-capable' content='yes' />
+  
+  <!-- Additional iOS Safari Integration -->
+  <meta name='apple-mobile-web-app-title' content='{pageTitle}' />
+  <meta name='format-detection' content='telephone=no' />
   <script is:inline>
     // ✅ SINGLE THEME INITIALIZATION - Prevent flash on initial load
     ;(function () {
@@ -264,6 +273,16 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         // This should remove bg-zinc-50 but something might be re-adding it
         document.documentElement.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
         document.body.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
+        
+        // 📱 Update Safari mobile theme-color for iOS status bar
+        var themeColorMeta = document.querySelector('meta[name="theme-color"]:not([media])')
+        if (!themeColorMeta) {
+          // Create a meta tag if it doesn't exist
+          themeColorMeta = document.createElement('meta')
+          themeColorMeta.name = 'theme-color'
+          document.head.appendChild(themeColorMeta)
+        }
+        themeColorMeta.content = theme === 'dark' ? '#09090b' : '#fafafa'
 
         // Update all theme toggle button icons
         var buttons = document.querySelectorAll('[data-theme-toggle]')
