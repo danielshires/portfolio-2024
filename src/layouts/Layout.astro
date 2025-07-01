@@ -298,126 +298,85 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       })
     }
     
-    // THEME TOGGLE MANAGEMENT - Comprehensive solution
-    if (!window.globalThemeManagerInitialized) {
-      window.globalThemeManagerInitialized = true
+    // SIMPLIFIED THEME TOGGLE - Approach 4: Isolated theme manager
+    if (!window.simpleThemeManagerInitialized) {
+      window.simpleThemeManagerInitialized = true
       
-      function getInitialTheme() {
-        if (typeof window === 'undefined') return 'light'
-        var stored = localStorage.getItem('theme')
-        if (stored) return stored
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      }
+      // Store current theme state
+      window.currentThemeState = localStorage.getItem('theme') || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
       
-      function applyThemeComplete(theme) {
-        if (typeof window === 'undefined') return
+      function applyThemeDirectly(theme) {
+        console.log('Applying theme:', theme) // Debug
         
-        // Update class on document element
+        // Save to localStorage first
+        localStorage.setItem('theme', theme)
+        window.currentThemeState = theme
+        
+        // Apply to document
         if (theme === 'dark') {
           document.documentElement.classList.add('dark')
         } else {
           document.documentElement.classList.remove('dark')
         }
         
-        // Update background colors immediately
+        // Update background immediately  
         var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
         document.documentElement.style.backgroundColor = color
         document.body.style.backgroundColor = color
         
-        // Save to localStorage
-        localStorage.setItem('theme', theme)
-        
-        // Update all theme toggle buttons on the page
-        updateAllThemeToggleButtons(theme)
-      }
-      
-      function updateAllThemeToggleButtons(theme) {
+        // Update all theme toggle button icons
         var buttons = document.querySelectorAll('[data-theme-toggle]')
         buttons.forEach(function(button) {
           var sunIcon = button.querySelector('[data-sun-icon]')
           var moonIcon = button.querySelector('[data-moon-icon]')
           
-          if (!sunIcon || !moonIcon) return
-          
-          if (theme === 'dark') {
-            sunIcon.classList.remove('hidden')
-            moonIcon.classList.add('hidden')
-            button.setAttribute('aria-label', 'Switch to light mode')
-          } else {
-            sunIcon.classList.add('hidden')
-            moonIcon.classList.remove('hidden')
-            button.setAttribute('aria-label', 'Switch to dark mode')
+          if (sunIcon && moonIcon) {
+            if (theme === 'dark') {
+              sunIcon.classList.remove('hidden')
+              moonIcon.classList.add('hidden')
+              button.setAttribute('aria-label', 'Switch to light mode')
+            } else {
+              sunIcon.classList.add('hidden')
+              moonIcon.classList.remove('hidden')
+              button.setAttribute('aria-label', 'Switch to dark mode')
+            }
           }
         })
       }
       
-      function handleThemeToggle() {
-        var currentTheme = localStorage.getItem('theme') || getInitialTheme()
-        var newTheme = currentTheme === 'dark' ? 'light' : 'dark'
-        applyThemeComplete(newTheme)
+      function toggleTheme() {
+        console.log('Toggle theme - current:', window.currentThemeState) // Debug
+        var newTheme = window.currentThemeState === 'dark' ? 'light' : 'dark'
+        applyThemeDirectly(newTheme)
       }
       
-      function initializeGlobalThemeManager() {
-        // Apply initial theme
-        var currentTheme = getInitialTheme()
-        applyThemeComplete(currentTheme)
-        
-        // Use event delegation to handle all theme toggle clicks
-        // Remove all existing listeners to prevent duplicates
-        document.removeEventListener('click', delegatedThemeToggleHandler, true)
-        document.removeEventListener('click', delegatedThemeToggleHandler, false)
-        
-        // Add event listener with capture phase for more reliable handling
-        document.addEventListener('click', delegatedThemeToggleHandler, true)
-      }
-      
-      function delegatedThemeToggleHandler(event) {
-        var themeButton = event.target.closest('[data-theme-toggle]')
-        if (themeButton) {
+      // Simple click handler using event delegation
+      document.addEventListener('click', function(event) {
+        var button = event.target.closest('[data-theme-toggle]')
+        if (button) {
           event.preventDefault()
           event.stopPropagation()
-          console.log('Theme toggle clicked') // Debug log
-          handleThemeToggle()
+          console.log('Theme button clicked!') // Debug
+          toggleTheme()
         }
-      }
-      
-      // Enhanced initialization with multiple trigger points
-      function ensureThemeManagerInitialized() {
-        initializeGlobalThemeManager()
-      }
-      
-      // Initialize on page load - multiple events for reliability
-      document.addEventListener('DOMContentLoaded', ensureThemeManagerInitialized)
-      window.addEventListener('load', ensureThemeManagerInitialized)
-      
-      // Re-initialize after Swup transitions with improved timing
-      document.addEventListener('swup:contentReplaced', function() {
-        setTimeout(function() {
-          var currentTheme = localStorage.getItem('theme') || getInitialTheme()
-          applyThemeComplete(currentTheme)
-          ensureThemeManagerInitialized()
-        }, 0)
       })
       
+      // Apply initial theme
+      applyThemeDirectly(window.currentThemeState)
+      
+      // Reapply theme after Swup transitions
       document.addEventListener('swup:pageView', function() {
         setTimeout(function() {
-          var currentTheme = localStorage.getItem('theme') || getInitialTheme()
-          applyThemeComplete(currentTheme)
-          ensureThemeManagerInitialized()
-        }, 10)
-      })
-      
-      document.addEventListener('swup:transitionEnd', function() {
-        setTimeout(function() {
-          ensureThemeManagerInitialized()
+          applyThemeDirectly(window.currentThemeState)
         }, 50)
       })
       
-      // Listen for storage changes from other tabs
+      // Handle storage changes from other tabs
       window.addEventListener('storage', function(e) {
-        if (e.key === 'theme') {
-          var newTheme = e.newValue || getInitialTheme()
-          applyThemeComplete(newTheme)
+        if (e.key === 'theme' && e.newValue) {
+          window.currentThemeState = e.newValue
+          applyThemeDirectly(e.newValue)
         }
       })
     }
