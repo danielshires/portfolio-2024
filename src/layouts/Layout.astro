@@ -23,99 +23,38 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
 <html lang='en' class='text-base'>
   <meta name='theme-color' content='#fafafa' media='(prefers-color-scheme: light)' />
   <meta name='theme-color' content='#09090b' media='(prefers-color-scheme: dark)' />
-  <style is:inline>
-    html,
-    body {
-      background-color: rgb(250, 250, 250) !important;
-    }
-    @media (prefers-color-scheme: dark) {
-      html,
-      body {
-        background-color: rgb(9, 9, 11) !important;
-      }
-    }
-  </style>
   <script is:inline>
-    // Set background color immediately to prevent flashing
+    // ✅ SINGLE THEME INITIALIZATION - Prevent flash on initial load
     ;(function () {
       try {
         var theme = localStorage.getItem('theme')
         if (!theme) {
           theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
         }
+        // Apply theme immediately
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+        // Set background immediately to prevent flash
         var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
         document.documentElement.style.backgroundColor = color
         document.body.style.backgroundColor = color
       } catch (e) {}
     })()
   </script>
-  <script>
-    ;(function () {
-      try {
-        var theme = localStorage.getItem('theme')
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-        }
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
-      } catch (e) {}
-    })()
-  </script>
   <script is:inline>
-    ;(function () {
-      try {
-        var theme = localStorage.getItem('theme')
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-        }
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
-
-        // Set background color immediately to prevent flashing
-        var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
-        var style = document.createElement('style')
-        style.innerHTML = 'html,body{background:' + color + ' !important;}'
-        document.head.appendChild(style)
-      } catch (e) {}
-    })()
-  </script>
-  <script is:inline>
-    // Function to apply theme
-    function applyTheme() {
-      try {
-        var theme = localStorage.getItem('theme')
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-        }
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
-
-        // Immediately set background color after view transition
-        var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
-        document.documentElement.style.backgroundColor = color
-        document.body.style.backgroundColor = color
-      } catch (e) {}
-    }
-
     // Prevent flash on initial page load - use window property to avoid conflicts
     if (!window.swupInitialized) {
       window.swupInitialized = true
-      
+
       // Suppress Swup syntax errors while keeping functionality
       var originalConsoleError = console.error
       console.error = function() {
         var message = arguments[0]
-        if (typeof message === 'string' && 
-            (message.indexOf('Unexpected token') !== -1 || 
+        if (typeof message === 'string' &&
+            (message.indexOf('Unexpected token') !== -1 ||
              message.indexOf('SyntaxError') !== -1 ||
              message.indexOf('runScript') !== -1)) {
           // Suppress Swup-related syntax errors
@@ -123,12 +62,12 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         }
         originalConsoleError.apply(console, arguments)
       }
-      
+
       // Mark when Swup is enabled to prevent initial flash
       document.addEventListener('swup:enable', function() {
         document.documentElement.setAttribute('data-swup-enabled', 'true')
       })
-      
+
       // Mark initial load as complete after page is fully loaded
       window.addEventListener('load', function() {
         setTimeout(() => {
@@ -136,20 +75,13 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         }, 100)
       })
     }
-    
-    // Apply theme on Astro transitions
-    document.addEventListener('astro:after-swap', applyTheme)
-    
-    // Apply theme on Swup transitions
-    document.addEventListener('swup:contentReplaced', applyTheme)
-    document.addEventListener('swup:pageView', applyTheme)
-    
+
     // Global script reinitialization for Swup transitions
     document.addEventListener('swup:contentReplaced', function() {
       // Dispatch custom event for components to reinitialize
       document.dispatchEvent(new CustomEvent('swup:reinitialize'))
     })
-    
+
     // Only remove focus after transitions complete to avoid disrupting animations
     document.addEventListener('swup:transitionEnd', function() {
       const mainElement = document.querySelector('main.transition-fade')
@@ -160,17 +92,17 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         mainElement.style.border = 'none'
       }
     })
-    
+
     // Chrome-specific fix: Prevent focus entirely on both body and main
     if (!window.chromeFocusFixInitialized) {
       window.chromeFocusFixInitialized = true
-      
+
       const chromeUserAgent = /Chrome/.test(navigator.userAgent)
       if (chromeUserAgent) {
         function removeFocusStyles() {
           const bodyElement = document.body
           const mainElement = document.querySelector('main.transition-fade')
-          
+
           // Remove focus from body
           if (bodyElement) {
             bodyElement.style.setProperty('outline', 'none', 'important')
@@ -180,7 +112,7 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
             bodyElement.style.setProperty('box-shadow', 'none', 'important')
             bodyElement.blur()
           }
-          
+
           // Remove focus from main
           if (mainElement) {
             mainElement.style.setProperty('outline', 'none', 'important')
@@ -190,76 +122,76 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
             mainElement.blur()
           }
         }
-        
+
         // Only apply focus removal after transitions complete, not during
         document.addEventListener('swup:transitionEnd', function() {
           setTimeout(removeFocusStyles, 100)
         })
       }
     }
-    
+
     // Enhanced Navigation Active State Handler - Approach 2
     if (!window.navigationHandlerInitialized) {
       window.navigationHandlerInitialized = true
-      
+
       function updateNavigationActiveState() {
         const currentPath = window.location.pathname.slice(1)
         const navLinks = document.querySelectorAll('[data-nav-path]')
-        
+
         if (navLinks.length === 0) {
           return false
         }
-        
+
         navLinks.forEach((link) => {
           const path = link.getAttribute('data-nav-path')
-          const isActive = path === '' 
-            ? currentPath === '' 
+          const isActive = path === ''
+            ? currentPath === ''
             : currentPath.startsWith(path) && path !== ''
-          
+
           const baseClasses = 'text-zinc-900 dark:text-zinc-100 underline-offset-8'
           const activeClasses = `underline ${baseClasses}`
           const inactiveClasses = `no-underline hover:underline ${baseClasses}`
-          
+
           link.className = isActive ? activeClasses : inactiveClasses
         })
-        
+
         return true
       }
-      
+
       // Enhanced timing for navigation updates
       function scheduleNavigationUpdate() {
         // Try immediate update
         if (updateNavigationActiveState()) {
           return
         }
-        
+
         // Fallback: try after short delay
         setTimeout(() => {
           if (updateNavigationActiveState()) {
             return
           }
-          
+
           // Final fallback: try after longer delay
           setTimeout(() => {
             updateNavigationActiveState()
           }, 100)
         }, 10)
       }
-      
+
       // Update navigation on initial load
       document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => updateNavigationActiveState(), 0)
       })
-      
+
       // Enhanced Swup event handling with multiple timing strategies
       document.addEventListener('swup:animationOutDone', scheduleNavigationUpdate)
       document.addEventListener('swup:contentReplaced', scheduleNavigationUpdate)
       document.addEventListener('swup:pageView', scheduleNavigationUpdate)
       document.addEventListener('swup:transitionEnd', scheduleNavigationUpdate)
-      
+
       // Browser navigation
       window.addEventListener('popstate', scheduleNavigationUpdate)
-      
+
       // Fallback: also try on URL changes
       let lastUrl = window.location.href
       setInterval(() => {
@@ -270,13 +202,12 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       }, 100)
     }
   </script>
-
   <!-- Performance Monitoring for SEO -->
   <script is:inline>
     // Monitor Core Web Vitals for SEO - with Swup-safe execution
     if (!window.webVitalsInitialized && 'web-vital' in window) {
       window.webVitalsInitialized = true
-      
+
       import('web-vitals').then(function(webVitals) {
         // Core Web Vitals monitoring (silent)
         webVitals.getCLS(function() {})
@@ -290,47 +221,56 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     // Track page load performance - with Swup-safe execution (silent)
     if (!window.performanceTrackingInitialized) {
       window.performanceTrackingInitialized = true
-      
+
       window.addEventListener('load', function() {
         // Performance tracking runs silently
         var navigation = performance.getEntriesByType('navigation')[0]
         // Metrics collected but not logged to console
       })
     }
-    
-    // SIMPLIFIED THEME TOGGLE - Approach 4: Isolated theme manager
+
+    // ✅ CURRENT WORKING THEME SYSTEM - Approach 4: Isolated theme manager
     if (!window.simpleThemeManagerInitialized) {
       window.simpleThemeManagerInitialized = true
-      
+
       // Store current theme state
-      window.currentThemeState = localStorage.getItem('theme') || 
+      window.currentThemeState = localStorage.getItem('theme') ||
         (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-      
+
       function applyThemeDirectly(theme) {
-        console.log('Applying theme:', theme) // Debug
-        
+
         // Save to localStorage first
         localStorage.setItem('theme', theme)
         window.currentThemeState = theme
-        
+
         // Apply to document
         if (theme === 'dark') {
           document.documentElement.classList.add('dark')
         } else {
           document.documentElement.classList.remove('dark')
         }
-        
-        // Update background immediately  
-        var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
-        document.documentElement.style.backgroundColor = color
-        document.body.style.backgroundColor = color
-        
+
+        // Update CSS custom properties for background
+        var bgColor = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
+        var textColor = theme === 'dark' ? 'rgb(250, 250, 250)' : 'rgb(9, 9, 11)'
+        document.documentElement.style.setProperty('--background-color', bgColor)
+        document.documentElement.style.setProperty('--text-color', textColor)
+
+        // Also set inline styles as fallback to ensure background changes immediately
+        document.documentElement.style.backgroundColor = bgColor
+        document.body.style.backgroundColor = bgColor
+
+        // 🚨 CRITICAL: Remove any conflicting Tailwind background classes from both html and body
+        // This should remove bg-zinc-50 but something might be re-adding it
+        document.documentElement.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
+        document.body.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
+
         // Update all theme toggle button icons
         var buttons = document.querySelectorAll('[data-theme-toggle]')
         buttons.forEach(function(button) {
           var sunIcon = button.querySelector('[data-sun-icon]')
           var moonIcon = button.querySelector('[data-moon-icon]')
-          
+
           if (sunIcon && moonIcon) {
             if (theme === 'dark') {
               sunIcon.classList.remove('hidden')
@@ -344,34 +284,38 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
           }
         })
       }
-      
+
       function toggleTheme() {
-        console.log('Toggle theme - current:', window.currentThemeState) // Debug
         var newTheme = window.currentThemeState === 'dark' ? 'light' : 'dark'
         applyThemeDirectly(newTheme)
       }
-      
+
       // Simple click handler using event delegation
       document.addEventListener('click', function(event) {
         var button = event.target.closest('[data-theme-toggle]')
         if (button) {
           event.preventDefault()
           event.stopPropagation()
-          console.log('Theme button clicked!') // Debug
           toggleTheme()
         }
       })
-      
+
       // Apply initial theme
       applyThemeDirectly(window.currentThemeState)
-      
-      // Reapply theme after Swup transitions
-      document.addEventListener('swup:pageView', function() {
-        setTimeout(function() {
-          applyThemeDirectly(window.currentThemeState)
-        }, 50)
+
+      // Reapply theme after Swup transitions - multiple events for reliability
+      document.addEventListener('swup:contentReplaced', function() {
+        applyThemeDirectly(window.currentThemeState)
       })
-      
+
+      document.addEventListener('swup:pageView', function() {
+        applyThemeDirectly(window.currentThemeState)
+      })
+
+      document.addEventListener('swup:transitionEnd', function() {
+        applyThemeDirectly(window.currentThemeState)
+      })
+
       // Handle storage changes from other tabs
       window.addEventListener('storage', function(e) {
         if (e.key === 'theme' && e.newValue) {
@@ -381,11 +325,10 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       })
     }
   </script>
-
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
   <SEO title={pageTitle} description={pageDescription} image={pageImage} type={pageType} />
   <body
-    class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased'
+    class='text-text-light dark:text-text-dark antialiased'
     tabindex="-1">
     <LoadingBar />
     <Navigation />
@@ -397,12 +340,8 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
 
 <style is:global>
   /* Ensure consistent background during transitions */
-  html {
-    background-color: var(--background-color) !important;
-  }
 
   body {
-    background-color: var(--background-color) !important;
     transition: background-color 0.2s ease-out;
   }
 
@@ -496,7 +435,7 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       outline-style: none !important;
       outline-width: 0 !important;
     }
-    
+
     body:focus, main.transition-fade:focus {
       outline: none !important;
       outline-offset: 0 !important;
