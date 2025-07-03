@@ -31,7 +31,9 @@ export default defineConfig({
             containers: ['main'],
             preload: true,
             accessibility: true,
-            animationSelector: '.transition-fade'
+            animationSelector: '.transition-fade',
+            scrollToTop: true, // Re-enable Swup's built-in scroll management
+            scrollBehavior: 'auto'
         })
     ],
     image: {
