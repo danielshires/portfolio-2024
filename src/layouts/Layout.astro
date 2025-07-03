@@ -21,101 +21,49 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
 
 <!doctype html>
 <html lang='en' class='text-base'>
+  <!-- Safari Mobile Status Bar and Navigation Colors -->
   <meta name='theme-color' content='#fafafa' media='(prefers-color-scheme: light)' />
   <meta name='theme-color' content='#09090b' media='(prefers-color-scheme: dark)' />
-  <style is:inline>
-    html,
-    body {
-      background-color: rgb(250, 250, 250) !important;
-    }
-    @media (prefers-color-scheme: dark) {
-      html,
-      body {
-        background-color: rgb(9, 9, 11) !important;
-      }
-    }
-  </style>
+  
+  <!-- iOS Safari Status Bar Style -->
+  <meta name='apple-mobile-web-app-status-bar-style' content='default' />
+  <meta name='apple-mobile-web-app-capable' content='yes' />
+  
+  <!-- Additional iOS Safari Integration -->
+  <meta name='apple-mobile-web-app-title' content='{pageTitle}' />
+  <meta name='format-detection' content='telephone=no' />
   <script is:inline>
-    // Set background color immediately to prevent flashing
+    // ✅ SINGLE THEME INITIALIZATION - Prevent flash on initial load
     ;(function () {
       try {
         var theme = localStorage.getItem('theme')
         if (!theme) {
           theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
         }
+        // Apply theme immediately
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+        // Set background immediately to prevent flash
         var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
         document.documentElement.style.backgroundColor = color
         document.body.style.backgroundColor = color
       } catch (e) {}
     })()
   </script>
-  <script>
-    ;(function () {
-      try {
-        var theme = localStorage.getItem('theme')
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-        }
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
-      } catch (e) {}
-    })()
-  </script>
   <script is:inline>
-    ;(function () {
-      try {
-        var theme = localStorage.getItem('theme')
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-        }
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
-
-        // Set background color immediately to prevent flashing
-        var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
-        var style = document.createElement('style')
-        style.innerHTML = 'html,body{background:' + color + ' !important;}'
-        document.head.appendChild(style)
-      } catch (e) {}
-    })()
-  </script>
-  <script is:inline>
-    // Function to apply theme
-    function applyTheme() {
-      try {
-        var theme = localStorage.getItem('theme')
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-        }
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-        }
-
-        // Immediately set background color after view transition
-        var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
-        document.documentElement.style.backgroundColor = color
-        document.body.style.backgroundColor = color
-      } catch (e) {}
-    }
-
     // Prevent flash on initial page load - use window property to avoid conflicts
     if (!window.swupInitialized) {
       window.swupInitialized = true
-      
+
       // Suppress Swup syntax errors while keeping functionality
       var originalConsoleError = console.error
       console.error = function() {
         var message = arguments[0]
-        if (typeof message === 'string' && 
-            (message.indexOf('Unexpected token') !== -1 || 
+        if (typeof message === 'string' &&
+            (message.indexOf('Unexpected token') !== -1 ||
              message.indexOf('SyntaxError') !== -1 ||
              message.indexOf('runScript') !== -1)) {
           // Suppress Swup-related syntax errors
@@ -123,12 +71,12 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         }
         originalConsoleError.apply(console, arguments)
       }
-      
+
       // Mark when Swup is enabled to prevent initial flash
       document.addEventListener('swup:enable', function() {
         document.documentElement.setAttribute('data-swup-enabled', 'true')
       })
-      
+
       // Mark initial load as complete after page is fully loaded
       window.addEventListener('load', function() {
         setTimeout(() => {
@@ -136,20 +84,13 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         }, 100)
       })
     }
-    
-    // Apply theme on Astro transitions
-    document.addEventListener('astro:after-swap', applyTheme)
-    
-    // Apply theme on Swup transitions
-    document.addEventListener('swup:contentReplaced', applyTheme)
-    document.addEventListener('swup:pageView', applyTheme)
-    
+
     // Global script reinitialization for Swup transitions
     document.addEventListener('swup:contentReplaced', function() {
       // Dispatch custom event for components to reinitialize
       document.dispatchEvent(new CustomEvent('swup:reinitialize'))
     })
-    
+
     // Only remove focus after transitions complete to avoid disrupting animations
     document.addEventListener('swup:transitionEnd', function() {
       const mainElement = document.querySelector('main.transition-fade')
@@ -160,17 +101,17 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         mainElement.style.border = 'none'
       }
     })
-    
+
     // Chrome-specific fix: Prevent focus entirely on both body and main
     if (!window.chromeFocusFixInitialized) {
       window.chromeFocusFixInitialized = true
-      
+
       const chromeUserAgent = /Chrome/.test(navigator.userAgent)
       if (chromeUserAgent) {
         function removeFocusStyles() {
           const bodyElement = document.body
           const mainElement = document.querySelector('main.transition-fade')
-          
+
           // Remove focus from body
           if (bodyElement) {
             bodyElement.style.setProperty('outline', 'none', 'important')
@@ -180,7 +121,7 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
             bodyElement.style.setProperty('box-shadow', 'none', 'important')
             bodyElement.blur()
           }
-          
+
           // Remove focus from main
           if (mainElement) {
             mainElement.style.setProperty('outline', 'none', 'important')
@@ -190,76 +131,76 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
             mainElement.blur()
           }
         }
-        
+
         // Only apply focus removal after transitions complete, not during
         document.addEventListener('swup:transitionEnd', function() {
           setTimeout(removeFocusStyles, 100)
         })
       }
     }
-    
+
     // Enhanced Navigation Active State Handler - Approach 2
     if (!window.navigationHandlerInitialized) {
       window.navigationHandlerInitialized = true
-      
+
       function updateNavigationActiveState() {
         const currentPath = window.location.pathname.slice(1)
         const navLinks = document.querySelectorAll('[data-nav-path]')
-        
+
         if (navLinks.length === 0) {
           return false
         }
-        
+
         navLinks.forEach((link) => {
           const path = link.getAttribute('data-nav-path')
-          const isActive = path === '' 
-            ? currentPath === '' 
+          const isActive = path === ''
+            ? currentPath === ''
             : currentPath.startsWith(path) && path !== ''
-          
+
           const baseClasses = 'text-zinc-900 dark:text-zinc-100 underline-offset-8'
           const activeClasses = `underline ${baseClasses}`
           const inactiveClasses = `no-underline hover:underline ${baseClasses}`
-          
+
           link.className = isActive ? activeClasses : inactiveClasses
         })
-        
+
         return true
       }
-      
+
       // Enhanced timing for navigation updates
       function scheduleNavigationUpdate() {
         // Try immediate update
         if (updateNavigationActiveState()) {
           return
         }
-        
+
         // Fallback: try after short delay
         setTimeout(() => {
           if (updateNavigationActiveState()) {
             return
           }
-          
+
           // Final fallback: try after longer delay
           setTimeout(() => {
             updateNavigationActiveState()
           }, 100)
         }, 10)
       }
-      
+
       // Update navigation on initial load
       document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => updateNavigationActiveState(), 0)
       })
-      
+
       // Enhanced Swup event handling with multiple timing strategies
       document.addEventListener('swup:animationOutDone', scheduleNavigationUpdate)
       document.addEventListener('swup:contentReplaced', scheduleNavigationUpdate)
       document.addEventListener('swup:pageView', scheduleNavigationUpdate)
       document.addEventListener('swup:transitionEnd', scheduleNavigationUpdate)
-      
+
       // Browser navigation
       window.addEventListener('popstate', scheduleNavigationUpdate)
-      
+
       // Fallback: also try on URL changes
       let lastUrl = window.location.href
       setInterval(() => {
@@ -270,13 +211,12 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       }, 100)
     }
   </script>
-
   <!-- Performance Monitoring for SEO -->
   <script is:inline>
     // Monitor Core Web Vitals for SEO - with Swup-safe execution
     if (!window.webVitalsInitialized && 'web-vital' in window) {
       window.webVitalsInitialized = true
-      
+
       import('web-vitals').then(function(webVitals) {
         // Core Web Vitals monitoring (silent)
         webVitals.getCLS(function() {})
@@ -290,19 +230,153 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     // Track page load performance - with Swup-safe execution (silent)
     if (!window.performanceTrackingInitialized) {
       window.performanceTrackingInitialized = true
-      
+
       window.addEventListener('load', function() {
         // Performance tracking runs silently
         var navigation = performance.getEntriesByType('navigation')[0]
         // Metrics collected but not logged to console
       })
     }
-  </script>
 
+    // ✅ CURRENT WORKING THEME SYSTEM - Approach 4: Isolated theme manager
+    if (!window.simpleThemeManagerInitialized) {
+      window.simpleThemeManagerInitialized = true
+
+      // Store current theme state
+      window.currentThemeState = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+
+      function applyThemeDirectly(theme) {
+
+        // Save to localStorage first
+        localStorage.setItem('theme', theme)
+        window.currentThemeState = theme
+
+        // Apply to document
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+
+        // Update CSS custom properties for background
+        var bgColor = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
+        var textColor = theme === 'dark' ? 'rgb(250, 250, 250)' : 'rgb(9, 9, 11)'
+        document.documentElement.style.setProperty('--background-color', bgColor)
+        document.documentElement.style.setProperty('--text-color', textColor)
+
+        // Also set inline styles as fallback to ensure background changes immediately
+        document.documentElement.style.backgroundColor = bgColor
+        document.body.style.backgroundColor = bgColor
+
+        // 🚨 CRITICAL: Remove any conflicting Tailwind background classes from both html and body
+        // This should remove bg-zinc-50 but something might be re-adding it
+        document.documentElement.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
+        document.body.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
+        
+        // 📱 Update Safari mobile theme-color for iOS status bar
+        var themeColorMeta = document.querySelector('meta[name="theme-color"]:not([media])')
+        if (!themeColorMeta) {
+          // Create a meta tag if it doesn't exist
+          themeColorMeta = document.createElement('meta')
+          themeColorMeta.name = 'theme-color'
+          document.head.appendChild(themeColorMeta)
+        }
+        themeColorMeta.content = theme === 'dark' ? '#09090b' : '#fafafa'
+
+        // Update all theme toggle button icons
+        var buttons = document.querySelectorAll('[data-theme-toggle]')
+        buttons.forEach(function(button) {
+          var sunIcon = button.querySelector('[data-sun-icon]')
+          var moonIcon = button.querySelector('[data-moon-icon]')
+
+          if (sunIcon && moonIcon) {
+            if (theme === 'dark') {
+              sunIcon.classList.remove('hidden')
+              moonIcon.classList.add('hidden')
+              button.setAttribute('aria-label', 'Switch to light mode')
+            } else {
+              sunIcon.classList.add('hidden')
+              moonIcon.classList.remove('hidden')
+              button.setAttribute('aria-label', 'Switch to dark mode')
+            }
+          }
+        })
+      }
+
+      function toggleTheme() {
+        var newTheme = window.currentThemeState === 'dark' ? 'light' : 'dark'
+        applyThemeDirectly(newTheme)
+      }
+
+      // Simple click handler using event delegation
+      document.addEventListener('click', function(event) {
+        var button = event.target.closest('[data-theme-toggle]')
+        if (button) {
+          event.preventDefault()
+          event.stopPropagation()
+          toggleTheme()
+        }
+      })
+
+      // Apply initial theme
+      applyThemeDirectly(window.currentThemeState)
+
+      // Reapply theme after Swup transitions - multiple events for reliability
+      document.addEventListener('swup:contentReplaced', function() {
+        applyThemeDirectly(window.currentThemeState)
+      })
+
+      document.addEventListener('swup:pageView', function() {
+        applyThemeDirectly(window.currentThemeState)
+      })
+
+      document.addEventListener('swup:transitionEnd', function() {
+        applyThemeDirectly(window.currentThemeState)
+      })
+
+      // Handle storage changes from other tabs
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'theme' && e.newValue) {
+          window.currentThemeState = e.newValue
+          applyThemeDirectly(e.newValue)
+        }
+      })
+    }
+    
+    // ✨ ELEMENT ANIMATION SYSTEM - Re-trigger animations after Swup page transitions
+    if (!window.elementAnimationsInitialized) {
+      window.elementAnimationsInitialized = true
+      
+      function triggerElementAnimations() {
+        // Reset all animations first
+        var animatedElements = document.querySelectorAll('[class*="animate-"]')
+        animatedElements.forEach(function(element) {
+          element.style.animation = 'none'
+          element.offsetHeight // Force reflow
+          element.style.animation = null
+        })
+      }
+      
+      // Trigger animations after Swup page changes
+      document.addEventListener('swup:contentReplaced', function() {
+        setTimeout(triggerElementAnimations, 50) // Small delay to ensure content is ready
+      })
+      
+      document.addEventListener('swup:pageView', function() {
+        setTimeout(triggerElementAnimations, 50)
+      })
+      
+      // Also trigger on initial page load
+      document.addEventListener('DOMContentLoaded', triggerElementAnimations)
+      window.addEventListener('load', triggerElementAnimations)
+    }
+    
+  </script>
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
   <SEO title={pageTitle} description={pageDescription} image={pageImage} type={pageType} />
   <body
-    class='bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark antialiased'
+    class='text-text-light dark:text-text-dark antialiased'
     tabindex="-1">
     <LoadingBar />
     <Navigation />
@@ -314,12 +388,8 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
 
 <style is:global>
   /* Ensure consistent background during transitions */
-  html {
-    background-color: var(--background-color) !important;
-  }
 
   body {
-    background-color: var(--background-color) !important;
     transition: background-color 0.2s ease-out;
   }
 
@@ -331,17 +401,23 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       border-color 0.2s ease-out;
   }
 
-  /* Swup fade transition styling - only when Swup is active */
+  /* Swup slide + fade transition styling - only when Swup is active */
   html[data-swup-enabled] .transition-fade {
-    transition: opacity 0.3s ease-out;
+    transition:
+      opacity 0.3s ease-out,
+      transform 0.3s ease-out;
   }
 
+  /* Page leaving animation - slide up and fade out */
   html.is-leaving .transition-fade {
     opacity: 0;
+    transform: translateY(-20px);
   }
 
+  /* Page entering animation - slide down and fade in */
   html.is-rendering .transition-fade {
     opacity: 0;
+    transform: translateY(20px);
   }
 
   /* Prevent flash on initial load */
@@ -413,7 +489,7 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       outline-style: none !important;
       outline-width: 0 !important;
     }
-    
+
     body:focus, main.transition-fade:focus {
       outline: none !important;
       outline-offset: 0 !important;
@@ -441,17 +517,122 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
 
   /* Subtle page entrance animation - only for non-Swup navigation and not initial load */
   html[data-initial-load-complete]:not([data-swup-enabled]) main {
-    animation: gentleFadeIn 0.3s ease-out;
+    animation: gentleFadeIn 0.02s ease-out;
   }
 
   @keyframes gentleFadeIn {
     from {
       opacity: 0;
-      transform: translateY(3px);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
       transform: translateY(0);
     }
+  }
+
+  /* ✨ STAGGERED ELEMENT ANIMATIONS - Add these classes to any element */
+  
+  /* Fade in elements with different delays after page loads */
+  .animate-fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: elementFadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in-delay-1 {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: elementFadeIn 0.6s ease-out 0.1s forwards;
+  }
+
+  .animate-fade-in-delay-2 {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: elementFadeIn 0.6s ease-out 0.2s forwards;
+  }
+
+  .animate-fade-in-delay-3 {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: elementFadeIn 0.6s ease-out 0.3s forwards;
+  }
+
+  .animate-fade-in-delay-4 {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: elementFadeIn 0.6s ease-out 0.4s forwards;
+  }
+
+  /* Different animation styles */
+  .animate-slide-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: slideInLeft 0.7s ease-out 0.2s forwards;
+  }
+
+  .animate-slide-right {
+    opacity: 0;
+    transform: translateX(50px);
+    animation: slideInRight 0.7s ease-out 0.2s forwards;
+  }
+
+  .animate-scale-in {
+    opacity: 0;
+    transform: scale(0.8);
+    animation: scaleIn 0.5s ease-out 0.3s forwards;
+  }
+
+  /* Keyframe definitions */
+  @keyframes elementFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Re-trigger animations after Swup page transitions */
+  html[data-swup-enabled] .animate-fade-in,
+  html[data-swup-enabled] .animate-fade-in-delay-1,
+  html[data-swup-enabled] .animate-fade-in-delay-2,
+  html[data-swup-enabled] .animate-fade-in-delay-3,
+  html[data-swup-enabled] .animate-fade-in-delay-4,
+  html[data-swup-enabled] .animate-slide-left,
+  html[data-swup-enabled] .animate-slide-right,
+  html[data-swup-enabled] .animate-scale-in {
+    animation-play-state: paused;
+  }
+
+  /* Trigger animations when new page loads */
+  html[data-swup-enabled].is-animating .animate-fade-in,
+  html[data-swup-enabled].is-animating .animate-fade-in-delay-1,
+  html[data-swup-enabled].is-animating .animate-fade-in-delay-2,
+  html[data-swup-enabled].is-animating .animate-fade-in-delay-3,
+  html[data-swup-enabled].is-animating .animate-fade-in-delay-4,
+  html[data-swup-enabled].is-animating .animate-slide-left,
+  html[data-swup-enabled].is-animating .animate-slide-right,
+  html[data-swup-enabled].is-animating .animate-scale-in {
+    animation-play-state: running;
   }
 </style>
