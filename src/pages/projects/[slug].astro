@@ -7,6 +7,7 @@ import ProjectProblem from '../../components/content/projects/ProjectProblem.ast
 import RelatedProjects from '../../components/content/projects/RelatedProjects.astro'
 import SEO from '../../components/common/SEO.astro'
 import Text from '../../components/ui/text/Text.astro'
+import ContactCTA from '../../components/ui/buttons/ContactCTA.astro'
 
 // Generate static paths for all projects
 export async function getStaticPaths() {
@@ -117,6 +118,25 @@ const seoImage = fullProject.heroImage
       </section>
     )
   }
+
+  <!-- Project Contact CTA Section -->
+  <section class='py-16 border-t border-zinc-200/20 dark:border-zinc-800/20'>
+    <div class='container mx-auto px-4 lg:px-2'>
+      <div class='text-center space-y-6'>
+        <Text variant='h3' color='default' class='max-w-2xl mx-auto'>
+          Enjoyed this project? I'd love to hear from you.
+        </Text>
+        <ContactCTA 
+          variant='primary' 
+          size='lg' 
+          subject={`Re:%20${encodeURIComponent(fullProject.title)}`}
+          className='animate-fade-in-delay-1'
+        >
+          Get in touch →
+        </ContactCTA>
+      </div>
+    </div>
+  </section>
 
   <!-- Navigation Back to Projects -->
   <section class='py-16'>
