@@ -32,7 +32,7 @@ const normalizedOutcomes = Array.isArray(outcomes)
       >
         <!-- Outcome Text -->
         <div class="space-y-2">
-          <Text variant="h3" weight="bold">{outcome.statistic}</Text>
+          <Text variant="h3" weight="bold" class="font-mono">{outcome.statistic}</Text>
           {outcome.description && (
             <Text variant="body" weight="medium">{outcome.description}</Text>
           )}

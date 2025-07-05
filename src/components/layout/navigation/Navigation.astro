@@ -2,6 +2,7 @@
 // Components
 import NavLink from '../../ui/buttons/NavLink.astro'
 import ContactCTA from '../../ui/buttons/ContactCTA.tsx'
+import ThemeToggle from '../../ui/buttons/ThemeToggle.tsx'
 import { getNavigationItems } from '../../../config/features'
 
 // Javascript
@@ -32,7 +33,7 @@ const navigationItems = getNavigationItems()
         </div>
       </div>
       <!-- Right side: Contact CTA and Theme Toggle -->
-      <div class='flex items-center gap-6'>
+      <div class='flex items-center gap-2 md:gap-4'>
         <!-- Contact CTA -->
         <ContactCTA
           variant='primary'
@@ -44,28 +45,7 @@ const navigationItems = getNavigationItems()
           Get in touch
         </ContactCTA>
         <!-- Theme Toggle Button -->
-        <button
-          data-theme-toggle
-          class="group p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-101 hover:rotate-6 active:scale-95 transform-gpu"
-          aria-label="Toggle theme"
-        >
-          <!-- Sun Icon -->
-          <svg data-sun-icon width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-700 dark:text-gray-300 hidden dark:block transition-transform duration-300 group-hover:rotate-45 group-hover:scale-101">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <!-- Moon Icon -->
-          <svg data-moon-icon width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-700 dark:text-gray-300 block dark:hidden transition-transform duration-300 group-hover:rotate-12 group-hover:scale-105">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
+        <ThemeToggle client:load />
       </div>
     </div>
   </div>

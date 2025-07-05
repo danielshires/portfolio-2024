@@ -25,11 +25,11 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
   <!-- Safari Mobile Status Bar and Navigation Colors -->
   <meta name='theme-color' content='#fafafa' media='(prefers-color-scheme: light)' />
   <meta name='theme-color' content='#09090b' media='(prefers-color-scheme: dark)' />
-  
+
   <!-- iOS Safari Status Bar Style -->
   <meta name='apple-mobile-web-app-status-bar-style' content='default' />
   <meta name='apple-mobile-web-app-capable' content='yes' />
-  
+
   <!-- Additional iOS Safari Integration -->
   <meta name='apple-mobile-web-app-title' content='{pageTitle}' />
   <meta name='format-detection' content='telephone=no' />
@@ -214,18 +214,9 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
   </script>
   <!-- Performance Monitoring for SEO -->
   <script is:inline>
-    // Monitor Core Web Vitals for SEO - with Swup-safe execution
-    if (!window.webVitalsInitialized && 'web-vital' in window) {
+    // Basic performance monitoring without web-vitals dependency
+    if (!window.webVitalsInitialized) {
       window.webVitalsInitialized = true
-
-      import('web-vitals').then(function(webVitals) {
-        // Core Web Vitals monitoring (silent)
-        webVitals.getCLS(function() {})
-        webVitals.getFID(function() {})
-        webVitals.getFCP(function() {})
-        webVitals.getLCP(function() {})
-        webVitals.getTTFB(function() {})
-      })
     }
 
     // Track page load performance - with Swup-safe execution (silent)
@@ -274,16 +265,23 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         // This should remove bg-zinc-50 but something might be re-adding it
         document.documentElement.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
         document.body.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
-        
+
         // 📱 Update Safari mobile theme-color for iOS status bar
         var themeColorMeta = document.querySelector('meta[name="theme-color"]:not([media])')
         if (!themeColorMeta) {
-          // Create a meta tag if it doesn't exist
-          themeColorMeta = document.createElement('meta')
-          themeColorMeta.name = 'theme-color'
-          document.head.appendChild(themeColorMeta)
+          try {
+            // Create a meta tag if it doesn't exist
+            themeColorMeta = document.createElement('meta')
+            themeColorMeta.name = 'theme-color'
+            document.head.appendChild(themeColorMeta)
+          } catch (e) {
+            console.warn('Failed to create theme-color meta tag:', e)
+            return
+          }
         }
-        themeColorMeta.content = theme === 'dark' ? '#09090b' : '#fafafa'
+        if (themeColorMeta) {
+          themeColorMeta.content = theme === 'dark' ? '#09090b' : '#fafafa'
+        }
 
         // Update all theme toggle button icons
         var buttons = document.querySelectorAll('[data-theme-toggle]')
@@ -344,11 +342,11 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
         }
       })
     }
-    
+
     // ✨ ELEMENT ANIMATION SYSTEM - Re-trigger animations after Swup page transitions
     if (!window.elementAnimationsInitialized) {
       window.elementAnimationsInitialized = true
-      
+
       function triggerElementAnimations() {
         // Reset all animations first
         var animatedElements = document.querySelectorAll('[class*="animate-"]')
@@ -358,21 +356,21 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
           element.style.animation = null
         })
       }
-      
+
       // Trigger animations after Swup page changes
       document.addEventListener('swup:contentReplaced', function() {
         setTimeout(triggerElementAnimations, 50) // Small delay to ensure content is ready
       })
-      
+
       document.addEventListener('swup:pageView', function() {
         setTimeout(triggerElementAnimations, 50)
       })
-      
+
       // Also trigger on initial page load
       document.addEventListener('DOMContentLoaded', triggerElementAnimations)
       window.addEventListener('load', triggerElementAnimations)
     }
-    
+
   </script>
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
   <SEO title={pageTitle} description={pageDescription} image={pageImage} type={pageType} />
@@ -384,7 +382,7 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     <main class='container mx-auto px-8 lg:px-16 transition-fade' tabindex="-1">
       <slot />
     </main>
-    <Footer />
+    <!-- <Footer /> -->
   </body>
 </html>
 
@@ -534,7 +532,7 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
   }
 
   /* ✨ STAGGERED ELEMENT ANIMATIONS - Add these classes to any element */
-  
+
   /* Fade in elements with different delays after page loads */
   .animate-fade-in {
     opacity: 0;
@@ -653,7 +651,7 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     button, a[role="button"], .btn, [data-theme-toggle] {
       transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
     }
-    
+
     button:hover, a[role="button"]:hover, .btn:hover, [data-theme-toggle]:hover {
       transform: none !important;
       animation: none !important;

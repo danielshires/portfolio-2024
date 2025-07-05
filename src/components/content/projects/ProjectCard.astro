@@ -18,18 +18,28 @@ interface Props {
 const { projectImage, title, heading, projectUrl } = Astro.props
 ---
 
-<div class='col-span-1 md:col-span-3 lg:col-span-1'>
-  <ProjectImage
-    src={projectImage.src}
-    alt={projectImage.alt}
-    title={heading || title}
-    projectUrl={projectUrl}
-    width={projectImage.width}
-    height={projectImage.height}
-    transitionName={`${title.toLowerCase().replace(/\s+/g, '-')}-image`}
-  />
-  <div class='pt-2'>
-    <Text variant='h5' color='default' class='mt-4'>{title}</Text>
-    {heading && <Text variant='body' color='muted' class='mt-1'>{heading}</Text>}
-  </div>
+<div class='col-span-1 md:col-span-3 lg:col-span-1 p-1'>
+  <a
+    href={projectUrl}
+    class='group block relative overflow-hidden transition-colors duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white cursor-pointer'
+    aria-label={`View ${title} project`}
+    data-swup-preload
+  >
+    <div class='w-full aspect-[3/2] overflow-hidden rounded-xl'>
+      <img
+        src={projectImage.src}
+        alt={projectImage.alt}
+        width={projectImage.width}
+        height={projectImage.height}
+        class='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus:scale-100'
+        loading='eager'
+        decoding='async'
+        transition:name={`${title.toLowerCase().replace(/\s+/g, '-')}-image`}
+      />
+    </div>
+    <div class='pt-2'>
+      <Text variant='h5' color='default' class='mt-4'>{title}</Text>
+      {heading && <Text variant='body' color='muted' class='mt-1'>{heading}</Text>}
+    </div>
+  </a>
 </div>

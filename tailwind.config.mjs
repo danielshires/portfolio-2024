@@ -9,6 +9,10 @@ export default {
                     DEFAULT: 'rgb(var(--zinc-950))',
                     light: 'rgb(var(--zinc-50))',
                 },
+                focus: {
+                    DEFAULT: '#000000',
+                    dark: '#ffffff',
+                },
                 background: {
                     light: 'rgb(var(--zinc-50))',
                     dark: 'rgb(var(--zinc-950))',
@@ -88,7 +92,7 @@ export default {
                             color: theme('colors.zinc.900'),
                         },
                         '.prose-overline': {
-                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontFamily: theme('fontFamily.mono').join(','),
                             fontWeight: '400',
                             fontSize: theme('fontSize.xs')[0],
                             textTransform: 'uppercase',
@@ -150,6 +154,7 @@ export default {
                             color: theme('colors.zinc.400'),
                         },
                         '.prose-overline': {
+                            fontFamily: theme('fontFamily.mono').join(','),
                             color: theme('colors.zinc.400'),
                         },
                         'strong': {

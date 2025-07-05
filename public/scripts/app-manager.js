@@ -3,18 +3,23 @@
  * Consolidates all layout functionality with improved performance
  */
 
+// Prevent duplicate class declarations
+if (typeof AppManager === 'undefined') {
 class AppManager {
   constructor() {
+    console.log('[Focus Debug] AppManager constructor called')
     this.isInitialized = false
     this.currentTheme = localStorage.getItem('theme') || 
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
     this.lastUrl = window.location.href
     this.urlCheckInterval = null
+    this.inputMethod = 'mouse' // Default to mouse input
     
     this.init()
   }
 
   init() {
+    console.log('[Focus Debug] AppManager init() called')
     if (this.isInitialized) return
     this.isInitialized = true
 
@@ -23,13 +28,17 @@ class AppManager {
     this.updateNavigation = this.updateNavigation.bind(this)
     this.toggleTheme = this.toggleTheme.bind(this)
     this.triggerAnimations = this.triggerAnimations.bind(this)
+    this.setInputMethod = this.setInputMethod.bind(this)
 
     // Initialize all systems
+    console.log('[Focus Debug] Initializing all systems')
     this.initThemeSystem()
     this.initNavigationSystem()
     this.initSwupSystem()
     this.initAnimationSystem()
     this.initAccessibility()
+    this.initFocusManagement()
+    console.log('[Focus Debug] All systems initialized')
   }
 
   // ===== THEME SYSTEM =====
@@ -43,6 +52,8 @@ class AppManager {
       if (button) {
         event.preventDefault()
         this.toggleTheme()
+        // Remove focus after click to prevent focus ring
+        button.blur()
       }
     })
 
@@ -223,6 +234,92 @@ class AppManager {
     })
   }
 
+  // ===== FOCUS MANAGEMENT SYSTEM =====
+  initFocusManagement() {
+    console.log('[Focus Debug] initFocusManagement() called')
+    // Set initial input method
+    this.setInputMethod(this.inputMethod)
+
+    // Track mouse interactions
+    document.addEventListener('mousedown', () => {
+      console.log('[Focus Debug] Mouse detected')
+      this.setInputMethod('mouse')
+    })
+
+    document.addEventListener('mousemove', () => {
+      this.setInputMethod('mouse')
+    })
+
+    // Track keyboard interactions
+    document.addEventListener('keydown', (e) => {
+      // Change to keyboard mode on Tab, arrow keys, Enter, Space
+      if (e.key === 'Tab' || e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') {
+        console.log(`[Focus Debug] Keyboard key detected: ${e.key}`)
+        this.setInputMethod('keyboard')
+      }
+    })
+
+    // Browser detection debugging
+    console.log(`[Focus Debug] User Agent: ${navigator.userAgent}`)
+    console.log(`[Focus Debug] Chrome test: ${/Chrome/.test(navigator.userAgent)}`)
+    console.log(`[Focus Debug] Safari test: ${/Safari/.test(navigator.userAgent)}`)
+    
+    // Chrome-specific: Global click handler to blur focused elements for mouse users
+    const isChrome = /Chrome/.test(navigator.userAgent) && !/Safari/.test(navigator.userAgent)
+    
+    if (isChrome) {
+      document.addEventListener('click', (event) => {
+        console.log(`[Focus Debug] Chrome click detected, current input method: ${this.inputMethod}`)
+        if (this.inputMethod === 'mouse') {
+          // Comprehensive element detection for Chrome
+          const target = event.target.closest(`
+            a, button, [tabindex], [role="button"], 
+            .cursor-pointer, [onclick], input, select, textarea,
+            [class*="card"], [class*="button"], [class*="link"],
+            [data-swup-preload]
+          `.replace(/\s+/g, ''))
+          
+          if (target) {
+            console.log(`[Focus Debug] Chrome blurring element: ${target.tagName}, classes: ${target.className}`)
+            target.blur()
+          }
+          
+          // Always blur any focused element in Chrome for mouse clicks
+          setTimeout(() => {
+            if (document.activeElement && document.activeElement !== document.body && document.activeElement !== document.documentElement) {
+              console.log(`[Focus Debug] Chrome blurring active element: ${document.activeElement.tagName}`)
+              document.activeElement.blur()
+            }
+          }, 0)
+        }
+      })
+    } else {
+      console.log('[Focus Debug] Non-Chrome browser detected - using browser defaults for focus')
+    }
+  }
+
+  setInputMethod(method) {
+    if (this.inputMethod === method) return
+    
+    this.inputMethod = method
+    document.documentElement.setAttribute('data-input-method', method)
+    
+    // Debug logging
+    console.log(`[Focus Debug] Input method changed to: ${method}`)
+    console.log(`[Focus Debug] HTML data-input-method: ${document.documentElement.getAttribute('data-input-method')}`)
+    console.log(`[Focus Debug] Browser: ${navigator.userAgent.includes('Safari') && !navigator.userAgent.includes('Chrome') ? 'Safari' : 'Other'}`)
+    
+    // Debug CSS application
+    if (method === 'mouse') {
+      const testElement = document.querySelector('button, a')
+      if (testElement) {
+        const styles = window.getComputedStyle(testElement, ':focus')
+        console.log(`[Focus Debug] Test element focus outline: ${styles.outline}`)
+        console.log(`[Focus Debug] HTML classes: ${document.documentElement.className}`)
+      }
+    }
+  }
+
   // ===== CLEANUP =====
   destroy() {
     if (this.urlCheckInterval) {
@@ -239,9 +336,21 @@ class AppManager {
   }
 }
 
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new AppManager())
-} else {
-  new AppManager()
+// Only initialize if not already done
+if (!window.appManagerInitialized) {
+  window.appManagerInitialized = true
+  
+  // Initialize when DOM is ready
+  console.log('[Focus Debug] AppManager script loaded')
+  if (document.readyState === 'loading') {
+    console.log('[Focus Debug] DOM still loading, waiting for DOMContentLoaded')
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('[Focus Debug] DOMContentLoaded fired, creating AppManager')
+      new AppManager()
+    })
+  } else {
+    console.log('[Focus Debug] DOM already loaded, creating AppManager immediately')
+    new AppManager()
+  }
+}
 }

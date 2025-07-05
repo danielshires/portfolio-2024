@@ -22,7 +22,7 @@ html {
 }
 
 body {
-    font-family: 'Graphik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     transition: background-color 0.2s ease-out, color 0.2s ease-out;
@@ -72,11 +72,51 @@ img {
 }
 
 
-/* Focus styles */
+/* Focus styles - Browser-specific approach */
 
+/* Default focus styles (Safari will use these) */
 *:focus {
-    outline: 2px solid #3b82f6;
+    outline: 2px solid #000000;
     outline-offset: 2px;
+}
+
+.dark *:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* Hide focus rings for mouse users - all browsers */
+html[data-input-method="mouse"] *:focus,
+html[data-input-method="mouse"] a:focus,
+html[data-input-method="mouse"] button:focus,
+html[data-input-method="mouse"] [tabindex]:focus,
+html[data-input-method="mouse"] [role="button"]:focus,
+html[data-input-method="mouse"] input:focus,
+html[data-input-method="mouse"] .cursor-pointer:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    border-color: inherit !important;
+    /* Remove any potential focus rings */
+    -webkit-focus-ring-color: transparent !important;
+    -moz-outline: none !important;
+}
+
+/* Ensure keyboard focus works for all browsers */
+html[data-input-method="keyboard"] *:focus,
+html[data-input-method="keyboard"] a:focus,
+html[data-input-method="keyboard"] button:focus,
+html[data-input-method="keyboard"] [tabindex]:focus {
+    outline: 2px solid #000000 !important;
+    outline-offset: 2px !important;
+}
+
+html.dark[data-input-method="keyboard"] *:focus,
+html.dark[data-input-method="keyboard"] a:focus,
+html.dark[data-input-method="keyboard"] button:focus,
+html.dark[data-input-method="keyboard"] [tabindex]:focus {
+    outline: 2px solid #ffffff !important;
+    outline-offset: 2px !important;
 }
 
 

@@ -24,7 +24,7 @@ export const variantStyles: Record<TextVariant, string> = {
   subtitle: 'text-base font-medium',
   body: 'text-base font-normal',
   caption: 'text-base font-normal',
-  overline: 'text-xs font-normal uppercase tracking-wider',
+  overline: 'text-xs font-normal uppercase tracking-wider font-mono',
 }
 
 // Define color variations

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { Post } from '../../../lib/sanity'
-import PostCard from '../../content/posts/PostCard'
+import PostCard from '../../content/posts/PostCard.jsx'
 
 interface FilterPostsReactProps {
   posts: Post[]
