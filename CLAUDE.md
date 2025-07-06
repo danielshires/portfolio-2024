@@ -44,12 +44,36 @@ The site fetches content from Sanity CMS with these main content types:
 ### Component Architecture
 
 Components are organized by feature in subdirectories:
-- `Hero/` - Landing page hero components
-- `Navigation/` - Site navigation with responsive design
-- `Cards/` - Post and picture card components
-- `Filters/` - Content filtering UI (React-based)
-- `FeaturedProject/` - Project showcase components
-- `Shared/` - Common utilities (SEO, Loading, Error boundaries)
+- `content/` - Content-specific components (posts, projects, albums, featured)
+- `layout/` - Page layout components (navigation, footer, sidebar)
+- `ui/` - Reusable UI primitives (buttons, cards, text, forms)
+- `media/` - Media handling components (images, galleries)
+
+#### **React vs Astro Component Strategy**
+
+**Use React Components (.jsx/.tsx) for:**
+- ✅ Interactive features requiring state management
+- ✅ Event handlers and user interactions
+- ✅ Dynamic content filtering and search
+- ✅ Theme toggles and user preferences
+- ✅ Form inputs with real-time validation
+- ✅ Components requiring React hooks
+
+**Use Astro Components (.astro) for:**
+- ✅ Static content rendering and layouts
+- ✅ SEO and meta tag management
+- ✅ Server-side data fetching
+- ✅ Content presentation (cards, text, images)
+- ✅ Navigation and routing
+- ✅ Components that don't require JavaScript
+
+**Examples:**
+- `ThemeToggle.tsx` - React (interactive state)
+- `FilterPostsReact.tsx` - React (filtering logic)
+- `ContactCTA.tsx` - React (icons and interactions)
+- `Layout.astro` - Astro (static structure)
+- `PostCard.jsx` - React (for consistent behavior)
+- `Text.astro` - Astro (static typography)
 
 ### Theming System
 

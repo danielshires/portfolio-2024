@@ -1,5 +1,20 @@
+/**
+ * Sanity CMS Integration
+ * 
+ * This file provides centralized access to Sanity CMS content and utilities.
+ * Includes type definitions, client configuration, and data fetching functions.
+ * 
+ * Project: Dan Photography Portfolio
+ * Sanity Project ID: 5fq3rcf6
+ * Dataset: production
+ */
+
 import { createClient } from '@sanity/client'
 import imageUrlBuilder from '@sanity/image-url'
+
+// ========================================
+// TYPE DEFINITIONS
+// ========================================
 
 export interface SanityImage {
   _type: 'image'

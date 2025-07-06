@@ -1,9 +1,20 @@
+/**
+ * Astro Configuration
+ * 
+ * Photography portfolio built with Astro 4, featuring:
+ * - Static Site Generation (SSG)
+ * - React components for interactivity
+ * - Tailwind CSS for styling
+ * - Sanity CMS integration
+ * - Swup for smooth page transitions
+ * - Sharp image optimization
+ */
+
 import {
     defineConfig
 } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
-import icon from "astro-icon";
 import sanity from '@sanity/astro';
 import swup from '@swup/astro';
 
@@ -24,7 +35,6 @@ export default defineConfig({
         react({
             include: ['**/*.jsx', '**/*.tsx', '**/*.js', '**/*.ts']
         }),
-        icon(),
         sanity(sanityConfig),
         swup({
             theme: 'fade',

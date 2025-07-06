@@ -49,7 +49,7 @@ const seoImage = fullProject.heroImage
 
   <!-- Project Header Section -->
   <section
-    class='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center my-40 md:py-32'>
+    class='grid grid-cols-1 lg:grid-cols-2 items-center mt-40 mb-20 md:pt-32 md:mb-40'>
     <!-- Left Column: Project Title, Subtitle, and Metadata -->
     <div class='grid grid-cols-1 lg:grid-cols-2 col-span-1 md:col-span-2 gap-16'>
       <div class='lg:col-span-1'>
@@ -83,7 +83,7 @@ const seoImage = fullProject.heroImage
   <!-- Project Gallery Section -->
   {
     fullProject.images && fullProject.images.length > 0 && (
-      <section class='col-span-full mt-20 md:mt-40'>
+      <section class='col-span-full'>
         <div class='space-y-8'>
           {fullProject.images.map((image) => (
             <div class='space-y-4 w-full aspect-[3/2] rounded-xl'>
@@ -113,7 +113,7 @@ const seoImage = fullProject.heroImage
   <!-- Related Projects Section -->
   {
     fullProject.relatedProjects && fullProject.relatedProjects.length > 0 && (
-      <section class='py-20'>
+      <section class='my-20'>
         <RelatedProjects projects={fullProject.relatedProjects} />
       </section>
     )
