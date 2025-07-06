@@ -27,6 +27,7 @@
         "astro": "^4.4.15",
         "astro-portabletext": "^0.11.1",
         "emoji-regex-xs": "^2.0.1",
+        "gsap": "^3.13.0",
         "preact": "^10.20.2",
         "prop-types": "^15.8.1",
         "react": "^18.3.1",
