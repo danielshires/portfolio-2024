@@ -5,7 +5,7 @@ import '../styles/fonts.css'
 import Navigation from '../components/layout/navigation/Navigation.astro'
 import Footer from '../components/layout/Footer.astro'
 import Head from './Head.astro'
-import LoadingBar from '../components/ui/loading/LoadingBar.astro'
+import LoadingManager from '../components/ui/loading/LoadingManager.tsx'
 import SEO from '../components/common/SEO.astro'
 
 interface Props {
@@ -371,15 +371,87 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
       window.addEventListener('load', triggerElementAnimations)
     }
 
+    // ✨ PAGE REVEAL ANIMATION - Slide up from bottom when loading completes
+    if (!window.pageRevealInitialized) {
+      window.pageRevealInitialized = true
+
+      // Check if this is the first load (no sessionStorage yet)
+      var hasShownLoading = sessionStorage.getItem('hasShownLoading')
+
+      if (!hasShownLoading) {
+        // Only apply initial positioning on first load
+        var navElement = document.querySelector('nav')
+        var mainElement = document.querySelector('main')
+
+        if (navElement && mainElement) {
+          navElement.style.transform = 'translateY(100vh)'
+          mainElement.style.transform = 'translateY(100vh)'
+          navElement.style.transition = 'none'
+          mainElement.style.transition = 'none'
+        }
+
+        // Listen for loading completion (only on first load)
+        window.addEventListener('loadingComplete', function() {
+          if (navElement && mainElement) {
+            // Animate navigation and main content sliding up
+            navElement.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+            mainElement.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+
+            setTimeout(function() {
+              navElement.style.transform = 'translateY(0)'
+              mainElement.style.transform = 'translateY(0)'
+
+              // Clean up transforms after animation completes
+              setTimeout(function() {
+                navElement.style.transform = ''
+                mainElement.style.transform = ''
+                navElement.style.transition = ''
+                mainElement.style.transition = ''
+              }, 800)
+            }, 100)
+          }
+        }, { once: true })
+      }
+    }
+
+    // ✨ PROGRESSIVE PAGE REVEAL SYSTEM - Animate elements progressively after loading
+    if (!window.progressiveRevealInitialized) {
+      window.progressiveRevealInitialized = true
+
+      // Check if this is the first load (no sessionStorage yet)
+      var hasShownLoading = sessionStorage.getItem('hasShownLoading')
+      
+      if (!hasShownLoading) {
+        // Listen for loading completion to trigger progressive animations
+        window.addEventListener('loadingComplete', function() {
+          setTimeout(function() {
+            // Add progressive reveal classes to trigger animations
+            var progressiveElements = document.querySelectorAll('[data-progressive-reveal]')
+            progressiveElements.forEach(function(element) {
+              var animationClass = element.getAttribute('data-progressive-reveal')
+              var delayClass = element.getAttribute('data-progressive-delay')
+              
+              if (animationClass) {
+                element.classList.add(animationClass)
+              }
+              if (delayClass) {
+                element.classList.add(delayClass)
+              }
+            })
+          }, 100) // Small delay after page reveal starts
+        }, { once: true })
+      }
+    }
+
   </script>
   <Head pageDescription={pageDescription} pageTitle={pageTitle} />
   <SEO title={pageTitle} description={pageDescription} image={pageImage} type={pageType} />
   <body
     class='text-text-light dark:text-text-dark antialiased'
     tabindex="-1">
-    <LoadingBar />
+    <LoadingManager client:load />
     <Navigation />
-    <main class='container mx-auto px-8 lg:px-16 transition-fade' tabindex="-1">
+    <main class='container mx-auto px-8 lg:px-16 transition-fadeW' tabindex="-1">
       <slot />
     </main>
     <!-- <Footer /> -->
@@ -583,6 +655,31 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     animation: scaleIn 0.5s ease-out 0.3s forwards;
   }
 
+  /* Progressive Loading Animations */
+  .animate-slide-down {
+    opacity: 0;
+    transform: translateY(-100%);
+    animation: slideInDown 0.6s ease-out forwards;
+  }
+
+  .animate-scale-bounce {
+    opacity: 0;
+    transform: scale(0);
+    animation: scaleBounceIn 0.8s ease-out forwards;
+  }
+
+  /* Progressive loading delays */
+  .progressive-delay-1 { animation-delay: 0.2s; }
+  .progressive-delay-2 { animation-delay: 0.5s; }
+  .progressive-delay-3 { animation-delay: 0.8s; }
+  .progressive-delay-4 { animation-delay: 1.0s; }
+  .progressive-delay-5 { animation-delay: 1.2s; }
+  .progressive-delay-6 { animation-delay: 1.4s; }
+  .progressive-delay-7 { animation-delay: 1.6s; }
+  .progressive-delay-8 { animation-delay: 1.8s; }
+  .progressive-delay-9 { animation-delay: 2.0s; }
+  .progressive-delay-10 { animation-delay: 2.2s; }
+
   /* Keyframe definitions */
   @keyframes elementFadeIn {
     to {
@@ -612,6 +709,28 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     }
   }
 
+  @keyframes slideInDown {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleBounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
   /* Re-trigger animations after Swup page transitions */
   html[data-swup-enabled] .animate-fade-in,
   html[data-swup-enabled] .animate-fade-in-delay-1,
@@ -620,7 +739,9 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
   html[data-swup-enabled] .animate-fade-in-delay-4,
   html[data-swup-enabled] .animate-slide-left,
   html[data-swup-enabled] .animate-slide-right,
-  html[data-swup-enabled] .animate-scale-in {
+  html[data-swup-enabled] .animate-scale-in,
+  html[data-swup-enabled] .animate-slide-down,
+  html[data-swup-enabled] .animate-scale-bounce {
     animation-play-state: paused;
   }
 
@@ -632,7 +753,9 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
   html[data-swup-enabled].is-animating .animate-fade-in-delay-4,
   html[data-swup-enabled].is-animating .animate-slide-left,
   html[data-swup-enabled].is-animating .animate-slide-right,
-  html[data-swup-enabled].is-animating .animate-scale-in {
+  html[data-swup-enabled].is-animating .animate-scale-in,
+  html[data-swup-enabled].is-animating .animate-slide-down,
+  html[data-swup-enabled].is-animating .animate-scale-bounce {
     animation-play-state: running;
   }
 
@@ -648,6 +771,22 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
 
   /* Respect reduced motion preferences */
   @media (prefers-reduced-motion: reduce) {
+    /* Disable all animations for accessibility */
+    .animate-fade-in,
+    .animate-fade-in-delay-1,
+    .animate-fade-in-delay-2,
+    .animate-fade-in-delay-3,
+    .animate-fade-in-delay-4,
+    .animate-slide-left,
+    .animate-slide-right,
+    .animate-scale-in,
+    .animate-slide-down,
+    .animate-scale-bounce {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
     button, a[role="button"], .btn, [data-theme-toggle] {
       transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease !important;
     }

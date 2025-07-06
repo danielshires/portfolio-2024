@@ -34,6 +34,19 @@ const transformedProjects = projects.map((project) => ({
 ---
 
 <section class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8 max-w-[100vw] mt-16'>
-  <Text variant='overline' class='col-span-full'>Recent projects</Text>
-  {transformedProjects.map((project) => <ProjectCard {...project} />)}
+  <div 
+    class='col-span-full'
+    data-progressive-reveal='animate-fade-in'
+    data-progressive-delay='progressive-delay-4'
+  >
+    <Text variant='overline'>Recent projects</Text>
+  </div>
+  {transformedProjects.map((project, index) => (
+    <div
+      data-progressive-reveal='animate-fade-in'
+      data-progressive-delay={`progressive-delay-${Math.min(5 + index, 10)}`}
+    >
+      <ProjectCard {...project} />
+    </div>
+  ))}
 </section>
