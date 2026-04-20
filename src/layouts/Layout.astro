@@ -12,26 +12,37 @@ interface Props {
   pageTitle: string
   pageDescription: string
   pageImage?: string
-  pageUrl?: string
+  pageImageAlt?: string
   pageType?: 'website' | 'article'
+  publishedTime?: string
+  modifiedTime?: string
+  robots?: string
+  jsonLd?: unknown
   children?: any
 }
 
-const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } = Astro.props
+const {
+  pageTitle,
+  pageDescription,
+  pageImage,
+  pageImageAlt,
+  pageType = 'website',
+  publishedTime,
+  modifiedTime,
+  robots,
+  jsonLd,
+} = Astro.props
 ---
 
 <!doctype html>
 <html lang='en' class='text-base'>
-  <!-- Safari Mobile Status Bar and Navigation Colors -->
-  <meta name='theme-color' content='#fafafa' media='(prefers-color-scheme: light)' />
-  <meta name='theme-color' content='#09090b' media='(prefers-color-scheme: dark)' />
-
+  <head>
   <!-- iOS Safari Status Bar Style -->
   <meta name='apple-mobile-web-app-status-bar-style' content='default' />
   <meta name='apple-mobile-web-app-capable' content='yes' />
 
   <!-- Additional iOS Safari Integration -->
-  <meta name='apple-mobile-web-app-title' content='{pageTitle}' />
+  <meta name='apple-mobile-web-app-title' content={pageTitle} />
   <meta name='format-detection' content='telephone=no' />
   <script is:inline>
     // ✅ SINGLE THEME INITIALIZATION - Prevent flash on initial load
@@ -444,21 +455,20 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     }
 
   </script>
-  <Head pageDescription={pageDescription} pageTitle={pageTitle} />
-  <SEO title={pageTitle} description={pageDescription} image={pageImage} type={pageType} />
-  <body
-    class='text-text-light dark:text-text-dark antialiased'
-    tabindex="-1">
-    <LoadingManager client:load />
-    <Navigation />
-    <main class='container mx-auto px-8 lg:px-16 transition-fadeW' tabindex="-1">
-      <slot />
-    </main>
-    <!-- <Footer /> -->
-  </body>
-</html>
-
-<style is:global>
+  <Head />
+  <SEO
+    title={pageTitle}
+    description={pageDescription}
+    image={pageImage}
+    imageAlt={pageImageAlt}
+    type={pageType}
+    publishedTime={publishedTime}
+    modifiedTime={modifiedTime}
+    robots={robots}
+    jsonLd={jsonLd}
+  />
+  <slot name='head' />
+  <style is:global>
   /* Ensure consistent background during transitions */
 
   body {
@@ -802,3 +812,15 @@ const { pageTitle, pageDescription, pageImage, pageUrl, pageType = 'website' } =
     }
   }
 </style>
+  </head>
+  <body
+    class='text-text-light dark:text-text-dark antialiased'
+    tabindex="-1">
+    <LoadingManager client:load />
+    <Navigation />
+    <main class='container mx-auto px-8 lg:px-16 transition-fade' tabindex="-1">
+      <slot />
+    </main>
+    <!-- <Footer /> -->
+  </body>
+</html>

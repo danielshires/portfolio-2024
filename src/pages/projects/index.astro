@@ -1,21 +1,51 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getAllProjects, urlFor } from '../../lib/sanity'
-import SEO from '../../components/common/SEO.astro'
 import Text from '../../components/ui/text/Text.astro'
 import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 import ProjectCard from '../../components/content/projects/ProjectCard.astro'
 
 const projects = await getAllProjects()
+
+const pageTitle = 'Projects | Daniel Shires'
+const pageDescription =
+  'Explore my latest design and development projects, featuring UI/UX design, web development, and digital experiences.'
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Projects',
+  description: pageDescription,
+  url: 'https://danielshires.com/projects',
+  author: {
+    '@type': 'Person',
+    name: 'Daniel Shires',
+    jobTitle: 'Product Designer',
+  },
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: projects.length,
+    itemListElement: projects.slice(0, 10).map((project, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'CreativeWork',
+        name: project.title,
+        description: project.subtitle || 'Design project by Daniel Shires',
+        url: `https://danielshires.com/projects/${project.slug.current}`,
+        creator: {
+          '@type': 'Person',
+          name: 'Daniel Shires',
+        },
+        dateCreated: project.publishedAt,
+        keywords: project.tags?.join(', ') || 'UX Design, UI Design, Product Design',
+      },
+    })),
+  },
+}
 ---
 
-<Layout pageTitle='Projects' pageDescription='Explore my design and development projects'>
-  <SEO
-    title='Projects | Your Portfolio'
-    description='Explore my latest design and development projects, featuring UI/UX design, web development, and digital experiences.'
-    slot='head'
-  />
-
+<Layout pageTitle={pageTitle} pageDescription={pageDescription} jsonLd={structuredData}>
   <!-- Hero Section -->
   <SimpleHero
     introText={{

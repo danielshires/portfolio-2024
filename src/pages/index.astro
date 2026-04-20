@@ -27,7 +27,6 @@ const pageTitle = 'Daniel Shires | Product Designer | Sydney, Australia'
 const pageDescription =
   'Product Designer with 5+ years experience creating user-centered digital experiences. Based in Sydney, working at Commonwealth Bank. View my design portfolio and journal.'
 const pageImage = avatarUrl || '/images/jpg/background.webp'
-const pageUrl = '/'
 
 // Structured data for the homepage
 const structuredData = {
@@ -63,7 +62,7 @@ const structuredData = {
   pageTitle={pageTitle}
   pageDescription={pageDescription}
   pageImage={pageImage}
-  pageUrl={pageUrl}
+  jsonLd={structuredData}
   pageType='website'>
   <main class='grid gap-8 overflow-hidden h-max'>
     <Hero {...heroContent} />

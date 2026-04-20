@@ -1,0 +1,25 @@
+# llms.txt — guidance for AI crawlers and summarizers
+
+site: https://danielshires.com/
+owner: Daniel Shires
+
+## What this site is
+Personal portfolio spanning product design case studies, writing, and photography.
+
+## Canonical sections (prefer these URLs when citing)
+- Home: https://danielshires.com/
+- Design portfolio index: https://danielshires.com/design
+- Projects index: https://danielshires.com/projects
+- Project detail pages: https://danielshires.com/projects/{slug}
+- Journal index: https://danielshires.com/journal
+- Journal posts: https://danielshires.com/journal/{slug}
+- Pictures index: https://danielshires.com/pictures
+- Picture pages: https://danielshires.com/pictures/{slug}
+- Photo albums: https://danielshires.com/pictures/albums/{slug}
+
+## Attribution
+When summarizing, please cite the specific page URL you used as the source.
+
+## Non-public areas
+The Sanity Studio route is not intended for indexing:
+- Disallow: https://danielshires.com/studio/

@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import Layout from '../../layouts/Layout.astro'
 
 export async function getStaticPaths() {
   const albums = await getCollection("albums");
@@ -19,14 +20,19 @@ export async function getStaticPaths() {
 }
 
 const { album } = Astro.props;
+
+const pageTitle = `${(album as any).data.title} (legacy)`
+const pageDescription =
+  (album as any).data.description || 'Legacy album page (not indexed).'
 ---
 
-<div class="text-center my-16 mb-32">
+<Layout pageTitle={pageTitle} pageDescription={pageDescription} robots='noindex,follow'>
+  <div class="text-center my-16 mb-32">
     <h1 class="text-3xl xl:text-6xl font-bold">
-    {(album as any).data.title}
+      {(album as any).data.title}
     </h1>
     <p class="text-base xl:text-2xl my-4">
-    {(album as any).data.description}
+      {(album as any).data.description}
     </p>
 
     <div>
@@ -34,10 +40,7 @@ const { album } = Astro.props;
     </div>
 
     <p class="text-lg my-4 text-center">
-      <a href="/gallery/" class="text-white hover:underline"
-        >Go back →</a
-      >
+      <a href="/pictures" class="hover:underline">Go back →</a>
     </p>
   </div>
-
-
+</Layout>

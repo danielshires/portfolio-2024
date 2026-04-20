@@ -1,7 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro'
-import { getAlbumBySlug, getAllAlbums } from '../../../lib/sanity'
-import type { Album } from '../../../lib/sanity'
+import { getAllAlbums, urlFor } from '../../../lib/sanity'
 import Hero from '../../../components/content/featured/Hero.astro'
 import PictureCard from '../../../components/media/gallery/PictureCard.astro'
 import PageTransition from '../../../components/layout/transitions/PageTransition.astro'
@@ -16,20 +15,82 @@ export async function getStaticPaths() {
 
 const { album } = Astro.props
 
-// Front Matter
-const frontMatter = {
-  pageTitle: album.title,
-  pageDescription: album.description || `Photos from ${album.title}`,
-}
-
 const heroContent = {
   name: album.title,
   tagline: 'Photography',
   intro: `${album.description || `A collection of photographs from ${album.title}`}. Each image captures a unique moment, preserved through the lens of film photography.`,
 }
+
+const pageDescription = album.description || `Photos from ${album.title}`
+const seoImage = album.coverImage
+  ? urlFor(album.coverImage).width(1200).height(630).url()
+  : undefined
+
+const canonicalUrl = new URL(Astro.url.pathname, 'https://danielshires.com').href
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://danielshires.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Pictures',
+          item: 'https://danielshires.com/pictures',
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: album.title,
+          item: canonicalUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'CollectionPage',
+      name: album.title,
+      description: pageDescription,
+      url: canonicalUrl,
+      image: seoImage ? [seoImage] : undefined,
+      author: {
+        '@type': 'Person',
+        name: 'Daniel Shires',
+      },
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: album.pictures?.length || 0,
+        itemListElement: (album.pictures || []).slice(0, 12).map((picture, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          item: {
+            '@type': 'ImageObject',
+            name: picture.title,
+            url: `https://danielshires.com/pictures/${picture.slug.current}`,
+            contentUrl: picture.mainImage
+              ? urlFor(picture.mainImage).width(1600).auto('format').url()
+              : undefined,
+          },
+        })),
+      },
+    },
+  ],
+}
 ---
 
-<Layout pageTitle={heroContent.name} pageDescription={heroContent.intro}>
+<Layout
+  pageTitle={album.title}
+  pageDescription={pageDescription}
+  pageImage={seoImage}
+  pageImageAlt={album.title}
+  jsonLd={jsonLd}>
   <PageTransition>
     <div class='flex flex-col'>
       <Hero {...heroContent} />

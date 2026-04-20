@@ -5,7 +5,6 @@ import ProjectMeta from '../../components/content/projects/ProjectMeta.astro'
 import ProjectOutcomes from '../../components/content/projects/ProjectOutcomes.astro'
 import ProjectProblem from '../../components/content/projects/ProjectProblem.astro'
 import RelatedProjects from '../../components/content/projects/RelatedProjects.astro'
-import SEO from '../../components/common/SEO.astro'
 import Text from '../../components/ui/text/Text.astro'
 import ContactCTA from '../../components/ui/buttons/ContactCTA.astro'
 
@@ -42,11 +41,73 @@ const seoDescription = fullProject.subtitle || `${fullProject.title} project cas
 const seoImage = fullProject.heroImage
   ? urlFor(fullProject.heroImage).width(1200).height(630).url()
   : undefined
+
+const canonicalUrl = new URL(Astro.url.pathname, 'https://danielshires.com').href
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://danielshires.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Projects',
+          item: 'https://danielshires.com/projects',
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: fullProject.title,
+          item: canonicalUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'CreativeWork',
+      name: fullProject.title,
+      headline: fullProject.title,
+      description: seoDescription,
+      url: canonicalUrl,
+      datePublished: fullProject.publishedAt,
+      dateModified: fullProject.publishedAt,
+      author: {
+        '@type': 'Person',
+        name: 'Daniel Shires',
+      },
+      creator: {
+        '@type': 'Person',
+        name: 'Daniel Shires',
+      },
+      keywords: fullProject.tags?.join(', '),
+      image:
+        fullProject.images?.map((image) =>
+          urlFor(image.asset).width(2000).auto('format').url()
+        ) || (seoImage ? [seoImage] : undefined),
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalUrl,
+      },
+    },
+  ],
+}
 ---
 
-<Layout pageTitle={seoTitle} pageDescription={seoDescription}>
-  <SEO title={seoTitle} description={seoDescription} image={seoImage} slot='head' />
-
+<Layout
+  pageTitle={seoTitle}
+  pageDescription={seoDescription}
+  pageImage={seoImage}
+  pageType='article'
+  publishedTime={fullProject.publishedAt}
+  modifiedTime={fullProject.publishedAt}
+  jsonLd={jsonLd}>
   <!-- Project Header Section -->
   <section
     class='grid grid-cols-1 lg:grid-cols-2 items-center mt-40 mb-20 md:pt-32 md:mb-40'>

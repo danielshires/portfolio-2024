@@ -21,7 +21,6 @@ const pageTitle = 'Journal | Design & Development Blog | Daniel Shires'
 const pageDescription =
   'Read insights on UX/UI design, product development, and digital experiences. Articles on design thinking, user research, and creating impactful digital products.'
 const pageImage = '/images/jpg/background.webp'
-const pageUrl = '/journal'
 
 // Structured data for blog
 const structuredData = {
@@ -30,7 +29,7 @@ const structuredData = {
   name: 'Daniel Shires Journal',
   description: pageDescription,
   url: 'https://danielshires.com/journal',
-  image: 'https://danielshires.com' + pageImage,
+  image: new URL(pageImage, 'https://danielshires.com').href,
   author: {
     '@type': 'Person',
     name: 'Daniel Shires',
@@ -60,7 +59,7 @@ const structuredData = {
   pageTitle={pageTitle}
   pageDescription={pageDescription}
   pageImage={pageImage}
-  pageUrl={pageUrl}
+  jsonLd={structuredData}
   pageType='website'>
     <!-- Hero Section -->
     <SimpleHero

@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getPictureBySlug, getAllPictures } from '../../lib/sanity'
+import { getAllPictures, urlFor } from '../../lib/sanity'
 import SanityImage from '../../components/media/images/SanityImage.astro'
 import PageTransition from '../../components/layout/transitions/PageTransition.astro'
 import Text from '../../components/ui/text/Text.astro'
@@ -14,9 +14,56 @@ export async function getStaticPaths() {
 }
 
 const { picture } = Astro.props
+
+const seoImage = picture.mainImage
+  ? urlFor(picture.mainImage).width(1200).height(630).url()
+  : undefined
+
+const canonicalUrl = new URL(Astro.url.pathname, 'https://danielshires.com').href
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://danielshires.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Pictures',
+          item: 'https://danielshires.com/pictures',
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: picture.title,
+          item: canonicalUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'ImageObject',
+      name: picture.title,
+      description: picture.description || picture.title,
+      url: canonicalUrl,
+      contentUrl: seoImage,
+    },
+  ],
+}
 ---
 
-<Layout pageTitle={picture.title} pageDescription={picture.description || picture.title}>
+<Layout
+  pageTitle={picture.title}
+  pageDescription={picture.description || picture.title}
+  pageImage={seoImage}
+  pageImageAlt={picture.title}
+  jsonLd={jsonLd}>
   <PageTransition>
     <article class='mt-32'>
       <header class='mb-8'>

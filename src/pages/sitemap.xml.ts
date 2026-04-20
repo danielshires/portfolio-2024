@@ -1,5 +1,3 @@
-import { defineConfig } from 'astro/config'
-import { getCollection } from 'astro:content'
 import { getNavigationItems } from '../config/features'
 import {
   getAllAlbums,
@@ -16,7 +14,7 @@ import {
 // Current URL patterns that must be maintained:
 // - /journal/[slug] - Blog posts
 // - /projects/[slug] - Design projects
-// - /albums/[slug] - Photo albums
+// - /pictures/albums/[slug] - Photo albums (Sanity)
 // - /pictures - Photography collections
 // - /design - Design portfolio
 // - / - Homepage
@@ -26,6 +24,7 @@ export async function GET() {
   const albums = await getAllAlbums()
   const projects = await getAllProjects()
   const pictures = await getAllPictures()
+  const buildIso = new Date().toISOString()
 
   // Get navigation items and filter by enabled/visible features
   const navigationItems = getNavigationItems()
@@ -34,7 +33,6 @@ export async function GET() {
     { url: '/pictures', priority: '0.9', changefreq: 'weekly' },
     { url: '/design', priority: '0.9', changefreq: 'weekly' },
     { url: '/journal', priority: '0.8', changefreq: 'weekly' },
-    { url: '/albums', priority: '0.8', changefreq: 'monthly' },
     ...navigationItems.map((item) => ({ url: item.href, priority: '0.7', changefreq: 'monthly' })),
   ]
 
@@ -45,6 +43,7 @@ export async function GET() {
       (page) => `
     <url>
       <loc>${new URL(page.url, 'https://danielshires.com').href}</loc>
+      <lastmod>${buildIso}</lastmod>
       <changefreq>${page.changefreq}</changefreq>
       <priority>${page.priority}</priority>
     </url>
@@ -79,7 +78,7 @@ export async function GET() {
     .map(
       (album: Album) => `
     <url>
-      <loc>${new URL(`/albums/${album.slug.current}`, 'https://danielshires.com').href}</loc>
+      <loc>${new URL(`/pictures/albums/${album.slug.current}`, 'https://danielshires.com').href}</loc>
       <lastmod>${new Date(album.publishedAt).toISOString()}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.6</priority>
@@ -92,6 +91,7 @@ export async function GET() {
       (picture: Picture) => `
     <url>
       <loc>${new URL(`/pictures/${picture.slug.current}`, 'https://danielshires.com').href}</loc>
+      <lastmod>${buildIso}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.5</priority>
     </url>
