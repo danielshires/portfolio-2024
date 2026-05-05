@@ -5,11 +5,11 @@ export default function PostCard({ post }) {
     return (
         <a
             href={`/journal/${post.slug?.current || post._id}`}
-            className="group block py-3 border-b border-zinc-200/80 dark:border-zinc-800/80 last:border-b-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black dark:focus:ring-white rounded-sm transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 -mx-1 px-1"
+            className="group block py-3 border-b border-zinc-200/80 dark:border-zinc-800/80 last:border-b-0 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-black dark:focus-visible:ring-white rounded-sm transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 -mx-1 px-1"
             data-swup-preload
         >
             <div className="">
-                <Text variant="body" weight="medium" className="font-semibold text-zinc-900 dark:text-zinc-100">
+                <Text variant="body" weight="medium" className="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:underline underline-offset-4">
                     {post.title}
                 </Text>
                 {post.description && (

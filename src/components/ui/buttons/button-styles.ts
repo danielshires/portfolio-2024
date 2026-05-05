@@ -5,21 +5,21 @@ export type ButtonElement = 'button' | 'a' | 'div'
 
 // Define base button styles
 export const baseButtonStyles =
-  'inline-flex items-center justify-center gap-2 font-medium rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform-gpu'
+  'inline-flex items-center justify-center gap-2 font-medium rounded-full transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transform-gpu'
 
 // Define variant styles with enhanced hover states
 export const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-zinc-900 hover:bg-zinc-800 hover:scale-105 hover:shadow-lg text-zinc-100 dark:bg-zinc-100 dark:hover:bg-zinc-200 dark:text-zinc-900 focus:ring-black dark:focus:ring-white active:scale-95',
+    'bg-zinc-900 hover:bg-zinc-800 hover:scale-105 hover:shadow-lg text-zinc-100 dark:bg-zinc-100 dark:hover:bg-zinc-200 dark:text-zinc-900 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
   secondary:
-    'bg-zinc-100 hover:bg-zinc-200 hover:scale-105 hover:shadow-md text-zinc-900 border border-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border-zinc-700 focus:ring-black dark:focus:ring-white active:scale-95',
+    'bg-zinc-100 hover:bg-zinc-200 hover:scale-105 hover:shadow-md text-zinc-900 border border-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border-zinc-700 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
   tertiary:
-    'bg-transparent hover:bg-zinc-100 hover:scale-105 text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-100 hover:underline underline-offset-4 focus:ring-black dark:focus:ring-white active:scale-95',
+    'bg-transparent hover:bg-zinc-100 hover:scale-105 text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-100 hover:underline underline-offset-4 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
   ghost:
-    'bg-transparent hover:bg-zinc-100 hover:scale-105 hover:shadow-sm text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-100 focus:ring-black dark:focus:ring-white active:scale-95',
+    'bg-transparent hover:bg-zinc-100 hover:scale-105 hover:shadow-sm text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-100 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
   outline:
-    'bg-transparent border border-zinc-300 hover:bg-zinc-50 hover:border-zinc-400 hover:scale-105 hover:shadow-md text-zinc-900 dark:border-zinc-600 dark:hover:bg-zinc-800 dark:hover:border-zinc-500 dark:text-zinc-100 focus:ring-black dark:focus:ring-white active:scale-95',
-  icon: 'bg-zinc-50 border border-zinc-300 hover:bg-zinc-100 hover:border-zinc-400 hover:scale-105 hover:rotate-6 text-zinc-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:bg-zinc-700 dark:hover:border-zinc-500 dark:text-zinc-300 focus:ring-black dark:focus:ring-white active:scale-95',
+    'bg-transparent border border-zinc-300 hover:bg-zinc-50 hover:border-zinc-400 hover:scale-105 hover:shadow-md text-zinc-900 dark:border-zinc-600 dark:hover:bg-zinc-800 dark:hover:border-zinc-500 dark:text-zinc-100 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
+  icon: 'bg-zinc-50 border border-zinc-300 hover:bg-zinc-100 hover:border-zinc-400 hover:scale-105 hover:rotate-6 text-zinc-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:bg-zinc-700 dark:hover:border-zinc-500 dark:text-zinc-300 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
 }
 
 // Define size styles

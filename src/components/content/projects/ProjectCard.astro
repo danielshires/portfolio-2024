@@ -31,11 +31,11 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
         href={projectUrl}
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener noreferrer' : undefined}
-        class='group block py-1 rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white dark:focus:ring-offset-zinc-950'
+        class='group block py-1 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950'
         aria-label={linkLabel}
         data-swup-preload={external ? undefined : true}>
         <p class='text-base leading-relaxed text-zinc-900 dark:text-zinc-100'>
-          <span class='font-semibold'>{title}</span>
+          <span class='font-semibold group-hover:underline underline-offset-4'>{title}</span>
           {lineDescription && (
             <>
               {' '}
@@ -59,7 +59,7 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
         href={projectUrl}
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener noreferrer' : undefined}
-        class='group block relative overflow-hidden transition-colors duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white cursor-pointer'
+        class='group block relative overflow-hidden transition-colors duration-300 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white cursor-pointer'
         aria-label={linkLabel}
         data-swup-preload={external ? undefined : true}>
         <div class='w-full aspect-[3/2] overflow-hidden rounded-xl'>
@@ -76,7 +76,7 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
         </div>
         <div class='pt-2'>
           <div class:list={['mt-4 flex items-baseline gap-1.5 flex-wrap']}>
-            <Text variant='h5' color='default'>
+            <Text variant='h5' color='default' class='group-hover:underline underline-offset-4'>
               {title}
             </Text>
             {

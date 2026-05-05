@@ -72,49 +72,58 @@ img {
 }
 
 
-/* Focus styles - Browser-specific approach */
+/* Focus styles — avoid a persistent box on mouse-clicked links (:focus without :focus-visible) */
 
-/* Default focus styles (Safari will use these) */
-*:focus {
+*:focus:not(:focus-visible) {
+    outline: none !important;
+}
+
+*:focus-visible {
     outline: 2px solid #000000;
     outline-offset: 2px;
 }
 
-.dark *:focus {
+.dark *:focus-visible {
     outline: 2px solid #ffffff;
     outline-offset: 2px;
 }
 
-/* Hide focus rings for mouse users - all browsers */
+/* Tracked mouse modality: strip outlines and Tailwind ring shadows after pointer use */
 html[data-input-method="mouse"] *:focus,
+html[data-input-method="mouse"] *:focus-visible,
 html[data-input-method="mouse"] a:focus,
+html[data-input-method="mouse"] a:focus-visible,
 html[data-input-method="mouse"] button:focus,
+html[data-input-method="mouse"] button:focus-visible,
 html[data-input-method="mouse"] [tabindex]:focus,
+html[data-input-method="mouse"] [tabindex]:focus-visible,
 html[data-input-method="mouse"] [role="button"]:focus,
+html[data-input-method="mouse"] [role="button"]:focus-visible,
 html[data-input-method="mouse"] input:focus,
-html[data-input-method="mouse"] .cursor-pointer:focus {
+html[data-input-method="mouse"] input:focus-visible,
+html[data-input-method="mouse"] .cursor-pointer:focus,
+html[data-input-method="mouse"] .cursor-pointer:focus-visible {
     outline: none !important;
     box-shadow: none !important;
     -webkit-tap-highlight-color: transparent !important;
     border-color: inherit !important;
-    /* Remove any potential focus rings */
     -webkit-focus-ring-color: transparent !important;
     -moz-outline: none !important;
 }
 
-/* Ensure keyboard focus works for all browsers */
-html[data-input-method="keyboard"] *:focus,
-html[data-input-method="keyboard"] a:focus,
-html[data-input-method="keyboard"] button:focus,
-html[data-input-method="keyboard"] [tabindex]:focus {
+/* Reinforce keyboard modality (Tab navigation) once input method switches */
+html[data-input-method="keyboard"] *:focus-visible,
+html[data-input-method="keyboard"] a:focus-visible,
+html[data-input-method="keyboard"] button:focus-visible,
+html[data-input-method="keyboard"] [tabindex]:focus-visible {
     outline: 2px solid #000000 !important;
     outline-offset: 2px !important;
 }
 
-html.dark[data-input-method="keyboard"] *:focus,
-html.dark[data-input-method="keyboard"] a:focus,
-html.dark[data-input-method="keyboard"] button:focus,
-html.dark[data-input-method="keyboard"] [tabindex]:focus {
+html.dark[data-input-method="keyboard"] *:focus-visible,
+html.dark[data-input-method="keyboard"] a:focus-visible,
+html.dark[data-input-method="keyboard"] button:focus-visible,
+html.dark[data-input-method="keyboard"] [tabindex]:focus-visible {
     outline: 2px solid #ffffff !important;
     outline-offset: 2px !important;
 }

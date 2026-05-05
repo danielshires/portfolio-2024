@@ -23,7 +23,7 @@ const preview = posts.slice(0, 8)
           <li>
             <a
               href={`/journal/${post.slug?.current || post._id}`}
-              class='text-base font-semibold text-zinc-900 dark:text-zinc-100 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white dark:focus:ring-offset-zinc-950 rounded-sm'
+              class='text-base font-semibold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950 rounded-sm'
               data-swup-preload>
               {post.title}
             </a>

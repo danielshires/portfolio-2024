@@ -264,10 +264,11 @@ class AppManager {
     console.log(`[Focus Debug] Chrome test: ${/Chrome/.test(navigator.userAgent)}`)
     console.log(`[Focus Debug] Safari test: ${/Safari/.test(navigator.userAgent)}`)
     
-    // Chrome-specific: Global click handler to blur focused elements for mouse users
-    const isChrome = /Chrome/.test(navigator.userAgent) && !/Safari/.test(navigator.userAgent)
-    
-    if (isChrome) {
+    // Chromium (Chrome, Edge, Brave, etc.): UA string includes both "Chrome" and "Safari";
+    // the old Safari exclusion incorrectly skipped real Chrome builds.
+    const isChromium = typeof navigator !== 'undefined' && /Chrome|Chromium|Edg|OPR|CriOS/i.test(navigator.userAgent)
+
+    if (isChromium) {
       document.addEventListener('click', (event) => {
         console.log(`[Focus Debug] Chrome click detected, current input method: ${this.inputMethod}`)
         if (this.inputMethod === 'mouse') {
