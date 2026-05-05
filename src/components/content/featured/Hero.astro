@@ -3,7 +3,6 @@ import Text from '../../ui/text/Text.astro'
 
 interface Props {
   name: string
-  tagline: string
   intro: string
   avatar?: string // Optional avatar image path or URL
 }
@@ -27,21 +26,11 @@ const { name, intro, avatar } = Astro.props
       />
     )
   }
-  <!-- <div class='col-span-full flex flex-col gap-2 mt-2'>
-    <Text variant='overline'>
-      {tagline}
-    </Text>
-  </div> -->
   <div class='col-span-1 md:col-span-2 lg:col-span-3 gap-4'>
     <div>
       <Text variant='h1'>
         {intro}
       </Text>
     </div>
-    <!-- <div class='mt-8'>
-      <ContactCTA variant='primary' size='md' className='animate-fade-in-delay-2'>
-        Get in touch
-      </ContactCTA>
-    </div> -->
   </div>
 </section>
