@@ -1,0 +1,35 @@
+---
+import Text from '../../ui/text/Text.astro'
+import type { Post } from '../../../lib/sanity'
+
+interface Props {
+  posts: readonly Post[]
+}
+
+const { posts } = Astro.props
+const preview = posts.slice(0, 8)
+---
+
+{
+  preview.length > 0 && (
+    <section class='space-y-6 mt-20'>
+      <a href='/journal' class='inline-block group'>
+        <Text variant='overline' class='underline-offset-4 group-hover:underline'>
+          Writing →
+        </Text>
+      </a>
+      <ul class='space-y-3'>
+        {preview.map((post) => (
+          <li>
+            <a
+              href={`/journal/${post.slug?.current || post._id}`}
+              class='text-base font-semibold text-zinc-900 dark:text-zinc-100 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white dark:focus:ring-offset-zinc-950 rounded-sm'
+              data-swup-preload>
+              {post.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

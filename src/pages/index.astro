@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Hero from '../components/content/featured/Hero.astro'
+import WritingPreview from '../components/content/posts/WritingPreview.astro'
 import ProjectGrid from '../components/content/projects/ProjectGrid.astro'
-import { getAuthorBySlug, getAllProjects, getFeaturedProjects, urlFor } from '../lib/sanity'
+import { getAuthorBySlug, getAllProjects, getFeaturedProjects, getAllPosts, urlFor } from '../lib/sanity'
 
 const author = await getAuthorBySlug('daniel-shires')
 const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).url() : undefined
@@ -13,6 +14,9 @@ const heroContent = {
   intro: `Hi, I'm Dan — a Product Designer with 5+ years experience designing cohesive, user-centered digital products.`,
   avatar: avatarUrl,
 }
+
+// Writing (posts) for homepage preview
+const allPosts = await getAllPosts()
 
 // Get projects from Sanity
 const allProjects = await getAllProjects()
@@ -25,7 +29,7 @@ const projectsToShow =
 // SEO optimized content
 const pageTitle = 'Daniel Shires | Product Designer | Sydney, Australia'
 const pageDescription =
-  'Product Designer with 5+ years experience creating user-centered digital experiences. Based in Sydney, working at Commonwealth Bank. View my design portfolio and journal.'
+  'Product Designer with 5+ years experience creating user-centered digital experiences. Based in Sydney, working at Commonwealth Bank. View my design portfolio and writing.'
 const pageImage = avatarUrl || '/images/jpg/background.webp'
 
 // Structured data for the homepage
@@ -66,8 +70,9 @@ const structuredData = {
   pageType='website'>
   <main class='grid gap-8 overflow-hidden h-max'>
     <Hero {...heroContent} />
+    <WritingPreview posts={allPosts} />
     <div class='mt-auto'>
-      <ProjectGrid projects={projectsToShow} />
+      <ProjectGrid projects={projectsToShow} variant='text' />
     </div>
   </main>
 </Layout>

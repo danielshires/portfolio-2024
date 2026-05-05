@@ -17,7 +17,7 @@ const categories = Array.from(
 const tags = Array.from(new Set(posts.flatMap((post) => post.tags || [])))
 
 // SEO optimized content
-const pageTitle = 'Journal | Design & Development Blog | Daniel Shires'
+const pageTitle = 'Writing | Design & Development | Daniel Shires'
 const pageDescription =
   'Read insights on UX/UI design, product development, and digital experiences. Articles on design thinking, user research, and creating impactful digital products.'
 const pageImage = '/images/jpg/background.webp'
@@ -26,7 +26,7 @@ const pageImage = '/images/jpg/background.webp'
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Blog',
-  name: 'Daniel Shires Journal',
+  name: 'Daniel Shires — Writing',
   description: pageDescription,
   url: 'https://danielshires.com/journal',
   image: new URL(pageImage, 'https://danielshires.com').href,
@@ -64,7 +64,7 @@ const structuredData = {
     <!-- Hero Section -->
     <SimpleHero
       introText={{
-        first: 'Journal',
+        first: 'Writing',
         second: 'Notes, stories, and reflections on design, development, and the digital world.',
       }}
     />

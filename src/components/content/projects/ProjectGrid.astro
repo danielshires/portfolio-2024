@@ -6,9 +6,10 @@ import Text from '../../ui/text/Text.astro'
 
 interface Props {
   projects: Project[]
+  variant?: 'card' | 'text'
 }
 
-const { projects } = Astro.props
+const { projects, variant = 'card' } = Astro.props
 
 // Transform Sanity projects to match ProjectCard interface
 const transformedProjects = projects.map((project) => ({
@@ -33,20 +34,36 @@ const transformedProjects = projects.map((project) => ({
 }))
 ---
 
-<section class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8 max-w-[100vw] mt-16'>
-  <div 
-    class='col-span-full'
-    data-progressive-reveal='animate-fade-in'
-    data-progressive-delay='progressive-delay-4'
-  >
-    <Text variant='overline'>Recent projects</Text>
+<section
+  class:list={[
+    variant === 'text'
+      ? 'space-y-6 mt-16 max-w-[100vw]'
+      : 'grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8 max-w-[100vw] mt-16',
+  ]}>
+  <div class:list={[variant === 'text' ? 'flex items-baseline justify-between gap-4' : 'col-span-full']}>
+    {
+      variant === 'text' ? (
+        <a href='/projects' class='inline-block group'>
+          <Text variant='overline' class='underline-offset-4 group-hover:underline'>
+            Projects →
+          </Text>
+        </a>
+      ) : (
+        <Text variant='overline'>Recent projects</Text>
+      )
+    }
   </div>
-  {transformedProjects.map((project, index) => (
-    <div
-      data-progressive-reveal='animate-fade-in'
-      data-progressive-delay={`progressive-delay-${Math.min(5 + index, 10)}`}
-    >
-      <ProjectCard {...project} />
-    </div>
-  ))}
+  <div class:list={[variant === 'text' ? 'col-span-full space-y-1' : 'contents']}>
+    {
+      transformedProjects.map((project) =>
+        variant === 'text' ? (
+          <ProjectCard variant='text' {...project} />
+        ) : (
+          <div>
+            <ProjectCard {...project} />
+          </div>
+        )
+      )
+    }
+  </div>
 </section>

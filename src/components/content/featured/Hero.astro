@@ -26,8 +26,6 @@ const { name, tagline, intro, avatar } = Astro.props
         height='80'
         class='rounded-full mb-2 col-span-full'
         style='width:80px;height:80px;object-fit:cover;'
-        data-progressive-reveal='animate-scale-bounce'
-        data-progressive-delay='progressive-delay-2'
       />
     )
   }
@@ -37,10 +35,7 @@ const { name, tagline, intro, avatar } = Astro.props
     </Text>
   </div> -->
   <div class='col-span-1 md:col-span-2 lg:col-span-3 gap-4'>
-    <div 
-      data-progressive-reveal='animate-fade-in'
-      data-progressive-delay='progressive-delay-3'
-    >
+    <div>
       <Text variant='h1'>
         {intro}
       </Text>

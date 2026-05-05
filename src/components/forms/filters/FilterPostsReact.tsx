@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import type { Post } from '../../../lib/sanity'
 import PostCard from '../../content/posts/PostCard.jsx'
 
@@ -59,7 +59,7 @@ export default function FilterPostsReact({
           </button>
         ))}
       </nav>
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+      <section className="mt-12 max-w-3xl space-y-0">
         {/* <h2 className="col-span-12 text-base text-zinc-800 font-medium">Posts</h2> */}
         {filtered.map((post) => (
           <div key={post._id}>

@@ -1,8 +1,8 @@
 ---
-import ProjectImage from '../featured/ProjectImage.astro'
 import Text from '../../ui/text/Text.astro'
 
 interface Props {
+  variant?: 'card' | 'text'
   projectImage: {
     src: string
     alt: string
@@ -15,31 +15,61 @@ interface Props {
   projectUrl: string
 }
 
-const { projectImage, title, heading, projectUrl } = Astro.props
+const { variant = 'card', projectImage, title, heading, projectUrl } = Astro.props
+const lineDescription = heading || Astro.props.description || ''
 ---
 
-<div class='col-span-1 md:col-span-3 lg:col-span-1 p-1'>
-  <a
-    href={projectUrl}
-    class='group block relative overflow-hidden transition-colors duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white cursor-pointer'
-    aria-label={`View ${title} project`}
-    data-swup-preload
-  >
-    <div class='w-full aspect-[3/2] overflow-hidden rounded-xl'>
-      <img
-        src={projectImage.src}
-        alt={projectImage.alt}
-        width={projectImage.width}
-        height={projectImage.height}
-        class='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus:scale-100'
-        loading='eager'
-        decoding='async'
-        transition:name={`${title.toLowerCase().replace(/\s+/g, '-')}-image`}
-      />
+{
+  variant === 'text' ? (
+    <div class='col-span-full'>
+      <a
+        href={projectUrl}
+        class='group block py-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white dark:focus:ring-offset-zinc-950 rounded-sm'
+        aria-label={`View ${title} project`}
+        data-swup-preload>
+        <p class='text-base leading-relaxed text-zinc-900 dark:text-zinc-100'>
+          <span class='font-semibold'>{title}</span>
+          {lineDescription && (
+            <>
+              {' '}
+              <span class='font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'>
+                {lineDescription}
+              </span>
+            </>
+          )}
+        </p>
+      </a>
     </div>
-    <div class='pt-2'>
-      <Text variant='h5' color='default' class='mt-4'>{title}</Text>
-      {heading && <Text variant='body' color='muted' class='mt-1'>{heading}</Text>}
+  ) : (
+    <div class='col-span-1 md:col-span-3 lg:col-span-1 p-1'>
+      <a
+        href={projectUrl}
+        class='group block relative overflow-hidden transition-colors duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white cursor-pointer'
+        aria-label={`View ${title} project`}
+        data-swup-preload>
+        <div class='w-full aspect-[3/2] overflow-hidden rounded-xl'>
+          <img
+            src={projectImage.src}
+            alt={projectImage.alt}
+            width={projectImage.width}
+            height={projectImage.height}
+            class='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus:scale-100'
+            loading='eager'
+            decoding='async'
+            transition:name={`${title.toLowerCase().replace(/\s+/g, '-')}-image`}
+          />
+        </div>
+        <div class='pt-2'>
+          <Text variant='h5' color='default' class='mt-4'>
+            {title}
+          </Text>
+          {heading && (
+            <Text variant='body' color='muted' class='mt-1'>
+              {heading}
+            </Text>
+          )}
+        </div>
+      </a>
     </div>
-  </a>
-</div>
+  )
+}
