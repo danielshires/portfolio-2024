@@ -4,17 +4,9 @@ import NavLink from '../../ui/buttons/NavLink.astro'
 import Image from 'astro/components/Image.astro'
 import { getNavigationItems } from '../../../config/features'
 
-// Images
-import logoLM from '../../../public/images/svg/logo-LM.svg'
-import logoDM from '../../../public/images/svg/logo-DM.svg'
-
-// Icons
-import { Icon } from 'astro-icon/components'
-
 // Javascript
 const pathname = new URL(Astro.request.url).pathname
 const currentPath = pathname.slice(1)
-const colourModePath = currentPath === 'experiments' ? logoDM : logoLM
 
 // Get navigation items based on feature flags
 const navigationItems = getNavigationItems()

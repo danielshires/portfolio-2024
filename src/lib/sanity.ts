@@ -105,6 +105,10 @@ const config = {
   // Use CDN in production for performance, but with API token for cache-busting when needed
   useCdn: import.meta.env.PROD && !import.meta.env.SANITY_API_TOKEN,
   token: import.meta.env.SANITY_API_TOKEN,
+  // When a token is present, Sanity returns drafts alongside published documents,
+  // which causes duplicate entries on listings. Force "published" so the site
+  // only ever sees published content (regardless of token scope).
+  perspective: 'published' as const,
 }
 
 export const client = createClient(config)
