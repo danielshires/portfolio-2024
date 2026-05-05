@@ -28,7 +28,7 @@ export default {
             },
             fontFamily: {
                 'sans': ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
-                'serif': ['"Instrument Serif"', 'serif'],
+                'serif': ['ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'serif'],
                 'mono': ['"IBM Plex Mono"', 'monospace'],
                 'fragment': ['"IBM Plex Mono"', 'monospace']
             },
@@ -103,7 +103,23 @@ export default {
                             color: theme('colors.zinc.900'),
                         },
                         'a': {
-                            color: theme('colors.zinc.900'),
+                            color: theme('colors.zinc.800'),
+                            fontWeight: '500',
+                            textDecoration: 'underline',
+                            textUnderlineOffset: '0.2em',
+                            textDecorationThickness: '1px',
+                            textDecorationColor: theme('colors.zinc.400'),
+                            transitionProperty: 'color, text-decoration-color',
+                            transitionDuration: theme('transitionDuration.200'),
+                            transitionTimingFunction: theme('transitionTimingFunction.DEFAULT'),
+                        },
+                        'a:hover': {
+                            color: theme('colors.zinc.950'),
+                            textDecorationColor: theme('colors.zinc.700'),
+                        },
+                        'a:visited': {
+                            color: theme('colors.zinc.700'),
+                            textDecorationColor: theme('colors.zinc.400'),
                         },
                         'code': {
                             color: theme('colors.zinc.900'),
@@ -164,7 +180,23 @@ export default {
                             color: theme('colors.zinc.100'),
                         },
                         'a': {
-                            color: theme('colors.zinc.100'),
+                            color: theme('colors.zinc.200'),
+                            fontWeight: '500',
+                            textDecoration: 'underline',
+                            textUnderlineOffset: '0.2em',
+                            textDecorationThickness: '1px',
+                            textDecorationColor: theme('colors.zinc.500'),
+                            transitionProperty: 'color, text-decoration-color',
+                            transitionDuration: theme('transitionDuration.200'),
+                            transitionTimingFunction: theme('transitionTimingFunction.DEFAULT'),
+                        },
+                        'a:hover': {
+                            color: theme('colors.zinc.50'),
+                            textDecorationColor: theme('colors.zinc.400'),
+                        },
+                        'a:visited': {
+                            color: theme('colors.zinc.300'),
+                            textDecorationColor: theme('colors.zinc.600'),
                         },
                         'code': {
                             color: theme('colors.zinc.100'),

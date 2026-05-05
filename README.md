@@ -126,7 +126,7 @@ SANITY_DATASET=production
 
 ## 🎨 Design System
 
-- **Typography**: Custom Graphik font family
+- **Typography**: IBM Plex Sans / IBM Plex Mono (Google Fonts)
 - **Colors**: Dark/light theme support
 - **Components**: Modular, reusable UI components
 - **Animations**: Smooth page transitions and scroll effects

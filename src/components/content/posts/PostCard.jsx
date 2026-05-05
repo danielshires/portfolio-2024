@@ -9,7 +9,7 @@ export default function PostCard({ post, showDescription = true }) {
             data-swup-preload
         >
             <div className="">
-                <Text variant="body" weight="medium" className="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:underline underline-offset-4">
+                <Text variant="body" className="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:underline underline-offset-4">
                     {post.title}
                 </Text>
                 {showDescription && post.description && (

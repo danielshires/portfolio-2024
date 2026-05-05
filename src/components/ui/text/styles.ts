@@ -23,7 +23,7 @@ export const variantStyles: Record<TextVariant, string> = {
   h5: 'text-base font-medium',
   subtitle: 'text-base font-medium',
   body: 'text-base font-normal',
-  caption: 'text-base font-normal',
+  caption: 'text-sm font-normal leading-snug',
   overline: 'text-xs font-normal uppercase tracking-wider font-mono',
 }
 

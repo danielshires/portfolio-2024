@@ -11,7 +11,7 @@ const { frontMatter } = Astro.props
       <aside class='absolute top-0 mt-32'>
         <ButtonTertiary path='journal' href='/journal' target=''>Back</ButtonTertiary>
       </aside>
-      <article class='prose-p:text-xl prose-p:leading-relaxed'>
+      <article>
         <h1>{frontMatter.title}</h1>
         <slot />
       </article>
