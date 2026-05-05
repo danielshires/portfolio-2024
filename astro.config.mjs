@@ -6,7 +6,7 @@
  * - React components for interactivity
  * - Tailwind CSS for styling
  * - Sanity CMS integration
- * - Swup for smooth page transitions
+ * - Swup for client navigations / preload (no route transition theme)
  * - Sharp image optimization
  */
 
@@ -37,13 +37,12 @@ export default defineConfig({
         }),
         sanity(sanityConfig),
         swup({
-            theme: 'fade',
+            theme: false,
+            animationClass: false,
             containers: ['main'],
             preload: true,
             accessibility: true,
-            animationSelector: '.transition-fade',
-            scrollToTop: true, // Re-enable Swup's built-in scroll management
-            scrollBehavior: 'auto'
+            scrollToTop: true,
         })
     ],
     image: {

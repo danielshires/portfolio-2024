@@ -87,13 +87,6 @@ const {
       document.addEventListener('swup:enable', function() {
         document.documentElement.setAttribute('data-swup-enabled', 'true')
       })
-
-      // Mark initial load as complete after page is fully loaded
-      window.addEventListener('load', function() {
-        setTimeout(() => {
-          document.documentElement.setAttribute('data-initial-load-complete', 'true')
-        }, 100)
-      })
     }
 
     // Global script reinitialization for Swup transitions
@@ -104,7 +97,7 @@ const {
 
     // Only remove focus after transitions complete to avoid disrupting animations
     document.addEventListener('swup:transitionEnd', function() {
-      const mainElement = document.querySelector('main.transition-fade')
+      const mainElement = document.querySelector('#main-content')
       if (mainElement && mainElement === document.activeElement) {
         mainElement.blur()
         mainElement.style.outline = 'none'
@@ -121,7 +114,7 @@ const {
       if (chromeUserAgent) {
         function removeFocusStyles() {
           const bodyElement = document.body
-          const mainElement = document.querySelector('main.transition-fade')
+          const mainElement = document.querySelector('#main-content')
 
           // Remove focus from body
           if (bodyElement) {
@@ -358,8 +351,7 @@ const {
       window.elementAnimationsInitialized = true
 
       function triggerElementAnimations() {
-        // Reset all animations first
-        var animatedElements = document.querySelectorAll('[class*="animate-"]')
+        var animatedElements = document.querySelectorAll('[class*="animate-fade-in"]')
         animatedElements.forEach(function(element) {
           element.style.animation = 'none'
           element.offsetHeight // Force reflow
@@ -410,31 +402,6 @@ const {
       border-color 0.2s ease-out;
   }
 
-  /* Swup slide + fade transition styling - only when Swup is active */
-  html[data-swup-enabled] .transition-fade {
-    transition:
-      opacity 0.3s ease-out,
-      transform 0.3s ease-out;
-  }
-
-  /* Page leaving animation - slide up and fade out */
-  html.is-leaving .transition-fade {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  /* Page entering animation - slide down and fade in */
-  html.is-rendering .transition-fade {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  /* Prevent flash on initial load */
-  .transition-fade {
-    opacity: 1;
-  }
-
-  /* Remove focus outlines during and after Swup transitions */
   [data-swup-transition]:focus,
   [data-swup-transition]:focus-visible,
   html.is-changing [data-swup-transition]:focus,
@@ -463,10 +430,10 @@ const {
     ring: none !important;
   }
 
-  /* Override any Tailwind focus classes */
-  .transition-fade:focus,
-  .transition-fade:focus-visible,
-  .transition-fade:focus-within {
+  /* Override any Tailwind focus classes on layout main */
+  #main-content:focus,
+  #main-content:focus-visible,
+  #main-content:focus-within {
     outline: none !important;
     box-shadow: none !important;
     --tw-ring-shadow: none !important;
@@ -491,7 +458,7 @@ const {
 
   /* Force Chrome to never show focus rings on body and main */
   @supports (-webkit-appearance: none) {
-    body, main.transition-fade {
+    body, #main-content {
       outline: none !important;
       outline-offset: 0 !important;
       outline-color: transparent !important;
@@ -499,7 +466,7 @@ const {
       outline-width: 0 !important;
     }
 
-    body:focus, main.transition-fade:focus {
+    body:focus, #main-content:focus {
       outline: none !important;
       outline-offset: 0 !important;
       outline-color: transparent !important;
@@ -508,91 +475,28 @@ const {
     }
   }
 
-  /* Completely disable focus on main element */
-  main.transition-fade {
+  #main-content {
     outline: none !important;
     -webkit-appearance: none !important;
     -moz-appearance: none !important;
     pointer-events: auto !important;
   }
 
-  main.transition-fade:focus,
-  main.transition-fade:active,
-  main.transition-fade:focus-visible {
+  #main-content:focus,
+  #main-content:active,
+  #main-content:focus-visible {
     outline: none !important;
     box-shadow: none !important;
     border: none !important;
   }
 
-  /* Subtle page entrance animation - only for non-Swup navigation and not initial load */
-  html[data-initial-load-complete]:not([data-swup-enabled]) main {
-    animation: gentleFadeIn 0.02s ease-out;
-  }
-
-  @keyframes gentleFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* ✨ STAGGERED ELEMENT ANIMATIONS - Add these classes to any element */
-
-  /* Fade in elements with different delays after page loads */
-  .animate-fade-in {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: elementFadeIn 0.6s ease-out forwards;
-  }
-
+  /* Entry animation for elements using .animate-fade-in-delay-1 (e.g. project detail, footer CTA) */
   .animate-fade-in-delay-1 {
     opacity: 0;
     transform: translateY(30px);
-    animation: elementFadeIn 0.6s ease-out 0.1s forwards;
+    animation: elementFadeIn 0.1s ease-out 0.1s forwards;
   }
 
-  .animate-fade-in-delay-2 {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: elementFadeIn 0.6s ease-out 0.2s forwards;
-  }
-
-  .animate-fade-in-delay-3 {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: elementFadeIn 0.6s ease-out 0.3s forwards;
-  }
-
-  .animate-fade-in-delay-4 {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: elementFadeIn 0.6s ease-out 0.4s forwards;
-  }
-
-  /* Different animation styles */
-  .animate-slide-left {
-    opacity: 0;
-    transform: translateX(-50px);
-    animation: slideInLeft 0.7s ease-out 0.2s forwards;
-  }
-
-  .animate-slide-right {
-    opacity: 0;
-    transform: translateX(50px);
-    animation: slideInRight 0.7s ease-out 0.2s forwards;
-  }
-
-  .animate-scale-in {
-    opacity: 0;
-    transform: scale(0.8);
-    animation: scaleIn 0.5s ease-out 0.3s forwards;
-  }
-
-  /* Keyframe definitions */
   @keyframes elementFadeIn {
     to {
       opacity: 1;
@@ -600,48 +504,11 @@ const {
     }
   }
 
-  @keyframes slideInLeft {
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes slideInRight {
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes scaleIn {
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  /* Re-trigger animations after Swup page transitions */
-  html[data-swup-enabled] .animate-fade-in,
-  html[data-swup-enabled] .animate-fade-in-delay-1,
-  html[data-swup-enabled] .animate-fade-in-delay-2,
-  html[data-swup-enabled] .animate-fade-in-delay-3,
-  html[data-swup-enabled] .animate-fade-in-delay-4,
-  html[data-swup-enabled] .animate-slide-left,
-  html[data-swup-enabled] .animate-slide-right,
-  html[data-swup-enabled] .animate-scale-in {
+  html[data-swup-enabled] .animate-fade-in-delay-1 {
     animation-play-state: paused;
   }
 
-  /* Trigger animations when new page loads */
-  html[data-swup-enabled].is-animating .animate-fade-in,
-  html[data-swup-enabled].is-animating .animate-fade-in-delay-1,
-  html[data-swup-enabled].is-animating .animate-fade-in-delay-2,
-  html[data-swup-enabled].is-animating .animate-fade-in-delay-3,
-  html[data-swup-enabled].is-animating .animate-fade-in-delay-4,
-  html[data-swup-enabled].is-animating .animate-slide-left,
-  html[data-swup-enabled].is-animating .animate-slide-right,
-  html[data-swup-enabled].is-animating .animate-scale-in {
+  html[data-swup-enabled].is-animating .animate-fade-in-delay-1 {
     animation-play-state: running;
   }
 
@@ -657,15 +524,7 @@ const {
 
   /* Respect reduced motion preferences */
   @media (prefers-reduced-motion: reduce) {
-    /* Disable all animations for accessibility */
-    .animate-fade-in,
-    .animate-fade-in-delay-1,
-    .animate-fade-in-delay-2,
-    .animate-fade-in-delay-3,
-    .animate-fade-in-delay-4,
-    .animate-slide-left,
-    .animate-slide-right,
-    .animate-scale-in {
+    .animate-fade-in-delay-1 {
       animation: none !important;
       opacity: 1 !important;
       transform: none !important;
@@ -691,7 +550,7 @@ const {
     class='text-text-light dark:text-text-dark antialiased'
     tabindex="-1">
     <Navigation />
-    <main class='container mx-auto px-8 lg:px-16 transition-fade' tabindex="-1">
+    <main id='main-content' class='container mx-auto px-8 lg:px-16' tabindex="-1">
       <slot />
     </main>
     <!-- <Footer /> -->
