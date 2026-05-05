@@ -129,6 +129,9 @@ export default {
                 invert: {
                     css: {
                         color: theme('colors.zinc.300'),
+                        li: {
+                            color: theme('colors.zinc.300'),
+                        },
                         'li::marker': {
                             color: 'rgb(var(--zinc-50))',
                         },
