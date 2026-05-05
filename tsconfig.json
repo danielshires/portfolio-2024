@@ -11,5 +11,13 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "strict": true
-    }
+    },
+    "include": ["src/**/*", ".astro/types.d.ts", "astro.config.mjs", "sanity.config.ts"],
+    "exclude": [
+        "node_modules",
+        "dist",
+        ".astro",
+        "portfolio-25",
+        "scripts"
+    ]
 }
