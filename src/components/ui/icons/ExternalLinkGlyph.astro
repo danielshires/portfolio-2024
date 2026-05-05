@@ -1,6 +1,7 @@
 ---
 /**
- * Heroicons outline “external link” path (same as react-icons `HiOutlineExternalLink` from `react-icons/hi`).
+ * Simple diagonal arrow (up-right) used as an external-link affordance.
+ * Based on Heroicons `arrow-up-right` outline path.
  */
 interface Props {
   class?: string
@@ -19,6 +20,6 @@ const { class: className } = Astro.props
   <path
     stroke-linecap='round'
     stroke-linejoin='round'
-    d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
+    d='M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25'
   />
 </svg>

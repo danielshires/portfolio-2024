@@ -89,8 +89,8 @@ const structuredData = {
               return (
                 <ProjectCard
                   projectImage={projectImage}
-                  title={project.client || 'Project'}
-                  heading={project.subtitle || project.title}
+                  title={project.title}
+                  heading={project.subtitle}
                   projectUrl={projectListHref(project)}
                   external={isExternalProject(project)}
                 />

@@ -16,6 +16,35 @@ export default {
       description: 'Optional subheading for the project'
     },
     {
+      name: 'linkBehavior',
+      title: 'Link behavior',
+      type: 'string',
+      initialValue: 'internal',
+      options: {
+        list: [
+          { title: 'Case study page on this site', value: 'internal' },
+          { title: 'Link out (e.g. Figma, Medium)', value: 'external' },
+        ],
+        layout: 'radio',
+      },
+      validation: Rule => Rule.required(),
+    },
+    {
+      name: 'externalUrl',
+      title: 'External URL',
+      type: 'url',
+      description:
+        'When “Link out” is selected, visitors go here from project lists instead of opening a case study page.',
+      hidden: ({ parent }) => parent?.linkBehavior !== 'external',
+      validation: Rule =>
+        Rule.uri({ allowRelative: false, scheme: ['http', 'https'] }).custom((url, context) => {
+          if (context.parent?.linkBehavior === 'external') {
+            if (!url || !url.trim()) return 'Required for external links'
+          }
+          return true
+        }),
+    },
+    {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -89,8 +118,9 @@ export default {
           ],
         },
       ],
-      description: 'Key outcomes, stats, or achievements (2-4 bullet points)',
-      validation: (Rule) => Rule.max(4).min(1),
+      description: 'Optional key outcomes, stats, or achievements (max 4)',
+      hidden: ({ parent }) => parent?.linkBehavior === 'external',
+      validation: Rule => Rule.max(4),
     },
     {
       name: 'problem',
@@ -111,7 +141,8 @@ export default {
           },
         }
       ],
-      description: 'Description of the problem this project solves'
+      description: 'Description of the problem this project solves',
+      hidden: ({ parent }) => parent?.linkBehavior === 'external',
     },
     {
       name: 'solution',
@@ -136,7 +167,8 @@ export default {
           ]
         }
       ],
-      description: 'How you solved the problem - can include lists'
+      description: 'How you solved the problem - can include lists',
+      hidden: ({ parent }) => parent?.linkBehavior === 'external',
     },
     {
       name: 'images',
@@ -165,7 +197,8 @@ export default {
           ]
         }
       ],
-      description: 'Screenshots, mockups, and other project visuals'
+      description: 'Screenshots, mockups, and other project visuals',
+      hidden: ({ parent }) => parent?.linkBehavior === 'external',
     },
     {
       name: 'relatedProjects',
@@ -173,6 +206,7 @@ export default {
       type: 'array',
       of: [{ type: 'reference', to: { type: 'project' } }],
       description: 'Other projects to display at the bottom (2-3 recommended)',
+      hidden: ({ parent }) => parent?.linkBehavior === 'external',
       validation: Rule => Rule.max(3)
     },
     {
@@ -200,13 +234,19 @@ export default {
       title: 'title',
       subtitle: 'subtitle',
       media: 'heroImage',
-      client: 'client'
+      client: 'client',
+      behavior: 'linkBehavior',
+      url: 'externalUrl',
     },
     prepare(selection) {
-      const { title, subtitle, client, media } = selection
+      const { title, subtitle, client, media, behavior, url } = selection
+      const ext = behavior === 'external'
+      const sub = client ? `${client}${subtitle ? ` • ${subtitle}` : ''}` : subtitle
       return {
         title: title,
-        subtitle: client ? `${client}${subtitle ? ` • ${subtitle}` : ''}` : subtitle,
+        subtitle: ext
+          ? (url ? `${sub || ''}${sub ? ' · ' : ''}External · ${url}`.trim() : 'External link')
+          : sub,
         media: media
       }
     }

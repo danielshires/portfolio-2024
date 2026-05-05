@@ -11,28 +11,38 @@ interface Props {
 
 const { projects, variant = 'card' } = Astro.props
 
-// Transform Sanity projects to match ProjectCard interface
-const transformedProjects = projects.map((project) => ({
-  projectImage: {
-    src: project.heroImage
-      ? urlFor(project.heroImage)
-          .width(800)
-          .height(600)
-          .quality(85) // Standard quality for project thumbnails
-          .auto('format')
-          .fit('max')
-          .url()
-      : '/images/jpg/background.webp',
-    alt: project.title + ' project showcase',
-    width: 800,
-    height: 600,
-  },
-  title: project.client || project.tags?.[0] || 'Project',
-  heading: project.subtitle,
-  description: project.subtitle || 'View project details',
-  external: isExternalProject(project),
-  projectUrl: projectListHref(project),
-}))
+// Transform Sanity projects to match ProjectCard interface.
+// Text variant (homepage list) uses project name + subtitle.
+// Card variant keeps the existing client-as-headline layout.
+const transformedProjects = projects.map((project) => {
+  const isText = variant === 'text'
+  const headline = isText
+    ? project.title
+    : project.client || project.tags?.[0] || project.title
+  const sub = project.subtitle
+
+  return {
+    projectImage: {
+      src: project.heroImage
+        ? urlFor(project.heroImage)
+            .width(800)
+            .height(600)
+            .quality(85)
+            .auto('format')
+            .fit('max')
+            .url()
+        : '/images/jpg/background.webp',
+      alt: project.title + ' project showcase',
+      width: 800,
+      height: 600,
+    },
+    title: headline,
+    heading: sub,
+    description: sub,
+    external: isExternalProject(project),
+    projectUrl: projectListHref(project),
+  }
+})
 ---
 
 <section

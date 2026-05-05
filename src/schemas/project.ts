@@ -100,16 +100,8 @@ export default {
       title: 'Outcomes',
       type: 'array',
       of: [{type: 'string'}],
-      description:
-        'Key outcomes or achievements (recommended for internal case studies; optional once you publish a write-up externally)',
-      validation: (Rule: any) =>
-        Rule.custom((outcomes: string[] | undefined, context: any) => {
-          const behavior = context.parent?.linkBehavior || 'internal'
-          if (behavior === 'external') return true
-          if (!outcomes?.length) return 'Add at least one outcome for internal case studies'
-          if (outcomes.length > 4) return 'At most 4 outcomes'
-          return true
-        }),
+      description: 'Optional key outcomes or achievements (max 4)',
+      validation: (Rule: any) => Rule.max(4),
       hidden: ({ parent }: any) => parent?.linkBehavior === 'external',
     },
     {

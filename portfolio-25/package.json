@@ -8,6 +8,7 @@
     "dev": "sanity dev",
     "start": "sanity start",
     "build": "sanity build",
+    "login": "sanity login",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy"
   },
@@ -15,10 +16,10 @@
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^3.95.0",
+    "@sanity/vision": "^4.22.0",
     "react": "^19.1",
     "react-dom": "^19.1",
-    "sanity": "^3.95.0",
+    "sanity": "^4.22.0",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
