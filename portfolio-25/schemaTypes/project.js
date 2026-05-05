@@ -75,12 +75,6 @@ export default {
       description: 'Team members and collaborators'
     },
     {
-      name: 'year',
-      title: 'Year',
-      type: 'number',
-      validation: Rule => Rule.min(2000).max(new Date().getFullYear() + 1)
-    },
-    {
       name: 'duration',
       title: 'Duration',
       type: 'string',

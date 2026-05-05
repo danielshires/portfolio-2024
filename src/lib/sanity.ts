@@ -80,7 +80,6 @@ export interface Project {
   client?: string
   role?: string[]
   team?: string[]
-  year?: number
   duration?: string
   heroImage?: SanityImage
   outcomes?: string[]
@@ -300,7 +299,6 @@ export async function getAllProjects(): Promise<Project[]> {
       client,
       role,
       team,
-      year,
       duration,
       heroImage,
       outcomes,
@@ -325,7 +323,6 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       client,
       role,
       team,
-      year,
       duration,
       heroImage,
       outcomes,
@@ -344,7 +341,6 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
         client,
         heroImage,
         tags,
-        year,
         linkBehavior,
         externalUrl
       },
@@ -370,7 +366,6 @@ export async function getFeaturedProjects(): Promise<Project[]> {
       client,
       heroImage,
       tags,
-      year,
       linkBehavior,
       externalUrl
     }

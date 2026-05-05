@@ -120,7 +120,7 @@ const jsonLd = {
           client={fullProject.client}
           role={fullProject.role}
           team={fullProject.team}
-          year={fullProject.year}
+          year={fullProject.publishedAt ? new Date(fullProject.publishedAt).getFullYear() : undefined}
         />
       </div>
 
