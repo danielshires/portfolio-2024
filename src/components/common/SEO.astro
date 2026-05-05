@@ -90,14 +90,14 @@ const jsonLdHtml = jsonLdBlocks
 <meta name='theme-color' content='#09090b' media='(prefers-color-scheme: dark)' />
 
 {jsonLdHtml.map((serialized) => (
-  <script type='application/ld+json' set:html={serialized} />
+  <script is:inline type='application/ld+json' set:html={serialized} />
 ))}
 
 {googleTagId && (
   <>
     <!-- Google tag (gtag.js) -->
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${googleTagId}`}></script>
-    <script set:html={`
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${googleTagId}`}></script>
+    <script is:inline set:html={`
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());

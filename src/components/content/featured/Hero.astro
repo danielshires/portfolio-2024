@@ -1,7 +1,5 @@
 ---
-import { getPictureBySlug, urlFor } from '../../../lib/sanity'
 import Text from '../../ui/text/Text.astro'
-import ContactCTA from '../../ui/buttons/ContactCTA.astro'
 
 interface Props {
   name: string
@@ -10,7 +8,7 @@ interface Props {
   avatar?: string // Optional avatar image path or URL
 }
 
-const { name, tagline, intro, avatar } = Astro.props
+const { name, intro, avatar } = Astro.props
 ---
 
 <section
