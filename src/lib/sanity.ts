@@ -74,6 +74,9 @@ export interface Project {
   slug: {
     current: string
   }
+  /** Default to internal when absent (legacy documents). */
+  linkBehavior?: 'internal' | 'external'
+  externalUrl?: string
   client?: string
   role?: string[]
   team?: string[]
@@ -108,9 +111,24 @@ export const client = createClient(config)
 
 const builder = imageUrlBuilder(client)
 
+export function isExternalProject(
+  project: Pick<Project, 'linkBehavior' | 'externalUrl'>
+): boolean {
+  return project.linkBehavior === 'external' && Boolean(project.externalUrl?.trim())
+}
+
+/** Href for project cards and lists: internal path or external URL. */
+export function projectListHref(project: Pick<Project, 'slug' | 'linkBehavior' | 'externalUrl'>): string {
+  if (isExternalProject(project)) {
+    return project.externalUrl!.trim()
+  }
+  return `/projects/${project.slug.current}`
+}
+
 export function urlFor(source: SanityImage) {
   return builder.image(source)
 }
+
 
 // Helper function to fetch all posts
 export async function getAllPosts(): Promise<Post[]> {
@@ -284,7 +302,9 @@ export async function getAllProjects(): Promise<Project[]> {
       outcomes,
       featured,
       publishedAt,
-      tags
+      tags,
+      linkBehavior,
+      externalUrl
     }
   `)
 }
@@ -320,11 +340,15 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
         client,
         heroImage,
         tags,
-        year
+        year,
+        linkBehavior,
+        externalUrl
       },
       featured,
       publishedAt,
-      tags
+      tags,
+      linkBehavior,
+      externalUrl
     }
   `,
     { slug }
@@ -342,7 +366,9 @@ export async function getFeaturedProjects(): Promise<Project[]> {
       client,
       heroImage,
       tags,
-      year
+      year,
+      linkBehavior,
+      externalUrl
     }
   `)
 }

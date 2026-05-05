@@ -63,6 +63,7 @@ export async function GET() {
     )
     .join('')}
   ${projects
+    .filter((project: Project) => project.linkBehavior !== 'external')
     .map(
       (project: Project) => `
     <url>

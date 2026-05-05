@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getAllProjects, urlFor } from '../../lib/sanity'
+import { getAllProjects, urlFor, projectListHref, isExternalProject } from '../../lib/sanity'
 import Text from '../../components/ui/text/Text.astro'
 import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 import ProjectCard from '../../components/content/projects/ProjectCard.astro'
@@ -32,7 +32,9 @@ const structuredData = {
         '@type': 'CreativeWork',
         name: project.title,
         description: project.subtitle || 'Design project by Daniel Shires',
-        url: `https://danielshires.com/projects/${project.slug.current}`,
+        url: isExternalProject(project)
+          ? project.externalUrl!.trim()
+          : `https://danielshires.com/projects/${project.slug.current}`,
         creator: {
           '@type': 'Person',
           name: 'Daniel Shires',
@@ -89,7 +91,8 @@ const structuredData = {
                   projectImage={projectImage}
                   title={project.client || 'Project'}
                   heading={project.subtitle || project.title}
-                  projectUrl={`/projects/${project.slug.current}`}
+                  projectUrl={projectListHref(project)}
+                  external={isExternalProject(project)}
                 />
               )
             })}

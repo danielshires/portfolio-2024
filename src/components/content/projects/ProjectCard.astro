@@ -1,8 +1,11 @@
 ---
 import Text from '../../ui/text/Text.astro'
+import ExternalLinkGlyph from '../../ui/icons/ExternalLinkGlyph.astro'
 
 interface Props {
   variant?: 'card' | 'text'
+  /** When true: opens in new tab, no Swup, shows external-link glyph (react-icons `HiOutlineExternalLink` stroke). */
+  external?: boolean
   projectImage: {
     src: string
     alt: string
@@ -15,8 +18,10 @@ interface Props {
   projectUrl: string
 }
 
-const { variant = 'card', projectImage, title, heading, projectUrl } = Astro.props
+const { variant = 'card', external = false, projectImage, title, heading, projectUrl } =
+  Astro.props
 const lineDescription = heading || Astro.props.description || ''
+const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} project`
 ---
 
 {
@@ -24,11 +29,16 @@ const lineDescription = heading || Astro.props.description || ''
     <div class='col-span-full'>
       <a
         href={projectUrl}
-        class='group block py-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white dark:focus:ring-offset-zinc-950 rounded-sm'
-        aria-label={`View ${title} project`}
-        data-swup-preload>
-        <p class='text-base leading-relaxed text-zinc-900 dark:text-zinc-100'>
+        target={external ? '_blank' : undefined}
+        rel={external ? 'noopener noreferrer' : undefined}
+        class='group block py-1 rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white dark:focus:ring-offset-zinc-950'
+        aria-label={linkLabel}
+        data-swup-preload={external ? undefined : true}>
+        <p class:list={['text-base leading-relaxed text-zinc-900 dark:text-zinc-100', external && 'inline-flex flex-wrap items-baseline gap-1 gap-x-2']}>
           <span class='font-semibold'>{title}</span>
+          {external && (
+            <ExternalLinkGlyph class='w-[1em] h-[1em] relative top-[0.08em] text-zinc-500 dark:text-zinc-400 shrink-0' />
+          )}
           {lineDescription && (
             <>
               {' '}
@@ -44,9 +54,11 @@ const lineDescription = heading || Astro.props.description || ''
     <div class='col-span-1 md:col-span-3 lg:col-span-1 p-1'>
       <a
         href={projectUrl}
+        target={external ? '_blank' : undefined}
+        rel={external ? 'noopener noreferrer' : undefined}
         class='group block relative overflow-hidden transition-colors duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white cursor-pointer'
-        aria-label={`View ${title} project`}
-        data-swup-preload>
+        aria-label={linkLabel}
+        data-swup-preload={external ? undefined : true}>
         <div class='w-full aspect-[3/2] overflow-hidden rounded-xl'>
           <img
             src={projectImage.src}
@@ -60,9 +72,16 @@ const lineDescription = heading || Astro.props.description || ''
           />
         </div>
         <div class='pt-2'>
-          <Text variant='h5' color='default' class='mt-4'>
-            {title}
-          </Text>
+          <div class:list={['mt-4 flex items-start gap-1.5 flex-wrap']}>
+            <Text variant='h5' color='default'>
+              {title}
+            </Text>
+            {
+              external && (
+                <ExternalLinkGlyph class='w-5 h-5 mt-1 shrink-0 text-zinc-500 dark:text-zinc-400' />
+              )
+            }
+          </div>
           {heading && (
             <Text variant='body' color='muted' class='mt-1'>
               {heading}
