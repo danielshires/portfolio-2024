@@ -3,7 +3,7 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
 
 # CRITICAL SEO: 301 redirects to preserve rankings
 # These redirects ensure your current Google rankings are maintained
