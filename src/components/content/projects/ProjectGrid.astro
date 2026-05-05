@@ -7,9 +7,11 @@ import Text from '../../ui/text/Text.astro'
 interface Props {
   projects: Project[]
   variant?: 'card' | 'text'
+  /** When `variant` is `text`, show project subtitle after the title (default true). */
+  showSubtitle?: boolean
 }
 
-const { projects, variant = 'card' } = Astro.props
+const { projects, variant = 'card', showSubtitle = true } = Astro.props
 
 // Transform Sanity projects to match ProjectCard interface.
 // Text variant (homepage list) uses project name + subtitle.
@@ -68,7 +70,7 @@ const transformedProjects = projects.map((project) => {
     {
       transformedProjects.map((project) =>
         variant === 'text' ? (
-          <ProjectCard variant='text' {...project} />
+          <ProjectCard variant='text' showSubtitle={showSubtitle} {...project} />
         ) : (
           <div>
             <ProjectCard {...project} />

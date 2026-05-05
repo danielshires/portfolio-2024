@@ -4,32 +4,49 @@ import type { Post } from '../../../lib/sanity'
 
 interface Props {
   posts: readonly Post[]
+  /** Secondary line (excerpt/description). Off on the homepage for a title-only list. */
+  showSubtitle?: boolean
 }
 
-const { posts } = Astro.props
+const { posts, showSubtitle = false } = Astro.props
 const preview = posts.slice(0, 8)
 ---
 
 {
   preview.length > 0 && (
-    <section class='space-y-6 mt-20'>
+    <section class='space-y-6 mt-20' aria-label='Writing'>
       <a href='/journal' class='inline-block group'>
         <Text variant='overline' class='underline-offset-4 group-hover:underline'>
           Writing →
         </Text>
       </a>
-      <ul class='space-y-3'>
-        {preview.map((post) => (
-          <li>
-            <a
-              href={`/journal/${post.slug?.current || post._id}`}
-              class='text-base font-semibold text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950 rounded-sm'
-              data-swup-preload>
-              {post.title}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div class='col-span-full space-y-1'>
+        {preview.map((post) => {
+          const href = `/journal/${post.slug?.current || post._id}`
+          const lineDescription = post.excerpt || post.description || ''
+          return (
+            <div class='col-span-full'>
+              <a
+                href={href}
+                class='group block py-1 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950'
+                aria-label={`Read ${post.title}`}
+                data-swup-preload>
+                <p class='text-base leading-relaxed text-zinc-900 dark:text-zinc-100'>
+                  <span class='font-semibold group-hover:underline underline-offset-4'>{post.title}</span>
+                  {showSubtitle && lineDescription ? (
+                    <>
+                      {' '}
+                      <span class='font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'>
+                        {lineDescription}
+                      </span>
+                    </>
+                  ) : null}
+                </p>
+              </a>
+            </div>
+          )
+        })}
+      </div>
     </section>
   )
 }

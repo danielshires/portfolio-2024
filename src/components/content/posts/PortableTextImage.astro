@@ -1,0 +1,29 @@
+---
+import SanityImage from '../../media/images/SanityImage.astro'
+import type { SanityImage as SanityImageShape } from '../../../lib/sanity'
+
+/** Portable Text `image` block from Sanity (`body` array). */
+interface Props {
+  node: SanityImageShape & { alt?: string }
+}
+
+const { node } = Astro.props
+
+if (!node?.asset) {
+  return null
+}
+
+const alt = typeof node.alt === 'string' && node.alt.trim() !== '' ? node.alt : ''
+---
+
+<figure class='my-10 not-prose'>
+  <SanityImage
+    image={node}
+    alt={alt}
+    width={1200}
+    height={800}
+    preset='gallery'
+    class='w-full h-auto rounded-lg'
+    sizes='(min-width: 1200px) 75ch, 100vw'
+  />
+</figure>

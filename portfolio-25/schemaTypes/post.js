@@ -52,6 +52,14 @@ export default {
           options: {
             hotspot: true,
           },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative text',
+              description: 'Describe the image for screen readers and SEO.',
+            },
+          ],
         },
       ],
     },

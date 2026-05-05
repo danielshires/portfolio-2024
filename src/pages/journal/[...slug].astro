@@ -1,8 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getAllPosts, urlFor, type Post } from '../../lib/sanity'
+import { getAllPosts, getPostBySlug, urlFor, type Post } from '../../lib/sanity'
 import SanityImage from '../../components/media/images/SanityImage.astro'
 import Text from '../../components/ui/text/Text.astro'
+import ReadNext from '../../components/content/posts/ReadNext.astro'
+import PortableTextImage from '../../components/content/posts/PortableTextImage.astro'
 import { PortableText } from 'astro-portabletext'
 
 export async function getStaticPaths() {
@@ -11,22 +13,31 @@ export async function getStaticPaths() {
     .filter((post: Post) => post.slug?.current)
     .map((post: Post) => ({
       params: { slug: post.slug.current },
-      props: { post },
     }))
 }
 
-const { post } = Astro.props
 const { slug } = Astro.params
 
 if (!slug) {
-  Astro.redirect('/404')
+  return Astro.redirect('/404')
 }
+
+const post = await getPostBySlug(slug)
 
 if (!post) {
   return Astro.redirect('/404')
 }
 
+const readNextPosts =
+  post.relatedPosts?.filter((p) => p && p._id !== post._id && p.slug?.current) ?? []
+
 const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : undefined
+
+const portableTextComponents = {
+  type: {
+    image: PortableTextImage,
+  },
+}
 
 const canonicalUrl = new URL(Astro.url.pathname, 'https://danielshires.com').href
 
@@ -146,18 +157,11 @@ const jsonLd = {
         )
       }
       <div class='prose dark:prose-invert max-w-none text-base mt-12'>
-        {post.body && <PortableText value={post.body} />}
+        {post.body && <PortableText value={post.body} components={portableTextComponents} />}
       </div>
     </article>
 
-    <!-- Related Posts -->
-    <!-- {
-        relatedPostsToShow.length > 0 && (
-          <section class='mt-16 pt-16 border-t border-zinc-200 dark:border-zinc-800'>
-            <RelatedPosts projects={relatedPostsToShow} />
-          </section>
-        )
-      } -->
+    <ReadNext posts={readNextPosts} />
 
     <!-- Navigation Back -->
     <div class='mt-16 text-center col-span-full'>

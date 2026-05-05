@@ -4,6 +4,8 @@ import ExternalLinkGlyph from '../../ui/icons/ExternalLinkGlyph.astro'
 
 interface Props {
   variant?: 'card' | 'text'
+  /** When `variant` is `text`, show subtitle line (default true). */
+  showSubtitle?: boolean
   /** When true: opens in new tab, no Swup, shows external-link glyph (react-icons `HiOutlineExternalLink` stroke). */
   external?: boolean
   projectImage: {
@@ -18,8 +20,15 @@ interface Props {
   projectUrl: string
 }
 
-const { variant = 'card', external = false, projectImage, title, heading, projectUrl } =
-  Astro.props
+const {
+  variant = 'card',
+  external = false,
+  projectImage,
+  title,
+  heading,
+  projectUrl,
+  showSubtitle = true,
+} = Astro.props
 const lineDescription = heading || Astro.props.description || ''
 const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} project`
 ---
@@ -36,14 +45,14 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
         data-swup-preload={external ? undefined : true}>
         <p class='text-base leading-relaxed text-zinc-900 dark:text-zinc-100'>
           <span class='font-semibold group-hover:underline underline-offset-4'>{title}</span>
-          {lineDescription && (
+          {showSubtitle && lineDescription ? (
             <>
               {' '}
               <span class='font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'>
                 {lineDescription}
               </span>
             </>
-          )}
+          ) : null}
           {external && (
             <>
               {' '}

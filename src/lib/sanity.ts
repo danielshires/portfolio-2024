@@ -172,10 +172,10 @@ export async function getPostBySlug(slug: string): Promise<Post> {
       "author": author->name,
       "relatedPosts": select(
         count(relatedPosts[defined(_ref)]) > 0 => relatedPosts[defined(_ref)]->{
-            _id, title, slug, mainImage, publishedAt
-        }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()][0..1],
-        *[_type == "post" && slug.current != $slug && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) [0..1] {
-            _id, title, slug, mainImage, publishedAt
+            _id, title, slug, mainImage, publishedAt, description
+        }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()][0..4],
+        *[_type == "post" && slug.current != $slug && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) [0..4] {
+            _id, title, slug, mainImage, publishedAt, description
         }
       ),
       excerpt,

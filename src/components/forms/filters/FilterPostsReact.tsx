@@ -8,6 +8,35 @@ interface FilterPostsReactProps {
   tags: string[]
 }
 
+/** Group posts by calendar year (newest years first). Posts without a valid date land in "Other". */
+function groupPostsByYear(posts: Post[]): { label: string; posts: Post[] }[] {
+  const byYear = new Map<number, Post[]>()
+  const undated: Post[] = []
+
+  for (const post of posts) {
+    const raw = post.publishedAt
+    const d = raw ? new Date(raw) : undefined
+    const y = d && !Number.isNaN(d.getTime()) ? d.getFullYear() : undefined
+    if (y === undefined) {
+      undated.push(post)
+      continue
+    }
+    const list = byYear.get(y) ?? []
+    list.push(post)
+    byYear.set(y, list)
+  }
+
+  const sections = [...byYear.entries()]
+    .sort((a, b) => b[0] - a[0])
+    .map(([year, sectionPosts]) => ({ label: String(year), posts: sectionPosts }))
+
+  if (undated.length > 0) {
+    sections.push({ label: 'Other', posts: undated })
+  }
+
+  return sections
+}
+
 export default function FilterPostsReact({
   posts = [],
   categories = [],
@@ -21,9 +50,11 @@ export default function FilterPostsReact({
     filtered = posts.filter(
       (p) =>
         (p.category || '').toLowerCase() === filterLower ||
-        (p.tags || []).map((t) => t.toLowerCase()).includes(filterLower)
+        (p.tags || []).map((t) => t.toLowerCase()).includes(filterLower),
     )
   }
+
+  const grouped = groupPostsByYear(filtered)
 
   return (
     <div className="w-full">
@@ -59,19 +90,35 @@ export default function FilterPostsReact({
           </button>
         ))}
       </nav>
-      <section className="mt-12 max-w-3xl space-y-0">
-        {/* <h2 className="col-span-12 text-base text-zinc-800 font-medium">Posts</h2> */}
-        {filtered.map((post) => (
-          <div key={post._id}>
-            <PostCard post={post} />
-          </div>
-        ))}
-        {filtered.length === 0 && (
+      <div className="mt-12 max-w-3xl">
+        {filtered.length === 0 ? (
           <div className="col-span-full text-center text-zinc-500 dark:text-zinc-400">
             No posts found.
           </div>
+        ) : (
+          grouped.map(({ label, posts: yearPosts }, index) => (
+            <section
+              key={label}
+              className={index > 0 ? 'mt-14' : ''}
+              aria-labelledby={`journal-year-${label}`}
+            >
+              <h2
+                id={`journal-year-${label}`}
+                className="font-mono text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-4"
+              >
+                {label}
+              </h2>
+              <div className="space-y-0">
+                {yearPosts.map((post) => (
+                  <div key={post._id}>
+                    <PostCard post={post} showDescription={false} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))
         )}
-      </section>
+      </div>
     </div>
   )
 }
