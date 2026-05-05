@@ -19,6 +19,9 @@
 
 html {
     scroll-behavior: smooth;
+    /* Keep authored font sizes on mobile (Safari/Chrome often auto-adjust columns); avoids “looks smaller live than devtools” mismatches */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 body {

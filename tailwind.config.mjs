@@ -32,6 +32,11 @@ export default {
                 'mono': ['"IBM Plex Mono"', 'monospace'],
                 'fragment': ['"IBM Plex Mono"', 'monospace']
             },
+            // Global body scale knob: drives `text-base`, Text `body`/similar, and prose `p`/`li`/`h5` via theme('fontSize.base').
+            // Quick presets: 1rem (default Tailwind), 1.0625rem (~17px), 1.125rem (18px).
+            fontSize: {
+                base: ['1rem', { lineHeight: '1.5' }],
+            },
             typography: (theme) => ({
                 DEFAULT: {
                     css: {
