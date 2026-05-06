@@ -25,7 +25,13 @@ html {
 }
 
 body {
-    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     transition: background-color 0.2s ease-out, color 0.2s ease-out;

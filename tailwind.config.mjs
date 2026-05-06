@@ -27,7 +27,7 @@ export default {
                 },
             },
             fontFamily: {
-                'sans': ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+                'sans': ['Inter', 'system-ui', 'sans-serif'],
                 'serif': ['ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'serif'],
                 'mono': ['"IBM Plex Mono"', 'monospace'],
                 'fragment': ['"IBM Plex Mono"', 'monospace']
