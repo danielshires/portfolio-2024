@@ -40,7 +40,8 @@ export default {
             typography: (theme) => ({
                 DEFAULT: {
                     css: {
-                        maxWidth: '100vw',
+                        // Comfortable reading measure when prose has no explicit max-w-* (journal uses max-w-[65ch] too).
+                        maxWidth: '65ch',
                         article: {
                             maxWidth: '60ch',
                         },

@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Text from '../components/ui/text/Text.astro'
+import { simpleHeroSectionClass } from '../components/ui/text/styles'
 import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
 import { aboutContent } from '../config/about'
 import {
@@ -34,13 +35,13 @@ const structuredData = {
 
 <Layout pageTitle={pageTitle} pageDescription={pageDescription} jsonLd={structuredData}>
   <article class='pb-16 md:pb-24'>
-    <header class='mt-40' aria-label='About'>
+    <header class={simpleHeroSectionClass} aria-label='About'>
       <Text variant='h1'>About</Text>
     </header>
 
     <section class='mt-10 md:mt-14 max-w-3xl' aria-label='Summary'>
       <div class='space-y-4'>
-        <Text variant='body' class='leading-relaxed'>
+        <Text variant='body' class='!text-xl !leading-relaxed md:!text-[2rem] md:!leading-snug'>
           {aboutContent.summary.paragraph1BeforeLink}
           <a
             href={aboutContent.summary.paragraph1Link.href}
@@ -51,7 +52,7 @@ const structuredData = {
           </a>
           {aboutContent.summary.paragraph1AfterLink}
         </Text>
-        <Text variant='body' class='leading-relaxed'>
+        <Text variant='body' class='!text-xl !leading-relaxed md:!text-[2rem] md:!leading-snug'>
           {aboutContent.summary.paragraph2}
         </Text>
       </div>

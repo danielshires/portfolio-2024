@@ -81,8 +81,8 @@ export function combineStyles(
 /** Vertical offset from hero-style intros to first content block (Writing / Projects lists). */
 export const stackBelowHeroClass = 'mt-16 md:mt-20'
 
-/** Inner spacing for dense title + subtitle rows (homepage hero name → headline uses separate rules). */
-export const simpleHeroHeadingStackClass = 'flex flex-col gap-3'
+/** Inner spacing for SimpleHero title + subline (Projects / Writing intros). */
+export const simpleHeroHeadingStackClass = 'flex flex-col gap-5 md:gap-8'
 
 /** Top spacing aligned with `Hero` on the homepage. */
 export const simpleHeroSectionClass = 'flex flex-col mt-44 md:mt-52 lg:mt-60'
@@ -123,9 +123,9 @@ export const filtersNavTopClass = 'mt-10 md:mt-12'
 export const heroIdentityNameClass =
   'text-lg font-normal leading-snug text-zinc-900 dark:text-zinc-100 md:text-xl'
 
-/** Homepage hero headline only (display scale). */
+/** Homepage hero headline typography (display scale). Column width is set in `Hero.astro` from intro length. */
 export const heroDisplayIntroClass = [
-  'max-w-4xl whitespace-pre-line text-left font-medium tracking-tight text-zinc-900 dark:text-zinc-100',
+  'whitespace-pre-line text-left font-medium tracking-tight text-zinc-900 dark:text-zinc-100',
   'leading-snug md:leading-snug lg:leading-[1.12]',
   'text-3xl sm:text-4xl md:text-5xl lg:text-[4rem]',
   'mt-4',

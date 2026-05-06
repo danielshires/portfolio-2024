@@ -1,0 +1,86 @@
+---
+import JournalPostLink from './JournalPostLink.astro'
+import { groupPostsByYear } from '../../../lib/journal/groupPostsByYear'
+import { filtersNavTopClass, sectionYearLabelClass } from '../../ui/text/styles'
+import type { Post } from '../../../lib/sanity'
+
+interface Props {
+  posts: Post[]
+  categories: string[]
+  tags: string[]
+}
+
+const { posts, categories, tags } = Astro.props
+const grouped = groupPostsByYear(posts)
+
+const btnShared = 'jf-filter-btn px-4 py-1 rounded-full border text-sm transition-all duration-200'
+const btnCat = 'font-mono uppercase'
+---
+
+<style is:global>
+  #journal-filters-root .jf-filter-btn.jf-active {
+    @apply bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-transparent;
+  }
+  #journal-filters-root .jf-filter-btn.jf-inactive {
+    @apply bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700;
+  }
+</style>
+
+<div id='journal-filters-root' class='w-full'>
+  <nav class:list={['flex flex-wrap gap-2', filtersNavTopClass]} aria-label='Post filters'>
+    <button
+      type='button'
+      data-journal-filter='all'
+      class:list={[btnShared, 'jf-active', btnCat]}
+      aria-pressed='true'>
+      All
+    </button>
+    {
+      categories.map((category) => (
+        <button
+          type='button'
+          data-journal-filter={category}
+          class:list={[btnShared, 'jf-inactive', btnCat]}
+          aria-pressed='false'>
+          {category}
+        </button>
+      ))
+    }
+    {
+      tags.map((tag) => (
+        <button
+          type='button'
+          data-journal-filter={tag}
+          class:list={[btnShared, 'jf-inactive', 'font-normal']}
+          aria-pressed='false'>
+          {tag}
+        </button>
+      ))
+    }
+  </nav>
+
+  <div class='mt-12 max-w-3xl'>
+    <div data-journal-filter-empty class='text-center text-zinc-500 dark:text-zinc-400' hidden>
+      No posts found.
+    </div>
+    <div data-journal-filter-results>
+      {
+        grouped.map(({ label, posts: yearPosts }, index) => (
+          <section
+            data-year-section
+            class:list={[index > 0 ? 'mt-14' : '']}
+            aria-labelledby={`journal-year-${label}`}>
+            <h2 id={`journal-year-${label}`} class={sectionYearLabelClass}>
+              {label}
+            </h2>
+            <div class='flex flex-col'>
+              {yearPosts.map((post) => (
+                <JournalPostLink post={post} />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</div>

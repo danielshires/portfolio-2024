@@ -530,5 +530,10 @@ const {
       <slot />
     </main>
     <Footer />
+    <script>
+      import { attachJournalFilters } from '../scripts/journal-filters-client.ts'
+      attachJournalFilters()
+      document.addEventListener('astro:page-load', attachJournalFilters)
+    </script>
   </body>
 </html>

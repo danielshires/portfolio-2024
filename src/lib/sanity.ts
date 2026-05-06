@@ -33,7 +33,7 @@ export interface Post {
   publishedAt: string
   description: string
   mainImage?: SanityImage
-  body: any // This will be the Portable Text content
+  body?: any // Portable Text — omitted in listing queries to keep island props small
   tags?: string[]
   author?: string
   relatedPosts?: Post[]
@@ -133,7 +133,7 @@ export function urlFor(source: SanityImage) {
 }
 
 
-// Helper function to fetch all posts
+/** Listing/metadata only — no `body` or `mainImage` (keeps React island props within limits). */
 export async function getAllPosts(): Promise<Post[]> {
   return await client.fetch(`
     *[_type == "post" && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) {
@@ -142,8 +142,6 @@ export async function getAllPosts(): Promise<Post[]> {
       slug,
       publishedAt,
       description,
-      mainImage,
-      body,
       "tags": tags,
       "author": author->name,
       excerpt,
