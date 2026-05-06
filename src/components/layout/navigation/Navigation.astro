@@ -145,8 +145,7 @@ const navigationItems = getNavigationItems()
 
   initNavScroll()
 
+  document.addEventListener('astro:after-swap', initNavScroll)
   document.addEventListener('astro:page-load', initNavScroll)
-
-  document.addEventListener('swup:contentReplaced', initNavScroll)
-  document.addEventListener('swup:pageView', initNavScroll)
+  document.addEventListener('swup:content:replace', initNavScroll)
 </script>

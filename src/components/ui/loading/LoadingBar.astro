@@ -8,7 +8,7 @@
 
 <script>
   // @ts-nocheck
-  // Swup-safe loading bar with vanilla JavaScript
+  // Swup + @swup/astro compatibility (also fires astro:after-swap / astro:page-load)
   if (!window.loadingBarInitialized) {
     window.loadingBarInitialized = true
     
@@ -74,7 +74,7 @@
     })
     
     // On Swup navigation
-    document.addEventListener('swup:pageView', function() {
+    document.addEventListener('astro:page-load', function() {
       startImageLoadingProgress()
     })
   }

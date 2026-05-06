@@ -65,38 +65,20 @@ const {
     })()
   </script>
   <script is:inline>
-    // Prevent flash on initial page load - use window property to avoid conflicts
-    if (!window.swupInitialized) {
-      window.swupInitialized = true
+    // After Swup navigations (same signals @swup/astro emits for Astro islands)
+    document.addEventListener('astro:page-load', function() {
+      document.dispatchEvent(new CustomEvent('portfolio:route-change'))
+    })
 
-      // Suppress Swup syntax errors while keeping functionality
-      var originalConsoleError = console.error
-      console.error = function() {
-        var message = arguments[0]
-        if (typeof message === 'string' &&
-            (message.indexOf('Unexpected token') !== -1 ||
-             message.indexOf('SyntaxError') !== -1 ||
-             message.indexOf('runScript') !== -1)) {
-          // Suppress Swup-related syntax errors
-          return
-        }
-        originalConsoleError.apply(console, arguments)
-      }
-
-      // Mark when Swup is enabled to prevent initial flash
-      document.addEventListener('swup:enable', function() {
-        document.documentElement.setAttribute('data-swup-enabled', 'true')
-      })
-    }
-
-    // Global script reinitialization for Swup transitions
-    document.addEventListener('swup:contentReplaced', function() {
-      // Dispatch custom event for components to reinitialize
-      document.dispatchEvent(new CustomEvent('swup:reinitialize'))
+    document.addEventListener('swup:content:replace', function (e) {
+      var visit = e.detail && e.detail.visit
+      if (!visit || visit.history.popstate || visit.to.hash) return
+      if (visit.scroll && visit.scroll.reset === false) return
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     })
 
     // Only remove focus after transitions complete to avoid disrupting animations
-    document.addEventListener('swup:transitionEnd', function() {
+    document.addEventListener('astro:page-load', function() {
       const mainElement = document.querySelector('#main-content')
       if (mainElement && mainElement === document.activeElement) {
         mainElement.blur()
@@ -137,7 +119,7 @@ const {
         }
 
         // Only apply focus removal after transitions complete, not during
-        document.addEventListener('swup:transitionEnd', function() {
+        document.addEventListener('astro:page-load', function() {
           setTimeout(removeFocusStyles, 100)
         })
       }
@@ -196,11 +178,8 @@ const {
         setTimeout(() => updateNavigationActiveState(), 0)
       })
 
-      // Enhanced Swup event handling with multiple timing strategies
-      document.addEventListener('swup:animationOutDone', scheduleNavigationUpdate)
-      document.addEventListener('swup:contentReplaced', scheduleNavigationUpdate)
-      document.addEventListener('swup:pageView', scheduleNavigationUpdate)
-      document.addEventListener('swup:transitionEnd', scheduleNavigationUpdate)
+      document.addEventListener('astro:after-swap', scheduleNavigationUpdate)
+      document.addEventListener('astro:page-load', scheduleNavigationUpdate)
 
       // Browser navigation
       window.addEventListener('popstate', scheduleNavigationUpdate)
@@ -222,7 +201,7 @@ const {
       window.webVitalsInitialized = true
     }
 
-    // Track page load performance - with Swup-safe execution (silent)
+    // Track page load performance (silent)
     if (!window.performanceTrackingInitialized) {
       window.performanceTrackingInitialized = true
 
@@ -322,16 +301,11 @@ const {
       // Apply initial theme
       applyThemeDirectly(window.currentThemeState)
 
-      // Reapply theme after Swup transitions - multiple events for reliability
-      document.addEventListener('swup:contentReplaced', function() {
+      document.addEventListener('astro:after-swap', function() {
         applyThemeDirectly(window.currentThemeState)
       })
 
-      document.addEventListener('swup:pageView', function() {
-        applyThemeDirectly(window.currentThemeState)
-      })
-
-      document.addEventListener('swup:transitionEnd', function() {
+      document.addEventListener('astro:page-load', function() {
         applyThemeDirectly(window.currentThemeState)
       })
 
@@ -344,7 +318,7 @@ const {
       })
     }
 
-    // ✨ ELEMENT ANIMATION SYSTEM - Re-trigger animations after Swup page transitions
+    // ✨ ELEMENT ANIMATION SYSTEM - Re-trigger animations after Swup navigations
     if (!window.elementAnimationsInitialized) {
       window.elementAnimationsInitialized = true
 
@@ -357,12 +331,11 @@ const {
         })
       }
 
-      // Trigger animations after Swup page changes
-      document.addEventListener('swup:contentReplaced', function() {
-        setTimeout(triggerElementAnimations, 50) // Small delay to ensure content is ready
+      document.addEventListener('astro:after-swap', function() {
+        setTimeout(triggerElementAnimations, 50)
       })
 
-      document.addEventListener('swup:pageView', function() {
+      document.addEventListener('astro:page-load', function() {
         setTimeout(triggerElementAnimations, 50)
       })
 
@@ -400,35 +373,7 @@ const {
       border-color 0.2s ease-out;
   }
 
-  [data-swup-transition]:focus,
-  [data-swup-transition]:focus-visible,
-  html.is-changing [data-swup-transition]:focus,
-  html.is-leaving [data-swup-transition]:focus,
-  html.is-rendering [data-swup-transition]:focus,
-  html.is-animating [data-swup-transition]:focus,
-  main[data-swup-transition]:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-
   /* Prevent any blue focus rings on main container */
-  main[data-swup-transition] {
-    outline: none !important;
-  }
-
-  /* Force remove all possible focus styles that could create blue lines */
-  main[data-swup-transition],
-  main[data-swup-transition]:focus,
-  main[data-swup-transition]:focus-within,
-  main[data-swup-transition]:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-    ring: none !important;
-  }
-
-  /* Override any Tailwind focus classes on layout main */
   #main-content:focus,
   #main-content:focus-visible,
   #main-content:focus-within {
@@ -500,14 +445,6 @@ const {
       opacity: 1;
       transform: translateY(0);
     }
-  }
-
-  html[data-swup-enabled] .animate-fade-in-delay-1 {
-    animation-play-state: paused;
-  }
-
-  html[data-swup-enabled].is-animating .animate-fade-in-delay-1 {
-    animation-play-state: running;
   }
 
   /* Button hover optimizations */

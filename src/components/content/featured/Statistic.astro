@@ -4,17 +4,16 @@ import Text from '../../ui/text/Text.astro'
 interface Props {
   value: string
   label: string
-  index: number
 }
 
-const { value, label, index } = Astro.props as Props
+const { value, label } = Astro.props as Props
 ---
 
-<div class='flex flex-col items-start md:items-start' transition:name={`commbank-outcome-${index}`}>
-  <Text variant='h4' class='font-fragment' transition:name={`commbank-outcome-value-${index}`}>
+<div class='flex flex-col items-start md:items-start'>
+  <Text variant='h4' class='font-fragment'>
     {value}
   </Text>
-  <Text variant='caption' color='muted' transition:name={`commbank-outcome-label-${index}`}>
+  <Text variant='caption' color='muted'>
     {label}
   </Text>
 </div>

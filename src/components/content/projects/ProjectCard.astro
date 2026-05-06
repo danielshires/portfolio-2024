@@ -6,7 +6,7 @@ interface Props {
   variant?: 'card' | 'text'
   /** When `variant` is `text`, show subtitle line (default true). */
   showSubtitle?: boolean
-  /** When true: opens in new tab, no Swup, shows external-link glyph (react-icons `HiOutlineExternalLink` stroke). */
+  /** When true: opens in new tab, no client navigation, shows external-link glyph (react-icons `HiOutlineExternalLink` stroke). */
   external?: boolean
   projectImage: {
     src: string
@@ -80,7 +80,6 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
             class='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-focus:scale-100'
             loading='eager'
             decoding='async'
-            transition:name={`${title.toLowerCase().replace(/\s+/g, '-')}-image`}
           />
         </div>
         <div class='pt-2'>

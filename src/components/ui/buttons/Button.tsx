@@ -23,7 +23,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ReactButt
   ) => {
     const combinedClassName = combineButtonStyles(variant, size, className)
 
-    // Determine if it's an internal link for Swup preloading
+    // Internal links: Swup PreloadPlugin (data-swup-preload)
     const isInternal = href && href.startsWith('/') && !href.startsWith('//')
 
     // Common props for all elements

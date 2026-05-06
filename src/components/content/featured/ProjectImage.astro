@@ -6,17 +6,15 @@ interface Props {
   projectUrl: string
   width: number
   height: number
-  transitionName?: string
 }
 
-const { src, alt, title, projectUrl, width, height, transitionName } = Astro.props as Props
+const { src, alt, title, projectUrl, width, height } = Astro.props as Props
 ---
 
 <a
   href={projectUrl}
   class='block relative overflow-hidden group'
-  aria-label={`View ${title} project`}
-  transition:name={transitionName}>
+  aria-label={`View ${title} project`}>
   <div class='w-full aspect-[3/2] overflow-hidden rounded-xl'>
     <img
       src={src}

@@ -23,7 +23,6 @@ const {
 
 const combinedClassName = combineButtonStyles(variant, size, className)
 
-// Determine if it's an internal link for Swup preloading
 const isInternal = href && href.startsWith('/') && !href.startsWith('//')
 const shouldPreload = swupPreload !== undefined ? swupPreload : isInternal
 

@@ -6,7 +6,7 @@
  * - React components for interactivity
  * - Tailwind CSS for styling
  * - Sanity CMS integration
- * - Swup for client navigations / preload (no route transition theme)
+ * - Swup (main-only swap; instant feel with theme off + no head asset wait)
  * - Sharp image optimization
  */
 
@@ -42,8 +42,18 @@ export default defineConfig({
             containers: ['main'],
             preload: true,
             accessibility: true,
-            scrollToTop: true,
-        })
+            // Intercept clicks as soon as the bundle runs (idle init delays first navigations)
+            loadOnIdle: false,
+            // Do not block swap on new stylesheets in <head> (big win vs 1–2s stalls)
+            updateHead: { awaitAssets: false, persistAssets: false, persistTags: false },
+            smoothScrolling: {
+                animateScroll: {
+                    betweenPages: false,
+                    samePageWithHash: true,
+                    samePage: true,
+                },
+            },
+        }),
     ],
     image: {
         service: {
@@ -59,8 +69,10 @@ export default defineConfig({
             pathname: '/static/**'
         }]
     },
+    // Keep off: Swup PreloadPlugin + data-swup-preload cover in-app routes; avoids duplicate prefetch work
     prefetch: {
-        prefetchAll: false
+        prefetchAll: false,
+        defaultStrategy: 'hover',
     },
     vite: {
         build: {
