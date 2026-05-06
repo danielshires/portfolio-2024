@@ -1,6 +1,7 @@
 ---
 import ProjectImage from './ProjectImage.astro'
 import Statistic from './Statistic.astro'
+import Text from '../../ui/text/Text.astro'
 import type { FeaturedProjectProps, Outcome } from './types'
 
 const { projectImage, title, heading, outcomes, projectUrl } = Astro.props as FeaturedProjectProps
@@ -19,16 +20,12 @@ const { projectImage, title, heading, outcomes, projectUrl } = Astro.props as Fe
   id='projectContent'
   class='flex flex-col md:flex-row gap-4 justify-between mt-6'>
   <!-- Title -->
-  <div id='text' class='flex flex-col gap-2 md:w-2/4'>
-    <!-- Title -->
-    <h3 class='text-sm font-medium'>
-      {title}
-    </h3>
-    <!-- Heading -->
-    <h2 class='text-xl md:text-2xl lg:text-2xl'>
-      {heading}
-    </h2>
-  </div>
+    <div id='text' class='flex flex-col gap-2 md:w-2/4'>
+      <Text variant='caption' color='muted' weight='medium'>
+        {title}
+      </Text>
+      <Text variant='h3'>{heading}</Text>
+    </div>
   <!-- Outcomes -->
   <div id='outcomes' class='flex flex-row gap-8'>
     {

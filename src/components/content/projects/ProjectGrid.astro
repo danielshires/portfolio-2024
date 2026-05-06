@@ -3,6 +3,11 @@ import ProjectCard from './ProjectCard.astro'
 import { urlFor, projectListHref, isExternalProject } from '../../../lib/sanity'
 import type { Project } from '../../../lib/sanity'
 import Text from '../../ui/text/Text.astro'
+import {
+  contentSectionHeadingLinkClass,
+  sectionYearLabelClass,
+  stackBelowHeroClass,
+} from '../../ui/text/styles'
 
 interface Props {
   projects: Project[]
@@ -50,23 +55,23 @@ const transformedProjects = projects.map((project) => {
 <section
   class:list={[
     variant === 'text'
-      ? 'space-y-6 mt-16 max-w-[100vw]'
-      : 'grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8 max-w-[100vw] mt-16',
+      ? ['flex', 'flex-col', stackBelowHeroClass, 'max-w-[100vw]']
+      : ['grid', 'grid-cols-1', 'md:grid-cols-6', 'lg:grid-cols-3', 'gap-8', 'max-w-[100vw]', stackBelowHeroClass],
   ]}>
-  <div class:list={[variant === 'text' ? 'flex items-baseline justify-between gap-4' : 'col-span-full']}>
-    {
-      variant === 'text' ? (
-        <a href='/projects' class='inline-block group'>
-          <Text variant='overline' class='underline-offset-4 group-hover:underline'>
-            Projects →
-          </Text>
+  {
+    variant === 'text' ? (
+      <h2 class={sectionYearLabelClass}>
+        <a href='/projects' class={contentSectionHeadingLinkClass}>
+          Projects →
         </a>
-      ) : (
+      </h2>
+    ) : (
+      <div class:list={['col-span-full']}>
         <Text variant='overline'>Recent projects</Text>
-      )
-    }
-  </div>
-  <div class:list={[variant === 'text' ? 'col-span-full space-y-1' : 'contents']}>
+      </div>
+    )
+  }
+  <div class:list={[variant === 'text' ? 'col-span-full flex flex-col' : 'contents']}>
     {
       transformedProjects.map((project) =>
         variant === 'text' ? (

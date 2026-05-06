@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import Text from '../../ui/text/Text'
 
+import { linkListRowAnchorClass } from '../../ui/text/styles'
+
 export default function PostCard({ post, showDescription = true }) {
     return (
         <a
             href={`/journal/${post.slug?.current || post._id}`}
-            className="group block py-1 border-b border-zinc-200/80 dark:border-zinc-800/80 last:border-b-0 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950"
+            className={linkListRowAnchorClass}
             data-swup-preload
         >
             <div className="">

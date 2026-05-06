@@ -1,4 +1,6 @@
 ---
+import { heroDisplayIntroClass, heroIdentityNameClass } from '../../ui/text/styles'
+
 interface Props {
   name: string
   intro: string
@@ -30,7 +32,7 @@ const { name, intro, avatar } = Astro.props
               />
             )
           }
-          <p class='text-lg font-normal leading-snug text-zinc-900 dark:text-zinc-100 md:text-xl'>
+          <p class={heroIdentityNameClass}>
             {name}
           </p>
         </div>
@@ -50,13 +52,7 @@ const { name, intro, avatar } = Astro.props
       />
     )
   }
-  <h1
-    class:list={[
-      'max-w-4xl whitespace-pre-line text-left font-medium tracking-tight text-zinc-900 dark:text-zinc-100',
-      'leading-snug md:leading-snug lg:leading-[1.12]',
-      'text-3xl sm:text-4xl md:text-5xl lg:text-[4rem]',
-      'mt-4',
-    ]}>
+  <h1 class={heroDisplayIntroClass}>
     {intro}
   </h1>
 </section>

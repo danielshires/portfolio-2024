@@ -1,6 +1,7 @@
 ---
 import type { Picture } from '../../../lib/sanity'
 import SanityImage from '../images/SanityImage.astro'
+import Text from '../../ui/text/Text.astro'
 
 interface Props {
   picture: Picture
@@ -29,12 +30,12 @@ const { picture } = Astro.props
     )
   }
   <div class='p-4'>
-    <h3 class='text-lg font-medium'>{picture.title}</h3>
+    <Text variant='h5'>{picture.title}</Text>
     {
       picture.description && (
-        <p class='mt-2 text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2'>
+        <Text variant='caption' color='muted' class='mt-2 line-clamp-2'>
           {picture.description}
-        </p>
+        </Text>
       )
     }
   </div>

@@ -119,25 +119,20 @@ const jsonLd = {
   jsonLd={jsonLd}>
   <div class='min-h-screen py-16 lg:py-24'>
     <article class='prose dark:prose-invert prose-headings:text-left max-w-[75ch] mx-auto text-base'>
-      <header class='not-prose text-left mt-12 mb-12'>
-        <Text variant='h1' class='mb-2'>{post.title} </Text>
+      <header class='not-prose text-left mt-12 mb-12 flex flex-col gap-5 md:gap-6'>
+        <Text variant='h1'>{post.title}</Text>
         {
           post.description && (
-            <Text
-              variant='body'
-              color='muted'
-              class='mt-0 mb-1 text-xl font-normal leading-relaxed max-w-[55ch]'>
+            <Text variant='lead' color='muted' class='max-w-[55ch]'>
               {post.description}
             </Text>
           )
         }
         {
           metaBits.length > 0 && (
-            <p
-              class='mt-0 text-left text-xs font-normal uppercase tracking-wider font-mono text-zinc-500 dark:text-zinc-400'
-              aria-label={metaAriaLabel}>
+            <Text variant='overline' color='muted' aria-label={metaAriaLabel}>
               {metaBits.join(' · ')}
-            </p>
+            </Text>
           )
         }
       </header>

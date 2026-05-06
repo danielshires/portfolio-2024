@@ -1,9 +1,10 @@
 ---
-
 /**
  * Minimal “Read next” list (title-only links).
  * Uses Sanity `relatedPosts` when set; otherwise `getPostBySlug` supplies recent posts.
  */
+
+import Text from '../../ui/text/Text.astro'
 
 export interface ReadNextPost {
   _id: string
@@ -26,19 +27,19 @@ const items = posts.filter((p) => p?.slug?.current)
       class='mt-16 pt-12 border-t border-zinc-200 dark:border-zinc-800 max-w-[75ch] mx-auto px-4 sm:px-0'
       aria-labelledby='read-next-heading'>
       <div class='w-10 h-0.5 rounded-full bg-amber-500 mb-5' aria-hidden='true' />
-      <h2
-        id='read-next-heading'
-        class='text-xs font-normal uppercase tracking-wider font-mono text-zinc-600 dark:text-zinc-400 mb-8'>
+      <Text variant='overline' color='muted' class='mb-8' id='read-next-heading'>
         Read next
-      </h2>
-      <ul class='space-y-5 list-none p-0 m-0'>
+      </Text>
+      <ul class='space-y-4 list-none p-0 m-0'>
         {items.map((p) => (
           <li>
             <a
               href={`/journal/${p.slug!.current}`}
-              class='block text-lg sm:text-xl font-medium text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-4 decoration-zinc-400 dark:decoration-zinc-500 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950 rounded-sm'
+              class='block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
               data-swup-preload>
-              {p.title}
+              <Text variant='h4' weight='medium' color='default' class='hover:underline underline-offset-4 decoration-zinc-400 dark:decoration-zinc-500'>
+                {p.title}
+              </Text>
             </a>
           </li>
         ))}

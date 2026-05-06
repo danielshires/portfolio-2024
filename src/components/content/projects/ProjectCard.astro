@@ -1,5 +1,11 @@
 ---
 import Text from '../../ui/text/Text.astro'
+import {
+  linkListMutedContinuationClass,
+  linkListParagraphClass,
+  linkListRowAnchorClass,
+  linkListStrongTitleClass,
+} from '../../ui/text/styles'
 import ExternalLinkGlyph from '../../ui/icons/ExternalLinkGlyph.astro'
 
 interface Props {
@@ -40,15 +46,15 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
         href={projectUrl}
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener noreferrer' : undefined}
-        class='group block py-1 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950'
+        class={linkListRowAnchorClass}
         aria-label={linkLabel}
         data-swup-preload={external ? undefined : true}>
-        <p class='text-base leading-relaxed text-zinc-900 dark:text-zinc-100'>
-          <span class='font-semibold group-hover:underline underline-offset-4'>{title}</span>
+        <p class={linkListParagraphClass}>
+          <span class={linkListStrongTitleClass}>{title}</span>
           {showSubtitle && lineDescription ? (
             <>
               {' '}
-              <span class='font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'>
+              <span class={linkListMutedContinuationClass}>
                 {lineDescription}
               </span>
             </>

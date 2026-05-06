@@ -1,5 +1,13 @@
 ---
-import Text from '../../ui/text/Text.astro'
+import {
+  contentSectionHeadingLinkClass,
+  linkListMutedContinuationClass,
+  linkListParagraphClass,
+  linkListRowAnchorPlainClass,
+  linkListStrongTitleClass,
+  sectionYearLabelClass,
+  stackBelowHeroClass,
+} from '../../ui/text/styles'
 import type { Post } from '../../../lib/sanity'
 
 interface Props {
@@ -14,36 +22,32 @@ const preview = posts.slice(0, 8)
 
 {
   preview.length > 0 && (
-    <section class='space-y-6 mt-20' aria-label='Writing'>
-      <a href='/journal' class='inline-block group'>
-        <Text variant='overline' class='underline-offset-4 group-hover:underline'>
-          Writing →
-        </Text>
-      </a>
-      <div class='col-span-full space-y-1'>
+    <section class:list={[stackBelowHeroClass]} aria-label='Writing'>
+      <h2 class={sectionYearLabelClass}>
+        <a href='/journal' class={contentSectionHeadingLinkClass}>Writing →</a>
+      </h2>
+      <div class='flex flex-col'>
         {preview.map((post) => {
           const href = `/journal/${post.slug?.current || post._id}`
           const lineDescription = post.excerpt || post.description || ''
           return (
-            <div class='col-span-full'>
-              <a
-                href={href}
-                class='group block py-1 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950'
-                aria-label={`Read ${post.title}`}
-                data-swup-preload>
-                <p class='text-base leading-relaxed text-zinc-900 dark:text-zinc-100'>
-                  <span class='font-semibold group-hover:underline underline-offset-4'>{post.title}</span>
-                  {showSubtitle && lineDescription ? (
-                    <>
-                      {' '}
-                      <span class='font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'>
-                        {lineDescription}
-                      </span>
-                    </>
-                  ) : null}
-                </p>
-              </a>
-            </div>
+            <a
+              href={href}
+              class={linkListRowAnchorPlainClass}
+              aria-label={`Read ${post.title}`}
+              data-swup-preload>
+              <p class={linkListParagraphClass}>
+                <span class={linkListStrongTitleClass}>{post.title}</span>
+                {showSubtitle && lineDescription ? (
+                  <>
+                    {' '}
+                    <span class={linkListMutedContinuationClass}>
+                      {lineDescription}
+                    </span>
+                  </>
+                ) : null}
+              </p>
+            </a>
           )
         })}
       </div>

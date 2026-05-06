@@ -1,5 +1,6 @@
 ---
 import Text from '../../ui/text/Text.astro'
+import { simpleHeroHeadingStackClass, simpleHeroSectionClass } from '../../ui/text/styles'
 
 interface Props {
   introText: {
@@ -11,8 +12,8 @@ interface Props {
 const { introText } = Astro.props
 ---
 
-<section class='flex flex-col gap-4 mt-40' aria-label='Hero Section'>
-  <div class='flex flex-col gap-2'>
+<section class={simpleHeroSectionClass} aria-label='Hero Section'>
+  <div class={simpleHeroHeadingStackClass}>
     <Text variant='h1'>{introText.first}</Text>
     <Text variant='body'>{introText.second}</Text>
   </div>

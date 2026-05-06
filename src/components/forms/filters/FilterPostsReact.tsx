@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Post } from '../../../lib/sanity'
 import PostCard from '../../content/posts/PostCard.jsx'
+import { filtersNavTopClass, sectionYearLabelClass } from '../../ui/text/styles'
 
 interface FilterPostsReactProps {
   posts: Post[]
@@ -58,7 +59,7 @@ export default function FilterPostsReact({
 
   return (
     <div className="w-full">
-      <nav className="flex flex-wrap gap-2 mt-12" aria-label="Post filters">
+      <nav className={`flex flex-wrap gap-2 ${filtersNavTopClass}`} aria-label="Post filters">
         <button
           className={`px-4 py-1 rounded-full border text-sm font-mono uppercase transition-all duration-200 ${activeFilter === 'all' ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900' : 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700'}`}
           aria-pressed={activeFilter === 'all'}
@@ -102,13 +103,10 @@ export default function FilterPostsReact({
               className={index > 0 ? 'mt-14' : ''}
               aria-labelledby={`journal-year-${label}`}
             >
-              <h2
-                id={`journal-year-${label}`}
-                className="font-mono text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-4"
-              >
+              <h2 id={`journal-year-${label}`} className={sectionYearLabelClass}>
                 {label}
               </h2>
-              <div className="space-y-0">
+              <div className="flex flex-col">
                 {yearPosts.map((post) => (
                   <div key={post._id}>
                     <PostCard post={post} showDescription={false} />
