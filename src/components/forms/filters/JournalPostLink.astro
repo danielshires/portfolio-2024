@@ -7,26 +7,19 @@ import {
 } from '../../ui/text/styles'
 
 interface Props {
-  post: Pick<Post, '_id' | 'title' | 'slug'> & Partial<Pick<Post, 'category' | 'tags'>>
+  post: Pick<Post, '_id' | 'title' | 'slug'>
 }
 
 const { post } = Astro.props
 const href = `/journal/${post.slug?.current || post._id}`
-const cat = typeof post.category === 'string' ? post.category.toLowerCase() : ''
-const tagsLower = (post.tags || [])
-  .filter((t): t is string => typeof t === 'string')
-  .map((t) => t.toLowerCase())
-  .join(',')
 ---
 
-<div data-post-item data-category={cat} data-tags={tagsLower}>
-  <a
-    href={href}
-    class={linkListRowAnchorClass}
-    data-swup-preload
-    aria-label={`Read ${post.title}`}>
-    <p class={linkListParagraphClass}>
-      <span class={linkListStrongTitleClass}>{post.title}</span>
-    </p>
-  </a>
-</div>
+<a
+  href={href}
+  class={linkListRowAnchorClass}
+  data-swup-preload
+  aria-label={`Read ${post.title}`}>
+  <p class={linkListParagraphClass}>
+    <span class={linkListStrongTitleClass}>{post.title}</span>
+  </p>
+</a>

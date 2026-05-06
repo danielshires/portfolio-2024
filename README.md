@@ -1,4 +1,4 @@
-# Daniel Shires - Photography & Design Portfolio
+# Dan Portfolio
 
 A modern, responsive portfolio website showcasing photography collections and design projects. Built with Astro, React, and Sanity CMS for optimal performance and content management.
 

@@ -1,22 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getAllPosts } from '../../lib/sanity'
-import JournalFilters from '../../components/forms/filters/JournalFilters.astro'
+import JournalPostList from '../../components/forms/filters/JournalPostList.astro'
 import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 
 const posts = await getAllPosts()
-
-// Extract unique categories and tags from posts
-const categories = Array.from(
-  new Set(
-    posts
-      .map((post) => (typeof post.category === 'string' ? post.category : undefined))
-      .filter((c): c is string => Boolean(c))
-  )
-)
-const tags = Array.from(
-  new Set(posts.flatMap((post) => (post.tags || []).filter((t): t is string => typeof t === 'string')))
-)
 
 // SEO optimized content
 const pageTitle = 'Writing | Design & Development | Daniel Shires'
@@ -71,8 +59,7 @@ const structuredData = {
       }}
     />
 
-    <!-- Filters and Posts Grid -->
     <section class='pb-16'>
-        <JournalFilters posts={posts} categories={categories} tags={tags} />
+      <JournalPostList posts={posts} />
     </section>
 </Layout>

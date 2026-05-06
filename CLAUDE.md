@@ -14,7 +14,7 @@ All commands are run from the project root:
 
 ## Project Architecture
 
-This is a photography portfolio built with **Astro 4**, **Sanity CMS**, **React**, and **Tailwind CSS**.
+This is Dan Portfolio, built with **Astro 4**, **Sanity CMS**, **React**, and **Tailwind CSS**.
 
 ### Tech Stack
 - **Framework**: Astro 4 with SSG (Static Site Generation)

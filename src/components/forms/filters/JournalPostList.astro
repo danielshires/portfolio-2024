@@ -1,0 +1,32 @@
+---
+import JournalPostLink from './JournalPostLink.astro'
+import { groupRecentAndEarlier } from '../../../lib/journal/recentAndEarlier'
+import { sectionYearLabelClass } from '../../ui/text/styles'
+import type { Post } from '../../../lib/sanity'
+
+interface Props {
+  posts: Post[]
+}
+
+const { posts } = Astro.props
+const grouped = groupRecentAndEarlier(posts)
+---
+
+<div class='w-full max-w-3xl mt-10 md:mt-12'>
+  {
+    grouped.map(({ label, posts: sectionPosts }, index) => (
+      <section
+        class:list={[index > 0 ? 'mt-14' : '']}
+        aria-labelledby={`journal-section-${label.toLowerCase()}`}>
+        <h2 id={`journal-section-${label.toLowerCase()}`} class={sectionYearLabelClass}>
+          {label}
+        </h2>
+        <div class='flex flex-col'>
+          {sectionPosts.map((post) => (
+            <JournalPostLink post={post} />
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</div>

@@ -522,18 +522,13 @@ const {
 </style>
   </head>
   <body
-    class='text-text-light dark:text-text-dark antialiased'
+    class='text-text-light dark:text-text-dark antialiased min-h-dvh flex flex-col'
     tabindex="-1">
     <a href='#main-content' class='skip-link theme-transition'>Skip to main content</a>
     <Navigation />
-    <main id='main-content' class='container mx-auto px-8 lg:px-16' tabindex="-1">
+    <main id='main-content' class='container mx-auto px-8 lg:px-16 flex-1 w-full' tabindex="-1">
       <slot />
     </main>
     <Footer />
-    <script>
-      import { attachJournalFilters } from '../scripts/journal-filters-client.ts'
-      attachJournalFilters()
-      document.addEventListener('astro:page-load', attachJournalFilters)
-    </script>
   </body>
 </html>

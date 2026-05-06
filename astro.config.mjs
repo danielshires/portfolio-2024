@@ -1,7 +1,7 @@
 /**
  * Astro Configuration
  * 
- * Photography portfolio built with Astro 4, featuring:
+ * Dan Portfolio (Astro 4), featuring:
  * - Static Site Generation (SSG)
  * - React components for interactivity
  * - Tailwind CSS for styling

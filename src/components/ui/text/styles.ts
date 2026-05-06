@@ -87,13 +87,12 @@ export const simpleHeroHeadingStackClass = 'flex flex-col gap-5 md:gap-8'
 /** Top spacing aligned with `Hero` on the homepage. */
 export const simpleHeroSectionClass = 'flex flex-col mt-44 md:mt-52 lg:mt-60'
 
-/** Shared row link with dividers (journal index, homepage Projects text list). */
+/** Shared row link (journal index, homepage Writing preview, Projects text list). */
 export const linkListRowAnchorClass =
-  'group block py-2 border-b border-zinc-200/80 dark:border-zinc-800/80 last:border-b-0 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950'
-
-/** Same interaction/focus as link rows, without borders (homepage Writing preview). */
-export const linkListRowAnchorPlainClass =
   'group block py-2 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950'
+
+/** Alias of {@link linkListRowAnchorClass} (kept for existing imports). */
+export const linkListRowAnchorPlainClass = linkListRowAnchorClass
 
 /** One-line or title + continuation paragraph inside list links. */
 export const linkListParagraphClass =
@@ -105,19 +104,16 @@ export const linkListStrongTitleClass =
 export const linkListMutedContinuationClass =
   'font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'
 
-/** Typography shared by journal year headings and homepage Writing / Projects section titles. */
+/** Typography shared by Writing index section titles and homepage Writing / Projects section titles. */
 export const sectionLabelTypographyClass =
   'font-mono text-xs font-normal uppercase tracking-wider text-zinc-500 dark:text-zinc-400'
 
-/** Year group labels on the Writing index (+ margin below). */
+/** Section labels on the Writing index (Recent / Earlier) (+ margin below). */
 export const sectionYearLabelClass = `${sectionLabelTypographyClass} mb-4`
 
 /** “Writing →” / “Projects →” on the homepage (inside section heading). */
 export const contentSectionHeadingLinkClass =
   'underline-offset-4 transition-colors duration-200 hover:underline hover:text-zinc-900 dark:hover:text-zinc-100'
-
-/** Filter chips below SimpleHero on `/journal`. */
-export const filtersNavTopClass = 'mt-10 md:mt-12'
 
 /** Name line beside avatar on the homepage hero. */
 export const heroIdentityNameClass =

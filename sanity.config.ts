@@ -4,7 +4,7 @@ import { schemaTypes } from './src/schemas'
 
 export default defineConfig({
   name: 'default',
-  title: 'Dan Photography Portfolio',
+  title: 'Dan Portfolio',
   projectId: '5fq3rcf6',
   dataset: 'production',
   plugins: [structureTool()],
