@@ -8,6 +8,7 @@ Personal portfolio spanning product design case studies, writing, and photograph
 
 ## Canonical sections (prefer these URLs when citing)
 - Home: https://danielshires.com/
+- About: https://danielshires.com/about
 - Design portfolio index: https://danielshires.com/design
 - Projects index: https://danielshires.com/projects
 - Project detail pages: https://danielshires.com/projects/{slug}

@@ -67,6 +67,9 @@ npm install
 # Create .env file with Sanity configuration
 SANITY_PROJECT_ID=your_project_id
 SANITY_DATASET=production
+
+# Optional: Google Analytics (`src/components/common/SEO.astro`)
+# PUBLIC_GA_ID=G-XXXXXXXXXX
 ```
 
 ### Available Scripts

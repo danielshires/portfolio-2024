@@ -28,13 +28,40 @@ export async function GET() {
 
   // Get navigation items and filter by enabled/visible features
   const navigationItems = getNavigationItems()
-  const pages = [
+
+  type SitemapPage = { url: string; priority: string; changefreq: string }
+  const pageByUrl = new Map<string, SitemapPage>()
+
+  function addPage(page: SitemapPage) {
+    const prev = pageByUrl.get(page.url)
+    if (!prev || parseFloat(page.priority) > parseFloat(prev.priority)) {
+      pageByUrl.set(page.url, page)
+    }
+  }
+
+  const staticPages: SitemapPage[] = [
     { url: '', priority: '1.0', changefreq: 'weekly' },
     { url: '/pictures', priority: '0.9', changefreq: 'weekly' },
     { url: '/design', priority: '0.9', changefreq: 'weekly' },
     { url: '/journal', priority: '0.8', changefreq: 'weekly' },
-    ...navigationItems.map((item) => ({ url: item.href, priority: '0.7', changefreq: 'monthly' })),
   ]
+  staticPages.forEach(addPage)
+  navigationItems.forEach((item) =>
+    addPage({ url: item.href, priority: '0.7', changefreq: 'monthly' })
+  )
+
+  const aboutPage = pageByUrl.get('/about')
+  if (aboutPage) {
+    pageByUrl.set('/about', { ...aboutPage, priority: '0.85' })
+  }
+
+  const pages = [...pageByUrl.values()].sort((a, b) => {
+    if (a.url === '') return -1
+    if (b.url === '') return 1
+    const pd = parseFloat(b.priority) - parseFloat(a.priority)
+    if (pd !== 0) return pd
+    return a.url.localeCompare(b.url)
+  })
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

@@ -23,7 +23,6 @@ export interface AboutSummary {
 }
 
 export interface AboutContent {
-  /** Shown when the Sanity author bio is empty */
   summary: AboutSummary
   social: SocialLink[]
   work: WorkEntry[]
@@ -32,14 +31,14 @@ export interface AboutContent {
 export const aboutContent: AboutContent = {
   summary: {
     paragraph1BeforeLink:
-      "I'm a Senior Experience Designer based in Sydney, currently working at ",
+      "I'm a Senior Product Designer based in Sydney, currently working at ",
     paragraph1Link: {
       label: 'Commonwealth Bank',
       href: 'https://www.commbank.com.au',
     },
     paragraph1AfterLink: '.',
     paragraph2:
-      "I work across discovery, strategy, and delivery on complex digital products in financial services, with a focus on scalable systems, accessibility, and inclusive UI. I've contributed to products including CommBank Yello and NetBank, partnering closely with product, engineering, and research teams.",
+      "I work across discovery, strategy, and delivery on complex digital products in financial services, with a focus on scalable systems, accessibility, and inclusive product UI. I've contributed to products including CommBank Yello and NetBank, partnering closely with product, engineering, and research teams.",
   },
   social: [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/shiresdaniel/' },
@@ -48,7 +47,7 @@ export const aboutContent: AboutContent = {
   work: [
     {
       organization: 'CommBank',
-      role: 'Senior Experience Designer, CommBank Yello',
+      role: 'Senior Product Designer, CommBank Yello',
       period: '2025–present',
     },
     {

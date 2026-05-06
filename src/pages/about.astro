@@ -1,25 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Text from '../components/ui/text/Text.astro'
-import { PortableText } from 'astro-portabletext'
 import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
 import { aboutContent } from '../config/about'
 import {
   getAllProjects,
-  getAuthorBySlug,
   projectListHref,
   isExternalProject,
   urlFor,
 } from '../lib/sanity'
 
-const author = await getAuthorBySlug('daniel-shires')
-const hasSanityBio = Boolean(author?.bio && author.bio.length > 0)
-
 const projects = await getAllProjects()
 
 const pageTitle = 'About | Daniel Shires'
 const pageDescription =
-  "Senior Experience Designer in Sydney at Commonwealth Bank. Work history, case studies, and ways to connect."
+  'Product designer in Sydney at Commonwealth Bank. Work history, case studies, and ways to connect.'
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -29,8 +24,8 @@ const structuredData = {
   url: 'https://danielshires.com/about',
   mainEntity: {
     '@type': 'Person',
-    name: author?.name || 'Daniel Shires',
-    jobTitle: 'Senior Experience Designer',
+    name: 'Daniel Shires',
+    jobTitle: 'Senior Product Designer',
     url: 'https://danielshires.com',
     sameAs: aboutContent.social.map((s) => s.href).filter((h) => h.startsWith('http')),
   },
@@ -44,35 +39,22 @@ const structuredData = {
     </header>
 
     <section class='mt-10 md:mt-14 max-w-3xl' aria-label='Summary'>
-      {
-        hasSanityBio ? (
-          <div
-            class:list={[
-              'prose prose-zinc dark:prose-invert max-w-none',
-              'prose-p:text-base prose-p:font-normal prose-p:leading-relaxed prose-p:text-zinc-900 dark:prose-p:text-zinc-100',
-              'prose-p:mb-4 last:prose-p:mb-0',
-            ]}>
-            <PortableText value={author.bio ?? []} />
-          </div>
-        ) : (
-          <div class='space-y-4'>
-            <Text variant='body' class='leading-relaxed'>
-              {aboutContent.summary.paragraph1BeforeLink}
-              <a
-                href={aboutContent.summary.paragraph1Link.href}
-                target='_blank'
-                rel='noopener noreferrer'
-                class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
-                {aboutContent.summary.paragraph1Link.label}
-              </a>
-              {aboutContent.summary.paragraph1AfterLink}
-            </Text>
-            <Text variant='body' class='leading-relaxed'>
-              {aboutContent.summary.paragraph2}
-            </Text>
-          </div>
-        )
-      }
+      <div class='space-y-4'>
+        <Text variant='body' class='leading-relaxed'>
+          {aboutContent.summary.paragraph1BeforeLink}
+          <a
+            href={aboutContent.summary.paragraph1Link.href}
+            target='_blank'
+            rel='noopener noreferrer'
+            class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
+            {aboutContent.summary.paragraph1Link.label}
+          </a>
+          {aboutContent.summary.paragraph1AfterLink}
+        </Text>
+        <Text variant='body' class='leading-relaxed'>
+          {aboutContent.summary.paragraph2}
+        </Text>
+      </div>
     </section>
 
     <section class='mt-14 md:mt-20' aria-label='Social links'>
