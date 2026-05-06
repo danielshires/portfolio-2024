@@ -7,6 +7,8 @@
 :root {
     --background-color: rgb(250, 250, 250);
     --text-color: rgb(9, 9, 11);
+    /* Inline SVG noise tile — fixed grain for light + dark canvas */
+    --page-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .dark {
@@ -24,6 +26,19 @@ html {
     /* Keep authored font sizes on mobile (Safari/Chrome often auto-adjust columns); avoids “looks smaller live than devtools” mismatches */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    min-height: 100%;
+    position: relative;
+}
+
+/* Light: very subtle blush wash (static — follows LM/DM via `.dark` on html) */
+html:not(.dark) {
+    background-color: #fdfcfd;
+    background-image: linear-gradient(165deg, #ffffff 0%, #fdfbfc 50%, #faf7fa 100%);
+    background-attachment: scroll;
+}
+
+html.dark {
+    background-color: rgb(9, 9, 11);
 }
 
 body {
@@ -34,9 +49,32 @@ body {
         'Segoe UI',
         Roboto,
         sans-serif;
-    background-color: var(--background-color);
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
     color: var(--text-color);
     transition: background-color 0.2s ease-out, color 0.2s ease-out;
+}
+
+/* Grain on `html` (not `body::before` with z-index:-1 — that paints behind `html`’s fill and disappears). */
+html:not(.dark)::before,
+html.dark::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: var(--page-grain);
+    background-repeat: repeat;
+    background-size: 180px 180px;
+}
+
+html:not(.dark)::before {
+    opacity: 0.06;
+}
+
+html.dark::before {
+    opacity: 0.06;
 }
 
 

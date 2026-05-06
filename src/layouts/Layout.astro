@@ -47,20 +47,27 @@ const {
     // ✅ SINGLE THEME INITIALIZATION - Prevent flash on initial load
     ;(function () {
       try {
-        var theme = localStorage.getItem('theme')
-        if (!theme) {
-          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-        }
+        var stored = localStorage.getItem('theme')
+        var theme =
+          stored === 'light' || stored === 'dark'
+            ? stored
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
         // Apply theme immediately
         if (theme === 'dark') {
           document.documentElement.classList.add('dark')
         } else {
           document.documentElement.classList.remove('dark')
         }
-        // Set background immediately to prevent flash
-        var color = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
-        document.documentElement.style.backgroundColor = color
-        document.body.style.backgroundColor = color
+        // Dark: solid canvas on `html`. Light: CSS paints gradient (no inline fill).
+        if (theme === 'dark') {
+          document.documentElement.style.backgroundColor = 'rgb(9, 9, 11)'
+          document.body.style.removeProperty('background-color')
+        } else {
+          document.documentElement.style.removeProperty('background-color')
+          document.body.style.removeProperty('background-color')
+        }
       } catch (e) {}
     })()
   </script>
@@ -214,43 +221,46 @@ const {
     if (!window.simpleThemeManagerInitialized) {
       window.simpleThemeManagerInitialized = true
 
-      // Store current theme state
-      window.currentThemeState = localStorage.getItem('theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      // Effective theme = explicit choice (localStorage) OR system preference (never persist system automatically).
+      function getStoredThemeOverride() {
+        var raw = localStorage.getItem('theme')
+        return raw === 'light' || raw === 'dark' ? raw : null
+      }
 
-      function applyThemeDirectly(theme) {
+      function resolveEffectiveTheme() {
+        var o = getStoredThemeOverride()
+        if (o) return o
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      }
 
-        // Save to localStorage first
-        localStorage.setItem('theme', theme)
+      function applyThemeDom(theme) {
         window.currentThemeState = theme
 
-        // Apply to document
         if (theme === 'dark') {
           document.documentElement.classList.add('dark')
         } else {
           document.documentElement.classList.remove('dark')
         }
 
-        // Update CSS custom properties for background
         var bgColor = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
         var textColor = theme === 'dark' ? 'rgb(250, 250, 250)' : 'rgb(9, 9, 11)'
         document.documentElement.style.setProperty('--background-color', bgColor)
         document.documentElement.style.setProperty('--text-color', textColor)
 
-        // Also set inline styles as fallback to ensure background changes immediately
-        document.documentElement.style.backgroundColor = bgColor
-        document.body.style.backgroundColor = bgColor
+        if (theme === 'dark') {
+          document.documentElement.style.backgroundColor = bgColor
+          document.body.style.removeProperty('background-color')
+        } else {
+          document.documentElement.style.removeProperty('background-color')
+          document.body.style.removeProperty('background-color')
+        }
 
-        // 🚨 CRITICAL: Remove any conflicting Tailwind background classes from both html and body
-        // This should remove bg-zinc-50 but something might be re-adding it
         document.documentElement.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
         document.body.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
 
-        // 📱 Update Safari mobile theme-color for iOS status bar
         var themeColorMeta = document.querySelector('meta[name="theme-color"]:not([media])')
         if (!themeColorMeta) {
           try {
-            // Create a meta tag if it doesn't exist
             themeColorMeta = document.createElement('meta')
             themeColorMeta.name = 'theme-color'
             document.head.appendChild(themeColorMeta)
@@ -260,10 +270,9 @@ const {
           }
         }
         if (themeColorMeta) {
-          themeColorMeta.content = theme === 'dark' ? '#09090b' : '#fafafa'
+          themeColorMeta.content = theme === 'dark' ? '#09090b' : '#fcfbfb'
         }
 
-        // Update all theme toggle button icons
         var buttons = document.querySelectorAll('[data-theme-toggle]')
         buttons.forEach(function(button) {
           var sunIcon = button.querySelector('[data-sun-icon]')
@@ -283,12 +292,17 @@ const {
         })
       }
 
-      function toggleTheme() {
-        var newTheme = window.currentThemeState === 'dark' ? 'light' : 'dark'
-        applyThemeDirectly(newTheme)
+      function refreshTheme() {
+        applyThemeDom(resolveEffectiveTheme())
       }
 
-      // Simple click handler using event delegation
+      function toggleTheme() {
+        var eff = resolveEffectiveTheme()
+        var next = eff === 'dark' ? 'light' : 'dark'
+        localStorage.setItem('theme', next)
+        applyThemeDom(next)
+      }
+
       document.addEventListener('click', function(event) {
         var button = event.target.closest('[data-theme-toggle]')
         if (button) {
@@ -298,23 +312,20 @@ const {
         }
       })
 
-      // Apply initial theme
-      applyThemeDirectly(window.currentThemeState)
+      refreshTheme()
 
-      document.addEventListener('astro:after-swap', function() {
-        applyThemeDirectly(window.currentThemeState)
+      document.addEventListener('astro:after-swap', refreshTheme)
+
+      document.addEventListener('astro:page-load', refreshTheme)
+
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+        if (getStoredThemeOverride()) return
+        refreshTheme()
       })
 
-      document.addEventListener('astro:page-load', function() {
-        applyThemeDirectly(window.currentThemeState)
-      })
-
-      // Handle storage changes from other tabs
       window.addEventListener('storage', function(e) {
-        if (e.key === 'theme' && e.newValue) {
-          window.currentThemeState = e.newValue
-          applyThemeDirectly(e.newValue)
-        }
+        if (e.key !== 'theme') return
+        refreshTheme()
       })
     }
 
