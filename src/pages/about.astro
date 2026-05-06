@@ -87,7 +87,17 @@ const structuredData = {
           aboutContent.work.map((entry) => (
             <li class='flex flex-col gap-1 py-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6'>
               <div class='min-w-0'>
-                <span class='font-medium text-zinc-900 dark:text-zinc-100'>{entry.organization}</span>
+                {entry.organizationHref ? (
+                  <a
+                    href={entry.organizationHref}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    class='font-medium text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
+                    {entry.organization}
+                  </a>
+                ) : (
+                  <span class='font-medium text-zinc-900 dark:text-zinc-100'>{entry.organization}</span>
+                )}
                 <span class='text-zinc-600 before:mx-1.5 before:content-["·"] dark:text-zinc-400'>
                   {entry.role}
                 </span>
@@ -113,13 +123,13 @@ const structuredData = {
               const external = isExternalProject(project)
               const thumb =
                 project.heroImage != null
-                  ? urlFor(project.heroImage).width(64).height(64).auto('format').fit('max').url()
+                  ? urlFor(project.heroImage).width(128).height(128).auto('format').fit('max').url()
                   : null
               return (
                 <li>
                   <a
                     href={href}
-                    class='group flex gap-4 py-6 transition-colors'
+                    class='group flex items-start gap-4 py-6 transition-colors'
                     target={external ? '_blank' : undefined}
                     rel={external ? 'noopener noreferrer' : undefined}
                     {...(!external ? { 'data-swup-preload': true } : {})}>
@@ -127,9 +137,9 @@ const structuredData = {
                       <img
                         src={thumb}
                         alt=''
-                        width='32'
-                        height='32'
-                        class='mt-0.5 size-8 shrink-0 rounded object-cover'
+                        width='48'
+                        height='48'
+                        class='size-[3rem] shrink-0 self-start rounded-md object-cover'
                         loading='lazy'
                         decoding='async'
                       />

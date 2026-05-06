@@ -13,6 +13,8 @@ export interface WorkEntry {
   role: string
   /** e.g. "2022–24", "2025–present" */
   period: string
+  /** Employer / client website (optional) */
+  organizationHref?: string
 }
 
 export interface AboutSummary {
@@ -49,26 +51,31 @@ export const aboutContent: AboutContent = {
       organization: 'CommBank',
       role: 'Senior Product Designer, CommBank Yello',
       period: '2025–present',
+      organizationHref: 'https://www.commbank.com.au',
     },
     {
       organization: 'CommBank',
       role: 'Senior UI Designer, CommBank Yello',
       period: '2024–2025',
+      organizationHref: 'https://www.commbank.com.au',
     },
     {
       organization: 'CommBank',
       role: 'Specialist UI Designer, NetBank & CommBank Yello',
       period: '2022–2024',
+      organizationHref: 'https://www.commbank.com.au',
     },
     {
       organization: 'Formbay',
       role: 'Digital Designer',
       period: '2020–2022',
+      organizationHref: 'https://www.formbay.com.au',
     },
     {
       organization: 'Scenic Luxury Cruises & Tours',
       role: 'Digital Designer',
       period: '2019–2020',
+      organizationHref: 'https://www.scenic.com.au',
     },
     {
       organization: 'Freelance',
@@ -79,6 +86,7 @@ export const aboutContent: AboutContent = {
       organization: 'Made.com',
       role: 'Creative Artworker',
       period: '2017–2018',
+      organizationHref: 'https://www.made.com',
     },
   ],
 }
