@@ -1,6 +1,4 @@
 ---
-import Text from '../../ui/text/Text.astro'
-
 interface Props {
   name: string
   intro: string
@@ -8,9 +6,7 @@ interface Props {
   subtitle?: string
 }
 
-const { name, intro, avatar, subtitle } = Astro.props
-const showHeader = Boolean(name || subtitle)
-const marginTopLead = showHeader ? (subtitle ? 'mt-10 md:mt-14' : 'mt-6 md:mt-10') : 'mt-0'
+const { name, intro, avatar } = Astro.props
 ---
 
 <section
@@ -18,41 +14,47 @@ const marginTopLead = showHeader ? (subtitle ? 'mt-10 md:mt-14' : 'mt-6 md:mt-10
   class='flex flex-col items-start mt-44 md:mt-52 lg:mt-60'
   aria-label='Introduction'>
   {
-    avatar && (
-      <img
-        src={avatar}
-        alt={name ? `${name} avatar` : 'Avatar'}
-        width='80'
-        height='80'
-        decoding='async'
-        loading='eager'
-        class='mb-10 md:mb-12 block size-20 rounded-full object-cover'
-      />
+    name && (
+      <header class='flex flex-col items-start gap-1'>
+        <div class='flex items-center gap-2.5 md:gap-3'>
+          {
+            avatar && (
+              <img
+                src={avatar}
+                alt={name ? `${name} avatar` : 'Avatar'}
+                width='40'
+                height='40'
+                decoding='async'
+                loading='eager'
+                class='size-11 shrink-0 rounded-full object-cover md:size-10'
+              />
+            )
+          }
+          <p class='text-lg font-normal leading-snug text-zinc-900 dark:text-zinc-100 md:text-xl'>
+            {name}
+          </p>
+        </div>
+      </header>
     )
   }
   {
-    showHeader && (
-      <header class='flex flex-col items-start gap-1'>
-        {
-          name && (
-            <p class='text-lg font-bold leading-snug text-zinc-900 dark:text-zinc-100 md:text-xl'>
-              {name}
-            </p>
-          )
-        }
-        <!-- {subtitle && (
-          <Text variant='body' size='sm' weight='normal' class='leading-snug'>
-            {subtitle}
-          </Text>
-        )} -->
-      </header>
+    !name && avatar && (
+      <img
+        src={avatar}
+        alt='Avatar'
+        width='40'
+        height='40'
+        decoding='async'
+        loading='eager'
+        class='size-11 shrink-0 rounded-full object-cover md:size-10'
+      />
     )
   }
   <h1
     class:list={[
-      'max-w-4xl text-left font-normal text-zinc-900 dark:text-zinc-100',
-      'xl:leading-normal',
-      'text-xl sm:text-2xl md:text-3xl lg:text-4xl',
+      'max-w-4xl whitespace-pre-line text-left font-medium tracking-tight text-zinc-900 dark:text-zinc-100',
+      'leading-snug md:leading-snug lg:leading-[1.12]',
+      'text-3xl sm:text-4xl md:text-5xl lg:text-[4rem]',
       'mt-4',
     ]}>
     {intro}
