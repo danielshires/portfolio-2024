@@ -1,53 +1,64 @@
 ---
 import Text from '../ui/text/Text.astro'
 import { FALLBACK_MOOD } from '../../lib/woononaWeatherMood'
+
+const footerLinks = [
+  { href: '/', label: 'Home', aria: 'Home' },
+  { href: '/projects', label: 'Projects', aria: 'Projects' },
+  { href: '/journal', label: 'Writing', aria: 'Writing' },
+  { href: '/about', label: 'About', aria: 'About Daniel Shires' },
+] as const
 ---
 
 <footer class="bg-transparent border-t border-zinc-200/20 dark:border-zinc-800/20 mt-16 py-8 theme-transition">
   <div class="container mx-auto px-8 lg:px-16">
-    <div class="flex flex-col items-center text-center gap-6">
-      <!-- Footer Info -->
-      <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-zinc-200/20 dark:border-zinc-800/20 w-full">
-        <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-          <Text variant="caption" color="muted">
-            <span data-footer-mood aria-live="polite">
-              {FALLBACK_MOOD.emoji} {FALLBACK_MOOD.text}
-            </span>
-          </Text>
-          <div class="flex items-center gap-4">
-            <a
-              href='/about'
-              data-swup-preload
-              class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-              aria-label="About Daniel Shires"
-            >
-              <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
-                About
-              </Text>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/shiresdaniel/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-              aria-label="LinkedIn Profile"
-            >
-              <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
-                LinkedIn
-              </Text>
-            </a>
-            <a
-              href="mailto:hello@danielshires.com"
-              class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-              aria-label="Email Daniel Shires"
-            >
-              <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
-                Email
-              </Text>
-            </a>
-          </div>
-        </div>
+    <div class="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between w-full">
+      <div class="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start sm:gap-x-4 sm:gap-y-2">
+        <nav aria-label="Site" class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2">
+          {
+            footerLinks.map(({ href, label, aria }) => (
+              <a
+                href={href}
+                data-swup-preload
+                class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                aria-label={aria}
+              >
+                <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+                  {label}
+                </Text>
+              </a>
+            ))
+          }
+        </nav>
+        <span class="hidden sm:block h-3.5 w-px shrink-0 bg-zinc-200 dark:bg-zinc-700" aria-hidden="true" />
+        <nav aria-label="Contact" class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2">
+          <a
+            href="https://www.linkedin.com/in/shiresdaniel/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            aria-label="LinkedIn Profile"
+          >
+            <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+              LinkedIn
+            </Text>
+          </a>
+          <a
+            href="mailto:hello@danielshires.com"
+            class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            aria-label="Email Daniel Shires"
+          >
+            <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+              Email
+            </Text>
+          </a>
+        </nav>
       </div>
+      <Text variant="caption" color="muted" class="shrink-0 text-center sm:text-right">
+        <span data-footer-mood aria-live="polite">
+          {FALLBACK_MOOD.emoji} {FALLBACK_MOOD.text}
+        </span>
+      </Text>
     </div>
   </div>
 </footer>

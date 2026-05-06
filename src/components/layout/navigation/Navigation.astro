@@ -83,49 +83,70 @@ const navigationItems = getNavigationItems()
 </style>
 
 <script>
+  /** Stable static reference so removeEventListener actually drops old listeners on re-init. */
+  let navScrollHandler: (() => void) | null = null
+
   function initNavScroll() {
     const nav = document.getElementById('nav')
     if (!nav) return
 
+    if (navScrollHandler) {
+      window.removeEventListener('scroll', navScrollHandler)
+      navScrollHandler = null
+    }
+
     let lastScrollY = window.scrollY
+    /** Ignore subpixel / rubber-band noise */
+    const DIRECTION_THRESHOLD_PX = 8
+    /** Treat as "at bottom" for iOS/safari clamp slack */
+    const BOTTOM_SLACK_PX = 4
+    /** Don't reveal nav on tiny upward nudges when pinned at the bottom */
+    const BOTTOM_SCROLL_UP_MIN_PX = 28
 
     function updateNav() {
       if (!nav) return
 
       const currentScrollY = window.scrollY
+      const delta = currentScrollY - lastScrollY
+      const maxScroll = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      )
+      const nearBottom = currentScrollY >= maxScroll - BOTTOM_SLACK_PX
 
-      // Show nav at top of page
       if (currentScrollY <= 1) {
         nav.classList.remove('nav-hidden')
+        lastScrollY = currentScrollY
         return
       }
 
-      // Hide nav when scrolling down
-      if (currentScrollY > lastScrollY) {
-        nav.classList.add('nav-hidden')
+      if (Math.abs(delta) < DIRECTION_THRESHOLD_PX) {
+        lastScrollY = currentScrollY
+        return
       }
-      // Show nav when scrolling up
-      else {
+
+      if (nearBottom && delta < 0 && Math.abs(delta) < BOTTOM_SCROLL_UP_MIN_PX) {
+        lastScrollY = currentScrollY
+        return
+      }
+
+      if (delta > 0) {
+        nav.classList.add('nav-hidden')
+      } else {
         nav.classList.remove('nav-hidden')
       }
 
       lastScrollY = currentScrollY
     }
 
-    // Remove existing listener if any
-    window.removeEventListener('scroll', updateNav)
-
-    // Add scroll listener
-    window.addEventListener('scroll', updateNav, { passive: true })
+    navScrollHandler = updateNav
+    window.addEventListener('scroll', navScrollHandler, { passive: true })
   }
 
-  // Initialize on page load
   initNavScroll()
 
-  // Re-initialize after view transitions
   document.addEventListener('astro:page-load', initNavScroll)
 
-  // Re-initialize after Swup transitions
   document.addEventListener('swup:contentReplaced', initNavScroll)
   document.addEventListener('swup:pageView', initNavScroll)
 </script>

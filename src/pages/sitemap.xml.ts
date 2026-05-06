@@ -1,14 +1,5 @@
-import { getNavigationItems } from '../config/features'
-import {
-  getAllAlbums,
-  getAllPosts,
-  getAllProjects,
-  getAllPictures,
-  type Post,
-  type Album,
-  type Project,
-  type Picture,
-} from '../lib/sanity'
+import { collectSitemapSources } from '../lib/sitemap-sources'
+import type { Post, Album, Project, Picture } from '../lib/sanity'
 
 // CRITICAL SEO: Preserve these URL structures to maintain Google rankings
 // Current URL patterns that must be maintained:
@@ -20,52 +11,12 @@ import {
 // - / - Homepage
 
 export async function GET() {
-  const posts = await getAllPosts()
-  const albums = await getAllAlbums()
-  const projects = await getAllProjects()
-  const pictures = await getAllPictures()
+  const { staticPages, posts, internalProjects, albums, pictures } = await collectSitemapSources()
   const buildIso = new Date().toISOString()
-
-  // Get navigation items and filter by enabled/visible features
-  const navigationItems = getNavigationItems()
-
-  type SitemapPage = { url: string; priority: string; changefreq: string }
-  const pageByUrl = new Map<string, SitemapPage>()
-
-  function addPage(page: SitemapPage) {
-    const prev = pageByUrl.get(page.url)
-    if (!prev || parseFloat(page.priority) > parseFloat(prev.priority)) {
-      pageByUrl.set(page.url, page)
-    }
-  }
-
-  const staticPages: SitemapPage[] = [
-    { url: '', priority: '1.0', changefreq: 'weekly' },
-    { url: '/pictures', priority: '0.9', changefreq: 'weekly' },
-    { url: '/design', priority: '0.9', changefreq: 'weekly' },
-    { url: '/journal', priority: '0.8', changefreq: 'weekly' },
-  ]
-  staticPages.forEach(addPage)
-  navigationItems.forEach((item) =>
-    addPage({ url: item.href, priority: '0.7', changefreq: 'monthly' })
-  )
-
-  const aboutPage = pageByUrl.get('/about')
-  if (aboutPage) {
-    pageByUrl.set('/about', { ...aboutPage, priority: '0.85' })
-  }
-
-  const pages = [...pageByUrl.values()].sort((a, b) => {
-    if (a.url === '') return -1
-    if (b.url === '') return 1
-    const pd = parseFloat(b.priority) - parseFloat(a.priority)
-    if (pd !== 0) return pd
-    return a.url.localeCompare(b.url)
-  })
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${pages
+  ${staticPages
     .map(
       (page) => `
     <url>
@@ -89,8 +40,7 @@ export async function GET() {
   `
     )
     .join('')}
-  ${projects
-    .filter((project: Project) => project.linkBehavior !== 'external')
+  ${internalProjects
     .map(
       (project: Project) => `
     <url>
