@@ -9,9 +9,10 @@ const author = await getAuthorBySlug('daniel-shires')
 const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).url() : undefined
 
 const heroContent = {
-  name: '',
-  intro: `Hi, I'm Dan — a Product Designer with 5+ years experience designing cohesive, user-centered digital products.`,
-  avatar: avatarUrl,
+  name: 'Daniel Shires',
+  subtitle: 'Product Designer',
+  intro: `I'm a Product Designer with 5+ years' experience designing cohesive, user-centered digital products.`,
+  ...(avatarUrl !== undefined ? { avatar: avatarUrl } : {}),
 }
 
 // Writing (posts) for homepage preview
