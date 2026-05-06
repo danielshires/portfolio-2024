@@ -1,0 +1,181 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Text from '../components/ui/text/Text.astro'
+import { PortableText } from 'astro-portabletext'
+import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
+import { aboutContent } from '../config/about'
+import {
+  getAllProjects,
+  getAuthorBySlug,
+  projectListHref,
+  isExternalProject,
+  urlFor,
+} from '../lib/sanity'
+
+const author = await getAuthorBySlug('daniel-shires')
+const hasSanityBio = Boolean(author?.bio && author.bio.length > 0)
+
+const projects = await getAllProjects()
+
+const pageTitle = 'About | Daniel Shires'
+const pageDescription =
+  "Senior Experience Designer in Sydney at Commonwealth Bank. Work history, case studies, and ways to connect."
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  name: pageTitle,
+  description: pageDescription,
+  url: 'https://danielshires.com/about',
+  mainEntity: {
+    '@type': 'Person',
+    name: author?.name || 'Daniel Shires',
+    jobTitle: 'Senior Experience Designer',
+    url: 'https://danielshires.com',
+    sameAs: aboutContent.social.map((s) => s.href).filter((h) => h.startsWith('http')),
+  },
+}
+---
+
+<Layout pageTitle={pageTitle} pageDescription={pageDescription} jsonLd={structuredData}>
+  <article class='pb-16 md:pb-24'>
+    <header class='mt-40' aria-label='About'>
+      <Text variant='h1'>About</Text>
+    </header>
+
+    <section class='mt-10 md:mt-14 max-w-3xl' aria-label='Summary'>
+      {
+        hasSanityBio ? (
+          <div
+            class:list={[
+              'prose prose-zinc dark:prose-invert max-w-none',
+              'prose-p:text-base prose-p:font-normal prose-p:leading-relaxed prose-p:text-zinc-900 dark:prose-p:text-zinc-100',
+              'prose-p:mb-4 last:prose-p:mb-0',
+            ]}>
+            <PortableText value={author.bio ?? []} />
+          </div>
+        ) : (
+          <div class='space-y-4'>
+            <Text variant='body' class='leading-relaxed'>
+              {aboutContent.summary.paragraph1BeforeLink}
+              <a
+                href={aboutContent.summary.paragraph1Link.href}
+                target='_blank'
+                rel='noopener noreferrer'
+                class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
+                {aboutContent.summary.paragraph1Link.label}
+              </a>
+              {aboutContent.summary.paragraph1AfterLink}
+            </Text>
+            <Text variant='body' class='leading-relaxed'>
+              {aboutContent.summary.paragraph2}
+            </Text>
+          </div>
+        )
+      }
+    </section>
+
+    <section class='mt-14 md:mt-20' aria-label='Social links'>
+      <Text variant='caption' color='muted' class='mb-4 font-mono text-xs uppercase tracking-wider'>
+        Connect
+      </Text>
+      <ul class='flex flex-wrap gap-x-6 gap-y-2'>
+        {
+          aboutContent.social.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class='text-base text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'
+                target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+                rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class='mt-14 md:mt-20' aria-label='Work history'>
+      <Text variant='caption' color='muted' class='mb-4 font-mono text-xs uppercase tracking-wider'>
+        Work
+      </Text>
+      <ul class='divide-y divide-zinc-200/60 dark:divide-zinc-800/60'>
+        {
+          aboutContent.work.map((entry) => (
+            <li class='flex flex-col gap-1 py-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6'>
+              <div class='min-w-0'>
+                <span class='font-medium text-zinc-900 dark:text-zinc-100'>{entry.organization}</span>
+                <span class='text-zinc-600 before:mx-1.5 before:content-["·"] dark:text-zinc-400'>
+                  {entry.role}
+                </span>
+              </div>
+              <span class='shrink-0 text-sm tabular-nums text-zinc-600 dark:text-zinc-400'>
+                {entry.period}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class='mt-14 md:mt-20' aria-label='Projects'>
+      <Text variant='caption' color='muted' class='mb-4 font-mono text-xs uppercase tracking-wider'>
+        Projects
+      </Text>
+      {
+        projects.length > 0 ? (
+          <ul class='divide-y divide-zinc-200/60 dark:divide-zinc-800/60'>
+            {projects.map((project) => {
+              const href = projectListHref(project)
+              const external = isExternalProject(project)
+              const thumb =
+                project.heroImage != null
+                  ? urlFor(project.heroImage).width(64).height(64).auto('format').fit('max').url()
+                  : null
+              return (
+                <li>
+                  <a
+                    href={href}
+                    class='group flex gap-4 py-6 transition-colors'
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noopener noreferrer' : undefined}
+                    {...(!external ? { 'data-swup-preload': true } : {})}>
+                    {thumb && (
+                      <img
+                        src={thumb}
+                        alt=''
+                        width='32'
+                        height='32'
+                        class='mt-0.5 size-8 shrink-0 rounded object-cover'
+                        loading='lazy'
+                        decoding='async'
+                      />
+                    )}
+                    <div class='min-w-0 flex-1'>
+                      <div class='flex flex-wrap items-center gap-x-1 gap-y-0.5'>
+                        <span class='font-medium text-zinc-900 dark:text-zinc-100'>{project.title}</span>
+                        {external && (
+                          <ExternalLinkGlyph class='size-3.5 text-zinc-500 dark:text-zinc-500' />
+                        )}
+                      </div>
+                      {project.subtitle && (
+                        <p class='mt-1 text-sm leading-snug text-zinc-600 dark:text-zinc-400'>
+                          {project.subtitle}
+                        </p>
+                      )}
+                    </div>
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        ) : (
+          <Text variant='body' color='muted'>
+            No projects published yet.
+          </Text>
+        )
+      }
+    </section>
+  </article>
+</Layout>

@@ -19,6 +19,8 @@
 
 html {
     scroll-behavior: smooth;
+    /* Reserve scrollbar width so centered `container` + fixed nav align the same whether the page scrolls */
+    scrollbar-gutter: stable;
     /* Keep authored font sizes on mobile (Safari/Chrome often auto-adjust columns); avoids “looks smaller live than devtools” mismatches */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;

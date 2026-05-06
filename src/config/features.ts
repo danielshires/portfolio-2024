@@ -25,6 +25,7 @@ export function getNavigationItems() {
     { path: 'projects', href: '/projects', label: 'Projects', ...features.design },
     { path: 'pictures', href: '/pictures', label: 'Pictures', ...features.pictures },
     { path: 'journal', href: '/journal', label: 'Writing', ...features.posts },
+    { path: 'about', href: '/about', label: 'About', enabled: true, visible: true },
     { path: 'experiments', href: '/experiments', label: 'Experiments', ...features.experiments },
   ].filter((item) => item.enabled && item.visible)
 }
