@@ -1,5 +1,6 @@
 ---
 import Text from '../text/Text.astro'
+import { textLinkClass } from '../text/styles'
 
 interface Props {
   path: string
@@ -10,7 +11,7 @@ interface Props {
 const { href, target } = Astro.props
 ---
 
-<a class='hover:underline hover:underline-offset-4' href={href} target={target}>
+<a class={textLinkClass} href={href} target={target}>
   <Text variant='body'>
     <slot />
   </Text>

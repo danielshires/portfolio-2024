@@ -22,7 +22,7 @@ export const variantStyles: Record<TextVariant, string> = {
   h3: 'text-xl md:text-2xl font-normal leading-snug',
   h4: 'text-lg md:text-xl font-normal leading-snug',
   h5: 'text-base font-semibold leading-snug',
-  subtitle: 'text-base font-medium leading-snug',
+  subtitle: 'text-base font-normal leading-snug',
   lead: 'text-lg md:text-xl font-normal leading-relaxed',
   body: 'text-base font-normal leading-relaxed',
   caption: 'text-sm font-normal leading-snug',
@@ -87,9 +87,48 @@ export const simpleHeroHeadingStackClass = 'flex flex-col gap-5 md:gap-8'
 /** Top spacing aligned with `Hero` on the homepage. */
 export const simpleHeroSectionClass = 'flex flex-col mt-44 md:mt-52 lg:mt-60'
 
+/** 1px underline stroke + zinc decoration colors (use with `hover:underline`, optional `no-underline`). */
+export const linkUnderlineDecorationClass =
+  'underline-offset-4 decoration-zinc-400 decoration-1 transition-colors hover:decoration-zinc-600 dark:decoration-zinc-500 dark:hover:decoration-zinc-300'
+
+/** Default in-content text link: underline on hover only. */
+export const textLinkClass = `no-underline hover:underline ${linkUnderlineDecorationClass}`
+
+/** Footer + muted navigation links (caption-scale surround). */
+export const footerMutedLinkClass =
+  'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors no-underline hover:underline underline-offset-4 decoration-zinc-400 decoration-1 hover:decoration-zinc-600 dark:decoration-zinc-500 dark:hover:decoration-zinc-300'
+export const linkFocusRingClass =
+  'rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+
+/**
+ * Explore “← Back to …”: two-column `inline-grid` so underline/border stays on the text cell only (flex+link browsers
+ * sometimes paint decoration across adjacent items).
+ */
+export const siteChildNavBackAnchorClass =
+  `site-child-nav-back group inline-grid w-max max-w-full auto-cols-auto grid-flow-col items-center gap-x-2 no-underline hover:!no-underline visited:!no-underline ${linkFocusRingClass}`
+
+export const siteChildNavBackGlyphClass =
+  'site-child-nav-back__glyph shrink-0 text-lg font-normal leading-none text-zinc-300 transition-colors md:text-xl dark:text-zinc-600 group-hover:text-zinc-900 dark:group-hover:text-zinc-100'
+
+/** Faux underline via border-bottom on this cell only (`inline-grid` col 2). */
+export const siteChildNavBackLabelClass =
+  'site-child-nav-back__label border-b border-transparent pb-[1px] text-left text-lg font-normal leading-snug text-zinc-900 transition-[border-color] dark:text-zinc-100 md:text-xl group-hover:border-zinc-900 dark:group-hover:border-zinc-100'
+
+/**
+ * Card-style row link (title + optional muted body): whole row clickable; underline only the title via
+ * {@link cardLinkTitleUnderlineClass} on the heading `Text`.
+ *
+ * `hover:!no-underline` keeps `.prose a:hover` / `prose-invert` from re-applying underline to the `<a>` (it would propagate to
+ * all text inside the block link); the heading still picks up {@link cardLinkTitleUnderlineClass}.
+ */
+export const cardLinkAnchorClass =
+  `group block no-underline hover:!no-underline visited:!no-underline ${linkFocusRingClass}`
+
+export const cardLinkTitleUnderlineClass =
+  'no-underline underline-offset-4 decoration-zinc-400 decoration-1 transition-colors group-hover:underline group-hover:decoration-zinc-600 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-300'
+
 /** Shared row link (journal index, homepage Writing preview, Projects text list). */
-export const linkListRowAnchorClass =
-  'group block py-2 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black dark:focus-visible:ring-white dark:focus-visible:ring-offset-zinc-950'
+export const linkListRowAnchorClass = `group block py-2 ${linkFocusRingClass}`
 
 /** Alias of {@link linkListRowAnchorClass} (kept for existing imports). */
 export const linkListRowAnchorPlainClass = linkListRowAnchorClass
@@ -99,7 +138,7 @@ export const linkListParagraphClass =
   'text-base leading-relaxed text-zinc-900 dark:text-zinc-100'
 
 export const linkListStrongTitleClass =
-  'font-semibold group-hover:underline underline-offset-4'
+  'font-semibold group-hover:underline underline-offset-4 decoration-zinc-400 decoration-1 dark:decoration-zinc-500 group-hover:decoration-zinc-600 dark:group-hover:decoration-zinc-300 transition-colors'
 
 export const linkListMutedContinuationClass =
   'font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'
@@ -113,7 +152,15 @@ export const sectionYearLabelClass = `${sectionLabelTypographyClass} mb-4`
 
 /** “Writing →” / “Projects →” on the homepage (inside section heading). */
 export const contentSectionHeadingLinkClass =
-  'underline-offset-4 transition-colors duration-200 hover:underline hover:text-zinc-900 dark:hover:text-zinc-100'
+  'underline-offset-4 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300 transition-colors duration-200 hover:underline hover:text-zinc-900 dark:hover:text-zinc-100'
+
+/** Primary nav: same 1px stroke, taller offset (matches {@link NavLink}). */
+export const navLinkBaseClass =
+  'font-normal text-zinc-900 dark:text-zinc-100 underline-offset-8 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300'
+
+export const navLinkActiveClass = `underline hover:underline ${navLinkBaseClass}`
+
+export const navLinkInactiveClass = `no-underline hover:underline ${navLinkBaseClass}`
 
 /** Name line beside avatar on the homepage hero. */
 export const heroIdentityNameClass =
@@ -121,7 +168,7 @@ export const heroIdentityNameClass =
 
 /** Homepage hero headline typography (display scale). Column width is set in `Hero.astro` from intro length. */
 export const heroDisplayIntroClass = [
-  'whitespace-pre-line text-left font-medium tracking-tight text-zinc-900 dark:text-zinc-100',
+  'whitespace-pre-line text-left font-normal tracking-tight text-zinc-900 dark:text-zinc-100',
   'leading-snug md:leading-snug lg:leading-[1.12]',
   'text-3xl sm:text-4xl md:text-5xl lg:text-[4rem]',
   'mt-4',

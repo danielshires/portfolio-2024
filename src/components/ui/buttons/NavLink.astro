@@ -1,4 +1,6 @@
 ---
+import { navLinkActiveClass, navLinkInactiveClass } from '../text/styles'
+
 const pathname = new URL(Astro.request.url).pathname
 const currentPath = pathname.slice(1)
 
@@ -10,22 +12,20 @@ interface Props {
 
 const { href, path, target } = Astro.props
 
-// Initial server-side styles
 const initialStyles =
   path === ''
     ? currentPath === ''
-      ? 'underline text-zinc-900 dark:text-zinc-100 underline-offset-8'
-      : 'no-underline text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-8'
+      ? navLinkActiveClass
+      : navLinkInactiveClass
     : currentPath.startsWith(path)
-      ? 'underline text-zinc-900 dark:text-zinc-100 underline-offset-8'
-      : 'no-underline text-zinc-900 dark:text-zinc-100 hover:underline underline-offset-8'
+      ? navLinkActiveClass
+      : navLinkInactiveClass
 ---
 
-<a 
-  class={initialStyles} 
-  href={href} 
-  target={target} 
+<a
+  class={initialStyles}
+  href={href}
+  target={target}
   data-swup-preload
   data-nav-path={path}
-  data-nav-href={href}
-><slot /></a>
+  data-nav-href={href}><slot /></a>

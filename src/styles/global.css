@@ -95,12 +95,17 @@ p {
 }
 
 
-/* Links */
+/* Links — default no underline; prose uses typography plugin; UI uses `hover:underline` utilities.
+ * Must stay in `@layer base` so `@layer utilities` (e.g. hover/group-hover underline) can override. */
 
-a {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.2s ease-out;
+@layer base {
+    a {
+        color: inherit;
+        text-decoration: none;
+        transition:
+            color 0.2s ease-out,
+            text-decoration-color 0.2s ease-out;
+    }
 }
 
 /* Buttons */

@@ -1,5 +1,6 @@
 ---
 import Text from '../ui/text/Text.astro'
+import { footerMutedLinkClass } from '../ui/text/styles'
 import { FALLBACK_MOOD } from '../../lib/woononaWeatherMood'
 
 const footerLinks = [
@@ -20,7 +21,7 @@ const footerLinks = [
               <a
                 href={href}
                 data-swup-preload
-                class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                class={footerMutedLinkClass}
                 aria-label={aria}
               >
                 <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
@@ -36,7 +37,7 @@ const footerLinks = [
             href="https://www.linkedin.com/in/shiresdaniel/"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            class={footerMutedLinkClass}
             aria-label="LinkedIn Profile"
           >
             <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
@@ -45,7 +46,7 @@ const footerLinks = [
           </a>
           <a
             href="mailto:hello@danielshires.com"
-            class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+            class={footerMutedLinkClass}
             aria-label="Email Daniel Shires"
           >
             <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">

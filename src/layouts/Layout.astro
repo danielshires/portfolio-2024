@@ -153,8 +153,9 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
             ? currentPath === ''
             : currentPath.startsWith(path) && path !== ''
 
-          const baseClasses = 'text-zinc-900 dark:text-zinc-100 underline-offset-8'
-          const activeClasses = `underline ${baseClasses}`
+          const baseClasses =
+            'font-normal text-zinc-900 dark:text-zinc-100 underline-offset-8 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300'
+          const activeClasses = `underline hover:underline ${baseClasses}`
           const inactiveClasses = `no-underline hover:underline ${baseClasses}`
 
           link.className = isActive ? activeClasses : inactiveClasses

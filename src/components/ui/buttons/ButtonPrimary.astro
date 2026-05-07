@@ -16,7 +16,7 @@ const isInternal = href.startsWith('/') && !href.startsWith('//')
 <a
   href={href}
   target={target}
-  class='bg-primary hover:bg-zinc-800 hover:underline text-primary-light rounded-full w-fit py-3 px-4 transition'
+  class='bg-primary hover:bg-zinc-800 hover:underline underline-offset-4 decoration-1 decoration-zinc-300/70 hover:decoration-zinc-50 text-primary-light rounded-full w-fit py-3 px-4 transition'
   data-swup-preload={isInternal}>
   <Text variant='body' color='inverted'>
     <slot />

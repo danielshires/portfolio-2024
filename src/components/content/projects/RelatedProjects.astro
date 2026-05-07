@@ -3,6 +3,7 @@ import { urlFor, projectListHref, isExternalProject } from '../../../lib/sanity'
 import type { Project } from '../../../lib/sanity'
 import Text from '../../ui/text/Text.astro'
 import ProjectCard from './ProjectCard.astro'
+import { sectionLabelTypographyClass } from '../../ui/text/styles'
 
 interface Props {
   projects: Project[]
@@ -34,11 +35,14 @@ const transformedProjects = projects.map((project) => ({
 }))
 ---
 
-<section class='space-y-8'>
-  <div class='text-center space-y-4'>
-    <Text variant='h2' class='font-bold'> Related Projects </Text>
-    <Text variant='body' color='muted'> Explore more of my work </Text>
-  </div>
+<section class='not-prose space-y-8 text-left' aria-labelledby='related-projects-heading'>
+  <header>
+    <!-- Plain <p> + shared label utilities (same as Writing “Recent / Earlier”) so prose/hidden overrides can’t flatten to body text. -->
+    <p id='related-projects-heading' class:list={[sectionLabelTypographyClass, 'mb-3']}>
+      Related projects
+    </p>
+    <Text variant='body' color='muted'>Explore more of my work</Text>
+  </header>
 
   <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
     {transformedProjects.map((project) => <ProjectCard {...project} />)}

@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Text from '../components/ui/text/Text.astro'
-import { simpleHeroSectionClass } from '../components/ui/text/styles'
+import { simpleHeroSectionClass, textLinkClass } from '../components/ui/text/styles'
 import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
 import { aboutContent } from '../config/about'
 import {
@@ -47,7 +47,7 @@ const structuredData = {
             href={aboutContent.summary.paragraph1Link.href}
             target='_blank'
             rel='noopener noreferrer'
-            class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
+            class={`text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>
             {aboutContent.summary.paragraph1Link.label}
           </a>
           {aboutContent.summary.paragraph1AfterLink}
@@ -68,7 +68,7 @@ const structuredData = {
             <li>
               <a
                 href={link.href}
-                class='text-base text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'
+                class={`text-base text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}
                 target={link.href.startsWith('mailto:') ? undefined : '_blank'}
                 rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}>
                 {link.label}
@@ -93,7 +93,7 @@ const structuredData = {
                     href={entry.organizationHref}
                     target='_blank'
                     rel='noopener noreferrer'
-                    class='font-medium text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
+                    class={`font-medium text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>
                     {entry.organization}
                   </a>
                 ) : (
@@ -147,7 +147,9 @@ const structuredData = {
                     )}
                     <div class='min-w-0 flex-1'>
                       <div class='flex flex-wrap items-center gap-x-1 gap-y-0.5'>
-                        <span class='font-medium text-zinc-900 dark:text-zinc-100'>{project.title}</span>
+                        <span class='font-medium text-zinc-900 no-underline decoration-zinc-400 underline-offset-4 transition-colors group-hover:underline group-hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:group-hover:decoration-zinc-100'>
+                          {project.title}
+                        </span>
                         {external && (
                           <ExternalLinkGlyph class='size-3.5 text-zinc-500 dark:text-zinc-500' />
                         )}

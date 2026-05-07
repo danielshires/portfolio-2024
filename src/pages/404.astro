@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Text from '../components/ui/text/Text.astro'
+import { textLinkClass } from '../components/ui/text/styles'
 ---
 
 <Layout
@@ -12,7 +13,7 @@ import Text from '../components/ui/text/Text.astro'
       <Text variant='h1' size='5xl' class='mb-4'>404</Text>
       <Text variant='subtitle' class='mb-8'>Page not found</Text>
       <Text variant='body' color='muted'>
-        <a href='/' class='hover:underline'>Go back home</a>
+        <a href='/' class={`text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 ${textLinkClass}`}>Go back home</a>
       </Text>
     </div>
   </div>

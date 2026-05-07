@@ -40,6 +40,11 @@ export default defineConfig({
             theme: false,
             animationClass: false,
             containers: ['main'],
+            /**
+             * Swup’s in-memory page cache can serve an outdated `/journal` index after deploys or when
+             * the listing DOM changed (prevents stale “Navigate” et al.). Disables hover preload (bundled behavior).
+             */
+            cache: false,
             preload: true,
             accessibility: true,
             // Intercept clicks as soon as the bundle runs (idle init delays first navigations)

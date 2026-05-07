@@ -1,0 +1,102 @@
+---
+/**
+ * Shared footer nav for detail (“child”) pages: back to section index + two cross-links.
+ */
+import Text from '../../ui/text/Text.astro'
+import siteChildNavBackAnchorClass, { linkFocusRingClass, siteChildNavBackGlyphClass, siteChildNavBackLabelClass, textLinkClass } from '../../ui/text/styles'
+
+export interface SiteChildNavLink {
+  href: string
+  label: string
+}
+
+interface Props {
+  parentHref: string
+  /** Shown next to a leading “←” as `Back to {parentLabel}`. */
+  parentLabel: string
+  /** Defaults: Projects + About me; on project detail pages, Writing + About me (avoids duplicating Projects). */
+  secondaryLinks?: [SiteChildNavLink, SiteChildNavLink]
+  class?: string
+  headingId?: string
+  /** `measure`: centered 65ch. `full`: left-aligned to main container (project pages). */
+  layout?: 'measure' | 'full'
+}
+
+function defaultSecondary(parentHref: string): [SiteChildNavLink, SiteChildNavLink] {
+  const writing: SiteChildNavLink = { href: '/journal', label: 'Writing' }
+  const projects: SiteChildNavLink = { href: '/projects', label: 'Projects' }
+  const about: SiteChildNavLink = { href: '/about', label: 'About me' }
+  if (parentHref === '/projects') {
+    return [writing, about]
+  }
+  return [projects, about]
+}
+
+const {
+  parentHref,
+  parentLabel,
+  secondaryLinks: secondaryLinksProp,
+  class: className = '',
+  headingId = 'site-child-nav-heading',
+  layout = 'measure',
+} = Astro.props
+
+const secondaryLinks = secondaryLinksProp ?? defaultSecondary(parentHref)
+const widthClass = layout === 'full' ? 'w-full max-w-none' : 'w-full max-w-[65ch] mx-auto'
+---
+
+<nav
+  class={`not-prose mt-16 pt-12 border-t border-zinc-200 dark:border-zinc-800 ${widthClass} ${className}`}
+  aria-labelledby={headingId}>
+  <Text variant='overline' color='muted' class='mb-8 !uppercase' id={headingId}>
+    Explore
+  </Text>
+  <ul class='space-y-4 list-none p-0 m-0'>
+    <li>
+      <a href={parentHref} class={siteChildNavBackAnchorClass} data-swup-preload>
+        <span class={siteChildNavBackGlyphClass} aria-hidden='true'>←</span>
+        <span class={siteChildNavBackLabelClass}>Back to {parentLabel}</span>
+      </a>
+    </li>
+    {
+      secondaryLinks.map((item) => (
+        <li>
+          <a href={item.href} class={`block ${textLinkClass} ${linkFocusRingClass}`} data-swup-preload>
+            <Text variant='h4' color='default'>
+              {item.label}
+            </Text>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style is:global>
+  /*
+   * Kill any propagated / UA / plugin underlines on the whole Explore “back” control.
+   * Line comes only from .site-child-nav-back__label border-bottom on hover/focus-within (group).
+   */
+  a.site-child-nav-back,
+  a.site-child-nav-back:hover,
+  a.site-child-nav-back:focus,
+  a.site-child-nav-back:focus-visible,
+  a.site-child-nav-back:visited {
+    text-decoration: none !important;
+    text-decoration-line: none !important;
+    text-underline-offset: unset !important;
+  }
+
+  a.site-child-nav-back .site-child-nav-back__glyph,
+  a.site-child-nav-back .site-child-nav-back__label {
+    text-decoration: none !important;
+  }
+
+  /** Keyboard users see the label rule without relying on :hover-only group state */
+  a.site-child-nav-back:focus-visible .site-child-nav-back__label {
+    border-color: rgb(24 24 27);
+  }
+  .dark a.site-child-nav-back:focus-visible .site-child-nav-back__label {
+    border-color: rgb(244 244 245);
+  }
+</style>

@@ -6,6 +6,7 @@ import ProjectOutcomes from '../../components/content/projects/ProjectOutcomes.a
 import ProjectProblem from '../../components/content/projects/ProjectProblem.astro'
 import RelatedProjects from '../../components/content/projects/RelatedProjects.astro'
 import FieldGuideConceptLinks from '../../components/content/field-guide/FieldGuideConceptLinks.astro'
+import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
 import Text from '../../components/ui/text/Text.astro'
 import { PERSON_NODE_ID } from '../../lib/seo/merge-global-jsonld'
 
@@ -188,38 +189,7 @@ const jsonLd = {
     )
   }
 
-  <FieldGuideConceptLinks concepts={fullProject.conceptsDemonstrated ?? []} />
+  <FieldGuideConceptLinks concepts={fullProject.conceptsDemonstrated ?? []} heading='Concepts demonstrated' layout='full' />
 
-  <section class='not-prose max-w-[65ch] mx-auto border-t border-zinc-200/80 pt-12 dark:border-zinc-800/80' aria-label='Writing'>
-    <Text variant='h3' class='mb-3'>Writing</Text>
-    <Text variant='body' color='muted'>
-      Notes on design and product —{' '}
-      <a
-        href='/journal'
-        class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
-        Read the journal
-      </a>
-      .
-    </Text>
-  </section>
-
-  <!-- Navigation Back to Projects -->
-  <section class='py-16'>
-    <div class='container mx-auto px-4 lg:px-2'>
-      <div class='text-center'>
-        <a
-          href='/projects'
-          class='inline-flex items-center text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors'>
-          <svg class='w-4 h-4 mr-2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-            <path
-              stroke-linecap='round'
-              stroke-linejoin='round'
-              stroke-width='2'
-              d='M10 19l-7-7m0 0l7-7m-7 7h18'></path>
-          </svg>
-          <Text variant='body' color='muted'>Back to Projects</Text>
-        </a>
-      </div>
-    </div>
-  </section>
+  <SiteChildNav parentHref='/projects' parentLabel='Projects' layout='full' />
 </Layout>

@@ -1,12 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getAllPosts, getPostBySlug, urlFor, type Post } from '../../lib/sanity'
+import { getAllPosts, getPostBySlug, resolveReadNextPosts, urlFor, type Post } from '../../lib/sanity'
 import SanityImage from '../../components/media/images/SanityImage.astro'
 import Text from '../../components/ui/text/Text.astro'
 import ReadNext from '../../components/content/posts/ReadNext.astro'
 import FieldGuideConceptLinks from '../../components/content/field-guide/FieldGuideConceptLinks.astro'
 import PortableTextImage from '../../components/content/posts/PortableTextImage.astro'
 import { PortableText } from 'astro-portabletext'
+import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
 import { PERSON_NODE_ID } from '../../lib/seo/merge-global-jsonld'
 
 export async function getStaticPaths() {
@@ -30,8 +31,7 @@ if (!post) {
   return Astro.redirect('/404')
 }
 
-const readNextPosts =
-  post.relatedPosts?.filter((p) => p && p._id !== post._id && p.slug?.current) ?? []
+const readNextPosts = resolveReadNextPosts(post)
 
 const resolvedTitle = post.seo?.title?.trim() || post.title
 const resolvedDescription = post.seo?.description?.trim() || post.description
@@ -129,7 +129,7 @@ const jsonLd = {
   modifiedTime={post.publishedAt}
   robots={resolvedRobots}
   jsonLd={jsonLd}>
-  <div class='min-h-screen py-16 lg:py-24'>
+  <div class='min-h-screen py-16 lg:py-24 pb-24'>
     <article class='prose dark:prose-invert prose-headings:text-left max-w-[65ch] mx-auto text-base'>
       <header class='not-prose text-left mt-12 mb-12 flex flex-col gap-5 md:gap-6'>
         <Text variant='h1'>{post.title}</Text>
@@ -174,23 +174,6 @@ const jsonLd = {
 
     <ReadNext posts={readNextPosts} />
 
-    <section class='not-prose max-w-[65ch] mx-auto mt-16 border-t border-zinc-200/80 pt-12 dark:border-zinc-800/80' aria-label='Design work'>
-      <Text variant='h3' class='mb-3'>Design work</Text>
-      <Text variant='body' color='muted'>
-        Case studies and portfolio —{' '}
-        <a
-          href='/projects'
-          class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
-          Browse projects
-        </a>{' '}
-        or{' '}
-        <a
-          href='/design'
-          class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
-          see the design index
-        </a>
-        .
-      </Text>
-    </section>
+    <SiteChildNav parentHref='/journal' parentLabel='Writing' />
   </div>
 </Layout>

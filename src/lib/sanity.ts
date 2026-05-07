@@ -95,6 +95,15 @@ export interface Post {
   tags?: string[]
   author?: string
   relatedPosts?: Post[]
+  /** Next-older published post; used when `relatedPosts` resolves to an empty list. */
+  readNextByDate?: {
+    _id: string
+    title: string
+    slug?: { current: string }
+    publishedAt?: string
+    description?: string
+    mainImage?: SanityImage
+  } | null
   excerpt?: string
   category?: string
   views?: number
@@ -232,6 +241,25 @@ export async function getAllPosts(): Promise<Post[]> {
   `)
 }
 
+/** Curated Sanity “Related posts”, or the next-older published post when that list is empty. */
+export function resolveReadNextPosts(post: Post): Array<{ _id: string; title: string; slug?: { current: string } }> {
+  const curated =
+    post.relatedPosts?.filter((p) => {
+      if (!p || p._id === post._id || !p.title?.trim()) return false
+      if (!p.slug?.current?.trim()) return false
+      if (!p.publishedAt) return false
+      return new Date(p.publishedAt).getTime() <= Date.now()
+    }) ?? []
+  if (curated.length > 0) {
+    return curated.map((p) => ({ _id: p._id, title: p.title, slug: p.slug }))
+  }
+  const next = post.readNextByDate
+  if (next && next._id !== post._id && next.slug?.current) {
+    return [{ _id: next._id, title: next.title, slug: next.slug }]
+  }
+  return []
+}
+
 // Helper function to fetch a single post by slug
 export async function getPostBySlug(slug: string): Promise<Post> {
   return await client.fetch(
@@ -246,28 +274,43 @@ export async function getPostBySlug(slug: string): Promise<Post> {
       body,
       "tags": tags,
       "author": author->name,
-      "relatedPosts": select(
-        count(relatedPosts[defined(_ref)]) > 0 => relatedPosts[defined(_ref)]->{
-            _id, title, slug, mainImage, publishedAt, description
-        }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()][0..4],
-        *[_type == "post" && slug.current != $slug && defined(publishedAt) && publishedAt <= now()] | order(publishedAt desc) [0..4] {
-            _id, title, slug, mainImage, publishedAt, description
-        }
-      ),
+      "relatedPosts": coalesce(relatedPosts, [])[defined(_ref)]->{
+        _id,
+        title,
+        slug,
+        mainImage,
+        publishedAt,
+        description
+      },
+      "readNextByDate": *[
+        _type == "post" &&
+        slug.current != $slug &&
+        defined(publishedAt) &&
+        publishedAt < ^.publishedAt &&
+        publishedAt <= now()
+      ] | order(publishedAt desc) [0] {
+        _id, title, slug, mainImage, publishedAt, description
+      },
       excerpt,
       category,
       views,
       featured,
       pinned,
       readingTime,
-      "conceptsDiscussed": conceptsDiscussed[]->{
+      "conceptsDiscussed": *[
+        _type == "concept" &&
+        _id in coalesce(^.conceptsDiscussed, [])[]._ref &&
+        defined(slug.current) &&
+        defined(publishedAt) &&
+        publishedAt <= now()
+      ]{
         _id,
         title,
         slug,
         summary,
         type,
         publishedAt
-      }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()],
+      },
       seo {
         title,
         description,
@@ -310,14 +353,20 @@ export async function getConceptBySlug(slug: string): Promise<Concept | null> {
       body,
       signals,
       tensions,
-      "relatedConcepts": relatedConcepts[]->{
+      "relatedConcepts": *[
+        _type == "concept" &&
+        _id in coalesce(^.relatedConcepts, [])[]._ref &&
+        defined(slug.current) &&
+        defined(publishedAt) &&
+        publishedAt <= now()
+      ]{
         _id,
         title,
         slug,
         summary,
         type,
         publishedAt
-      }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()],
+      },
       aliases,
       featured,
       publishedAt
@@ -531,14 +580,20 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       tags,
       linkBehavior,
       externalUrl,
-      "conceptsDemonstrated": conceptsDemonstrated[]->{
+      "conceptsDemonstrated": *[
+        _type == "concept" &&
+        _id in coalesce(^.conceptsDemonstrated, [])[]._ref &&
+        defined(slug.current) &&
+        defined(publishedAt) &&
+        publishedAt <= now()
+      ]{
         _id,
         title,
         slug,
         summary,
         type,
         publishedAt
-      }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()],
+      },
       seo {
         title,
         description,

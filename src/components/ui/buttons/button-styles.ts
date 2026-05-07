@@ -14,7 +14,7 @@ export const variantStyles: Record<ButtonVariant, string> = {
   secondary:
     'bg-zinc-100 hover:bg-zinc-200 hover:scale-105 hover:shadow-md text-zinc-900 border border-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border-zinc-700 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
   tertiary:
-    'bg-transparent hover:bg-zinc-100 hover:scale-105 text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-100 hover:underline underline-offset-4 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
+    'bg-transparent hover:bg-zinc-100 hover:scale-105 text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-100 hover:underline underline-offset-4 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
   ghost:
     'bg-transparent hover:bg-zinc-100 hover:scale-105 hover:shadow-sm text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-100 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
   outline:

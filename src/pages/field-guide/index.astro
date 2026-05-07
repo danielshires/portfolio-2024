@@ -3,6 +3,11 @@ import Layout from '../../layouts/Layout.astro'
 import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 import Text from '../../components/ui/text/Text.astro'
 import { getAllPublishedConcepts, conceptTypeLabel } from '../../lib/sanity'
+import {
+  cardLinkAnchorClass,
+  cardLinkTitleUnderlineClass,
+  linkListMutedContinuationClass,
+} from '../../components/ui/text/styles'
 
 const concepts = await getAllPublishedConcepts()
 
@@ -32,15 +37,9 @@ const pageImage = '/images/jpg/background.webp'
           <ul class='m-0 list-none divide-y divide-zinc-200 border-t border-zinc-200 p-0 dark:divide-zinc-800 dark:border-zinc-800'>
             {concepts.map((c) => (
               <li class='py-10 first:pt-8'>
-                <a
-                  href={`/field-guide/${c.slug.current}`}
-                  class='group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
-                  data-swup-preload>
+                <a href={`/field-guide/${c.slug.current}`} class={cardLinkAnchorClass} data-swup-preload>
                   <div class='flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8'>
-                    <Text
-                      variant='h3'
-                      weight='medium'
-                      class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                    <Text variant='h3' weight='medium' class={cardLinkTitleUnderlineClass}>
                       {c.title}
                     </Text>
                     {conceptTypeLabel(c.type) && (
@@ -50,7 +49,10 @@ const pageImage = '/images/jpg/background.webp'
                     )}
                   </div>
                   {c.summary && (
-                    <Text variant='body' color='muted' class='mt-4 max-w-[55ch]'>
+                    <Text
+                      variant='body'
+                      color='muted'
+                      class={`mt-4 max-w-[55ch] ${linkListMutedContinuationClass}`}>
                       {c.summary}
                     </Text>
                   )}

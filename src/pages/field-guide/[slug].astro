@@ -13,6 +13,14 @@ import {
   isExternalProject,
   type ConceptSummary,
 } from '../../lib/sanity'
+import {
+  cardLinkAnchorClass,
+  cardLinkTitleUnderlineClass,
+  linkFocusRingClass,
+  linkListMutedContinuationClass,
+  textLinkClass,
+} from '../../components/ui/text/styles'
+import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
 
 export async function getStaticPaths() {
   const concepts = await getAllPublishedConcepts()
@@ -96,7 +104,8 @@ const jsonLd = {
   modifiedTime={concept.publishedAt}
   jsonLd={jsonLd}>
   <div class='min-h-screen py-16 lg:py-24'>
-    <article class='prose dark:prose-invert prose-headings:text-left mx-auto max-w-[65ch] text-base'>
+    <div class='mx-auto max-w-[65ch]'>
+    <article class='prose dark:prose-invert prose-headings:text-left text-base'>
       <header class='not-prose mb-12 mt-12 flex flex-col gap-5 text-left md:gap-6'>
         <Text variant='h1'>{concept.title}</Text>
         {conceptTypeLabel(concept.type) && (
@@ -120,6 +129,7 @@ const jsonLd = {
           </div>
         ) : null
       }
+    </article>
 
       {
         concept.signals && concept.signals.length > 0 && (
@@ -171,12 +181,9 @@ const jsonLd = {
                   <li>
                     <a
                       href={`/field-guide/${rel.slug.current}`}
-                      class='group inline-block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+                      class={`group inline-block ${textLinkClass} ${linkFocusRingClass}`}
                       data-swup-preload>
-                      <Text
-                        variant='h4'
-                        weight='medium'
-                        class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                      <Text variant='h4' weight='medium'>
                         {rel.title}
                       </Text>
                     </a>
@@ -198,18 +205,15 @@ const jsonLd = {
               {postsDiscussing.map((p) =>
                 p.slug?.current ? (
                   <li>
-                    <a
-                      href={`/journal/${p.slug.current}`}
-                      class='group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
-                      data-swup-preload>
-                      <Text
-                        variant='h4'
-                        weight='medium'
-                        class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                    <a href={`/journal/${p.slug.current}`} class={cardLinkAnchorClass} data-swup-preload>
+                      <Text variant='h4' weight='medium' class={cardLinkTitleUnderlineClass}>
                         {p.title}
                       </Text>
                       {p.description && (
-                        <Text variant='body' color='muted' class='mt-2 max-w-[55ch]'>
+                        <Text
+                          variant='body'
+                          color='muted'
+                          class={`mt-2 max-w-[55ch] ${linkListMutedContinuationClass}`}>
                           {p.description}
                         </Text>
                       )}
@@ -236,18 +240,18 @@ const jsonLd = {
                   <li>
                     <a
                       href={href}
-                      class='group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+                      class={cardLinkAnchorClass}
                       {...(external
                         ? { target: '_blank', rel: 'noopener noreferrer' }
                         : { 'data-swup-preload': true })}>
-                      <Text
-                        variant='h4'
-                        weight='medium'
-                        class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                      <Text variant='h4' weight='medium' class={cardLinkTitleUnderlineClass}>
                         {proj.title}
                       </Text>
                       {proj.subtitle && (
-                        <Text variant='body' color='muted' class='mt-2 max-w-[55ch]'>
+                        <Text
+                          variant='body'
+                          color='muted'
+                          class={`mt-2 max-w-[55ch] ${linkListMutedContinuationClass}`}>
                           {proj.subtitle}
                         </Text>
                       )}
@@ -259,6 +263,8 @@ const jsonLd = {
           </section>
         )
       }
-    </article>
+    </div>
+
+    <SiteChildNav parentHref='/field-guide' parentLabel='Field guide' />
   </div>
 </Layout>

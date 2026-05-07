@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import Text from '../../ui/text/Text'
 
-import { linkListRowAnchorClass } from '../../ui/text/styles'
+import { linkListRowAnchorClass, linkListStrongTitleClass } from '../../ui/text/styles'
 
 export default function PostCard({ post, showDescription = true }) {
     return (
@@ -11,7 +11,7 @@ export default function PostCard({ post, showDescription = true }) {
             data-swup-preload
         >
             <div className="">
-                <Text variant="body" className="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:underline underline-offset-4">
+                <Text variant="body" className={linkListStrongTitleClass}>
                     {post.title}
                 </Text>
                 {showDescription && post.description && (

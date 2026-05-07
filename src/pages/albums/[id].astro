@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from '../../layouts/Layout.astro'
+import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
+import { textLinkClass } from '../../components/ui/text/styles'
 
 export async function getStaticPaths() {
   const albums = await getCollection("albums");
@@ -40,7 +42,9 @@ const pageDescription =
     </div>
 
     <p class="text-lg my-4 text-center">
-      <a href="/pictures" class="hover:underline">Go back →</a>
+      <a href="/pictures" class={`text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>Go back →</a>
     </p>
+
+    <SiteChildNav parentHref="/pictures" parentLabel="Pictures" />
   </div>
 </Layout>

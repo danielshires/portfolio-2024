@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro'
 import { getAllPictures, urlFor } from '../../lib/sanity'
 import SanityImage from '../../components/media/images/SanityImage.astro'
 import PageTransition from '../../components/layout/transitions/PageTransition.astro'
+import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
 import Text from '../../components/ui/text/Text.astro'
 
 export async function getStaticPaths() {
@@ -94,4 +95,6 @@ const jsonLd = {
       }
     </article>
   </PageTransition>
+
+  <SiteChildNav parentHref='/pictures' parentLabel='Pictures' />
 </Layout>
