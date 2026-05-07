@@ -107,17 +107,12 @@ export const externalLinkGlyphGroupHoverClass =
   'text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors duration-200'
 
 /**
- * Explore “back” row: two-column `inline-grid` so underline/border stays on the text cell only (flex+link browsers
- * sometimes paint decoration across adjacent items).
+ * Explore “back” row: text-only link; faux underline on {@link siteChildNavBackLabelClass} uses `group` hover/focus.
  */
 export const siteChildNavBackAnchorClass =
-  `site-child-nav-back group inline-grid w-max max-w-full auto-cols-auto grid-flow-col items-center gap-x-2 text-lg font-normal text-zinc-900 no-underline hover:!no-underline visited:!no-underline dark:text-zinc-100 md:text-xl ${linkFocusRingClass}`
+  `site-child-nav-back group inline-block w-max max-w-full text-lg font-normal text-zinc-900 no-underline hover:!no-underline visited:!no-underline dark:text-zinc-100 md:text-xl ${linkFocusRingClass}`
 
-/** {@link ArrowLeftGlyph}: ~⅔ cap-height vs label; no `transition-*` so wrap animation opacity is clean. */
-export const siteChildNavBackGlyphClass =
-  'site-child-nav-back__glyph shrink-0 w-[0.65em] h-[0.65em] text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-900 dark:group-hover:text-zinc-100'
-
-/** Faux underline via border-bottom on this cell only (`inline-grid` col 2). */
+/** Faux underline via border-bottom (paired with {@link siteChildNavBackAnchorClass}). */
 export const siteChildNavBackLabelClass =
   'site-child-nav-back__label border-b border-transparent pb-[1px] text-left leading-snug transition-[border-color] group-hover:border-zinc-900 dark:group-hover:border-zinc-100'
 

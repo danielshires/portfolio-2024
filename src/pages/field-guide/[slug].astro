@@ -20,8 +20,6 @@ import {
   linkListMutedContinuationClass,
   textLinkClass,
 } from '../../components/ui/text/styles'
-import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
-
 export async function getStaticPaths() {
   const concepts = await getAllPublishedConcepts()
   return concepts
@@ -264,7 +262,5 @@ const jsonLd = {
         )
       }
     </div>
-
-    <SiteChildNav parentHref='/field-guide' parentLabel='Field guide' />
   </div>
 </Layout>
