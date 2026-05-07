@@ -1,22 +1,88 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Text from '../components/ui/text/Text.astro'
-import NotFoundPong from '../components/errors/NotFoundPong.astro'
-import { textLinkClass } from '../components/ui/text/styles'
+import NotFoundDetourVisual from '../components/errors/NotFoundDetourVisual.astro'
+import NotFoundSuggestedPaths from '../components/errors/NotFoundSuggestedPaths.astro'
+import type { NotFoundPathItem } from '../components/errors/not-found-paths'
+import {
+  heroDisplayIntroClass,
+  sectionLabelTypographyClass,
+} from '../components/ui/text/styles'
+import {
+  getAllPosts,
+  getAllProjects,
+  getAllPublishedConcepts,
+  isExternalProject,
+} from '../lib/sanity'
+import { SITE_ORIGIN } from '../lib/seo/merge-global-jsonld'
+
+const posts = await getAllPosts()
+const projects = await getAllProjects()
+const concepts = await getAllPublishedConcepts()
+
+const visiblePosts = posts.filter((p) => !p.seo?.noIndex && p.slug?.current)
+const latestPost = visiblePosts[0]
+
+const surprisePool = [
+  ...visiblePosts.map((p) => `/writing/${p.slug!.current}`),
+  ...concepts.filter((c) => c.slug?.current).map((c) => `/field-guide/${c.slug!.current}`),
+  ...projects
+    .filter((p) => !isExternalProject(p) && p.slug?.current)
+    .map((p) => `/projects/${p.slug!.current}`),
+]
+const surpriseTargets = [...new Set(surprisePool)]
+const surpriseFallbacks = ['/writing', '/field-guide', '/projects', '/']
+const surpriseForClient = surpriseTargets.length > 0 ? surpriseTargets : surpriseFallbacks
+
+const paths: NotFoundPathItem[] = [
+  { href: '/', title: 'Return home', hint: 'Order restored.' },
+  { href: '/projects', title: 'Browse projects', hint: 'Designed with intention.' },
+  { href: '/writing', title: 'Writing', hint: 'Essays on design, tools, and practice' },
+]
+
+if (latestPost !== undefined) {
+  paths.push({
+    href: `/writing/${latestPost.slug.current}`,
+    title: 'Read the latest essay',
+    hint: latestPost.title,
+  })
+}
+
+paths.push({
+  href: '/',
+  title: "I'm feeling lucky",
+  hint: 'Well do ya, punk?',
+  surprise: true,
+})
+
+const pageTitle = 'Page not found | Daniel Shires'
+const pageDescription =
+  'This URL is not part of the published site — a small detour in the archive. Continue via projects, writing, or another path below.'
+const pageImage = new URL('/images/jpg/background.webp', SITE_ORIGIN).href
+
+const surpriseTargetsJson = JSON.stringify(surpriseForClient)
 ---
 
 <Layout
-  pageTitle='Page Not Found'
-  pageDescription='The page you are looking for does not exist.'
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  pageImage={pageImage}
+  pageImageAlt='Daniel Shires — portfolio'
   robots='noindex,follow'>
-  <div class='flex min-h-screen flex-col items-center justify-center px-4 py-16'>
-    <div class='text-center'>
-      <Text variant='h1' size='5xl' class='mb-4'>404</Text>
-      <Text variant='subtitle' class='mb-8'>Page not found</Text>
-      <Text variant='body' color='muted'>
-        <a href='/' class={`text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 ${textLinkClass}`}>Go back home</a>
+  <div class='grid gap-8 overflow-hidden h-max pb-16 md:pb-24'>
+    <section
+      class='flex flex-col items-start mt-44 md:mt-52 lg:mt-60'
+      aria-labelledby='not-found-hero-heading'>
+      <p class={sectionLabelTypographyClass}>Detour</p>
+      <h1 id='not-found-hero-heading' class:list={[heroDisplayIntroClass, 'max-w-4xl']}>
+        {`You've wandered off\nthe published map.`}
+      </h1>
+      <Text variant='lead' color='muted' class='mt-6 max-w-2xl'>
+        The page may have moved, changed, or never existed. Treat this as an unfinished path — then
+        choose a direction below.
       </Text>
-    </div>
-    <NotFoundPong />
+      <NotFoundDetourVisual />
+      <NotFoundSuggestedPaths paths={paths} surpriseTargetsJson={surpriseTargetsJson} />
+    </section>
   </div>
 </Layout>

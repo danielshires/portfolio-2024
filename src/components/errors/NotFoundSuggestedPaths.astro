@@ -1,0 +1,107 @@
+---
+import ArrowRightGlyph from '../ui/icons/ArrowRightGlyph.astro'
+import type { NotFoundPathItem } from './not-found-paths'
+import {
+  contentSectionHeadingArrowClass,
+  linkFocusRingClass,
+  linkListParagraphClass,
+  linkListRowAnchorClass,
+  linkListStrongTitleClass,
+  linkListMutedContinuationClass,
+  sectionLabelTypographyClass,
+} from '../ui/text/styles'
+
+interface Props {
+  paths: NotFoundPathItem[]
+  surpriseTargetsJson?: string
+}
+
+const { paths, surpriseTargetsJson } = Astro.props
+---
+
+<section class='mt-14 w-full max-w-2xl md:mt-16' aria-labelledby='not-found-paths-heading'>
+  <h2 id='not-found-paths-heading' class:list={[sectionLabelTypographyClass, 'mb-5']}>
+    Suggested paths
+  </h2>
+  <ul class='m-0 flex list-none flex-col divide-y divide-zinc-200 p-0 dark:divide-zinc-800'>
+    {
+      paths.map(({ href, title, hint, surprise }) => (
+        <li>
+          <a
+            href={href}
+            class:list={[
+              linkListRowAnchorClass,
+              linkFocusRingClass,
+              'group flex flex-col items-start gap-0.5 py-3.5 md:py-4',
+            ]}
+            {...surprise && surpriseTargetsJson
+              ? {
+                  'data-not-found-surprise': '',
+                  'data-surprise-targets': surpriseTargetsJson,
+                }
+              : {}}
+            {...(surprise ? {} : { 'data-swup-preload': true })}>
+            <div class='min-w-0'>
+              <p class:list={[linkListParagraphClass, 'flex flex-col gap-0.5']}>
+                <span class:list={[linkListStrongTitleClass, 'inline-flex items-center gap-1.5']}>
+                  {title}
+                  <ArrowRightGlyph class:list={[contentSectionHeadingArrowClass, 'shrink-0']} />
+                </span>
+                {hint !== undefined && hint.length > 0 ? (
+                  <span class={linkListMutedContinuationClass}>{hint}</span>
+                ) : null}
+              </p>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  function initNotFoundSurprise(): (() => void) | undefined {
+    const els = document.querySelectorAll<HTMLAnchorElement>('a[data-not-found-surprise]')
+    if (els.length === 0) return undefined
+
+    const handlers: Array<{ el: HTMLAnchorElement; fn: (e: MouseEvent) => void }> = []
+
+    els.forEach((el) => {
+      let urls: string[] = []
+      try {
+        urls = JSON.parse(el.dataset.surpriseTargets || '[]') as string[]
+      } catch {
+        urls = []
+      }
+      if (!Array.isArray(urls) || urls.length === 0) return
+
+      const onClick = (e: MouseEvent) => {
+        e.preventDefault()
+        const pick = urls[Math.floor(Math.random() * urls.length)]
+        if (pick) window.location.assign(pick)
+      }
+      el.addEventListener('click', onClick)
+      handlers.push({ el, fn: onClick })
+    })
+
+    return () => {
+      handlers.forEach(({ el, fn }) => el.removeEventListener('click', fn))
+    }
+  }
+
+  let cleanup: (() => void) | undefined
+
+  function boot() {
+    cleanup?.()
+    cleanup = initNotFoundSurprise()
+  }
+
+  function teardown() {
+    cleanup?.()
+    cleanup = undefined
+  }
+
+  document.addEventListener('astro:page-load', boot)
+  document.addEventListener('astro:before-swap', teardown)
+  boot()
+</script>
