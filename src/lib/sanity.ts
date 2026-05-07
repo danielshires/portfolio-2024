@@ -24,6 +24,64 @@ export interface SanityImage {
   }
 }
 
+/** Optional SEO overrides (Sanity `seo` object on post / project). */
+export interface DocumentSeo {
+  title?: string
+  description?: string
+  ogImage?: SanityImage
+  noIndex?: boolean
+}
+
+/** Field Guide concept taxonomy */
+export type ConceptKind =
+  | 'observation'
+  | 'pattern'
+  | 'principle'
+  | 'mental-model'
+  | 'heuristic'
+
+/** Minimal concept projection for references and cards */
+export interface ConceptSummary {
+  _id: string
+  title: string
+  slug: {
+    current: string
+  }
+  summary?: string
+  type?: ConceptKind
+  publishedAt?: string
+}
+
+/** Full concept for `/field-guide/[slug]` */
+export interface Concept extends ConceptSummary {
+  body?: any
+  signals?: string[]
+  tensions?: string[]
+  relatedConcepts?: ConceptSummary[]
+  aliases?: string[]
+  featured?: boolean
+}
+
+export interface PostDiscussingConcept {
+  _id: string
+  title: string
+  slug: {
+    current: string
+  }
+  description: string
+}
+
+export interface ProjectDemonstratingConcept {
+  _id: string
+  title: string
+  subtitle?: string
+  slug: {
+    current: string
+  }
+  linkBehavior?: 'internal' | 'external'
+  externalUrl?: string
+}
+
 export interface Post {
   _id: string
   title: string
@@ -43,6 +101,8 @@ export interface Post {
   featured?: boolean
   pinned?: boolean
   readingTime?: string
+  conceptsDiscussed?: ConceptSummary[]
+  seo?: DocumentSeo
 }
 
 export interface Picture {
@@ -94,6 +154,21 @@ export interface Project {
   featured?: boolean
   publishedAt: string
   tags?: string[]
+  conceptsDemonstrated?: ConceptSummary[]
+  seo?: DocumentSeo
+}
+
+/** Readable label for concept `type` values (editorial, not tag pills). */
+export function conceptTypeLabel(type: ConceptKind | string | undefined): string | undefined {
+  if (!type) return undefined
+  const map: Record<string, string> = {
+    observation: 'Observation',
+    pattern: 'Pattern',
+    principle: 'Principle',
+    'mental-model': 'Mental model',
+    heuristic: 'Heuristic',
+  }
+  return map[type] ?? type
 }
 
 // Sanity configuration
@@ -149,7 +224,10 @@ export async function getAllPosts(): Promise<Post[]> {
       views,
       featured,
       pinned,
-      readingTime
+      readingTime,
+      seo {
+        noIndex
+      }
     }
   `)
 }
@@ -181,10 +259,113 @@ export async function getPostBySlug(slug: string): Promise<Post> {
       views,
       featured,
       pinned,
-      readingTime
+      readingTime,
+      "conceptsDiscussed": conceptsDiscussed[]->{
+        _id,
+        title,
+        slug,
+        summary,
+        type,
+        publishedAt
+      }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()],
+      seo {
+        title,
+        description,
+        noIndex,
+        ogImage
+      }
     }
   `,
     { slug }
+  )
+}
+
+export async function getAllPublishedConcepts(): Promise<ConceptSummary[]> {
+  return await client.fetch(`
+    *[_type == "concept" && defined(publishedAt) && publishedAt <= now()] | order(title asc) {
+      _id,
+      title,
+      slug,
+      summary,
+      type,
+      publishedAt
+    }
+  `)
+}
+
+export async function getConceptBySlug(slug: string): Promise<Concept | null> {
+  return await client.fetch(
+    `
+    *[
+      _type == "concept" &&
+      slug.current == $slug &&
+      defined(publishedAt) &&
+      publishedAt <= now()
+    ][0] {
+      _id,
+      title,
+      slug,
+      summary,
+      type,
+      body,
+      signals,
+      tensions,
+      "relatedConcepts": relatedConcepts[]->{
+        _id,
+        title,
+        slug,
+        summary,
+        type,
+        publishedAt
+      }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()],
+      aliases,
+      featured,
+      publishedAt
+    }
+  `,
+    { slug }
+  )
+}
+
+export async function getPostsDiscussingConcept(
+  conceptId: string
+): Promise<PostDiscussingConcept[]> {
+  return await client.fetch(
+    `
+    *[
+      _type == "post" &&
+      references($conceptId) &&
+      defined(publishedAt) &&
+      publishedAt <= now()
+    ] | order(publishedAt desc) {
+      _id,
+      title,
+      slug,
+      description
+    }
+  `,
+    { conceptId }
+  )
+}
+
+export async function getProjectsDemonstratingConcept(
+  conceptId: string
+): Promise<ProjectDemonstratingConcept[]> {
+  return await client.fetch(
+    `
+    *[
+      _type == "project" &&
+      references($conceptId)
+    ] | order(publishedAt desc) {
+      _id,
+      title,
+      subtitle,
+      slug,
+      linkBehavior,
+      externalUrl
+    }
+  `,
+    { conceptId }
   )
 }
 
@@ -304,7 +485,10 @@ export async function getAllProjects(): Promise<Project[]> {
       publishedAt,
       tags,
       linkBehavior,
-      externalUrl
+      externalUrl,
+      seo {
+        noIndex
+      }
     }
   `)
 }
@@ -346,7 +530,21 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       publishedAt,
       tags,
       linkBehavior,
-      externalUrl
+      externalUrl,
+      "conceptsDemonstrated": conceptsDemonstrated[]->{
+        _id,
+        title,
+        slug,
+        summary,
+        type,
+        publishedAt
+      }[defined(slug.current) && defined(publishedAt) && publishedAt <= now()],
+      seo {
+        title,
+        description,
+        noIndex,
+        ogImage
+      }
     }
   `,
     { slug }

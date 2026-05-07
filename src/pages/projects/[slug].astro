@@ -5,7 +5,9 @@ import ProjectMeta from '../../components/content/projects/ProjectMeta.astro'
 import ProjectOutcomes from '../../components/content/projects/ProjectOutcomes.astro'
 import ProjectProblem from '../../components/content/projects/ProjectProblem.astro'
 import RelatedProjects from '../../components/content/projects/RelatedProjects.astro'
+import FieldGuideConceptLinks from '../../components/content/field-guide/FieldGuideConceptLinks.astro'
 import Text from '../../components/ui/text/Text.astro'
+import { PERSON_NODE_ID } from '../../lib/seo/merge-global-jsonld'
 
 // Generate static paths for internal case-study pages only (link-out projects have no /projects/[slug] page).
 export async function getStaticPaths() {
@@ -35,11 +37,19 @@ if (!fullProject) {
 }
 
 // Prepare SEO metadata
-const seoTitle = fullProject.title + (fullProject.client ? ` | ${fullProject.client}` : '')
-const seoDescription = fullProject.subtitle || `${fullProject.title} project case study`
+const seoTitleBase = fullProject.title + (fullProject.client ? ` | ${fullProject.client}` : '')
+const seoTitle = fullProject.seo?.title?.trim() || seoTitleBase
+const seoDescription =
+  fullProject.seo?.description?.trim() ||
+  fullProject.subtitle ||
+  `${fullProject.title} project case study`
 const seoImage = fullProject.heroImage
   ? urlFor(fullProject.heroImage).width(1200).height(630).url()
   : undefined
+const seoImageResolved = fullProject.seo?.ogImage
+  ? urlFor(fullProject.seo.ogImage).width(1200).height(630).url()
+  : seoImage
+const resolvedRobots = fullProject.seo?.noIndex ? 'noindex,follow' : undefined
 
 const canonicalUrl = new URL(Astro.url.pathname, 'https://danielshires.com').href
 
@@ -78,18 +88,16 @@ const jsonLd = {
       datePublished: fullProject.publishedAt,
       dateModified: fullProject.publishedAt,
       author: {
-        '@type': 'Person',
-        name: 'Daniel Shires',
+        '@id': PERSON_NODE_ID,
       },
       creator: {
-        '@type': 'Person',
-        name: 'Daniel Shires',
+        '@id': PERSON_NODE_ID,
       },
       keywords: fullProject.tags?.join(', '),
       image:
         fullProject.images?.map((image) =>
           urlFor(image.asset).width(2000).auto('format').url()
-        ) || (seoImage ? [seoImage] : undefined),
+        ) || (seoImageResolved ? [seoImageResolved] : undefined),
       mainEntityOfPage: {
         '@type': 'WebPage',
         '@id': canonicalUrl,
@@ -102,10 +110,11 @@ const jsonLd = {
 <Layout
   pageTitle={seoTitle}
   pageDescription={seoDescription}
-  pageImage={seoImage}
+  pageImage={seoImageResolved}
   pageType='article'
   publishedTime={fullProject.publishedAt}
   modifiedTime={fullProject.publishedAt}
+  robots={resolvedRobots}
   jsonLd={jsonLd}>
   <!-- Project Header Section -->
   <section
@@ -178,6 +187,21 @@ const jsonLd = {
       </section>
     )
   }
+
+  <FieldGuideConceptLinks concepts={fullProject.conceptsDemonstrated ?? []} />
+
+  <section class='not-prose max-w-[65ch] mx-auto border-t border-zinc-200/80 pt-12 dark:border-zinc-800/80' aria-label='Writing'>
+    <Text variant='h3' class='mb-3'>Writing</Text>
+    <Text variant='body' color='muted'>
+      Notes on design and product —{' '}
+      <a
+        href='/journal'
+        class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
+        Read the journal
+      </a>
+      .
+    </Text>
+  </section>
 
   <!-- Navigation Back to Projects -->
   <section class='py-16'>

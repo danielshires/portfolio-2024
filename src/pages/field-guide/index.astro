@@ -1,0 +1,65 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import SimpleHero from '../../components/content/featured/SimpleHero.astro'
+import Text from '../../components/ui/text/Text.astro'
+import { getAllPublishedConcepts, conceptTypeLabel } from '../../lib/sanity'
+
+const concepts = await getAllPublishedConcepts()
+
+const pageTitle = 'Field Guide | Daniel Shires'
+const pageDescription =
+  'Notes on behaviour, systems, design, and decision-making — concepts explored across writing and work.'
+const pageImage = '/images/jpg/background.webp'
+---
+
+<Layout pageTitle={pageTitle} pageDescription={pageDescription} pageImage={pageImage} pageType='website'>
+  <div class='min-h-screen pb-24'>
+    <SimpleHero
+      introText={{
+        first: 'Field guide',
+        second:
+          'An evolving space for patterns, observations, and mental models — connected to writing and projects.',
+      }}
+    />
+
+    <section class='mx-auto max-w-[65ch] px-4 pt-8 sm:px-0' aria-label='Entries'>
+      {
+        concepts.length === 0 ? (
+          <Text variant='body' color='muted'>
+            Entries will appear here as they are published.
+          </Text>
+        ) : (
+          <ul class='m-0 list-none divide-y divide-zinc-200 border-t border-zinc-200 p-0 dark:divide-zinc-800 dark:border-zinc-800'>
+            {concepts.map((c) => (
+              <li class='py-10 first:pt-8'>
+                <a
+                  href={`/field-guide/${c.slug.current}`}
+                  class='group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+                  data-swup-preload>
+                  <div class='flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8'>
+                    <Text
+                      variant='h3'
+                      weight='medium'
+                      class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                      {c.title}
+                    </Text>
+                    {conceptTypeLabel(c.type) && (
+                      <Text variant='caption' color='muted' class='shrink-0 sm:text-right'>
+                        {conceptTypeLabel(c.type)}
+                      </Text>
+                    )}
+                  </div>
+                  {c.summary && (
+                    <Text variant='body' color='muted' class='mt-4 max-w-[55ch]'>
+                      {c.summary}
+                    </Text>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+  </div>
+</Layout>

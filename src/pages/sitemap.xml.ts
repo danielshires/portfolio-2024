@@ -1,5 +1,5 @@
 import { collectSitemapSources } from '../lib/sitemap-sources'
-import type { Post, Album, Project, Picture } from '../lib/sanity'
+import type { Post, Album, Project, Picture, ConceptSummary } from '../lib/sanity'
 
 // CRITICAL SEO: Preserve these URL structures to maintain Google rankings
 // Current URL patterns that must be maintained:
@@ -11,8 +11,12 @@ import type { Post, Album, Project, Picture } from '../lib/sanity'
 // - / - Homepage
 
 export async function GET() {
-  const { staticPages, posts, internalProjects, albums, pictures } = await collectSitemapSources()
+  const { staticPages, posts, internalProjects, albums, pictures, concepts } =
+    await collectSitemapSources()
   const buildIso = new Date().toISOString()
+
+  const indexablePosts = posts.filter((p) => !p.seo?.noIndex)
+  const indexableProjects = internalProjects.filter((p) => !p.seo?.noIndex)
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -28,7 +32,7 @@ export async function GET() {
   `
     )
     .join('')}
-  ${posts
+  ${indexablePosts
     .map(
       (post: Post) => `
     <url>
@@ -40,7 +44,7 @@ export async function GET() {
   `
     )
     .join('')}
-  ${internalProjects
+  ${indexableProjects
     .map(
       (project: Project) => `
     <url>
@@ -75,6 +79,20 @@ export async function GET() {
     </url>
   `
     )
+    .join('')}
+  ${concepts
+    .map((concept: ConceptSummary) => {
+      const lastmod =
+        concept.publishedAt != null ? new Date(concept.publishedAt).toISOString() : buildIso
+      return `
+    <url>
+      <loc>${new URL(`/field-guide/${concept.slug.current}`, 'https://danielshires.com').href}</loc>
+      <lastmod>${lastmod}</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.45</priority>
+    </url>
+  `
+    })
     .join('')}
 </urlset>`
 

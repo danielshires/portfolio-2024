@@ -1,0 +1,264 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Text from '../../components/ui/text/Text.astro'
+import PortableTextImage from '../../components/content/posts/PortableTextImage.astro'
+import { PortableText } from 'astro-portabletext'
+import {
+  getAllPublishedConcepts,
+  getConceptBySlug,
+  getPostsDiscussingConcept,
+  getProjectsDemonstratingConcept,
+  conceptTypeLabel,
+  projectListHref,
+  isExternalProject,
+  type ConceptSummary,
+} from '../../lib/sanity'
+
+export async function getStaticPaths() {
+  const concepts = await getAllPublishedConcepts()
+  return concepts
+    .filter((c: ConceptSummary) => c.slug?.current)
+    .map((c: ConceptSummary) => ({
+      params: { slug: c.slug.current },
+    }))
+}
+
+const { slug } = Astro.params
+
+if (!slug) {
+  return Astro.redirect('/404')
+}
+
+const concept = await getConceptBySlug(slug)
+
+if (!concept) {
+  return Astro.redirect('/404')
+}
+
+const [postsDiscussing, projectsDemonstrating] = await Promise.all([
+  getPostsDiscussingConcept(concept._id),
+  getProjectsDemonstratingConcept(concept._id),
+])
+
+const portableTextComponents = {
+  type: {
+    image: PortableTextImage,
+  },
+}
+
+const pageTitle = `${concept.title} | Field Guide`
+const pageDescription = concept.summary?.trim() || `${concept.title} — Field Guide`
+const canonicalUrl = new URL(Astro.url.pathname, 'https://danielshires.com').href
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://danielshires.com/',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Field guide',
+          item: 'https://danielshires.com/field-guide',
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: concept.title,
+          item: canonicalUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'Article',
+      headline: concept.title,
+      description: pageDescription,
+      url: canonicalUrl,
+      datePublished: concept.publishedAt,
+      dateModified: concept.publishedAt,
+    },
+  ],
+}
+---
+
+<Layout
+  pageTitle={pageTitle}
+  pageDescription={pageDescription}
+  pageType='article'
+  publishedTime={concept.publishedAt}
+  modifiedTime={concept.publishedAt}
+  jsonLd={jsonLd}>
+  <div class='min-h-screen py-16 lg:py-24'>
+    <article class='prose dark:prose-invert prose-headings:text-left mx-auto max-w-[65ch] text-base'>
+      <header class='not-prose mb-12 mt-12 flex flex-col gap-5 text-left md:gap-6'>
+        <Text variant='h1'>{concept.title}</Text>
+        {conceptTypeLabel(concept.type) && (
+          <Text variant='caption' color='muted'>
+            {conceptTypeLabel(concept.type)}
+          </Text>
+        )}
+        {
+          concept.summary && (
+            <Text variant='lead' color='muted' class='max-w-[55ch]'>
+              {concept.summary}
+            </Text>
+          )
+        }
+      </header>
+
+      {
+        Array.isArray(concept.body) && concept.body.length > 0 ? (
+          <div class='not-prose mt-12'>
+            <PortableText value={concept.body} components={portableTextComponents} />
+          </div>
+        ) : null
+      }
+
+      {
+        concept.signals && concept.signals.length > 0 && (
+          <section class='not-prose mt-14 border-t border-zinc-200 pt-10 dark:border-zinc-800'>
+            <Text variant='overline' color='muted' class='mb-6'>
+              Signals
+            </Text>
+            <ul class='m-0 list-none space-y-3 p-0'>
+              {concept.signals.map((line) => (
+                <li>
+                  <Text variant='body' color='muted'>
+                    {line}
+                  </Text>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        concept.tensions && concept.tensions.length > 0 && (
+          <section class='not-prose mt-14 border-t border-zinc-200 pt-10 dark:border-zinc-800'>
+            <Text variant='overline' color='muted' class='mb-6'>
+              Tensions
+            </Text>
+            <ul class='m-0 list-none space-y-3 p-0'>
+              {concept.tensions.map((line) => (
+                <li>
+                  <Text variant='body' color='muted'>
+                    {line}
+                  </Text>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        concept.relatedConcepts && concept.relatedConcepts.length > 0 && (
+          <section class='not-prose mt-14 border-t border-zinc-200 pt-10 dark:border-zinc-800'>
+            <Text variant='overline' color='muted' class='mb-6'>
+              Related entries
+            </Text>
+            <ul class='m-0 list-none space-y-4 p-0'>
+              {concept.relatedConcepts.map((rel) =>
+                rel.slug?.current ? (
+                  <li>
+                    <a
+                      href={`/field-guide/${rel.slug.current}`}
+                      class='group inline-block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+                      data-swup-preload>
+                      <Text
+                        variant='h4'
+                        weight='medium'
+                        class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                        {rel.title}
+                      </Text>
+                    </a>
+                  </li>
+                ) : null
+              )}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        postsDiscussing.length > 0 && (
+          <section class='not-prose mt-14 border-t border-zinc-200 pt-10 dark:border-zinc-800'>
+            <Text variant='overline' color='muted' class='mb-6'>
+              Discussed in
+            </Text>
+            <ul class='m-0 list-none space-y-4 p-0'>
+              {postsDiscussing.map((p) =>
+                p.slug?.current ? (
+                  <li>
+                    <a
+                      href={`/journal/${p.slug.current}`}
+                      class='group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+                      data-swup-preload>
+                      <Text
+                        variant='h4'
+                        weight='medium'
+                        class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                        {p.title}
+                      </Text>
+                      {p.description && (
+                        <Text variant='body' color='muted' class='mt-2 max-w-[55ch]'>
+                          {p.description}
+                        </Text>
+                      )}
+                    </a>
+                  </li>
+                ) : null
+              )}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        projectsDemonstrating.length > 0 && (
+          <section class='not-prose mt-14 border-t border-zinc-200 pt-10 dark:border-zinc-800'>
+            <Text variant='overline' color='muted' class='mb-6'>
+              Demonstrated in
+            </Text>
+            <ul class='m-0 list-none space-y-4 p-0'>
+              {projectsDemonstrating.map((proj) => {
+                const href = projectListHref(proj)
+                const external = isExternalProject(proj)
+                return (
+                  <li>
+                    <a
+                      href={href}
+                      class='group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+                      {...(external
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : { 'data-swup-preload': true })}>
+                      <Text
+                        variant='h4'
+                        weight='medium'
+                        class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                        {proj.title}
+                      </Text>
+                      {proj.subtitle && (
+                        <Text variant='body' color='muted' class='mt-2 max-w-[55ch]'>
+                          {proj.subtitle}
+                        </Text>
+                      )}
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </section>
+        )
+      }
+    </article>
+  </div>
+</Layout>

@@ -7,6 +7,7 @@ import {
   getAllPosts,
   getAllProjects,
   getAllPictures,
+  getAllPublishedConcepts,
   isExternalProject,
   type Post,
   type Project,
@@ -21,14 +22,16 @@ const STATIC_PRESET: PlainSitemapPage[] = [
   { url: '/pictures', priority: '0.9', changefreq: 'weekly' },
   { url: '/design', priority: '0.9', changefreq: 'weekly' },
   { url: '/journal', priority: '0.8', changefreq: 'weekly' },
+  { url: '/field-guide', priority: '0.5', changefreq: 'monthly' },
 ]
 
 export async function collectSitemapSources() {
-  const [posts, albums, projects, pictures] = await Promise.all([
+  const [posts, albums, projects, pictures, concepts] = await Promise.all([
     getAllPosts(),
     getAllAlbums(),
     getAllProjects(),
     getAllPictures(),
+    getAllPublishedConcepts(),
   ])
   const navigationItems = getNavigationItems()
   const pageByUrl = new Map<string, PlainSitemapPage>()
@@ -67,6 +70,7 @@ export async function collectSitemapSources() {
     albums,
     internalProjects,
     pictures,
+    concepts,
   }
 }
 

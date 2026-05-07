@@ -221,6 +221,49 @@ export default {
       type: 'array',
       of: [{ type: 'string' }],
       description: 'Tags for categorizing projects (e.g., "UI/UX", "Web Design", "Mobile")'
+    },
+    {
+      name: 'conceptsDemonstrated',
+      title: 'Concepts demonstrated',
+      description: 'Field Guide concepts this project applied or embodied.',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'concept' }] }],
+    },
+    {
+      name: 'seo',
+      title: 'SEO',
+      type: 'object',
+      options: {
+        collapsible: true,
+        collapsed: true,
+      },
+      fields: [
+        {
+          name: 'title',
+          title: 'Search title override',
+          type: 'string',
+          description: 'Optional. Used for `<title>` and sharing when set.',
+        },
+        {
+          name: 'description',
+          title: 'Meta description override',
+          type: 'text',
+          rows: 3,
+        },
+        {
+          name: 'ogImage',
+          title: 'Social image override',
+          type: 'image',
+          options: { hotspot: true },
+        },
+        {
+          name: 'noIndex',
+          title: 'Hide from search engines',
+          type: 'boolean',
+          initialValue: false,
+          description: 'Omits URL from sitemap and sets robots to noindex.',
+        },
+      ],
     }
   ],
   preview: {

@@ -4,6 +4,7 @@ import Hero from '../components/content/featured/Hero.astro'
 import WritingPreview from '../components/content/posts/WritingPreview.astro'
 import ProjectGrid from '../components/content/projects/ProjectGrid.astro'
 import { getAuthorBySlug, getAllProjects, getFeaturedProjects, getAllPosts, urlFor } from '../lib/sanity'
+import { PERSON_NODE_ID, SITE_ORIGIN, siteOwnerSameAs } from '../lib/seo/merge-global-jsonld'
 
 const author = await getAuthorBySlug('daniel-shires')
 const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).url() : undefined
@@ -33,15 +34,17 @@ const pageTitle = 'Daniel Shires | Product Designer | Sydney, Australia'
 const pageDescription =
   'Product Designer with 5+ years experience creating user-centered digital experiences. Based in Sydney, working at Commonwealth Bank. View my design portfolio and writing.'
 const pageImage = avatarUrl || '/images/jpg/background.webp'
+const pageImageAbsolute = new URL(pageImage, SITE_ORIGIN).href
 
 // Structured data for the homepage
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Person',
+  '@id': PERSON_NODE_ID,
   name: 'Daniel Shires',
   jobTitle: 'Product Designer',
-  url: 'https://danielshires.com',
-  image: pageImage,
+  url: SITE_ORIGIN,
+  image: pageImageAbsolute,
   description: pageDescription,
   address: {
     '@type': 'PostalAddress',
@@ -60,14 +63,14 @@ const structuredData = {
     'Front-end Development',
     'Human Centered Design',
   ],
-  sameAs: ['https://linkedin.com/in/danielshires', 'https://twitter.com/danielshires'],
+  sameAs: siteOwnerSameAs(),
 }
 ---
 
 <Layout
   pageTitle={pageTitle}
   pageDescription={pageDescription}
-  pageImage={pageImage}
+  pageImage={pageImageAbsolute}
   jsonLd={structuredData}
   pageType='website'>
   <div class='grid gap-8 overflow-hidden h-max pb-16 md:pb-24'>

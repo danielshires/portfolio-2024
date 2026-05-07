@@ -1,0 +1,5 @@
+# ai.txt — optional companion to llms.txt
+
+This site publishes the canonical crawler and attribution guidance in llms.txt.
+
+See: https://danielshires.com/llms.txt
