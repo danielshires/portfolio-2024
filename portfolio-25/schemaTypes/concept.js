@@ -95,7 +95,9 @@ export default {
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
-      description: 'Required on the site: unpublished concepts do not appear.',
+      description:
+        'Required for the live site. Entries without a date never appear in listings or under linked articles until you set this (today or earlier).',
+      validation: Rule => Rule.required(),
     },
   ],
   preview: {
