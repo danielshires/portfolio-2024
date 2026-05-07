@@ -7,7 +7,7 @@ import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 const posts = await getAllPosts()
 
 // SEO optimized content
-const pageTitle = 'Writing | Design & Development | Daniel Shires'
+const pageTitle = 'Thinking out loud | Design & Development | Daniel Shires'
 const pageDescription =
   'Read insights on UX/UI design, product development, and digital experiences. Articles on design thinking, user research, and creating impactful digital products.'
 const pageImage = '/images/jpg/background.webp'
@@ -16,7 +16,7 @@ const pageImage = '/images/jpg/background.webp'
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Blog',
-  name: 'Daniel Shires — Writing',
+  name: 'Daniel Shires — Thinking out loud',
   description: pageDescription,
   url: 'https://danielshires.com/writing',
   image: new URL(pageImage, 'https://danielshires.com').href,
@@ -54,7 +54,7 @@ const structuredData = {
     <!-- Hero Section -->
     <SimpleHero
       introText={{
-        first: 'Writing',
+        first: 'Thinking out loud',
         second: 'Notes on design, systems, tools, and work.',
       }}
     />

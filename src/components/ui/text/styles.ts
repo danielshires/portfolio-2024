@@ -78,10 +78,10 @@ export function combineStyles(
   return styles.filter(Boolean).join(' ')
 }
 
-/** Vertical offset from hero-style intros to first content block (Writing / Projects lists). */
+/** Vertical offset from hero-style intros to first content block (Thinking out loud / Projects lists). */
 export const stackBelowHeroClass = 'mt-16 md:mt-20'
 
-/** Inner spacing for SimpleHero title + subline (Projects / Writing intros). */
+/** Inner spacing for SimpleHero title + subline (Projects / Thinking out loud intros). */
 export const simpleHeroHeadingStackClass = 'flex flex-col gap-5 md:gap-8'
 
 /** Top spacing aligned with `Hero` on the homepage. */
@@ -134,7 +134,7 @@ export const cardLinkAnchorClass =
 export const cardLinkTitleUnderlineClass =
   'no-underline underline-offset-4 decoration-zinc-400 decoration-1 transition-colors group-hover:underline group-hover:decoration-zinc-600 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-300'
 
-/** Shared row link (journal index, homepage Writing preview, Projects text list). */
+/** Shared row link (thinking-out-loud index, homepage Thinking out loud preview, Projects text list). */
 export const linkListRowAnchorClass = `group block py-2 ${linkFocusRingClass}`
 
 /** Alias of {@link linkListRowAnchorClass} (kept for existing imports). */
@@ -150,14 +150,14 @@ export const linkListStrongTitleClass =
 export const linkListMutedContinuationClass =
   'font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'
 
-/** Typography shared by Writing index section titles and homepage Writing / Projects section titles. */
+/** Typography shared by Thinking out loud index section titles and homepage Thinking out loud / Projects section titles. */
 export const sectionLabelTypographyClass =
   'font-mono text-xs font-normal uppercase tracking-wider text-zinc-500 dark:text-zinc-400'
 
-/** Section labels on the Writing index (Recent / Earlier) (+ margin below). */
+/** Section labels on the Thinking out loud index (Recent / Earlier) (+ margin below). */
 export const sectionYearLabelClass = `${sectionLabelTypographyClass} mb-4`
 
-/** “Writing →” / “Projects →” on the homepage (inside section heading; use with {@link ArrowRightGlyph}). */
+/** “Thinking out loud →” / “Projects →” on the homepage (inside section heading; use with {@link ArrowRightGlyph}). */
 export const contentSectionHeadingLinkClass =
   'group inline-flex items-center gap-1 underline-offset-4 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300 transition-colors duration-200 hover:underline hover:text-zinc-900 dark:hover:text-zinc-100'
 

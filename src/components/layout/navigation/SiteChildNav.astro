@@ -21,7 +21,7 @@ interface Props {
   parentHref: string
   /** Shown next to a leading back arrow as `Back to {parentLabel}`. */
   parentLabel: string
-  /** Defaults: Projects + About me; on project detail pages, Writing + About me (avoids duplicating Projects). */
+  /** Defaults: Projects + About me; on project detail pages, Thinking out loud + About me (avoids duplicating Projects). */
   secondaryLinks?: [SiteChildNavLink, SiteChildNavLink]
   class?: string
   headingId?: string
@@ -30,7 +30,7 @@ interface Props {
 }
 
 function defaultSecondary(parentHref: string): [SiteChildNavLink, SiteChildNavLink] {
-  const writing: SiteChildNavLink = { href: '/writing', label: 'Writing' }
+  const writing: SiteChildNavLink = { href: '/writing', label: 'Thinking out loud' }
   const projects: SiteChildNavLink = { href: '/projects', label: 'Projects' }
   const about: SiteChildNavLink = { href: '/about', label: 'About me' }
   if (parentHref === '/projects') {

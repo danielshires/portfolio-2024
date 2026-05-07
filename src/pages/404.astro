@@ -37,7 +37,7 @@ const surpriseForClient = surpriseTargets.length > 0 ? surpriseTargets : surpris
 const paths: NotFoundPathItem[] = [
   { href: '/', title: 'Return home', hint: 'Order restored.' },
   { href: '/projects', title: 'Browse projects', hint: 'Designed with intention.' },
-  { href: '/writing', title: 'Writing', hint: 'Essays on design, tools, and practice' },
+  { href: '/writing', title: 'Thinking out loud', hint: 'Essays on design, tools, and practice' },
 ]
 
 if (latestPost !== undefined) {
@@ -57,7 +57,7 @@ paths.push({
 
 const pageTitle = 'Page not found | Daniel Shires'
 const pageDescription =
-  'This URL is not part of the published site — a small detour in the archive. Continue via projects, writing, or another path below.'
+  'This URL is not part of the published site — a small detour in the archive. Continue via projects, thinking out loud, or another path below.'
 const pageImage = new URL('/images/jpg/background.webp', SITE_ORIGIN).href
 
 const surpriseTargetsJson = JSON.stringify(surpriseForClient)

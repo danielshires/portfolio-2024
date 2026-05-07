@@ -18,7 +18,7 @@ const heroContent = {
   ...(avatarUrl !== undefined ? { avatar: avatarUrl } : {}),
 }
 
-// Writing (posts) for homepage preview
+// Thinking out loud (posts) for homepage preview
 const allPosts = await getAllPosts()
 
 // Get projects from Sanity
@@ -32,7 +32,7 @@ const projectsToShow =
 // SEO optimized content
 const pageTitle = 'Daniel Shires | Product Designer | Sydney, Australia'
 const pageDescription =
-  'Product Designer with 5+ years experience creating user-centered digital experiences. Based in Sydney, working at Commonwealth Bank. View my design portfolio and writing.'
+  'Product Designer with 5+ years experience creating user-centered digital experiences. Based in Sydney, working at Commonwealth Bank. View my design portfolio and thinking out loud.'
 const pageImage = avatarUrl || '/images/jpg/background.webp'
 const pageImageAbsolute = new URL(pageImage, SITE_ORIGIN).href
 
