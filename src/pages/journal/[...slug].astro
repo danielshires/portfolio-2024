@@ -4,8 +4,10 @@ import { getAllPosts, getPostBySlug, urlFor, type Post } from '../../lib/sanity'
 import SanityImage from '../../components/media/images/SanityImage.astro'
 import Text from '../../components/ui/text/Text.astro'
 import ReadNext from '../../components/content/posts/ReadNext.astro'
+import FieldGuideConceptLinks from '../../components/content/field-guide/FieldGuideConceptLinks.astro'
 import PortableTextImage from '../../components/content/posts/PortableTextImage.astro'
 import { PortableText } from 'astro-portabletext'
+import { PERSON_NODE_ID } from '../../lib/seo/merge-global-jsonld'
 
 export async function getStaticPaths() {
   const posts = await getAllPosts()
@@ -31,7 +33,13 @@ if (!post) {
 const readNextPosts =
   post.relatedPosts?.filter((p) => p && p._id !== post._id && p.slug?.current) ?? []
 
+const resolvedTitle = post.seo?.title?.trim() || post.title
+const resolvedDescription = post.seo?.description?.trim() || post.description
 const seoImage = post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : undefined
+const seoImageResolved = post.seo?.ogImage
+  ? urlFor(post.seo.ogImage).width(1200).height(630).url()
+  : seoImage
+const resolvedRobots = post.seo?.noIndex ? 'noindex,follow' : undefined
 
 const portableTextComponents = {
   type: {
@@ -89,15 +97,18 @@ const jsonLd = {
       url: canonicalUrl,
       datePublished: post.publishedAt,
       dateModified: post.publishedAt,
-      author: {
-        '@type': 'Person',
-        name: post.author || 'Daniel Shires',
-      },
+      author: post.author
+        ? {
+            '@type': 'Person',
+            name: post.author,
+          }
+        : {
+            '@id': PERSON_NODE_ID,
+          },
       publisher: {
-        '@type': 'Person',
-        name: 'Daniel Shires',
+        '@id': PERSON_NODE_ID,
       },
-      image: seoImage ? [seoImage] : undefined,
+      image: seoImageResolved ? [seoImageResolved] : undefined,
       keywords: post.tags?.join(', '),
       mainEntityOfPage: {
         '@type': 'WebPage',
@@ -109,13 +120,14 @@ const jsonLd = {
 ---
 
 <Layout
-  pageTitle={post.title}
-  pageDescription={post.description}
-  pageImage={seoImage}
+  pageTitle={resolvedTitle}
+  pageDescription={resolvedDescription}
+  pageImage={seoImageResolved}
   pageImageAlt={post.title}
   pageType='article'
   publishedTime={post.publishedAt}
   modifiedTime={post.publishedAt}
+  robots={resolvedRobots}
   jsonLd={jsonLd}>
   <div class='min-h-screen py-16 lg:py-24'>
     <article class='prose dark:prose-invert prose-headings:text-left max-w-[65ch] mx-auto text-base'>
@@ -158,6 +170,27 @@ const jsonLd = {
       )}
     </article>
 
+    <FieldGuideConceptLinks concepts={post.conceptsDiscussed ?? []} />
+
     <ReadNext posts={readNextPosts} />
+
+    <section class='not-prose max-w-[65ch] mx-auto mt-16 border-t border-zinc-200/80 pt-12 dark:border-zinc-800/80' aria-label='Design work'>
+      <Text variant='h3' class='mb-3'>Design work</Text>
+      <Text variant='body' color='muted'>
+        Case studies and portfolio —{' '}
+        <a
+          href='/projects'
+          class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
+          Browse projects
+        </a>{' '}
+        or{' '}
+        <a
+          href='/design'
+          class='text-zinc-900 underline decoration-zinc-400 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-600 dark:hover:decoration-zinc-100'>
+          see the design index
+        </a>
+        .
+      </Text>
+    </section>
   </div>
 </Layout>

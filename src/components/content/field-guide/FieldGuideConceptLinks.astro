@@ -1,0 +1,57 @@
+---
+/**
+ * Quiet editorial links from journal/project pages into Field Guide entries.
+ */
+import Text from '../../ui/text/Text.astro'
+import { conceptTypeLabel, type ConceptSummary } from '../../../lib/sanity'
+
+interface Props {
+  concepts: ConceptSummary[]
+  /** Screen reader / section label */
+  heading?: string
+}
+
+const { concepts, heading = 'Field guide' } = Astro.props
+const items = concepts.filter((c) => c?.slug?.current)
+---
+
+{
+  items.length > 0 && (
+    <section
+      class='not-prose mt-16 max-w-[65ch] mx-auto border-t border-zinc-200 pt-12 px-4 dark:border-zinc-800 sm:px-0'
+      aria-labelledby='fg-from-context-heading'>
+      <div class='mb-5 h-0.5 w-10 rounded-full bg-amber-500' aria-hidden='true' />
+      <Text variant='overline' color='muted' class='mb-8' id='fg-from-context-heading'>
+        {heading}
+      </Text>
+      <ul class='m-0 list-none space-y-6 p-0'>
+        {items.map((c) => (
+          <li>
+            <a
+              href={`/field-guide/${c.slug!.current}`}
+              class='group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+              data-swup-preload>
+              <Text
+                variant='h4'
+                weight='medium'
+                color='default'
+                class='underline decoration-zinc-400 decoration-2 underline-offset-4 transition-colors group-hover:decoration-zinc-900 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-100'>
+                {c.title}
+              </Text>
+              {conceptTypeLabel(c.type) && (
+                <Text variant='caption' color='muted' class='mt-1 block'>
+                  {conceptTypeLabel(c.type)}
+                </Text>
+              )}
+              {c.summary && (
+                <Text variant='body' color='muted' class='mt-2 max-w-[55ch]'>
+                  {c.summary}
+                </Text>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

@@ -3,6 +3,8 @@
 site: https://danielshires.com/
 owner: Daniel Shires
 
+Related: https://danielshires.com/ai.txt (pointer back to this file).
+
 ## What this site is
 Personal portfolio spanning product design case studies, writing, and photography.
 
@@ -14,6 +16,8 @@ Personal portfolio spanning product design case studies, writing, and photograph
 - Project detail pages: https://danielshires.com/projects/{slug}
 - Journal index: https://danielshires.com/journal
 - Journal posts: https://danielshires.com/journal/{slug}
+- Field Guide index: https://danielshires.com/field-guide
+- Field Guide concepts: https://danielshires.com/field-guide/{slug}
 - Pictures index: https://danielshires.com/pictures
 - Picture pages: https://danielshires.com/pictures/{slug}
 - Photo albums: https://danielshires.com/pictures/albums/{slug}
