@@ -30,7 +30,7 @@ This is Dan Portfolio, built with **Astro 4**, **Sanity CMS**, **React**, and **
 - `src/components/` - Reusable components organized by feature
 - `src/lib/sanity.ts` - Sanity client config and data fetching functions
 - `src/layouts/` - Page layouts with global styles and theme management
-- `src/schemas/` - TypeScript interfaces for Sanity content types
+- `portfolio-25/schemaTypes/` - Sanity Studio document schemas (single source used by `/studio`)
 
 ### Content Management
 

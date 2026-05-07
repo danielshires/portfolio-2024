@@ -10,13 +10,22 @@
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "strict": true
+        "strict": true,
+        "allowJs": true
     },
-    "include": ["src/**/*", ".astro/types.d.ts", "astro.config.mjs", "sanity.config.ts"],
+    "include": [
+        "src/**/*",
+        ".astro/types.d.ts",
+        "astro.config.mjs",
+        "sanity.config.ts",
+        "portfolio-25/schemaTypes/**/*"
+    ],
     "exclude": [
         "node_modules",
         "dist",
         ".astro",
-        "portfolio-25"
+        "portfolio-25/node_modules",
+        "portfolio-25/dist",
+        "portfolio-25/.sanity"
     ]
 }

@@ -31,4 +31,7 @@ portfolio-25/.sanity/
 portfolio-25/node_modules/
 portfolio-25/dist/
 portfolio-25/static/
+
+# Legacy duplicate studio tree (use portfolio-25 only)
+sanity-cms/
 .env.*
