@@ -3,7 +3,13 @@
  * Shared footer nav for detail (“child”) pages: back to section index + two cross-links.
  */
 import Text from '../../ui/text/Text.astro'
-import siteChildNavBackAnchorClass, { linkFocusRingClass, siteChildNavBackGlyphClass, siteChildNavBackLabelClass, textLinkClass } from '../../ui/text/styles'
+import {
+  linkFocusRingClass,
+  siteChildNavBackAnchorClass,
+  siteChildNavBackGlyphClass,
+  siteChildNavBackLabelClass,
+  textLinkClass,
+} from '../../ui/text/styles'
 
 export interface SiteChildNavLink {
   href: string

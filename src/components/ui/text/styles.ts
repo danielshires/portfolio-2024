@@ -105,7 +105,7 @@ export const linkFocusRingClass =
  * sometimes paint decoration across adjacent items).
  */
 export const siteChildNavBackAnchorClass =
-  `site-child-nav-back group inline-grid w-max max-w-full auto-cols-auto grid-flow-col items-center gap-x-2 no-underline hover:!no-underline visited:!no-underline ${linkFocusRingClass}`
+  `site-child-nav-back group inline-grid w-max max-w-full auto-cols-auto grid-flow-col items-center gap-x-2 font-normal no-underline hover:!no-underline visited:!no-underline ${linkFocusRingClass}`
 
 export const siteChildNavBackGlyphClass =
   'site-child-nav-back__glyph shrink-0 text-lg font-normal leading-none text-zinc-300 transition-colors md:text-xl dark:text-zinc-600 group-hover:text-zinc-900 dark:group-hover:text-zinc-100'
