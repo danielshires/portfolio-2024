@@ -26,8 +26,9 @@ This is Dan Portfolio, built with **Astro 4**, **Sanity CMS**, **React**, and **
 
 ### Key Directories
 
-- `src/pages/` - File-based routing (index, pictures, posts, design, experiments)
+- `src/pages/` - File-based routing (journal, projects, pictures, field-guide, design, experiments)
 - `src/components/` - Reusable components organized by feature
+- `src/components/content/journal/` - Writing index list (`JournalPostList`, `JournalPostLink`)
 - `src/lib/sanity.ts` - Sanity client config and data fetching functions
 - `src/layouts/` - Page layouts with global styles and theme management
 - `portfolio-25/schemaTypes/` - Sanity Studio document schemas (single source used by `/studio`)
@@ -45,7 +46,7 @@ The site fetches content from Sanity CMS with these main content types:
 
 Components are organized by feature in subdirectories:
 - `content/` - Content-specific components (posts, projects, albums, featured)
-- `layout/` - Page layout components (navigation, footer, sidebar)
+- `layout/` - Page layout components (navigation, footer)
 - `ui/` - Reusable UI primitives (buttons, cards, text, forms)
 - `media/` - Media handling components (images, galleries)
 
@@ -69,7 +70,6 @@ Components are organized by feature in subdirectories:
 
 **Examples:**
 - `ThemeToggle.tsx` - React (interactive state)
-- `FilterPostsReact.tsx` - React (filtering logic)
 - `ContactCTA.tsx` - React (icons and interactions)
 - `Layout.astro` - Astro (static structure)
 - `PostCard.jsx` - React (for consistent behavior)
@@ -95,8 +95,10 @@ Sanity queries are centralized in `src/lib/sanity.ts`:
 ### Routing Structure
 
 - `/` - Homepage with hero and featured content
-- `/posts/` - Blog index and individual post pages
-- `/pictures/` - Photo gallery and album views  
+- `/journal/` - Writing index and individual post pages
+- `/projects/` - Case study index and project detail pages
+- `/pictures/` - Photo gallery and album views
+- `/field-guide/` - Field guide index and entries
 - `/design/` - Design portfolio section
 - `/experiments/` - Experimental content
 

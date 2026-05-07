@@ -1,6 +1,7 @@
 ---
 import Text from '../../ui/text/Text.astro'
 import {
+  externalLinkGlyphGroupHoverClass,
   linkListMutedContinuationClass,
   linkListParagraphClass,
   linkListRowAnchorClass,
@@ -62,7 +63,9 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
           {external && (
             <>
               {' '}
-              <ExternalLinkGlyph class='w-[0.85em] h-[0.85em] relative -top-[0.05em] align-middle text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors duration-200' />
+              <ExternalLinkGlyph
+                class={`relative top-[0.03em] h-[0.72em] w-[0.72em] align-middle ${externalLinkGlyphGroupHoverClass}`}
+              />
             </>
           )}
         </p>
@@ -95,7 +98,9 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
             </Text>
             {
               external && (
-                <ExternalLinkGlyph class='w-4 h-4 shrink-0 self-center -translate-y-px text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors duration-200' />
+                <ExternalLinkGlyph
+                  class={`h-[0.8em] w-[0.8em] shrink-0 self-center -translate-y-px ${externalLinkGlyphGroupHoverClass}`}
+                />
               )
             }
           </div>

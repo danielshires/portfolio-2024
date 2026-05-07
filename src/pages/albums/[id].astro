@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from '../../layouts/Layout.astro'
 import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
+import ArrowRightGlyph from '../../components/ui/icons/ArrowRightGlyph.astro'
 import { textLinkClass } from '../../components/ui/text/styles'
 
 export async function getStaticPaths() {
@@ -42,7 +43,12 @@ const pageDescription =
     </div>
 
     <p class="text-lg my-4 text-center">
-      <a href="/pictures" class={`text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>Go back →</a>
+      <a
+        href="/pictures"
+        class={`inline-flex items-center gap-1 text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>
+        Go back
+        <ArrowRightGlyph class="h-[0.75em] w-[0.75em] shrink-0" />
+      </a>
     </p>
 
     <SiteChildNav parentHref="/pictures" parentLabel="Pictures" />

@@ -3,6 +3,7 @@
  * Shared footer nav for detail (“child”) pages: back to section index + two cross-links.
  */
 import Text from '../../ui/text/Text.astro'
+import ArrowLeftGlyph from '../../ui/icons/ArrowLeftGlyph.astro'
 import {
   linkFocusRingClass,
   siteChildNavBackAnchorClass,
@@ -18,7 +19,7 @@ export interface SiteChildNavLink {
 
 interface Props {
   parentHref: string
-  /** Shown next to a leading “←” as `Back to {parentLabel}`. */
+  /** Shown next to a leading back arrow as `Back to {parentLabel}`. */
   parentLabel: string
   /** Defaults: Projects + About me; on project detail pages, Writing + About me (avoids duplicating Projects). */
   secondaryLinks?: [SiteChildNavLink, SiteChildNavLink]
@@ -60,7 +61,7 @@ const widthClass = layout === 'full' ? 'w-full max-w-none' : 'w-full max-w-[65ch
   <ul class='space-y-4 list-none p-0 m-0'>
     <li>
       <a href={parentHref} class={siteChildNavBackAnchorClass} data-swup-preload>
-        <span class={siteChildNavBackGlyphClass} aria-hidden='true'>←</span>
+        <ArrowLeftGlyph class={siteChildNavBackGlyphClass} />
         <span class={siteChildNavBackLabelClass}>Back to {parentLabel}</span>
       </a>
     </li>

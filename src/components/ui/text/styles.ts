@@ -101,18 +101,25 @@ export const linkFocusRingClass =
   'rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
 
 /**
- * Explore “← Back to …”: two-column `inline-grid` so underline/border stays on the text cell only (flex+link browsers
+ * Stroke color for external-link arrows inside a parent with Tailwind `group` (homepage project list/cards, About).
+ */
+export const externalLinkGlyphGroupHoverClass =
+  'text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors duration-200'
+
+/**
+ * Explore “back” row: two-column `inline-grid` so underline/border stays on the text cell only (flex+link browsers
  * sometimes paint decoration across adjacent items).
  */
 export const siteChildNavBackAnchorClass =
-  `site-child-nav-back group inline-grid w-max max-w-full auto-cols-auto grid-flow-col items-center gap-x-2 font-normal no-underline hover:!no-underline visited:!no-underline ${linkFocusRingClass}`
+  `site-child-nav-back group inline-grid w-max max-w-full auto-cols-auto grid-flow-col items-center gap-x-2 text-lg font-normal text-zinc-900 no-underline hover:!no-underline visited:!no-underline dark:text-zinc-100 md:text-xl ${linkFocusRingClass}`
 
+/** {@link ArrowLeftGlyph}: ~⅔ cap-height vs label — stays smaller when label jumps to `md:text-xl`. */
 export const siteChildNavBackGlyphClass =
-  'site-child-nav-back__glyph shrink-0 text-lg font-normal leading-none text-zinc-300 transition-colors md:text-xl dark:text-zinc-600 group-hover:text-zinc-900 dark:group-hover:text-zinc-100'
+  'site-child-nav-back__glyph shrink-0 w-[0.65em] h-[0.65em] text-zinc-300 transition-colors dark:text-zinc-600 group-hover:text-zinc-900 dark:group-hover:text-zinc-100'
 
 /** Faux underline via border-bottom on this cell only (`inline-grid` col 2). */
 export const siteChildNavBackLabelClass =
-  'site-child-nav-back__label border-b border-transparent pb-[1px] text-left text-lg font-normal leading-snug text-zinc-900 transition-[border-color] dark:text-zinc-100 md:text-xl group-hover:border-zinc-900 dark:group-hover:border-zinc-100'
+  'site-child-nav-back__label border-b border-transparent pb-[1px] text-left leading-snug transition-[border-color] group-hover:border-zinc-900 dark:group-hover:border-zinc-100'
 
 /**
  * Card-style row link (title + optional muted body): whole row clickable; underline only the title via
@@ -150,9 +157,12 @@ export const sectionLabelTypographyClass =
 /** Section labels on the Writing index (Recent / Earlier) (+ margin below). */
 export const sectionYearLabelClass = `${sectionLabelTypographyClass} mb-4`
 
-/** “Writing →” / “Projects →” on the homepage (inside section heading). */
+/** “Writing →” / “Projects →” on the homepage (inside section heading; use with {@link ArrowRightGlyph}). */
 export const contentSectionHeadingLinkClass =
-  'underline-offset-4 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300 transition-colors duration-200 hover:underline hover:text-zinc-900 dark:hover:text-zinc-100'
+  'inline-flex items-center gap-1 underline-offset-4 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300 transition-colors duration-200 hover:underline hover:text-zinc-900 dark:hover:text-zinc-100'
+
+/** Size for {@link ArrowRightGlyph} beside mono `sectionYearLabelClass` (`text-xs`): slightly under 1em. */
+export const contentSectionHeadingArrowClass = 'h-[0.85em] w-[0.85em] shrink-0'
 
 /** Primary nav: same 1px stroke, taller offset (matches {@link NavLink}). */
 export const navLinkBaseClass =

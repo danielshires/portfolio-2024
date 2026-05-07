@@ -11,7 +11,7 @@ const { projects } = Astro.props
 const validProjects = projects.filter((p) => p && p.slug?.current)
 ---
 
-<div class='related-projects'>
+<div class='related-posts'>
   <Text variant='h2' class='mb-8 text-center'>Related Posts</Text>
   <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
     {validProjects.map((project) => <PostCard post={project} />)}

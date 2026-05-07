@@ -1,5 +1,7 @@
 ---
+import ArrowRightGlyph from '../../ui/icons/ArrowRightGlyph.astro'
 import {
+  contentSectionHeadingArrowClass,
   contentSectionHeadingLinkClass,
   linkListMutedContinuationClass,
   linkListParagraphClass,
@@ -25,7 +27,10 @@ const preview = posts.slice(0, WRITING_RECENT_POST_COUNT)
   preview.length > 0 && (
     <section class:list={[stackBelowHeroClass]} aria-label='Writing'>
       <h2 class={sectionYearLabelClass}>
-        <a href='/journal' class={contentSectionHeadingLinkClass}>Writing →</a>
+        <a href='/journal' class={contentSectionHeadingLinkClass}>
+          Writing
+          <ArrowRightGlyph class={contentSectionHeadingArrowClass} />
+        </a>
       </h2>
       <div class='flex flex-col'>
         {preview.map((post) => {

@@ -3,7 +3,9 @@ import ProjectCard from './ProjectCard.astro'
 import { urlFor, projectListHref, isExternalProject } from '../../../lib/sanity'
 import type { Project } from '../../../lib/sanity'
 import Text from '../../ui/text/Text.astro'
+import ArrowRightGlyph from '../../ui/icons/ArrowRightGlyph.astro'
 import {
+  contentSectionHeadingArrowClass,
   contentSectionHeadingLinkClass,
   sectionYearLabelClass,
   stackBelowHeroClass,
@@ -62,7 +64,8 @@ const transformedProjects = projects.map((project) => {
     variant === 'text' ? (
       <h2 class={sectionYearLabelClass}>
         <a href='/projects' class={contentSectionHeadingLinkClass}>
-          Projects →
+          Projects
+          <ArrowRightGlyph class={contentSectionHeadingArrowClass} />
         </a>
       </h2>
     ) : (

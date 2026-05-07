@@ -1,0 +1,51 @@
+---
+import Text from '../ui/text/Text.astro'
+---
+
+<section
+  class='not-found-pong mx-auto mt-10 w-full max-w-lg select-none px-4'
+  aria-label='Mini Pong game'
+  data-not-found-pong>
+  <Text variant='body' color='muted' class='mb-3 text-center text-sm'>
+    Play a round while you are here — pointer, touch, or W / S and arrow keys.
+  </Text>
+  <div
+    class='relative overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-950/60'>
+    <div class='flex items-center justify-between border-b border-zinc-200 px-3 py-2 text-xs dark:border-zinc-800'>
+      <span class='text-zinc-500 dark:text-zinc-400'>404 Pong</span>
+      <div class='text-center'>
+        <span class='font-mono tabular-nums text-zinc-700 dark:text-zinc-200' data-pong-score>0 — 0</span>
+        <div class='text-[10px] text-zinc-400 dark:text-zinc-500'>CPU · you</div>
+      </div>
+      <span class='w-14' aria-hidden='true'></span>
+    </div>
+    <div class='aspect-video w-full touch-none'>
+      <canvas
+        class='block h-full w-full touch-none'
+        data-pong-canvas
+        role='img'
+        aria-label='Pong court: you are the right paddle'></canvas>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { mountNotFoundPong } from '../../scripts/not-found-pong.ts'
+
+  let cleanup: (() => void) | undefined
+
+  function boot() {
+    cleanup?.()
+    const root = document.querySelector<HTMLElement>('[data-not-found-pong]')
+    if (root) cleanup = mountNotFoundPong(root)
+    else cleanup = undefined
+  }
+
+  function teardown() {
+    cleanup?.()
+    cleanup = undefined
+  }
+
+  document.addEventListener('astro:page-load', boot)
+  document.addEventListener('astro:before-swap', teardown)
+</script>

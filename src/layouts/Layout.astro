@@ -7,6 +7,7 @@ import Footer from '../components/layout/Footer.astro'
 import Head from './Head.astro'
 import SEO from '../components/common/SEO.astro'
 import { mergeGlobalJsonLd } from '../lib/seo/merge-global-jsonld'
+import { navLinkActiveClass, navLinkInactiveClass } from '../components/ui/text/styles'
 
 interface Props {
   pageTitle: string
@@ -74,6 +75,10 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
       } catch (e) {}
     })()
   </script>
+  <script
+    is:inline
+    set:html={`window.__portfolioNavLinkActiveClass=${JSON.stringify(navLinkActiveClass)};window.__portfolioNavLinkInactiveClass=${JSON.stringify(navLinkInactiveClass)};`}
+  />
   <script is:inline>
     // After Swup navigations (same signals @swup/astro emits for Astro islands)
     document.addEventListener('astro:page-load', function() {
@@ -135,7 +140,6 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
       }
     }
 
-    // Enhanced Navigation Active State Handler - Approach 2
     if (!window.navigationHandlerInitialized) {
       window.navigationHandlerInitialized = true
 
@@ -147,44 +151,41 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
           return false
         }
 
+        var activeClass = window.__portfolioNavLinkActiveClass
+        var inactiveClass = window.__portfolioNavLinkInactiveClass
+        if (typeof activeClass !== 'string' || typeof inactiveClass !== 'string') {
+          return false
+        }
+
         navLinks.forEach((link) => {
           const path = link.getAttribute('data-nav-path')
-          const isActive = path === ''
-            ? currentPath === ''
-            : currentPath.startsWith(path) && path !== ''
+          const isActive =
+            path === ''
+              ? currentPath === ''
+              : currentPath.startsWith(path) && path !== ''
 
-          const baseClasses =
-            'font-normal text-zinc-900 dark:text-zinc-100 underline-offset-8 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300'
-          const activeClasses = `underline hover:underline ${baseClasses}`
-          const inactiveClasses = `no-underline hover:underline ${baseClasses}`
-
-          link.className = isActive ? activeClasses : inactiveClasses
+          link.className = isActive ? activeClass : inactiveClass
         })
 
         return true
       }
 
-      // Enhanced timing for navigation updates
       function scheduleNavigationUpdate() {
-        // Try immediate update
         if (updateNavigationActiveState()) {
           return
         }
 
-        // Fallback: try after short delay
         setTimeout(() => {
           if (updateNavigationActiveState()) {
             return
           }
 
-          // Final fallback: try after longer delay
           setTimeout(() => {
             updateNavigationActiveState()
           }, 100)
         }, 10)
       }
 
-      // Update navigation on initial load
       document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => updateNavigationActiveState(), 0)
       })
@@ -192,10 +193,8 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
       document.addEventListener('astro:after-swap', scheduleNavigationUpdate)
       document.addEventListener('astro:page-load', scheduleNavigationUpdate)
 
-      // Browser navigation
       window.addEventListener('popstate', scheduleNavigationUpdate)
 
-      // Fallback: also try on URL changes
       let lastUrl = window.location.href
       setInterval(() => {
         if (window.location.href !== lastUrl) {
@@ -205,22 +204,7 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
       }, 100)
     }
   </script>
-  <!-- Performance Monitoring for SEO -->
   <script is:inline>
-    // Basic performance monitoring without web-vitals dependency
-    if (!window.webVitalsInitialized) {
-      window.webVitalsInitialized = true
-    }
-
-    // Track page load performance (silent)
-    if (!window.performanceTrackingInitialized) {
-      window.performanceTrackingInitialized = true
-
-      window.addEventListener('load', function() {
-        // Performance tracking runs silently; metrics collected but not logged.
-      })
-    }
-
     // ✅ CURRENT WORKING THEME SYSTEM - Approach 4: Isolated theme manager
     if (!window.simpleThemeManagerInitialized) {
       window.simpleThemeManagerInitialized = true
