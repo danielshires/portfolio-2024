@@ -37,6 +37,37 @@ export default {
             fontSize: {
                 base: ['1rem', { lineHeight: '1.5' }],
             },
+            keyframes: {
+                /**
+                 * Exit in arrow direction + fade, jump in from opposite side, settle home.
+                 * External: out up-right → in from bottom-left.
+                 */
+                /** % translate is relative to the SVG box; parent has overflow:hidden so motion reads as in/out of slot. */
+                'link-icon-external-wrap': {
+                    '0%': { transform: 'translate(0, 0)', opacity: '1' },
+                    '26%': { transform: 'translate(115%, -115%)', opacity: '0' },
+                    '38%': { transform: 'translate(-115%, 115%)', opacity: '0' },
+                    '100%': { transform: 'translate(0, 0)', opacity: '1' },
+                },
+                'link-icon-right-wrap': {
+                    '0%': { transform: 'translateX(0)', opacity: '1' },
+                    '26%': { transform: 'translateX(130%)', opacity: '0' },
+                    '38%': { transform: 'translateX(-130%)', opacity: '0' },
+                    '100%': { transform: 'translateX(0)', opacity: '1' },
+                },
+                'link-icon-left-wrap': {
+                    '0%': { transform: 'translateX(0)', opacity: '1' },
+                    '26%': { transform: 'translateX(-130%)', opacity: '0' },
+                    '38%': { transform: 'translateX(130%)', opacity: '0' },
+                    '100%': { transform: 'translateX(0)', opacity: '1' },
+                },
+            },
+            animation: {
+                'link-icon-external-wrap':
+                    'link-icon-external-wrap 0.72s cubic-bezier(0.4, 0, 0.2, 1) both',
+                'link-icon-right-wrap': 'link-icon-right-wrap 0.65s cubic-bezier(0.4, 0, 0.2, 1) both',
+                'link-icon-left-wrap': 'link-icon-left-wrap 0.65s cubic-bezier(0.4, 0, 0.2, 1) both',
+            },
             typography: (theme) => ({
                 DEFAULT: {
                     css: {

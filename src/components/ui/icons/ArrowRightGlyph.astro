@@ -1,6 +1,7 @@
 ---
 /**
  * Heroicons `arrow-right` outline (24×24), stroke matched to {@link ExternalLinkGlyph}.
+ * Wrapper clips overflow so the glyph can slide off right and re-enter from the left on `group` hover/focus-visible.
  */
 interface Props {
   class?: string
@@ -9,16 +10,23 @@ interface Props {
 const { class: className } = Astro.props
 ---
 
-<svg
-  class:list={['inline-block shrink-0', className]}
-  fill='none'
-  viewBox='0 0 24 24'
-  stroke-width='2'
-  stroke='currentColor'
+<span
+  class:list={['inline-flex shrink-0 items-center justify-center overflow-hidden', className]}
   aria-hidden='true'>
-  <path
-    stroke-linecap='round'
-    stroke-linejoin='round'
-    d='M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3'
-  />
-</svg>
+  <svg
+    class:list={[
+      'block h-full w-full',
+      'motion-safe:group-hover:animate-link-icon-right-wrap motion-safe:group-focus-visible:animate-link-icon-right-wrap',
+      'motion-reduce:group-hover:animate-none motion-reduce:group-focus-visible:animate-none',
+    ]}
+    fill='none'
+    viewBox='0 0 24 24'
+    stroke-width='2'
+    stroke='currentColor'>
+    <path
+      stroke-linecap='round'
+      stroke-linejoin='round'
+      d='M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3'
+    />
+  </svg>
+</span>

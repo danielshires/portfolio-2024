@@ -99,7 +99,7 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
             {
               external && (
                 <ExternalLinkGlyph
-                  class={`h-[0.8em] w-[0.8em] shrink-0 self-center -translate-y-px ${externalLinkGlyphGroupHoverClass}`}
+                  class={`relative top-px h-[0.8em] w-[0.8em] shrink-0 self-center ${externalLinkGlyphGroupHoverClass}`}
                 />
               )
             }
