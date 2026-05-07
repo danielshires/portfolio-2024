@@ -5,7 +5,7 @@ import {schemaTypes} from './schemaTypes'
 
 export default defineConfig({
   name: 'default',
-  title: 'Portfolio 25',
+  title: 'Dan Portfolio — Sanity CMS',
 
   projectId: '5fq3rcf6',
   dataset: 'production',

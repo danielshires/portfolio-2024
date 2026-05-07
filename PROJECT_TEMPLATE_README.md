@@ -7,8 +7,8 @@ This implementation provides a complete universal project page template system f
 ## 📁 Files Created
 
 ### 1. **Sanity Schema**
-- `portfolio-25/schemaTypes/project.js` - Complete project schema with all fields
-- `portfolio-25/schemaTypes/index.js` - Updated to include project schema
+- `sanity-cms/schemaTypes/project.js` - Complete project schema with all fields
+- `sanity-cms/schemaTypes/index.ts` - Updated to include project schema
 
 ### 2. **Pages**
 - `src/pages/projects/[slug].astro` - Dynamic project detail page
@@ -80,7 +80,7 @@ Each project in Sanity includes:
 ## 🔧 Usage
 
 ### 1. **Add to Sanity Studio**
-The schema is already added to your portfolio-25 configuration. Restart your Sanity Studio to see the new "Project" document type.
+The schema is already added to your sanity-cms configuration. Restart your Sanity Studio to see the new "Project" document type.
 
 ### 2. **Create Projects**
 Add projects through Sanity Studio with:

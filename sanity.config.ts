@@ -1,14 +1,2 @@
-import { defineConfig } from 'sanity'
-import { structureTool } from 'sanity/structure'
-import { schemaTypes } from './src/schemas'
-
-export default defineConfig({
-  name: 'default',
-  title: 'Dan Portfolio',
-  projectId: '5fq3rcf6',
-  dataset: 'production',
-  plugins: [structureTool()],
-  schema: {
-    types: schemaTypes,
-  },
-})
+/** Re-exports the Sanity Studio config from `sanity-cms/` so @sanity/astro can resolve `/sanity.config` at the repo root. */
+export { default } from './sanity-cms/sanity.config'

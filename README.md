@@ -38,8 +38,8 @@ This portfolio features:
 │   ├── lib/                # Utilities and Sanity client
 │   ├── pages/              # Astro pages and routes
 │   └── styles/             # Global styles
-├── portfolio-25/           # Sanity Studio configuration
-└── sanity.config.ts        # Sanity project configuration
+├── sanity-cms/             # Sanity Studio (schemas + standalone `sanity dev`)
+└── sanity.config.ts        # Re-exports studio config for the Astro site
 ```
 
 ## 🛠️ Development
