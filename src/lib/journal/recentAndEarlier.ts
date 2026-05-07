@@ -1,6 +1,6 @@
 import type { Post } from '../sanity'
 
-/** How many newest posts appear under “Recent” on `/journal` and on the homepage Writing block. */
+/** How many newest posts appear under “Recent” on `/writing` and on the homepage Writing block. */
 export const WRITING_RECENT_POST_COUNT = 3
 
 /** Writing index sections: newest posts under “Recent”, the rest under “Earlier”. */

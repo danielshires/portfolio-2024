@@ -205,7 +205,7 @@ const jsonLd = {
               {postsDiscussing.map((p) =>
                 p.slug?.current ? (
                   <li>
-                    <a href={`/journal/${p.slug.current}`} class={cardLinkAnchorClass} data-swup-preload>
+                    <a href={`/writing/${p.slug.current}`} class={cardLinkAnchorClass} data-swup-preload>
                       <Text variant='h4' weight='medium' class={cardLinkTitleUnderlineClass}>
                         {p.title}
                       </Text>

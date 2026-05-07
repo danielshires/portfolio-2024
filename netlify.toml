@@ -22,6 +22,17 @@
   to = "/studio/index.html"
   status = 200
 
+# Blog lived at /journal; routes are now /writing
+[[redirects]]
+  from = "/journal"
+  to = "/writing"
+  status = 301
+
+[[redirects]]
+  from = "/journal/*"
+  to = "/writing/:splat"
+  status = 301
+
 # SPA fallback for client-side routing
 [[redirects]]
   from = "/*"

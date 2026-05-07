@@ -6,7 +6,7 @@ import { linkListRowAnchorClass, linkListStrongTitleClass } from '../../ui/text/
 export default function PostCard({ post, showDescription = true }) {
     return (
         <a
-            href={`/journal/${post.slug?.current || post._id}`}
+            href={`/writing/${post.slug?.current || post._id}`}
             className={linkListRowAnchorClass}
             data-swup-preload
         >

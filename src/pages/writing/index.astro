@@ -18,7 +18,7 @@ const structuredData = {
   '@type': 'Blog',
   name: 'Daniel Shires — Writing',
   description: pageDescription,
-  url: 'https://danielshires.com/journal',
+  url: 'https://danielshires.com/writing',
   image: new URL(pageImage, 'https://danielshires.com').href,
   author: {
     '@type': 'Person',
@@ -39,7 +39,7 @@ const structuredData = {
     },
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
-    url: `https://danielshires.com/journal/${post.slug.current}`,
+    url: `https://danielshires.com/writing/${post.slug.current}`,
     keywords: post.tags?.join(', ') || 'design, development, UX, UI',
   })),
 }
@@ -55,7 +55,7 @@ const structuredData = {
     <SimpleHero
       introText={{
         first: 'Writing',
-        second: 'Notes, stories, and reflections on design, development, and the digital world.',
+        second: 'Notes on design, systems, tools, and work.',
       }}
     />
 

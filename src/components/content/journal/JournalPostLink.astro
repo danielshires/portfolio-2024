@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { post } = Astro.props
-const href = `/journal/${post.slug?.current || post._id}`
+const href = `/writing/${post.slug?.current || post._id}`
 ---
 
 <a

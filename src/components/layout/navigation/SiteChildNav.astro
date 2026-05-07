@@ -30,7 +30,7 @@ interface Props {
 }
 
 function defaultSecondary(parentHref: string): [SiteChildNavLink, SiteChildNavLink] {
-  const writing: SiteChildNavLink = { href: '/journal', label: 'Writing' }
+  const writing: SiteChildNavLink = { href: '/writing', label: 'Writing' }
   const projects: SiteChildNavLink = { href: '/projects', label: 'Projects' }
   const about: SiteChildNavLink = { href: '/about', label: 'About me' }
   if (parentHref === '/projects') {

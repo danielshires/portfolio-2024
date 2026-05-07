@@ -3,7 +3,7 @@ import type { Post, Album, Project, Picture, ConceptSummary } from '../lib/sanit
 
 // CRITICAL SEO: Preserve these URL structures to maintain Google rankings
 // Current URL patterns that must be maintained:
-// - /journal/[slug] - Blog posts
+// - /writing/[slug] - Blog posts
 // - /projects/[slug] - Design projects
 // - /pictures/albums/[slug] - Photo albums (Sanity)
 // - /pictures - Photography collections
@@ -36,7 +36,7 @@ export async function GET() {
     .map(
       (post: Post) => `
     <url>
-      <loc>${new URL(`/journal/${post.slug.current}`, 'https://danielshires.com').href}</loc>
+      <loc>${new URL(`/writing/${post.slug.current}`, 'https://danielshires.com').href}</loc>
       <lastmod>${new Date(post.publishedAt).toISOString()}</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.7</priority>

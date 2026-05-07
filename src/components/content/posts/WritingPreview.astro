@@ -27,14 +27,14 @@ const preview = posts.slice(0, WRITING_RECENT_POST_COUNT)
   preview.length > 0 && (
     <section class:list={[stackBelowHeroClass]} aria-label='Writing'>
       <h2 class={sectionYearLabelClass}>
-        <a href='/journal' class={contentSectionHeadingLinkClass}>
+        <a href='/writing' class={contentSectionHeadingLinkClass}>
           Writing
           <ArrowRightGlyph class={contentSectionHeadingArrowClass} />
         </a>
       </h2>
       <div class='flex flex-col'>
         {preview.map((post) => {
-          const href = `/journal/${post.slug?.current || post._id}`
+          const href = `/writing/${post.slug?.current || post._id}`
           const lineDescription = post.excerpt || post.description || ''
           return (
             <a

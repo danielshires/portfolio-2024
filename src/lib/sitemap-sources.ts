@@ -21,7 +21,7 @@ const STATIC_PRESET: PlainSitemapPage[] = [
   { url: '', priority: '1.0', changefreq: 'weekly' },
   { url: '/pictures', priority: '0.9', changefreq: 'weekly' },
   { url: '/design', priority: '0.9', changefreq: 'weekly' },
-  { url: '/journal', priority: '0.8', changefreq: 'weekly' },
+  { url: '/writing', priority: '0.8', changefreq: 'weekly' },
   { url: '/field-guide', priority: '0.5', changefreq: 'monthly' },
 ]
 

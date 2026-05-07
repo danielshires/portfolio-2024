@@ -14,8 +14,8 @@ Personal portfolio spanning product design case studies, writing, and photograph
 - Design portfolio index: https://danielshires.com/design
 - Projects index: https://danielshires.com/projects
 - Project detail pages: https://danielshires.com/projects/{slug}
-- Journal index: https://danielshires.com/journal
-- Journal posts: https://danielshires.com/journal/{slug}
+- Writing index: https://danielshires.com/writing
+- Writing posts: https://danielshires.com/writing/{slug}
 - Field Guide index: https://danielshires.com/field-guide
 - Field Guide concepts: https://danielshires.com/field-guide/{slug}
 - Pictures index: https://danielshires.com/pictures
