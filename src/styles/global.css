@@ -448,7 +448,7 @@ html.dark[data-high-contrast]:not([data-input-method='mouse']) :focus-visible {
 }
 
 html[data-high-contrast] [data-slot='switch'] {
-    border: 2px solid #000;
+    border-color: #000;
 }
 
 html[data-high-contrast] [data-slot='switch'][data-unchecked] {
@@ -468,7 +468,7 @@ html[data-high-contrast] [data-slot='switch'][data-checked] [data-slot='switch-t
 }
 
 html.dark[data-high-contrast] [data-slot='switch'] {
-    border: 2px solid #fff;
+    border-color: #fff;
 }
 
 html.dark[data-high-contrast] [data-slot='switch'][data-unchecked] {
