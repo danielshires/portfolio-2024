@@ -29,18 +29,18 @@ const menuButtonLayoutClass =
             ))
           }
         </div>
-        <button
-          type='button'
-          id='nav-menu-button'
-          class:list={[navLinkInactiveClass, menuButtonLayoutClass]}
-          aria-expanded='false'
-          aria-controls='nav-menu'
-          data-menu-open-class={navLinkActiveClass}
-          data-menu-closed-class={navLinkInactiveClass}
-          data-menu-layout-class={menuButtonLayoutClass}>
-          Menu
-        </button>
       </div>
+      <button
+        type='button'
+        id='nav-menu-button'
+        class:list={[navLinkInactiveClass, menuButtonLayoutClass]}
+        aria-expanded='false'
+        aria-controls='nav-menu'
+        data-menu-open-class={navLinkActiveClass}
+        data-menu-closed-class={navLinkInactiveClass}
+        data-menu-layout-class={menuButtonLayoutClass}>
+        Menu
+      </button>
       <div class='hidden shrink-0 items-center gap-2 md:flex md:gap-4'>
         <SocialIconLinks includeEmail class='gap-2' />
         <ThemeToggle client:load />
@@ -50,7 +50,7 @@ const menuButtonLayoutClass =
     <div
       id='nav-menu'
       hidden
-      class='absolute left-0 top-[calc(100%+1px)] z-50 w-max max-w-full border border-zinc-200 bg-white px-5 py-4 theme-transition dark:border-zinc-800 dark:bg-zinc-950 md:hidden'>
+      class='absolute right-0 top-[calc(100%+1px)] z-50 w-max max-w-full border border-zinc-200 bg-white px-5 py-4 theme-transition dark:border-zinc-800 dark:bg-zinc-950 md:hidden'>
       <ul class='flex flex-col items-start gap-4 whitespace-nowrap'>
         {
           navigationItems.map((item) => (

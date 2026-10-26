@@ -43,6 +43,31 @@
   to = "/writing/:splat"
   status = 301
 
+# Playground lived at /experiments, then briefly at /playgrounds
+[[redirects]]
+  from = "/experiments"
+  to = "/playground"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/experiments/*"
+  to = "/playground/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/playgrounds"
+  to = "/playground"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/playgrounds/*"
+  to = "/playground/:splat"
+  status = 301
+  force = true
+
 # Avatar chat. Must stay above the catch-all so the function is reached.
 [[redirects]]
   from = "/api/avatar"
