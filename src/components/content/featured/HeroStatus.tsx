@@ -86,7 +86,7 @@ export default function HeroStatus({ name }: { name: string }) {
         )}
         <span
           className={`relative inline-flex size-2 rounded-full ${
-            available ? 'bg-green-500' : 'bg-green-500/45'
+            available ? 'bg-green-500' : 'bg-zinc-900 dark:bg-zinc-400'
           }`}
         />
       </span>

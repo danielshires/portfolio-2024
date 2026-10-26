@@ -1,7 +1,7 @@
 ---
 import HeroStatus from './HeroStatus'
 import Text from '../../ui/text/Text.astro'
-import { heroDisplayIntroClass, heroIdentityLabelClass, simpleHeroSectionClass } from '../../ui/text/styles'
+import { heroDisplayIntroClass, heroIdentityLabelClass, heroStatusOpticalAlignClass, simpleHeroSectionClass } from '../../ui/text/styles'
 
 interface Props {
   name: string
@@ -57,7 +57,7 @@ const getInTouchClass = [
   }
   {
     name && (
-      <p class:list={[heroIdentityLabelClass, avatar ? 'mt-4' : undefined]}>
+      <p class:list={[heroIdentityLabelClass, localStatus && heroStatusOpticalAlignClass, avatar ? 'mt-4' : undefined]}>
         {localStatus ? <HeroStatus name={name} client:load /> : name}
       </p>
     )
@@ -76,11 +76,8 @@ const getInTouchClass = [
     <a href='/projects' class={exploreProjectsClass} data-swup-preload>
       Explore projects
     </a>
-    <a
-      href='mailto:hello@danielshires.com?subject=Portfolio%20Inquiry'
-      class={getInTouchClass}
-      aria-label='Send email to Daniel Shires'>
-      Get in touch
+    <a href='/about' class={getInTouchClass} data-swup-preload>
+      About Me
     </a>
   </div>
 </section>

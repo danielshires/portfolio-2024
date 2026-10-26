@@ -65,6 +65,14 @@ const sanityConfig = {
 // https://astro.build/config
 export default defineConfig({
     site: 'https://danielshires.com',
+    redirects: {
+        '/experiments': '/playground',
+        '/experiments/avatar': '/playground/avatar',
+        '/experiments/spinnerstudio': '/playground/spinnerstudio',
+        '/playgrounds': '/playground',
+        '/playgrounds/avatar': '/playground/avatar',
+        '/playgrounds/spinnerstudio': '/playground/spinnerstudio',
+    },
     integrations: [
         tailwind(),
         react({

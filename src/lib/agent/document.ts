@@ -19,7 +19,7 @@ const PAGE_NOTES: Record<string, string> = {
   '/pictures': 'photography',
   '/writing': 'essays and notes',
   '/about': 'summary, experience, and ways to connect',
-  '/experiments': 'small interactive trials',
+  '/playground': 'small interactive trials',
   '/design': 'design portfolio',
   '/field-guide': 'concepts and patterns',
   '/cv/daniel-shires-cv.md': 'résumé',

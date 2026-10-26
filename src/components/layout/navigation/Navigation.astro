@@ -29,19 +29,19 @@ const menuButtonLayoutClass =
             ))
           }
         </div>
-        <button
-          type='button'
-          id='nav-menu-button'
-          class:list={[navLinkInactiveClass, menuButtonLayoutClass]}
-          aria-expanded='false'
-          aria-controls='nav-menu'
-          data-menu-open-class={navLinkActiveClass}
-          data-menu-closed-class={navLinkInactiveClass}
-          data-menu-layout-class={menuButtonLayoutClass}>
-          <span class='menu-text menu-text-open'>Menu</span>
-          <span class='menu-text menu-text-close'>Close</span>
-        </button>
       </div>
+      <button
+        type='button'
+        id='nav-menu-button'
+        class:list={[navLinkInactiveClass, menuButtonLayoutClass]}
+        aria-expanded='false'
+        aria-controls='nav-menu'
+        data-menu-open-class={navLinkActiveClass}
+        data-menu-closed-class={navLinkInactiveClass}
+        data-menu-layout-class={menuButtonLayoutClass}>
+        <span class='menu-text menu-text-open'>Menu</span>
+        <span class='menu-text menu-text-close'>Close</span>
+      </button>
       <div class='hidden shrink-0 items-center gap-2 md:flex md:gap-4'>
         <SocialIconLinks includeEmail class='gap-2' />
         <ThemeToggle client:load />
@@ -50,7 +50,7 @@ const menuButtonLayoutClass =
     </div>
     <div
       id='nav-menu'
-      class='nav-menu absolute left-0 top-[calc(100%+8px)] z-50 w-max max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200/60 bg-white/95 px-5 py-4 shadow-lg shadow-zinc-900/5 backdrop-blur-xl theme-transition dark:border-zinc-800/60 dark:bg-zinc-950/95 dark:shadow-zinc-900/40 md:hidden'>
+      class='nav-menu absolute right-0 top-[calc(100%+8px)] z-50 w-max max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200/60 bg-white/95 px-5 py-4 shadow-lg shadow-zinc-900/5 backdrop-blur-xl theme-transition dark:border-zinc-800/60 dark:bg-zinc-950/95 dark:shadow-zinc-900/40 md:hidden'>
       <ul class='nav-menu-list flex flex-col items-start gap-1 whitespace-nowrap'>
         {
           navigationItems.map((item, index) => (
@@ -99,7 +99,7 @@ const menuButtonLayoutClass =
   .nav-menu {
     opacity: 0;
     transform: translateY(-8px) scale(0.98);
-    transform-origin: top left;
+    transform-origin: top right;
     pointer-events: none;
     visibility: hidden;
     transition:

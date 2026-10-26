@@ -15,19 +15,19 @@ if (!features.experiments.enabled) {
   return Astro.redirect('/404')
 }
 
-const pageTitle = 'Experiments | Daniel Shires'
-const pageDescription = 'Experimental prototypes and playgrounds.'
+const pageTitle = 'Playground | Daniel Shires'
+const pageDescription = 'Prototypes and experiments.'
 
 const experiments = [
   {
     title: 'Digital avatar',
-    href: '/experiments/avatar',
+    href: '/playground/avatar',
     description:
       'A chat grounded in the public pages on this site. Ask it about my work, writing or experience instead of browsing for it.',
   },
   {
     title: 'spinnerstudio',
-    href: '/experiments/spinnerstudio',
+    href: '/playground/spinnerstudio',
     description:
       'A generative shape playground. Adjust shape, count, colour and motion to see how a few parameters produce very different patterns.',
   },
@@ -38,8 +38,8 @@ const experiments = [
   <article class='pb-16 md:pb-24'>
     <SimpleHero
       introText={{
-        first: 'Experiments',
-        second: 'Prototypes and playgrounds. They may change or disappear.',
+        first: 'Playground',
+        second: 'Prototypes and experiments',
       }}
     />
 

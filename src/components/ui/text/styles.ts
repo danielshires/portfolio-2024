@@ -181,3 +181,10 @@ export const heroDisplayIntroClass = [
   'text-3xl sm:text-4xl md:text-5xl lg:text-[4rem]',
   'mt-4',
 ].join(' ')
+
+/**
+ * Shifts the status line so the dot meets the headline.
+ * Inter insets a capital by ~0.072em; these match the headline sizes above.
+ */
+export const heroStatusOpticalAlignClass =
+  'ml-[0.136rem] sm:ml-[0.163rem] md:ml-[0.217rem] lg:ml-[0.289rem]'
