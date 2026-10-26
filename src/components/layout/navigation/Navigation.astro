@@ -58,7 +58,6 @@ const menuButtonLayoutClass =
   class='nav-menu fixed inset-0 z-40 bg-white dark:bg-zinc-950 md:hidden'>
   <div class='container mx-auto flex h-full flex-col px-8 pt-20 pb-8'>
     <div class='nav-menu-section'>
-      <span class='nav-menu-label mb-4 block text-sm font-medium text-zinc-500 dark:text-zinc-400'>Menu</span>
       <ul class='nav-menu-list flex flex-col items-start'>
         {
           navigationItems.map((item, index) => (
@@ -124,21 +123,6 @@ const menuButtonLayoutClass =
     transition:
       opacity 0.25s ease-out,
       visibility 0s linear 0s;
-  }
-
-  /* Section label animation */
-  .nav-menu-label {
-    opacity: 0;
-    transform: translateY(-4px);
-    transition:
-      opacity 0.2s ease-out,
-      transform 0.2s ease-out;
-  }
-
-  .nav-menu[data-open='true'] .nav-menu-label {
-    opacity: 1;
-    transform: translateY(0);
-    transition-delay: 0.05s;
   }
 
   /* Staggered menu item animations */
