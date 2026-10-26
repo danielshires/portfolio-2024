@@ -38,7 +38,8 @@ const menuButtonLayoutClass =
           data-menu-open-class={navLinkActiveClass}
           data-menu-closed-class={navLinkInactiveClass}
           data-menu-layout-class={menuButtonLayoutClass}>
-          Menu
+          <span class='menu-text menu-text-open'>Menu</span>
+          <span class='menu-text menu-text-close'>Close</span>
         </button>
       </div>
       <div class='hidden shrink-0 items-center gap-2 md:flex md:gap-4'>
@@ -49,13 +50,12 @@ const menuButtonLayoutClass =
     </div>
     <div
       id='nav-menu'
-      hidden
-      class='absolute left-0 top-[calc(100%+1px)] z-50 w-max max-w-full border border-zinc-200 bg-white px-5 py-4 theme-transition dark:border-zinc-800 dark:bg-zinc-950 md:hidden'>
-      <ul class='flex flex-col items-start gap-4 whitespace-nowrap'>
+      class='nav-menu absolute left-0 top-[calc(100%+8px)] z-50 w-max max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200/60 bg-white/95 px-5 py-4 shadow-lg shadow-zinc-900/5 backdrop-blur-xl theme-transition dark:border-zinc-800/60 dark:bg-zinc-950/95 dark:shadow-zinc-900/40 md:hidden'>
+      <ul class='nav-menu-list flex flex-col items-start gap-1 whitespace-nowrap'>
         {
-          navigationItems.map((item) => (
-            <li>
-              <NavLink path={item.path} target='_self' href={item.href}>
+          navigationItems.map((item, index) => (
+            <li class='nav-menu-item w-full' style={`--item-index: ${index}`}>
+              <NavLink path={item.path} target='_self' href={item.href} class='block w-full rounded-lg px-3 py-2 -mx-3 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 transition-colors'>
                 {item.label}
               </NavLink>
             </li>
@@ -63,7 +63,7 @@ const menuButtonLayoutClass =
         }
       </ul>
       <div
-        class='mt-4 flex items-center gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800'>
+        class='nav-menu-footer mt-3 flex items-center gap-2 border-t border-zinc-200/60 pt-3 dark:border-zinc-800/60'>
         <SocialIconLinks includeEmail class='gap-2' />
         <ThemeToggle client:load />
         <SettingsTrigger client:load />
@@ -93,6 +93,83 @@ const menuButtonLayoutClass =
     opacity: 0;
     transform: translateY(-20px);
     pointer-events: none;
+  }
+
+  /* Mobile menu animations */
+  .nav-menu {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    transform-origin: top left;
+    pointer-events: none;
+    visibility: hidden;
+    transition:
+      opacity 0.2s ease-out,
+      transform 0.2s ease-out,
+      visibility 0s linear 0.2s;
+  }
+
+  .nav-menu[data-open='true'] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    visibility: visible;
+    transition:
+      opacity 0.25s ease-out,
+      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 0s;
+  }
+
+  /* Staggered menu item animations */
+  .nav-menu-item {
+    opacity: 0;
+    transform: translateX(-8px);
+    transition:
+      opacity 0.2s ease-out,
+      transform 0.2s ease-out;
+  }
+
+  .nav-menu[data-open='true'] .nav-menu-item {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: calc(0.04s * var(--item-index, 0) + 0.1s);
+  }
+
+  /* Footer animation */
+  .nav-menu-footer {
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 0.2s ease-out,
+      transform 0.2s ease-out;
+  }
+
+  .nav-menu[data-open='true'] .nav-menu-footer {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.2s;
+  }
+
+  /* Menu button text transition */
+  #nav-menu-button {
+    position: relative;
+    min-width: 3rem;
+  }
+
+  #nav-menu-button .menu-text {
+    display: inline-block;
+    transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  }
+
+  #nav-menu-button[aria-expanded='true'] .menu-text-open {
+    opacity: 0;
+    transform: translateY(-4px);
+    position: absolute;
+  }
+
+  #nav-menu-button[aria-expanded='false'] .menu-text-close {
+    opacity: 0;
+    transform: translateY(4px);
+    position: absolute;
   }
 </style>
 
@@ -137,9 +214,8 @@ const menuButtonLayoutClass =
       if (!menuButton || !menuPanel) return
 
       const wasOpen = menuButton.getAttribute('aria-expanded') === 'true'
-      menuPanel.hidden = !open
+      menuPanel.setAttribute('data-open', open ? 'true' : 'false')
       menuButton.setAttribute('aria-expanded', open ? 'true' : 'false')
-      menuButton.textContent = open ? 'Close' : 'Menu'
 
       const stateClass = open
         ? menuButton.dataset.menuOpenClass
