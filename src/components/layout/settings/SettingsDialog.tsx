@@ -200,7 +200,7 @@ export default function SettingsDialog() {
           <div className='mt-4'>
             <SettingSwitch
               label='Show experiments'
-              description='Reveals unfinished pieces, including the For agents control.'
+              description="New features that I'm testing on my portfolio."
               checked={settings.experiments}
               onToggle={() => commit({ ...settings, experiments: !settings.experiments })}
             />
