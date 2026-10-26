@@ -1,16 +1,19 @@
 ---
 import HeroStatus from './HeroStatus'
+import Text from '../../ui/text/Text.astro'
 import { heroDisplayIntroClass, heroIdentityLabelClass, simpleHeroSectionClass } from '../../ui/text/styles'
 
 interface Props {
   name: string
   intro: string
+  /** Context under the headline (current role, way of working). Should not restate the headline. */
+  supporting?: string
   avatar?: string
   /** Homepage only: pulsing availability, place, weather, and local time around the name. */
   localStatus?: boolean
 }
 
-const { name, intro, avatar, localStatus } = Astro.props
+const { name, intro, supporting, avatar, localStatus } = Astro.props
 
 /** Collapsed whitespace length — above this, headline spans ~80% of the content column for long quotes. */
 const LONG_INTRO_CHAR_THRESHOLD = 96
@@ -62,6 +65,13 @@ const getInTouchClass = [
   <h1 class:list={[heroDisplayIntroClass, heroIntroColumnClass]}>
     {intro}
   </h1>
+  {
+    supporting && (
+      <Text variant='lead' color='muted' class='mt-6 max-w-2xl md:mt-8'>
+        {supporting}
+      </Text>
+    )
+  }
   <div class='mt-8 flex flex-wrap items-center gap-2 md:mt-10'>
     <a href='/projects' class={exploreProjectsClass} data-swup-preload>
       Explore projects

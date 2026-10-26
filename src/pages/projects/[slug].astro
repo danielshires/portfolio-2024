@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro'
 import { getProjectBySlug, getAllProjects, urlFor } from '../../lib/sanity'
 import ProjectMeta from '../../components/content/projects/ProjectMeta.astro'
 import ProjectOutcomes from '../../components/content/projects/ProjectOutcomes.astro'
-import ProjectProblem from '../../components/content/projects/ProjectProblem.astro'
+import CaseStudySection from '../../components/content/projects/CaseStudySection.astro'
 import RelatedProjects from '../../components/content/projects/RelatedProjects.astro'
 import FieldGuideConceptLinks from '../../components/content/field-guide/FieldGuideConceptLinks.astro'
 import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
@@ -51,6 +51,14 @@ const seoImageResolved = fullProject.seo?.ogImage
   ? urlFor(fullProject.seo.ogImage).width(1200).height(630).url()
   : seoImage
 const resolvedRobots = fullProject.seo?.noIndex ? 'noindex,follow' : undefined
+
+const caseStudySections = [
+  { heading: 'The challenge', body: fullProject.problem },
+  { heading: 'My contribution', body: fullProject.contribution },
+  { heading: 'The approach', body: fullProject.solution },
+  { heading: 'The outcome', body: fullProject.outcomeSummary },
+  { heading: 'What I learned', body: fullProject.learnings },
+].filter((section) => Array.isArray(section.body) && section.body.length > 0)
 
 const canonicalUrl = new URL(Astro.url.pathname, 'https://danielshires.com').href
 
@@ -133,22 +141,27 @@ const jsonLd = {
         />
       </div>
 
-      <!-- Right Column: Problem Statement and Outcomes -->
+      <!-- Right Column: headline outcomes -->
       <div class='lg:col-span-1'>
-        <!-- Problem Statement -->
-        {fullProject.problem && <ProjectProblem problem={fullProject.problem} />}
-
-        <!-- Project Outcomes -->
-        {
-          fullProject.outcomes && fullProject.outcomes.length > 0 && (
-            <div class='lg:col-span-1'>
-              <ProjectOutcomes outcomes={fullProject.outcomes} />
-            </div>
-          )
-        }
+        {fullProject.outcomes && fullProject.outcomes.length > 0 && (
+          <ProjectOutcomes outcomes={fullProject.outcomes} />
+        )}
       </div>
     </div>
   </section>
+
+  <!-- Case study sections -->
+  <div class='mb-20'>
+    {
+      caseStudySections.map((section, index) => (
+        <CaseStudySection
+          number={String(index + 1).padStart(2, '0')}
+          heading={section.heading}
+          body={section.body}
+        />
+      ))
+    }
+  </div>
 
   <!-- Project Gallery Section -->
   {

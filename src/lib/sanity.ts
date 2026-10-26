@@ -151,9 +151,13 @@ export interface Project {
   team?: string[]
   duration?: string
   heroImage?: SanityImage
-  outcomes?: string[]
+  outcomes?: Array<{ statistic: string; description: string }>
+  category?: 'product' | 'independent'
   problem?: any // Portable Text content
+  contribution?: any // Portable Text content
   solution?: any // Portable Text content
+  outcomeSummary?: any // Portable Text content
+  learnings?: any // Portable Text content
   images?: Array<{
     asset: SanityImage
     alt: string
@@ -530,6 +534,7 @@ export async function getAllProjects(): Promise<Project[]> {
       duration,
       heroImage,
       outcomes,
+      category,
       featured,
       publishedAt,
       tags,
@@ -557,8 +562,12 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       duration,
       heroImage,
       outcomes,
+      category,
       problem,
+      contribution,
       solution,
+      outcomeSummary,
+      learnings,
       images[] {
         asset,
         alt,

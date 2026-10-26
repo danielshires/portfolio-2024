@@ -1,3 +1,43 @@
+const caseStudyBody = [
+  {
+    type: 'block',
+    styles: [
+      { title: 'Normal', value: 'normal' },
+      { title: 'H4', value: 'h4' },
+    ],
+    marks: {
+      decorators: [
+        { title: 'Strong', value: 'strong' },
+        { title: 'Emphasis', value: 'em' },
+      ],
+    },
+    lists: [
+      { title: 'Bullet', value: 'bullet' },
+      { title: 'Number', value: 'number' },
+    ],
+  },
+  {
+    type: 'image',
+    options: { hotspot: true },
+    fields: [
+      {
+        name: 'alt',
+        type: 'string',
+        title: 'Alternative text',
+        validation: Rule => Rule.required(),
+      },
+      {
+        name: 'caption',
+        type: 'string',
+        title: 'Caption',
+        description: 'Say what decision this artefact shows, not just what it is.',
+      },
+    ],
+  },
+]
+
+const isExternal = ({ parent }) => parent?.linkBehavior === 'external'
+
 export default {
   name: 'project',
   title: 'Project',
@@ -13,7 +53,20 @@ export default {
       name: 'subtitle',
       title: 'Subtitle',
       type: 'string',
-      description: 'Optional subheading for the project'
+      description: 'State the design challenge or value, not just the subject.'
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Product design', value: 'product' },
+          { title: 'Independent project', value: 'independent' },
+        ],
+        layout: 'radio',
+      },
+      description: 'Groups the Projects page. Product design is listed first.',
     },
     {
       name: 'linkBehavior',
@@ -118,51 +171,43 @@ export default {
     },
     {
       name: 'problem',
-      title: 'Problem Statement',
+      title: '01 The challenge',
       type: 'array',
-      of: [
-        {
-          type: 'block',
-          styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'H4', value: 'h4' },
-          ],
-          marks: {
-            decorators: [
-              { title: 'Strong', value: 'strong' },
-              { title: 'Emphasis', value: 'em' },
-            ],
-          },
-        }
-      ],
-      description: 'Description of the problem this project solves',
-      hidden: ({ parent }) => parent?.linkBehavior === 'external',
+      of: caseStudyBody,
+      description: 'The problem, context and constraints. What made it hard?',
+      hidden: isExternal,
+    },
+    {
+      name: 'contribution',
+      title: '02 My contribution',
+      type: 'array',
+      of: caseStudyBody,
+      description: 'What you personally owned, distinct from the wider team.',
+      hidden: isExternal,
     },
     {
       name: 'solution',
-      title: 'Solution',
+      title: '03 The approach',
       type: 'array',
-      of: [
-        {
-          type: 'block',
-          styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'H4', value: 'h4' },
-          ],
-          marks: {
-            decorators: [
-              { title: 'Strong', value: 'strong' },
-              { title: 'Emphasis', value: 'em' },
-            ],
-          },
-          lists: [
-            { title: 'Bullet', value: 'bullet' },
-            { title: 'Number', value: 'number' }
-          ]
-        }
-      ],
-      description: 'How you solved the problem - can include lists',
-      hidden: ({ parent }) => parent?.linkBehavior === 'external',
+      of: caseStudyBody,
+      description: 'The key decisions, each with the artefact that explains it.',
+      hidden: isExternal,
+    },
+    {
+      name: 'outcomeSummary',
+      title: '04 The outcome',
+      type: 'array',
+      of: caseStudyBody,
+      description: 'Verified results with timeframe, baseline and your relationship to them. Shown with the Outcomes stats.',
+      hidden: isExternal,
+    },
+    {
+      name: 'learnings',
+      title: '05 What I learned',
+      type: 'array',
+      of: caseStudyBody,
+      description: 'A short reflection on trade-offs or constraints.',
+      hidden: isExternal,
     },
     {
       name: 'images',

@@ -1,11 +1,33 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getAllProjects, urlFor, projectListHref, isExternalProject } from '../../lib/sanity'
+import type { Project } from '../../lib/sanity'
 import Text from '../../components/ui/text/Text.astro'
+import SectionHeading from '../../components/ui/text/SectionHeading.astro'
 import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 import ProjectCard from '../../components/content/projects/ProjectCard.astro'
 
 const projects = await getAllProjects()
+
+// Uncategorised projects fall back by link type: case studies read as product work, link-outs as independent.
+const projectCategory = (project: Project) =>
+  project.category ?? (isExternalProject(project) ? 'independent' : 'product')
+
+const productProjects = projects.filter((project) => projectCategory(project) === 'product')
+const independentProjects = projects.filter((project) => projectCategory(project) === 'independent')
+const leadProjects = productProjects.slice(0, 2)
+const otherProductProjects = productProjects.slice(2)
+
+function cardImage(project: Project, width: number, height: number) {
+  return {
+    src: project.heroImage
+      ? urlFor(project.heroImage).width(width).height(height).quality(85).auto('format').fit('max').url()
+      : '',
+    alt: project.title || 'Project image',
+    width,
+    height,
+  }
+}
 
 const pageTitle = 'Projects | Daniel Shires'
 const pageDescription =
@@ -56,56 +78,70 @@ const structuredData = {
     }}
   />
 
-  <!-- Projects Grid -->
-  <section class='my-16 md:my-24'>
-      {
-        projects.length > 0 ? (
-          <div class='grid grid-cols-1 md:grid-cols-3 gap-8 overflow-hidden'>
-            {projects.map((project) => {
-              // Prepare image props
-              let projectImage
-              if (project.heroImage) {
-                projectImage = {
-                  src: urlFor(project.heroImage)
-                    .width(800)
-                    .height(533)
-                    .quality(85) // Standard quality for project thumbnails
-                    .auto('format')
-                    .fit('max')
-                    .url(),
-                  alt: project.title || 'Project image',
-                  width: 800,
-                  height: 533,
-                }
-              } else {
-                projectImage = {
-                  src: '',
-                  alt: 'No image',
-                  width: 800,
-                  height: 533,
-                }
-              }
-              return (
+  {
+    projects.length > 0 ? (
+      <div class='my-16 md:my-24 flex flex-col gap-20 md:gap-28'>
+        {productProjects.length > 0 && (
+          <section class='flex flex-col' aria-labelledby='projects-product'>
+            <SectionHeading id='projects-product'>Product design</SectionHeading>
+            <div class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-2 gap-8'>
+              {leadProjects.map((project) => (
                 <ProjectCard
-                  projectImage={projectImage}
+                  projectImage={cardImage(project, 1200, 800)}
                   title={project.title}
                   heading={project.subtitle}
                   projectUrl={projectListHref(project)}
                   external={isExternalProject(project)}
                 />
-              )
-            })}
-          </div>
-        ) : (
-          <div class='text-center py-16'>
-            <Text variant='h3' class='mb-2'>
-              No projects yet
-            </Text>
-            <Text variant='body' color='muted'>
-              Check back soon for new content.
-            </Text>
-          </div>
-        )
-      }
-  </section>
+              ))}
+            </div>
+            {otherProductProjects.length > 0 && (
+              <div class='mt-12 grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8'>
+                {otherProductProjects.map((project) => (
+                  <ProjectCard
+                    projectImage={cardImage(project, 800, 533)}
+                    title={project.title}
+                    heading={project.subtitle}
+                    projectUrl={projectListHref(project)}
+                    external={isExternalProject(project)}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+        {independentProjects.length > 0 && (
+          <section class='flex flex-col' aria-labelledby='projects-independent'>
+            <SectionHeading id='projects-independent'>
+              Independent projects
+              <Text slot='description' variant='body' color='muted'>
+                Tools, references and experiments I've built outside client work.
+              </Text>
+            </SectionHeading>
+            <div class='flex flex-col'>
+              {independentProjects.map((project) => (
+                <ProjectCard
+                  variant='text'
+                  projectImage={cardImage(project, 800, 533)}
+                  title={project.title}
+                  heading={project.subtitle}
+                  projectUrl={projectListHref(project)}
+                  external={isExternalProject(project)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    ) : (
+      <div class='text-center py-16'>
+        <Text variant='h3' class='mb-2'>
+          No projects yet
+        </Text>
+        <Text variant='body' color='muted'>
+          Check back soon for new content.
+        </Text>
+      </div>
+    )
+  }
 </Layout>

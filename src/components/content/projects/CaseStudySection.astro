@@ -1,0 +1,47 @@
+---
+import type { PortableTextBlock } from '@portabletext/types'
+import { PortableText } from 'astro-portabletext'
+import Text from '../../ui/text/Text.astro'
+import PortableTextImage from '../posts/PortableTextImage.astro'
+
+interface Props {
+  number: string
+  heading: string
+  body?: PortableTextBlock[]
+}
+
+const { number, heading, body } = Astro.props
+const hasBody = Array.isArray(body) && body.length > 0
+
+const portableTextComponents = {
+  type: {
+    image: PortableTextImage,
+  },
+}
+
+const headingId = `case-study-${number}`
+---
+
+{
+  hasBody && (
+    <section
+      class='grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-16 py-12 md:py-16 border-t border-zinc-200 dark:border-zinc-800'
+      aria-labelledby={headingId}>
+      <div class='lg:col-span-4'>
+        <div class='lg:sticky lg:top-32'>
+          <Text variant='caption' color='muted' class='font-mono mb-2'>
+            {number}
+          </Text>
+          <Text variant='h4' id={headingId}>
+            {heading}
+          </Text>
+        </div>
+      </div>
+      <div class='lg:col-span-8'>
+        <div class='prose prose-lg dark:prose-invert max-w-none'>
+          <PortableText value={body} components={portableTextComponents} />
+        </div>
+      </div>
+    </section>
+  )
+}
