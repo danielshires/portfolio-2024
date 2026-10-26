@@ -1,23 +1,39 @@
 ---
 import Text from '../ui/text/Text.astro'
+import FooterMood from './FooterMood'
 import { footerMutedLinkClass } from '../ui/text/styles'
-import { FALLBACK_MOOD } from '../../lib/woononaWeatherMood'
+import { getNavigationItems } from '../../config/features'
+import { aboutContent } from '../../config/about'
 
-const footerLinks = [
+const pageLinks = [
   { href: '/', label: 'Home', aria: 'Home' },
-  { href: '/projects', label: 'Projects', aria: 'Projects' },
-  { href: '/writing', label: 'Thinking out loud', aria: 'Thinking out loud' },
-  { href: '/about', label: 'About', aria: 'About Daniel Shires' },
-] as const
+  ...getNavigationItems().map(({ href, label }) => ({
+    href,
+    label,
+    aria: href === '/about' ? 'About Daniel Shires' : label,
+  })),
+]
+
+const contactOrder = ['Email', 'LinkedIn', 'GitHub'] as const
+const contactLinks = contactOrder.flatMap((label) => {
+  const link = aboutContent.social.find((item) => item.label === label)
+  return link ? [link] : []
+})
+
+function contactAria(label: string) {
+  if (label === 'Email') return 'Email Daniel Shires'
+  if (label === 'LinkedIn') return 'LinkedIn Profile'
+  return label
+}
 ---
 
-<footer class="bg-transparent border-t border-zinc-200/20 dark:border-zinc-800/20 mt-16 py-8 theme-transition">
+<footer class="bg-transparent border-t border-zinc-200/20 dark:border-zinc-800/20 mt-16 pt-8 pb-24 sm:pb-8 theme-transition">
   <div class="container mx-auto px-8 lg:px-16">
     <div class="flex flex-col items-center gap-6 sm:flex-row sm:items-center sm:justify-between w-full">
       <div class="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start sm:gap-x-4 sm:gap-y-2">
         <nav aria-label="Site" class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2">
           {
-            footerLinks.map(({ href, label, aria }) => (
+            pageLinks.map(({ href, label, aria }) => (
               <a
                 href={href}
                 data-swup-preload
@@ -33,39 +49,27 @@ const footerLinks = [
         </nav>
         <span class="hidden sm:block h-3.5 w-px shrink-0 bg-zinc-200 dark:bg-zinc-700" aria-hidden="true" />
         <nav aria-label="Contact" class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2">
-          <a
-            href="https://www.linkedin.com/in/shiresdaniel/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class={footerMutedLinkClass}
-            aria-label="LinkedIn Profile"
-          >
-            <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
-              LinkedIn
-            </Text>
-          </a>
-          <a
-            href="mailto:hello@danielshires.com"
-            class={footerMutedLinkClass}
-            aria-label="Email Daniel Shires"
-          >
-            <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
-              Email
-            </Text>
-          </a>
+          {
+            contactLinks.map((link) => (
+              <a
+                href={link.href}
+                class={footerMutedLinkClass}
+                aria-label={contactAria(link.label)}
+                {...(link.href.startsWith('http')
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
+                <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+                  {link.label}
+                </Text>
+              </a>
+            ))
+          }
         </nav>
       </div>
-      <Text variant="caption" color="muted" class="shrink-0 text-center sm:text-right">
-        <span data-footer-mood aria-live="polite">
-          {FALLBACK_MOOD.emoji} {FALLBACK_MOOD.text}
-        </span>
-      </Text>
+      <div class="shrink-0 text-center sm:text-right">
+        <FooterMood client:load />
+      </div>
     </div>
   </div>
 </footer>
-
-<script>
-  import { initFooterMood } from '../../lib/woononaWeatherMood'
-
-  void initFooterMood()
-</script>
