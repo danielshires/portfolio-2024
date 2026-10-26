@@ -4,20 +4,22 @@ import NavLink from '../../ui/buttons/NavLink.astro'
 import ContactCTA from '../../ui/buttons/ContactCTA.tsx'
 import ThemeToggle from '../../ui/buttons/ThemeToggle.tsx'
 import { getNavigationItems } from '../../../config/features'
+import { navLinkActiveClass, navLinkInactiveClass } from '../../ui/text/styles'
 
 const navigationItems = getNavigationItems()
+const menuButtonLayoutClass =
+  'md:hidden shrink-0 cursor-pointer appearance-none border-0 bg-transparent p-0 text-left'
 ---
 
 <nav
   id='nav'
-  class='fixed z-50 top-0 left-0 right-0 flex items-center justify-start theme-transition nav-transition pt-4 md:pt-6 pb-3 border-b border-zinc-200/20 dark:border-zinc-800/20'>
-  <div class='container mx-auto px-8 lg:px-16'>
-    <div class='flex min-w-0 flex-1 gap-8 justify-between items-center'>
-      <div class='flex min-w-0 flex-1 flex-row items-center gap-4 md:gap-6'>
-        <!-- Home link -->
+  class='fixed z-50 top-0 left-0 right-0 flex items-center justify-start theme-transition nav-transition border-b border-zinc-200/20 dark:border-zinc-800/20'>
+  <div class='container mx-auto w-full px-8 lg:px-16'>
+    <div class='relative'>
+      <div class='flex min-w-0 items-center justify-between gap-8 pt-4 md:pt-6 pb-3'>
+      <div class='flex min-w-0 flex-row items-center gap-4 md:gap-6'>
         <NavLink path='' target='' href='/'>Home</NavLink>
-        <!-- Page links -->
-        <div class='nav-page-links flex min-w-0 flex-1 gap-6 overflow-x-auto'>
+        <div class='hidden min-w-0 gap-6 md:flex md:flex-1'>
           {
             navigationItems.map((item) => (
               <NavLink path={item.path} target='_self' href={item.href}>
@@ -26,21 +28,57 @@ const navigationItems = getNavigationItems()
             ))
           }
         </div>
+        <button
+          type='button'
+          id='nav-menu-button'
+          class:list={[navLinkInactiveClass, menuButtonLayoutClass]}
+          aria-expanded='false'
+          aria-controls='nav-menu'
+          data-menu-open-class={navLinkActiveClass}
+          data-menu-closed-class={navLinkInactiveClass}
+          data-menu-layout-class={menuButtonLayoutClass}>
+          Menu
+        </button>
       </div>
-      <!-- Right side: Contact CTA and Theme Toggle -->
-      <div class='flex shrink-0 items-center gap-2 md:gap-4'>
-        <!-- Contact CTA -->
+      <div class='hidden shrink-0 items-center gap-2 md:flex md:gap-4'>
         <ContactCTA
           variant='primary'
           size='sm'
           className='underline-offset-8'
           showIcon={true}
-          client:load
-        >
+          client:load>
           Get in touch
         </ContactCTA>
-        <!-- Theme Toggle Button -->
         <ThemeToggle client:load />
+      </div>
+    </div>
+    <div
+      id='nav-menu'
+      hidden
+      class='absolute left-0 top-[calc(100%+1px)] z-50 w-max max-w-full border border-zinc-200 bg-white px-5 py-4 theme-transition dark:border-zinc-800 dark:bg-zinc-950 md:hidden'>
+      <ul class='flex flex-col items-start gap-4 whitespace-nowrap'>
+        {
+          navigationItems.map((item) => (
+            <li>
+              <NavLink path={item.path} target='_self' href={item.href}>
+                {item.label}
+              </NavLink>
+            </li>
+          ))
+        }
+      </ul>
+      <div
+        class='mt-4 flex items-center gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800'>
+        <ContactCTA
+          variant='primary'
+          size='sm'
+          className='underline-offset-8'
+          showIcon={true}
+          client:load>
+          Get in touch
+        </ContactCTA>
+        <ThemeToggle client:load />
+      </div>
       </div>
     </div>
   </div>
@@ -67,33 +105,110 @@ const navigationItems = getNavigationItems()
     transform: translateY(-20px);
     pointer-events: none;
   }
-
-  .nav-page-links {
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    mask-image: linear-gradient(to right, black calc(100% - 1.5rem), transparent);
-  }
-
-  @media (min-width: 768px) {
-    .nav-page-links {
-      mask-image: none;
-      overflow: visible;
-    }
-  }
 </style>
 
 <script>
-  /** Stable static reference so removeEventListener actually drops old listeners on re-init. */
-  let navScrollHandler: (() => void) | null = null
+  type NavRuntime = {
+    scrollHandler: (() => void) | null
+    menuAbort: AbortController | null
+    lifecycleBound: boolean
+  }
 
-  function initNavScroll() {
+  const navWindow = window as Window & { __portfolioNav?: NavRuntime }
+  if (!navWindow.__portfolioNav) {
+    navWindow.__portfolioNav = {
+      scrollHandler: null,
+      menuAbort: null,
+      lifecycleBound: false,
+    }
+  }
+  const navRuntime = navWindow.__portfolioNav
+
+  function initNav() {
     const nav = document.getElementById('nav')
     if (!nav) return
 
-    if (navScrollHandler) {
-      window.removeEventListener('scroll', navScrollHandler)
-      navScrollHandler = null
+    if (navRuntime.scrollHandler) {
+      window.removeEventListener('scroll', navRuntime.scrollHandler)
+      navRuntime.scrollHandler = null
     }
+
+    if (navRuntime.menuAbort) {
+      navRuntime.menuAbort.abort()
+      navRuntime.menuAbort = null
+    }
+
+    const menuButton = nav.querySelector<HTMLButtonElement>('#nav-menu-button')
+    const menuPanel = nav.querySelector<HTMLElement>('#nav-menu')
+    const menuAbort = new AbortController()
+    navRuntime.menuAbort = menuAbort
+    const signal = menuAbort.signal
+
+    function setMenuOpen(open: boolean, returnFocus = false) {
+      if (!menuButton || !menuPanel) return
+
+      const wasOpen = menuButton.getAttribute('aria-expanded') === 'true'
+      menuPanel.hidden = !open
+      menuButton.setAttribute('aria-expanded', open ? 'true' : 'false')
+      menuButton.textContent = open ? 'Close' : 'Menu'
+
+      const stateClass = open
+        ? menuButton.dataset.menuOpenClass
+        : menuButton.dataset.menuClosedClass
+      const layoutClass = menuButton.dataset.menuLayoutClass ?? ''
+      menuButton.className = [stateClass, layoutClass].filter(Boolean).join(' ')
+
+      if (!open && returnFocus && wasOpen) menuButton.focus()
+    }
+
+    setMenuOpen(false)
+
+    menuButton?.addEventListener(
+      'click',
+      () => {
+        const open = menuButton.getAttribute('aria-expanded') === 'true'
+        setMenuOpen(!open)
+      },
+      { signal }
+    )
+
+    document.addEventListener(
+      'click',
+      (event) => {
+        const target = event.target
+        if (!(target instanceof Node) || nav.contains(target)) return
+        setMenuOpen(false)
+      },
+      { signal }
+    )
+
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key !== 'Escape') return
+        setMenuOpen(false, true)
+      },
+      { signal }
+    )
+
+    nav.addEventListener(
+      'click',
+      (event) => {
+        const target = event.target
+        if (!(target instanceof Element) || !target.closest('a')) return
+        setMenuOpen(false)
+      },
+      { signal }
+    )
+
+    const desktopQuery = window.matchMedia('(min-width: 768px)')
+    desktopQuery.addEventListener(
+      'change',
+      () => {
+        if (desktopQuery.matches) setMenuOpen(false)
+      },
+      { signal }
+    )
 
     let lastScrollY = window.scrollY
     /** Ignore subpixel / rubber-band noise */
@@ -132,6 +247,7 @@ const navigationItems = getNavigationItems()
 
       if (delta > 0) {
         nav.classList.add('nav-hidden')
+        if (menuButton?.getAttribute('aria-expanded') === 'true') setMenuOpen(false)
       } else {
         nav.classList.remove('nav-hidden')
       }
@@ -139,13 +255,16 @@ const navigationItems = getNavigationItems()
       lastScrollY = currentScrollY
     }
 
-    navScrollHandler = updateNav
-    window.addEventListener('scroll', navScrollHandler, { passive: true })
+    navRuntime.scrollHandler = updateNav
+    window.addEventListener('scroll', navRuntime.scrollHandler, { passive: true })
   }
 
-  initNavScroll()
+  initNav()
 
-  document.addEventListener('astro:after-swap', initNavScroll)
-  document.addEventListener('astro:page-load', initNavScroll)
-  document.addEventListener('swup:content:replace', initNavScroll)
+  if (!navRuntime.lifecycleBound) {
+    navRuntime.lifecycleBound = true
+    document.addEventListener('astro:after-swap', initNav)
+    document.addEventListener('astro:page-load', initNav)
+    document.addEventListener('swup:content:replace', initNav)
+  }
 </script>
