@@ -15,9 +15,9 @@ export interface SocialLink {
 
 export interface ExperienceRole {
   title: string
-  /** Four-digit year, e.g. "2022" */
+  /** Year or month and year, e.g. "2022" or "May 2022" */
   start: string
-  /** Four-digit year or "present" */
+  /** Year, month and year, or "present" */
   end: string
 }
 
@@ -87,13 +87,14 @@ export const aboutContent: AboutContent = {
   },
   experience: [
     {
-      organization: 'CommBank',
+      organization: 'Commonwealth Bank',
       organizationHref: 'https://www.commbank.com.au',
       logo: '/images/logos/commbank.svg',
       roles: [
-        { title: 'Senior Experience Designer', start: '2025', end: 'present' },
-        { title: 'Senior UI Designer', start: '2024', end: '2025' },
-        { title: 'Specialist UI Designer', start: '2022', end: '2024' },
+        { title: 'Senior Product Designer', start: 'Mar 2026', end: 'present' },
+        { title: 'Senior UX Designer', start: 'Jan 2025', end: 'Mar 2026' },
+        { title: 'Senior UI Designer', start: 'Nov 2023', end: 'Jan 2025' },
+        { title: 'Specialist UI Designer', start: 'May 2022', end: 'Dec 2023' },
       ],
     },
     {

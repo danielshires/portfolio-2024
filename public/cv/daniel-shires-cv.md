@@ -19,8 +19,8 @@ Senior Product Designer with experience shaping and delivering complex digital p
 
 ## Experience
 
-### CommBank — Senior Experience Designer
-*2025–Present*
+### Commonwealth Bank — Senior Product Designer
+*Mar 2026–Present*
 
 - Lead discovery into the future of customer communications and activity, mapping current-state experiences, synthesising research and identifying opportunities to help customers understand what needs their attention, stay informed and return to important information.
 - Translate discovery insights into a prioritised backlog of Q2 opportunities, including simplifying notifications on the CommBank app home screen through UI improvements.
@@ -29,8 +29,8 @@ Senior Product Designer with experience shaping and delivering complex digital p
 - Led discovery and design workshops for CommBank Yello 3.0, collaborating with product managers, engineers and third-party providers to explore opportunities and inform future product direction.
 - Delivered post-MVP improvements to Yello status information and activity tracking.
 
-### CommBank — Senior UI Designer
-*2024–2025 | CommBank Yello*
+### Commonwealth Bank — Senior UI Designer
+*Nov 2023–Jan 2025 | CommBank Yello*
 
 - Played a key role in delivering CommBank Yello 2.0, including Yello on Home, Eligibility Tracker, Combined Settings and a redesigned information architecture.
 - Contributed to 1.9 million unique customer engagements between May 2024 and May 2025, alongside reported increases of 700% in hub visits, 4× in user visitations, 5× in offer clicks and 3× in offer activations.
@@ -39,8 +39,8 @@ Senior Product Designer with experience shaping and delivering complex digital p
 - Collaborated with UX, research and content design partners to explore and communicate future-state concepts.
 - Mentored graduate designers, both of whom subsequently secured permanent roles.
 
-### CommBank — Specialist UI Designer
-*2022–2024 | NetBank & CommBank Yello*
+### Commonwealth Bank — Specialist UI Designer
+*May 2022–Dec 2023 | NetBank & CommBank Yello*
 
 - Designed and delivered native and web experiences for national rollouts of CommBank Yello across Everyday, Everyday Plus and Homeowner segments.
 - Designed onboarding flows, a cashback selector and the What’s New experience to support customer engagement and feature discovery.
