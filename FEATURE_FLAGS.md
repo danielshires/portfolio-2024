@@ -71,3 +71,17 @@ export const features = {
 
 2. Add it to the `getNavigationItems()` function if it should appear in navigation
 3. Add the corresponding environment variables to your `.env` file
+
+## Avatar chat
+
+The digital avatar at `/experiments/avatar` calls Gemini from a Netlify function. The key stays on the server. Do not prefix it with `PUBLIC_` and do not commit it.
+
+Set these in the Netlify UI, and in a local `.env` when using `npm run dev:netlify`:
+
+```env
+GEMINI_API_KEY=your-key-from-google-ai-studio
+# Optional. Defaults to gemini-3.5-flash.
+GEMINI_MODEL=gemini-3.5-flash
+```
+
+`npm run dev` does not run the function. Use `npm run dev:netlify` (`npx netlify dev`) so `/api/avatar` is available. Create the key at [Google AI Studio](https://aistudio.google.com/apikey).

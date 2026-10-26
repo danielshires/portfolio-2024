@@ -2,18 +2,12 @@
 import ProjectCard from './ProjectCard.astro'
 import { urlFor, projectListHref, isExternalProject } from '../../../lib/sanity'
 import type { Project } from '../../../lib/sanity'
-import Text from '../../ui/text/Text.astro'
-import ArrowRightGlyph from '../../ui/icons/ArrowRightGlyph.astro'
-import {
-  contentSectionHeadingArrowClass,
-  contentSectionHeadingLinkClass,
-  sectionYearLabelClass,
-  stackBelowHeroClass,
-} from '../../ui/text/styles'
+import SectionHeading from '../../ui/text/SectionHeading.astro'
+import { stackBelowHeroClass } from '../../ui/text/styles'
 
 interface Props {
   projects: Project[]
-  variant?: 'card' | 'text'
+  variant?: 'card' | 'text' | 'featured'
   /** When `variant` is `text`, show project subtitle after the title (default true). */
   showSubtitle?: boolean
 }
@@ -21,11 +15,11 @@ interface Props {
 const { projects, variant = 'card', showSubtitle = true } = Astro.props
 
 // Transform Sanity projects to match ProjectCard interface.
-// Text variant (homepage list) uses project name + subtitle.
+// Text and featured variants (homepage) use project name + subtitle.
 // Card variant keeps the existing client-as-headline layout.
 const transformedProjects = projects.map((project) => {
-  const isText = variant === 'text'
-  const headline = isText
+  const usesTitle = variant === 'text' || variant === 'featured'
+  const headline = usesTitle
     ? project.title
     : project.client || project.tags?.[0] || project.title
   const sub = project.subtitle
@@ -54,37 +48,33 @@ const transformedProjects = projects.map((project) => {
 })
 ---
 
-<section
-  class:list={[
-    variant === 'text'
-      ? ['flex', 'flex-col', stackBelowHeroClass, 'max-w-[100vw]']
-      : ['grid', 'grid-cols-1', 'md:grid-cols-6', 'lg:grid-cols-3', 'gap-8', 'max-w-[100vw]', stackBelowHeroClass],
-  ]}>
-  {
-    variant === 'text' ? (
-      <h2 class={sectionYearLabelClass}>
-        <a href='/projects' class={contentSectionHeadingLinkClass}>
-          Projects
-          <ArrowRightGlyph class={contentSectionHeadingArrowClass} />
-        </a>
-      </h2>
-    ) : (
-      <div class:list={['col-span-full']}>
-        <Text variant='overline'>Recent projects</Text>
+{
+  variant === 'featured' ? (
+    <section class:list={['flex flex-col max-w-[100vw]', stackBelowHeroClass]} aria-label='Projects'>
+      <SectionHeading href='/projects'>Projects</SectionHeading>
+      <div class='grid grid-cols-1 md:grid-cols-3 gap-8'>
+        {transformedProjects.map((project) => (
+          <ProjectCard {...project} />
+        ))}
       </div>
-    )
-  }
-  <div class:list={[variant === 'text' ? 'col-span-full flex flex-col' : 'contents']}>
-    {
-      transformedProjects.map((project) =>
-        variant === 'text' ? (
+    </section>
+  ) : variant === 'text' ? (
+    <section class:list={['flex flex-col max-w-[100vw]', stackBelowHeroClass]}>
+      <SectionHeading href='/projects'>Projects</SectionHeading>
+      <div class='flex flex-col'>
+        {transformedProjects.map((project) => (
           <ProjectCard variant='text' showSubtitle={showSubtitle} {...project} />
-        ) : (
-          <div>
-            <ProjectCard {...project} />
-          </div>
-        )
-      )
-    }
-  </div>
-</section>
+        ))}
+      </div>
+    </section>
+  ) : (
+    <section class:list={['flex flex-col max-w-[100vw]', stackBelowHeroClass]}>
+      <SectionHeading>Recent projects</SectionHeading>
+      <div class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8'>
+        {transformedProjects.map((project) => (
+          <ProjectCard {...project} />
+        ))}
+      </div>
+    </section>
+  )
+}

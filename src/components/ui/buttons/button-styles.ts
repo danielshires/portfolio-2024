@@ -19,7 +19,7 @@ export const variantStyles: Record<ButtonVariant, string> = {
     'bg-transparent hover:bg-zinc-100 hover:scale-105 hover:shadow-sm text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-100 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
   outline:
     'bg-transparent border border-zinc-300 hover:bg-zinc-50 hover:border-zinc-400 hover:scale-105 hover:shadow-md text-zinc-900 dark:border-zinc-600 dark:hover:bg-zinc-800 dark:hover:border-zinc-500 dark:text-zinc-100 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
-  icon: 'bg-zinc-50 border border-zinc-300 hover:bg-zinc-100 hover:border-zinc-400 hover:scale-105 hover:rotate-6 text-zinc-700 dark:bg-zinc-800 dark:border-zinc-600 dark:hover:bg-zinc-700 dark:hover:border-zinc-500 dark:text-zinc-300 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
+  icon: '!bg-zinc-50 !border !border-solid !border-zinc-300 hover:!bg-zinc-100 hover:!border-zinc-400 hover:scale-105 text-zinc-700 dark:!bg-zinc-800 dark:!border-zinc-600 dark:hover:!bg-zinc-700 dark:hover:!border-zinc-500 dark:text-zinc-300 focus-visible:ring-black dark:focus-visible:ring-white active:scale-95',
 }
 
 // Define size styles

@@ -24,14 +24,12 @@
         
         section {
             flex: 1;
+            min-width: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            width: 100%;
-            /* Full width */
             height: 100%;
-            /* Full height */
         }
         
         .controls {
@@ -94,6 +92,7 @@
                 flex-direction: column;
             }
             section {
+                order: -1;
                 height: 300px;
                 /* Adjust height for mobile */
             }
@@ -107,8 +106,6 @@
 </head>
 
 <body>
-
-    <section></section>
 
     <div class="controls">
         <!-- Shape Configuration -->
@@ -199,6 +196,8 @@
             <button id="randomColorButton">Random Colors</button>
         </div>
     </div>
+
+    <section></section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/two.js/0.7.0/two.min.js"></script>
     <script>

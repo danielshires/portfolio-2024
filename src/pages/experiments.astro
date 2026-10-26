@@ -1,19 +1,66 @@
 ---
-import Link from '../components/ui/buttons/Link.astro'
 import Layout from '../layouts/Layout.astro'
+import Text from '../components/ui/text/Text.astro'
 import { features } from '../config/features'
+import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
+import {
+  externalLinkGlyphGroupHoverClass,
+  linkListMutedContinuationClass,
+  linkListParagraphClass,
+  linkListRowAnchorClass,
+  linkListStrongTitleClass,
+  simpleHeroSectionClass,
+} from '../components/ui/text/styles'
 
-// Check if experiments feature is enabled
 if (!features.experiments.enabled) {
   return Astro.redirect('/404')
 }
+
+const pageTitle = 'Experiments | Daniel Shires'
+const pageDescription = 'Experimental prototypes and playgrounds.'
+
+const experiments = [
+  {
+    title: 'Digital avatar',
+    href: '/experiments/avatar',
+    description: 'A chat grounded in the public pages on this site.',
+  },
+  {
+    title: 'spinnerstudio',
+    href: '/experiments/spinnerstudio',
+    description: 'A shape playground.',
+  },
+]
 ---
 
-<Layout
-  pageTitle='Experiments'
-  pageDescription='Experimental prototypes and playgrounds.'
-  robots='noindex,follow'>
-  <main id='intro' class='h-dvh overflow-hidden col-span-12 content-center font-mono text-4xl'>
-    <Link path='spinnerstudio' target='_blank' href='/experiments/spinnerstudio'>spinnerstudio</Link>
-  </main>
+<Layout pageTitle={pageTitle} pageDescription={pageDescription} robots='noindex,follow'>
+  <article class='pb-16 md:pb-24'>
+    <header class={simpleHeroSectionClass} aria-label='Experiments'>
+      <Text variant='h1'>Experiments</Text>
+    </header>
+
+    <section class='mt-10 md:mt-14 max-w-3xl' aria-label='Experiment list'>
+      <Text variant='lead'>Prototypes and playgrounds. They may change or disappear.</Text>
+      <div class='mt-10 flex flex-col md:mt-12'>
+        {
+          experiments.map((experiment) => (
+            <a
+              href={experiment.href}
+              class={linkListRowAnchorClass}
+              aria-label={`${experiment.title} (opens in new tab)`}
+              target='_blank'
+              rel='noopener noreferrer'>
+              <p class={linkListParagraphClass}>
+                <span class={linkListStrongTitleClass}>{experiment.title}</span>{' '}
+                <span class={linkListMutedContinuationClass}>{experiment.description}</span>{' '}
+                <ExternalLinkGlyph
+                  class={`relative top-[0.03em] h-[0.72em] w-[0.72em] align-middle ${externalLinkGlyphGroupHoverClass}`}
+                />
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </article>
 </Layout>

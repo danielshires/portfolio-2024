@@ -1,0 +1,27 @@
+---
+import Button from './Button.astro'
+import type { ContactCTAProps } from './types'
+
+interface Props extends ContactCTAProps {}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  subject = 'Portfolio%20Inquiry',
+  className,
+  ...rest
+} = Astro.props
+
+const emailHref = `mailto:hello@danielshires.com?subject=${subject}`
+---
+
+<Button
+  variant={variant}
+  size={size}
+  href={emailHref}
+  className={className}
+  aria-label="Send email to Daniel Shires"
+  {...rest}
+>
+  <slot>Get in touch</slot>
+</Button>

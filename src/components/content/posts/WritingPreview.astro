@@ -1,13 +1,9 @@
 ---
-import ArrowRightGlyph from '../../ui/icons/ArrowRightGlyph.astro'
+import SectionHeading from '../../ui/text/SectionHeading.astro'
 import {
-  contentSectionHeadingArrowClass,
-  contentSectionHeadingLinkClass,
-  linkListMutedContinuationClass,
+  cardLinkAnchorClass,
   linkListParagraphClass,
-  linkListRowAnchorPlainClass,
   linkListStrongTitleClass,
-  sectionYearLabelClass,
   stackBelowHeroClass,
 } from '../../ui/text/styles'
 import type { Post } from '../../../lib/sanity'
@@ -15,44 +11,50 @@ import { WRITING_RECENT_POST_COUNT } from '../../../lib/journal/recentAndEarlier
 
 interface Props {
   posts: readonly Post[]
-  /** Secondary line (excerpt/description). Off on the homepage for a title-only list. */
-  showSubtitle?: boolean
 }
 
-const { posts, showSubtitle = false } = Astro.props
+const { posts } = Astro.props
 const preview = posts.slice(0, WRITING_RECENT_POST_COUNT)
+
+/** “12 May 2026” — day included so posts in the same month stay distinct. */
+function formatWritingDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+}
 ---
 
 {
   preview.length > 0 && (
     <section class:list={[stackBelowHeroClass]} aria-label='Thinking out loud'>
-      <h2 class={sectionYearLabelClass}>
-        <a href='/writing' class={contentSectionHeadingLinkClass}>
-          Thinking out loud
-          <ArrowRightGlyph class={contentSectionHeadingArrowClass} />
-        </a>
-      </h2>
-      <div class='flex flex-col'>
+      <SectionHeading href='/writing'>Thinking out loud</SectionHeading>
+      <div class='divide-y divide-zinc-200 dark:divide-zinc-800'>
         {preview.map((post) => {
           const href = `/writing/${post.slug?.current || post._id}`
           const lineDescription = post.excerpt || post.description || ''
           return (
             <a
               href={href}
-              class={linkListRowAnchorPlainClass}
+              class:list={[cardLinkAnchorClass, 'py-5 first:pt-0']}
               aria-label={`Read ${post.title}`}
               data-swup-preload>
-              <p class={linkListParagraphClass}>
-                <span class={linkListStrongTitleClass}>{post.title}</span>
-                {showSubtitle && lineDescription ? (
-                  <>
-                    {' '}
-                    <span class={linkListMutedContinuationClass}>
-                      {lineDescription}
-                    </span>
-                  </>
+              <div class='flex items-baseline justify-between gap-6'>
+                <p class:list={[linkListParagraphClass, 'min-w-0']}>
+                  <span class={linkListStrongTitleClass}>{post.title}</span>
+                </p>
+                {post.publishedAt ? (
+                  <p class='shrink-0 text-sm tabular-nums text-zinc-500 dark:text-zinc-400'>
+                    {formatWritingDate(post.publishedAt)}
+                  </p>
                 ) : null}
-              </p>
+              </div>
+              {lineDescription ? (
+                <p class='mt-1 max-w-2xl line-clamp-2 text-base leading-relaxed text-zinc-600 dark:text-zinc-400'>
+                  {lineDescription}
+                </p>
+              ) : null}
             </a>
           )
         })}

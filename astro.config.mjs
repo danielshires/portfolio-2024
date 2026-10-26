@@ -13,10 +13,45 @@
 import {
     defineConfig
 } from 'astro/config';
+import http from 'node:http';
 import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import sanity from '@sanity/astro';
 import swup from '@swup/astro';
+
+/** Dev-only: Astro on :4321 has no function runtime. Send the chat route to `netlify dev`. */
+function avatarDevProxy() {
+    return {
+        name: 'avatar-dev-proxy',
+        configureServer(server) {
+            server.middlewares.use((req, res, next) => {
+                const path = req.url?.split('?')[0]
+                if (path !== '/api/avatar') return next()
+
+                const proxyReq = http.request(
+                    {
+                        hostname: '127.0.0.1',
+                        port: 8888,
+                        path: req.url,
+                        method: req.method,
+                        headers: { ...req.headers, host: '127.0.0.1:8888' },
+                    },
+                    (proxyRes) => {
+                        res.writeHead(proxyRes.statusCode || 502, proxyRes.headers)
+                        proxyRes.pipe(res)
+                    }
+                )
+                proxyReq.on('error', () => {
+                    if (res.headersSent) return
+                    res.statusCode = 502
+                    res.setHeader('content-type', 'application/json; charset=utf-8')
+                    res.end(JSON.stringify({ error: 'The avatar could not reply. Try again.' }))
+                })
+                req.pipe(proxyReq)
+            })
+        },
+    }
+}
 
 // Sanity configuration
 const sanityConfig = {
@@ -80,6 +115,7 @@ export default defineConfig({
         defaultStrategy: 'hover',
     },
     vite: {
+        plugins: [avatarDevProxy()],
         build: {
             chunkSizeWarningLimit: 1000,
             rollupOptions: {

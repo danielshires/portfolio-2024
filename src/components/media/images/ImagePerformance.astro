@@ -1,0 +1,49 @@
+---
+interface Props {
+  imageUrl: string
+  alt: string
+  width: number
+  height: number
+  class?: string
+}
+
+const { imageUrl, alt, width, height, class: className = '' } = Astro.props
+---
+
+<img
+  src={imageUrl}
+  alt={alt}
+  width={width}
+  height={height}
+  class={className}
+  loading='lazy'
+  decoding='async'
+  onload="this.dataset.loaded = 'true'"
+  onerror="console.error('Image failed to load:', this.src)"
+/>
+
+<script>
+  // Monitor image loading performance
+  function monitorImagePerformance() {
+    const images = document.querySelectorAll('img[data-loaded]')
+
+    images.forEach((img) => {
+      const imgElement = img as HTMLImageElement
+      const startTime = performance.now()
+
+      imgElement.addEventListener('load', () => {
+        const loadTime = performance.now() - startTime
+        console.log(`Image loaded in ${loadTime.toFixed(2)}ms:`, imgElement.src)
+
+        // You could send this data to analytics
+        if (loadTime > 1000) {
+          console.warn('Slow image load detected:', imgElement.src)
+        }
+      })
+    })
+  }
+
+  // Run on page load and after navigation
+  document.addEventListener('astro:page-load', monitorImagePerformance)
+  window.addEventListener('load', monitorImagePerformance)
+</script>

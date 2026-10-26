@@ -145,18 +145,22 @@ export const linkListStrongTitleClass =
 export const linkListMutedContinuationClass =
   'font-normal text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-200'
 
-/** Typography shared by Thinking out loud index section titles and homepage Thinking out loud / Projects section titles. */
+/** Typography shared by section labels (`SectionHeading`) and the homepage identity line. */
 export const sectionLabelTypographyClass =
   'font-mono text-xs font-normal uppercase tracking-wider text-zinc-500 dark:text-zinc-400'
 
-/** Section labels on the Thinking out loud index (Recent / Earlier) (+ margin below). */
-export const sectionYearLabelClass = `${sectionLabelTypographyClass} mb-4`
+/**
+ * Rule under `SectionHeading`.
+ * `pb-4` is the gap between the label and the rule; `mb-12` is 48px below the rule.
+ */
+export const homeSectionRuleClass =
+  'border-b border-zinc-200 pb-4 mb-12 dark:border-zinc-800'
 
 /** “Thinking out loud →” / “Projects →” on the homepage (inside section heading; use with {@link ArrowRightGlyph}). */
 export const contentSectionHeadingLinkClass =
   'group inline-flex items-center gap-1 underline-offset-4 decoration-1 decoration-zinc-400 dark:decoration-zinc-500 hover:decoration-zinc-600 dark:hover:decoration-zinc-300 transition-colors duration-200 hover:underline hover:text-zinc-900 dark:hover:text-zinc-100'
 
-/** Size for {@link ArrowRightGlyph} beside mono `sectionYearLabelClass` (`text-xs`): slightly under 1em. */
+/** Size for {@link ArrowRightGlyph} beside a mono section label (`text-xs`): slightly under 1em. */
 export const contentSectionHeadingArrowClass = 'h-[0.85em] w-[0.85em] shrink-0'
 
 /** Primary nav: same 1px stroke, taller offset (matches {@link NavLink}). */
@@ -167,9 +171,8 @@ export const navLinkActiveClass = `underline hover:underline ${navLinkBaseClass}
 
 export const navLinkInactiveClass = `no-underline hover:underline ${navLinkBaseClass}`
 
-/** Name line beside avatar on the homepage hero. */
-export const heroIdentityNameClass =
-  'text-lg font-normal leading-snug text-zinc-900 dark:text-zinc-100 md:text-xl'
+/** Mono identity line under the homepage avatar (status, name, place, weather, time). */
+export const heroIdentityLabelClass = sectionLabelTypographyClass
 
 /** Homepage hero headline typography (display scale). Column width is set in `Hero.astro` from intro length. */
 export const heroDisplayIntroClass = [

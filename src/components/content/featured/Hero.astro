@@ -1,20 +1,38 @@
 ---
-import { heroDisplayIntroClass, heroIdentityNameClass } from '../../ui/text/styles'
+import HeroStatus from './HeroStatus'
+import { heroDisplayIntroClass, heroIdentityLabelClass } from '../../ui/text/styles'
 
 interface Props {
   name: string
   intro: string
   avatar?: string
-  subtitle?: string
+  /** Homepage only: pulsing availability, place, weather, and local time around the name. */
+  localStatus?: boolean
 }
 
-const { name, intro, avatar } = Astro.props
+const { name, intro, avatar, localStatus } = Astro.props
 
 /** Collapsed whitespace length — above this, headline spans ~80% of the content column for long quotes. */
 const LONG_INTRO_CHAR_THRESHOLD = 96
 const introMeasure = intro.replace(/\s+/g, ' ').trim()
 const heroIntroColumnClass =
   introMeasure.length > LONG_INTRO_CHAR_THRESHOLD ? 'max-w-[80%]' : 'max-w-4xl'
+
+const exploreProjectsClass = [
+  'inline-flex items-center rounded-lg px-3.5 py-2 text-sm font-normal',
+  'bg-zinc-900 text-zinc-50 hover:bg-zinc-800',
+  'dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700',
+  'transition-colors duration-200',
+  'outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-white',
+].join(' ')
+
+const getInTouchClass = [
+  'inline-flex items-center rounded-lg border px-3.5 py-2 text-sm font-normal',
+  'border-zinc-300 bg-transparent text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50',
+  'dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-900',
+  'transition-colors duration-200',
+  'outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-white',
+].join(' ')
 ---
 
 <section
@@ -22,43 +40,37 @@ const heroIntroColumnClass =
   class='flex flex-col items-start mt-44 md:mt-52 lg:mt-60'
   aria-label='Introduction'>
   {
-    name && (
-      <header class='flex flex-col items-start gap-1'>
-        <div class='flex items-center gap-2.5 md:gap-3'>
-          {
-            avatar && (
-              <img
-                src={avatar}
-                alt={name ? `${name} avatar` : 'Avatar'}
-                width='40'
-                height='40'
-                decoding='async'
-                loading='eager'
-                class='size-11 shrink-0 rounded-full object-cover md:size-10'
-              />
-            )
-          }
-          <p class={heroIdentityNameClass}>
-            {name}
-          </p>
-        </div>
-      </header>
+    avatar && (
+      <img
+        src={avatar}
+        alt={name ? `${name} avatar` : 'Avatar'}
+        width='48'
+        height='48'
+        decoding='async'
+        loading='eager'
+        class='size-12 shrink-0 rounded-full object-cover'
+      />
     )
   }
   {
-    !name && avatar && (
-      <img
-        src={avatar}
-        alt='Avatar'
-        width='40'
-        height='40'
-        decoding='async'
-        loading='eager'
-        class='size-11 shrink-0 rounded-full object-cover md:size-10'
-      />
+    name && (
+      <p class:list={[heroIdentityLabelClass, avatar ? 'mt-4' : undefined]}>
+        {localStatus ? <HeroStatus name={name} client:load /> : name}
+      </p>
     )
   }
   <h1 class:list={[heroDisplayIntroClass, heroIntroColumnClass]}>
     {intro}
   </h1>
+  <div class='mt-8 flex flex-wrap items-center gap-2 md:mt-10'>
+    <a href='/projects' class={exploreProjectsClass} data-swup-preload>
+      Explore projects
+    </a>
+    <a
+      href='mailto:hello@danielshires.com?subject=Portfolio%20Inquiry'
+      class={getInTouchClass}
+      aria-label='Send email to Daniel Shires'>
+      Get in touch
+    </a>
+  </div>
 </section>

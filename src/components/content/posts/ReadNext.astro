@@ -5,6 +5,7 @@
  */
 
 import Text from '../../ui/text/Text.astro'
+import SectionHeading from '../../ui/text/SectionHeading.astro'
 import { linkFocusRingClass, textLinkClass } from '../../ui/text/styles'
 
 export interface ReadNextPost {
@@ -26,11 +27,9 @@ const sectionHeading = items.length > 1 ? 'Related reading' : 'Read next'
 {
   items.length > 0 && (
     <section
-      class='mt-16 pt-12 border-t border-zinc-200 dark:border-zinc-800 w-full max-w-[65ch] mx-auto'
+      class='mt-16 w-full max-w-[65ch] mx-auto'
       aria-labelledby='read-next-heading'>
-      <Text variant='overline' color='muted' class='mb-8' id='read-next-heading'>
-        {sectionHeading}
-      </Text>
+      <SectionHeading id='read-next-heading'>{sectionHeading}</SectionHeading>
       <ul class='space-y-4 list-none p-0 m-0'>
         {items.map((p) => (
           <li>

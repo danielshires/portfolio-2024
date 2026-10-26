@@ -1,0 +1,45 @@
+---
+import ArrowRightGlyph from '../../ui/icons/ArrowRightGlyph.astro'
+import {
+  contentSectionHeadingArrowClass,
+  contentSectionHeadingLinkClass,
+  homeSectionRuleClass,
+  sectionLabelTypographyClass,
+} from './styles'
+
+interface Props {
+  /** Heading id, for `aria-labelledby` on the parent section. */
+  id?: string
+  /** When set, the label links here and shows a trailing arrow. */
+  href?: string
+  class?: string
+}
+
+const { id, href, class: className } = Astro.props
+const hasDescription = Astro.slots.has('description')
+---
+
+<div class:list={['flex flex-col', homeSectionRuleClass, className]}>
+  <div class='flex items-center justify-between gap-4'>
+    <h2 id={id} class={sectionLabelTypographyClass}>
+      {
+        href ? (
+          <a href={href} class={contentSectionHeadingLinkClass}>
+            <slot />
+            <ArrowRightGlyph class={contentSectionHeadingArrowClass} />
+          </a>
+        ) : (
+          <slot />
+        )
+      }
+    </h2>
+    <slot name='actions' />
+  </div>
+  {
+    hasDescription && (
+      <div class='mt-3'>
+        <slot name='description' />
+      </div>
+    )
+  }
+</div>

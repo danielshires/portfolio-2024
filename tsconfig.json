@@ -15,6 +15,7 @@
     },
     "include": [
         "src/**/*",
+        "netlify/functions/**/*.ts",
         ".astro/types.d.ts",
         "astro.config.mjs",
         "sanity.config.ts",

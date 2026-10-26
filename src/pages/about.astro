@@ -2,15 +2,15 @@
 import Layout from '../layouts/Layout.astro'
 import Text from '../components/ui/text/Text.astro'
 import {
-  contentSectionHeadingArrowClass,
-  contentSectionHeadingLinkClass,
   externalLinkGlyphGroupHoverClass,
-  sectionYearLabelClass,
   simpleHeroSectionClass,
   textLinkClass,
 } from '../components/ui/text/styles'
-import ArrowRightGlyph from '../components/ui/icons/ArrowRightGlyph.astro'
+import SectionHeading from '../components/ui/text/SectionHeading.astro'
 import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
+import SocialIconLinks from '../components/ui/icons/SocialIconLinks.astro'
+import ThemeToggle from '../components/ui/buttons/ThemeToggle.tsx'
+import Experience from '../components/content/experience/Experience.astro'
 import { aboutContent } from '../config/about'
 import {
   getAllProjects,
@@ -66,67 +66,18 @@ const structuredData = {
       </div>
     </section>
 
-    <section class='mt-14 md:mt-20' aria-label='Social links'>
-      <Text variant='caption' color='muted' class='mb-4 font-mono text-xs uppercase tracking-wider'>
-        Connect
-      </Text>
-      <ul class='flex flex-wrap gap-x-6 gap-y-2'>
-        {
-          aboutContent.social.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class={`text-base text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}
-                target={link.href.startsWith('mailto:') ? undefined : '_blank'}
-                rel={link.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}>
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+    <section class='mt-14 md:mt-20' aria-labelledby='connect-heading'>
+      <SectionHeading id='connect-heading'>Connect</SectionHeading>
+      <div class='flex items-center gap-2'>
+        <SocialIconLinks includeEmail class='gap-2' />
+        <ThemeToggle client:load />
+      </div>
     </section>
 
-    <section class='mt-14 md:mt-20' aria-label='Work history'>
-      <Text variant='caption' color='muted' class='mb-4 font-mono text-xs uppercase tracking-wider'>
-        Work
-      </Text>
-      <ul class='divide-y divide-zinc-200/60 dark:divide-zinc-800/60'>
-        {
-          aboutContent.work.map((entry) => (
-            <li class='flex flex-col gap-1 py-6 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6'>
-              <div class='min-w-0'>
-                {entry.organizationHref ? (
-                  <a
-                    href={entry.organizationHref}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    class={`font-medium text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>
-                    {entry.organization}
-                  </a>
-                ) : (
-                  <span class='font-medium text-zinc-900 dark:text-zinc-100'>{entry.organization}</span>
-                )}
-                <span class='text-zinc-600 before:mx-1.5 before:content-["·"] dark:text-zinc-400'>
-                  {entry.role}
-                </span>
-              </div>
-              <span class='shrink-0 text-sm tabular-nums text-zinc-600 dark:text-zinc-400'>
-                {entry.period}
-              </span>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+    <Experience class='mt-14 md:mt-20' />
 
     <section class='mt-14 md:mt-20' aria-label='Projects'>
-      <h2 class={sectionYearLabelClass}>
-        <a href='/projects' class={contentSectionHeadingLinkClass}>
-          Projects
-          <ArrowRightGlyph class={contentSectionHeadingArrowClass} />
-        </a>
-      </h2>
+      <SectionHeading href='/projects'>Projects</SectionHeading>
       {
         projects.length > 0 ? (
           <ul class='divide-y divide-zinc-200/60 dark:divide-zinc-800/60'>

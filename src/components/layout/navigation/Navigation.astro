@@ -1,8 +1,8 @@
 ---
 // Components
 import NavLink from '../../ui/buttons/NavLink.astro'
-import ContactCTA from '../../ui/buttons/ContactCTA.tsx'
 import ThemeToggle from '../../ui/buttons/ThemeToggle.tsx'
+import SocialIconLinks from '../../ui/icons/SocialIconLinks.astro'
 import { getNavigationItems } from '../../../config/features'
 import { navLinkActiveClass, navLinkInactiveClass } from '../../ui/text/styles'
 
@@ -41,14 +41,7 @@ const menuButtonLayoutClass =
         </button>
       </div>
       <div class='hidden shrink-0 items-center gap-2 md:flex md:gap-4'>
-        <ContactCTA
-          variant='primary'
-          size='sm'
-          className='underline-offset-8'
-          showIcon={true}
-          client:load>
-          Get in touch
-        </ContactCTA>
+        <SocialIconLinks includeEmail class='gap-2' />
         <ThemeToggle client:load />
       </div>
     </div>
@@ -69,14 +62,7 @@ const menuButtonLayoutClass =
       </ul>
       <div
         class='mt-4 flex items-center gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800'>
-        <ContactCTA
-          variant='primary'
-          size='sm'
-          className='underline-offset-8'
-          showIcon={true}
-          client:load>
-          Get in touch
-        </ContactCTA>
+        <SocialIconLinks includeEmail class='gap-2' />
         <ThemeToggle client:load />
       </div>
       </div>

@@ -2,8 +2,8 @@
 export const features = {
   // Navigation features
   experiments: {
-    enabled: import.meta.env.PUBLIC_FEATURE_EXPERIMENTS === 'true',
-    visible: import.meta.env.PUBLIC_FEATURE_EXPERIMENTS_VISIBLE === 'true',
+    enabled: import.meta.env.PUBLIC_FEATURE_EXPERIMENTS !== 'false',
+    visible: import.meta.env.PUBLIC_FEATURE_EXPERIMENTS_VISIBLE !== 'false',
   },
   pictures: {
     enabled: import.meta.env.PUBLIC_FEATURE_PICTURES !== 'false',

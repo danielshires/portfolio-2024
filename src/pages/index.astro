@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro'
 import Hero from '../components/content/featured/Hero.astro'
 import WritingPreview from '../components/content/posts/WritingPreview.astro'
 import ProjectGrid from '../components/content/projects/ProjectGrid.astro'
+import Experience from '../components/content/experience/Experience.astro'
+import { stackBelowHeroClass } from '../components/ui/text/styles'
 import { getAuthorBySlug, getAllProjects, getFeaturedProjects, getAllPosts, urlFor } from '../lib/sanity'
 import { PERSON_NODE_ID, SITE_ORIGIN, siteOwnerSameAs } from '../lib/seo/merge-global-jsonld'
 
@@ -11,7 +13,7 @@ const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).ur
 
 const heroContent = {
   name: 'Daniel Shires',
-  subtitle: 'Product Designer',
+  localStatus: true,
   intro: `Product designer focused 
   on discovery, systems and 
   human behaviour.`,
@@ -25,9 +27,8 @@ const allPosts = await getAllPosts()
 const allProjects = await getAllProjects()
 const featuredProjects = await getFeaturedProjects()
 
-// Use featured projects if available, otherwise show first 6 regular projects
-const projectsToShow =
-  featuredProjects.length > 0 ? featuredProjects.slice(0, 6) : allProjects.slice(0, 6)
+// Use featured projects if available, otherwise show all projects
+const projectsToShow = featuredProjects.length > 0 ? featuredProjects : allProjects
 
 // SEO optimized content
 const pageTitle = 'Daniel Shires | Product Designer | Sydney, Australia'
@@ -75,9 +76,9 @@ const structuredData = {
   pageType='website'>
   <div class='grid gap-8 overflow-hidden h-max pb-16 md:pb-24'>
     <Hero {...heroContent} />
+    <ProjectGrid projects={projectsToShow} variant='featured' />
+    {/* <ProjectGrid projects={projectsToShow} variant='text' /> */}
     <WritingPreview posts={allPosts} />
-    <div class='mt-auto'>
-      <ProjectGrid projects={projectsToShow} variant='text' />
-    </div>
+    <Experience class={stackBelowHeroClass} />
   </div>
 </Layout>

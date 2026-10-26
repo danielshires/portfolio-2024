@@ -3,6 +3,7 @@
  * Shared footer nav for detail (“child”) pages: back to section index + two cross-links.
  */
 import Text from '../../ui/text/Text.astro'
+import SectionHeading from '../../ui/text/SectionHeading.astro'
 import {
   linkFocusRingClass,
   siteChildNavBackAnchorClass,
@@ -51,11 +52,9 @@ const widthClass = layout === 'full' ? 'w-full max-w-none' : 'w-full max-w-[65ch
 ---
 
 <nav
-  class={`not-prose mt-16 pt-12 border-t border-zinc-200 dark:border-zinc-800 ${widthClass} ${className}`}
+  class={`not-prose mt-16 ${widthClass} ${className}`}
   aria-labelledby={headingId}>
-  <Text variant='overline' color='muted' class='mb-8 !uppercase' id={headingId}>
-    Explore
-  </Text>
+  <SectionHeading id={headingId}>Explore</SectionHeading>
   <ul class='space-y-4 list-none p-0 m-0'>
     <li>
       <a href={parentHref} class={siteChildNavBackAnchorClass} data-swup-preload>

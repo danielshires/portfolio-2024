@@ -102,6 +102,32 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     })
 
+    // Experience All/Less. Listener stays on document so Swup page swaps keep it working.
+    if (!window.__experienceToggleBound) {
+      window.__experienceToggleBound = true
+      document.addEventListener('click', function (event) {
+        var target = event.target
+        if (!target || typeof target.closest !== 'function') return
+        var button = target.closest('[data-experience-toggle]')
+        if (!button) return
+        var root = button.closest('[data-experience]')
+        if (!root) return
+        var open = root.getAttribute('data-open') !== 'true'
+        root.setAttribute('data-open', open ? 'true' : 'false')
+        button.setAttribute('aria-expanded', open ? 'true' : 'false')
+        var panels = root.querySelectorAll('[data-previous]')
+        for (var i = 0; i < panels.length; i++) {
+          if (open) {
+            panels[i].removeAttribute('inert')
+            panels[i].setAttribute('aria-hidden', 'false')
+          } else {
+            panels[i].setAttribute('inert', '')
+            panels[i].setAttribute('aria-hidden', 'true')
+          }
+        }
+      })
+    }
+
     // Only remove focus after transitions complete to avoid disrupting animations
     document.addEventListener('astro:page-load', function() {
       const mainElement = document.querySelector('#main-content')
@@ -245,16 +271,18 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
         document.documentElement.style.setProperty('--background-color', bgColor)
         document.documentElement.style.setProperty('--text-color', textColor)
 
+        document.documentElement.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
+
         if (theme === 'dark') {
           document.documentElement.style.backgroundColor = bgColor
-          document.body.style.removeProperty('background-color')
         } else {
           document.documentElement.style.removeProperty('background-color')
-          document.body.style.removeProperty('background-color')
         }
 
-        document.documentElement.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
-        document.body.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
+        if (document.body) {
+          document.body.style.removeProperty('background-color')
+          document.body.classList.remove('bg-zinc-50', 'bg-zinc-100', 'bg-zinc-900', 'bg-zinc-950', 'bg-background-light', 'bg-background-dark')
+        }
 
         var themeColorMeta = document.querySelector('meta[name="theme-color"]:not([media])')
         if (!themeColorMeta) {
@@ -535,7 +563,7 @@ const mergedJsonLd = mergeGlobalJsonLd(jsonLd)
     tabindex="-1">
     <a href='#main-content' class='skip-link theme-transition'>Skip to main content</a>
     <Navigation />
-    <main id='main-content' class='container mx-auto px-8 lg:px-16 flex-1 w-full' tabindex="-1">
+    <main id='main-content' class='container mx-auto min-w-0 px-8 lg:px-16 flex-1 w-full' tabindex="-1">
       <slot />
     </main>
     <Footer />

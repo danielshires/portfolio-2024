@@ -5,6 +5,11 @@
 [build.environment]
   NODE_VERSION = "20"
 
+[dev]
+  command = "npm run dev"
+  targetPort = 4321
+  port = 8888
+
 # CRITICAL SEO: 301 redirects to preserve rankings
 # These redirects ensure your current Google rankings are maintained
 # Add any URL changes here to maintain SEO value
@@ -32,6 +37,13 @@
   from = "/journal/*"
   to = "/writing/:splat"
   status = 301
+
+# Avatar chat. Must stay above the catch-all so the function is reached.
+[[redirects]]
+  from = "/api/avatar"
+  to = "/.netlify/functions/avatar-chat"
+  status = 200
+  force = true
 
 # SPA fallback for client-side routing
 [[redirects]]
