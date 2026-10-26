@@ -38,6 +38,31 @@ const caseStudyBody = [
 
 const isExternal = ({ parent }) => parent?.linkBehavior === 'external'
 
+const galleryImageFields = [
+  {
+    name: 'alt',
+    type: 'string',
+    title: 'Alternative text',
+    description: 'Important for SEO and accessibility.',
+    validation: Rule => Rule.required(),
+  },
+  {
+    name: 'caption',
+    type: 'string',
+    title: 'Caption',
+    description: 'Optional caption for the image',
+  },
+]
+
+const galleryImage = (name, title) => ({
+  name,
+  title,
+  type: 'image',
+  options: { hotspot: true },
+  fields: galleryImageFields,
+  validation: Rule => Rule.required(),
+})
+
 export default {
   name: 'project',
   title: 'Project',
@@ -219,24 +244,33 @@ export default {
           options: {
             hotspot: true,
           },
+          fields: galleryImageFields,
+        },
+        {
+          name: 'imagePair',
+          title: 'Two images',
+          type: 'object',
           fields: [
-            {
-              name: 'alt',
-              type: 'string',
-              title: 'Alternative text',
-              description: 'Important for SEO and accessibility.',
-              validation: Rule => Rule.required()
+            galleryImage('left', 'Left'),
+            galleryImage('right', 'Right'),
+          ],
+          preview: {
+            select: {
+              leftAlt: 'left.alt',
+              media: 'left',
             },
-            {
-              name: 'caption',
-              type: 'string',
-              title: 'Caption',
-              description: 'Optional caption for the image'
-            }
-          ]
-        }
+            prepare({ leftAlt, media }) {
+              return {
+                title: 'Two images',
+                subtitle: leftAlt,
+                media,
+              }
+            },
+          },
+        },
       ],
-      description: 'Screenshots, mockups, and other project visuals',
+      description:
+        'Screenshots and mockups. Add a full-width image, or two images side by side. Order here is the order on the page.',
       hidden: ({ parent }) => parent?.linkBehavior === 'external',
     },
     {

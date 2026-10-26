@@ -16,12 +16,60 @@ import imageUrlBuilder from '@sanity/image-url'
 // TYPE DEFINITIONS
 // ========================================
 
+export interface SanityImageCrop {
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export interface SanityImageHotspot {
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
 export interface SanityImage {
   _type: 'image'
   asset: {
     _ref: string
     _type: 'reference'
   }
+  crop?: SanityImageCrop
+  hotspot?: SanityImageHotspot
+}
+
+/** One image in a project gallery, including alt text and an optional caption. */
+export interface ProjectGalleryImage extends SanityImage {
+  _key?: string
+  alt?: string
+  caption?: string
+}
+
+/** Two gallery images shown side by side. */
+export interface ProjectGalleryPair {
+  _type: 'imagePair'
+  _key?: string
+  left?: ProjectGalleryImage
+  right?: ProjectGalleryImage
+}
+
+export type ProjectGalleryRow = ProjectGalleryImage | ProjectGalleryPair
+
+/** Images from gallery rows, with a one-sided pair treated as a single image. */
+export function flattenProjectGallery(rows?: ProjectGalleryRow[]): ProjectGalleryImage[] {
+  if (!rows?.length) return []
+  const images: ProjectGalleryImage[] = []
+  for (const row of rows) {
+    if (row._type === 'imagePair') {
+      if (row.left?.asset) images.push(row.left)
+      if (row.right?.asset) images.push(row.right)
+    } else if (row.asset) {
+      images.push(row)
+    }
+  }
+  return images
 }
 
 /** Optional SEO overrides (Sanity `seo` object on post / project). */
@@ -158,11 +206,7 @@ export interface Project {
   solution?: any // Portable Text content
   outcomeSummary?: any // Portable Text content
   learnings?: any // Portable Text content
-  images?: Array<{
-    asset: SanityImage
-    alt: string
-    caption?: string
-  }>
+  images?: ProjectGalleryRow[]
   relatedProjects?: Project[]
   featured?: boolean
   publishedAt: string
@@ -216,6 +260,7 @@ export function projectListHref(project: Pick<Project, 'slug' | 'linkBehavior' |
   return `/projects/${project.slug.current}`
 }
 
+/** Build an image URL. Pass the whole image so crop and hotspot are applied. */
 export function urlFor(source: SanityImage) {
   return builder.image(source)
 }
@@ -569,9 +614,31 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       outcomeSummary,
       learnings,
       images[] {
+        _type,
+        _key,
         asset,
         alt,
-        caption
+        caption,
+        crop,
+        hotspot,
+        left {
+          _type,
+          _key,
+          asset,
+          alt,
+          caption,
+          crop,
+          hotspot
+        },
+        right {
+          _type,
+          _key,
+          asset,
+          alt,
+          caption,
+          crop,
+          hotspot
+        }
       },
       relatedProjects[]-> {
         _id,
