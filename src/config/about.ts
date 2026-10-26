@@ -65,16 +65,16 @@ export function experienceSpan(roles: readonly ExperienceRole[]): string {
 export const aboutContent: AboutContent = {
   summary: {
     paragraph1BeforeLink:
-      "I'm a Senior Product Designer based in Sydney, currently at ",
+      "Hey, I'm Dan — a Senior Product Designer based in Woonona, NSW, currently at ",
     paragraph1Link: {
       label: 'Commonwealth Bank',
       href: 'https://www.commbank.com.au',
     },
-    paragraph1AfterLink: ', working on the future of customer communication.',
+    paragraph1AfterLink: ', exploring the future of customer communication.',
     paragraph2:
-      'I bring together product discovery, customer-centred design and systems thinking to turn complex problems into useful digital experiences. Working closely with product, engineering and research, I help shape ideas from early exploration through to delivery.',
+      'I bring together product discovery, customer-centred design and systems thinking to make complex problems easier to understand and solve. Working across product, engineering and research, I help turn early insights into clear concepts and useful digital experiences.',
     paragraph3:
-      'I also use AI to explore concepts, rapidly prototype and build working experiences—bridging the gap between design and development.',
+      'I also use AI to explore ideas, prototype quickly and build working products, bridging the gap between design and development.',
   },
   social: [
     { label: 'LinkedIn', handle: 'in/shiresdaniel', href: 'https://www.linkedin.com/in/shiresdaniel/' },
