@@ -50,17 +50,28 @@ const pageDescription =
     font-size: 14px;
   }
 
-  .studio-result {
+  .studio-stage {
     flex: 1;
     min-width: 0;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .studio-result {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
     overflow-y: auto;
-    padding: 2rem;
+    padding: 2rem 2rem 1rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
   }
 
   .studio-controls {
     width: 250px;
+    align-self: stretch;
     padding: 20px;
     margin: 2rem;
     border-radius: 1rem;
@@ -70,11 +81,13 @@ const pageDescription =
     flex-direction: column;
     gap: 16px;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   .studio-controls h1,
   .studio-controls p,
-  .studio-result p {
+  .studio-result p,
+  .studio-composer p {
     margin: 0;
     font-size: 14px;
     font-weight: 400;
@@ -85,54 +98,251 @@ const pageDescription =
     font-size: 14px;
   }
 
-  .studio-note {
-    color: rgba(255, 255, 255, 0.72);
-  }
-
-  .studio-controls textarea,
-  .studio-controls button {
-    margin: 5px 0;
+  .studio-new,
+  .studio-composer button {
     background-color: #282828;
     border: none;
     color: white;
-    padding: 5px;
+    padding: 8px 10px;
     border-radius: 4px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 14px;
-  }
-
-  .studio-controls textarea {
-    width: 100%;
-    min-height: 8rem;
-    resize: vertical;
-    box-sizing: border-box;
-  }
-
-  .studio-controls textarea::placeholder {
-    color: rgba(255, 255, 255, 0.45);
-  }
-
-  .studio-controls button {
     cursor: pointer;
+  }
+
+  .studio-new {
     width: 100%;
   }
 
-  .studio-controls button:disabled {
+  .studio-new:disabled,
+  .studio-composer button:disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
 
-  .studio-message p {
-    white-space: pre-wrap;
+  .studio-history {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+    min-height: 0;
   }
 
-  .studio-message + .studio-message {
-    margin-top: 16px;
+  .studio-history button {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.45;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .studio-label {
+  .studio-history button[aria-current='true'] {
+    background-color: #282828;
+  }
+
+  .studio-controls button:focus-visible,
+  .studio-composer button:focus-visible,
+  .studio-composer textarea:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.45);
+    outline-offset: 2px;
+  }
+
+  .studio-result .studio-empty {
+    margin-block: auto;
+    margin-inline: auto;
+    width: min(100%, 40rem);
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .studio-composer {
+    padding: 0 2rem 2rem;
+    box-sizing: border-box;
+  }
+
+  .studio-composer-bar {
+    width: min(100%, 40rem);
+    margin-inline: auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+  }
+
+  .studio-composer textarea {
+    flex: 1;
+    min-width: 0;
+    min-height: 2.4rem;
+    max-height: 10rem;
+    resize: none;
+    border: none;
+    background: transparent;
+    color: white;
+    padding: 6px 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .studio-composer textarea::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .studio-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .studio-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: min(100%, 40rem);
+    margin-inline: auto;
+    min-width: 0;
+  }
+
+  .bubble-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .message {
+    display: flex;
+    min-width: 0;
+  }
+
+  .message[data-align='end'] {
+    justify-content: flex-end;
+  }
+
+  .message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: fit-content;
+    max-width: min(80%, 36rem);
+    min-width: 0;
+  }
+
+  .message-header {
     color: rgba(255, 255, 255, 0.55);
-    margin-bottom: 4px;
+  }
+
+  .message[data-align='end'] .message-header {
+    align-self: flex-end;
+  }
+
+  .bubble {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .bubble[data-align='end'] {
+    align-self: flex-end;
+  }
+
+  .bubble-content {
+    width: fit-content;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    border-radius: 1rem;
+    padding: 0.55rem 0.8rem;
+    line-height: 1.45;
+  }
+
+  .bubble[data-variant='default'] .bubble-content {
+    background-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .bubble[data-variant='secondary'] .bubble-content {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .bubble[data-variant='muted'] .bubble-content {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .bubble[data-variant='ghost'] .bubble-content {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .bubble[data-variant='destructive'] .bubble-content {
+    background-color: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  }
+
+  .bubble-content a {
+    color: inherit;
+    text-underline-offset: 0.18em;
+  }
+
+  .studio-suggestions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .studio-suggestions button {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: none;
+    color: white;
+    border-radius: 1rem;
+    padding: 0.55rem 0.8rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.45;
+    text-align: left;
+    white-space: normal;
+    cursor: pointer;
+    max-width: min(36rem, 100%);
+  }
+
+  .studio-suggestions button:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .studio-suggestions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .studio-suggestions button:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.45);
+    outline-offset: 2px;
   }
 
   @media (max-width: 768px) {
@@ -140,14 +350,24 @@ const pageDescription =
       flex-direction: column;
     }
 
-    .studio-result {
+    .studio-controls {
       order: -1;
-      height: 300px;
-      flex: none;
+      width: auto;
+      height: auto;
+      max-height: 22vh;
+      margin: 0.75rem 0.75rem 0;
     }
 
-    .studio-controls {
-      width: auto;
+    .studio-stage {
+      min-height: 0;
+    }
+
+    .studio-result {
+      padding: 1rem 0.75rem 0.75rem;
+    }
+
+    .studio-composer {
+      padding: 0 0.75rem 0.75rem;
     }
   }
 </style>
