@@ -85,3 +85,16 @@ GEMINI_MODEL=gemini-3.5-flash
 ```
 
 `npm run dev` does not run the function. Use `npm run dev:netlify` (`npx netlify dev`) so `/api/avatar` is available. Create the key at [Google AI Studio](https://aistudio.google.com/apikey).
+
+## Training diary
+
+The training diary at `/playground/training` reads workouts from Strava. The client id and secret stay on the server. Do not prefix them with `PUBLIC_` and do not commit them.
+
+Set these in the Netlify UI, and in a local `.env` when using `npm run dev:netlify`:
+
+```env
+STRAVA_CLIENT_ID=your-strava-client-id
+STRAVA_CLIENT_SECRET=your-strava-client-secret
+```
+
+Create the app at [Strava API settings](https://www.strava.com/settings/api). The callback domain is the production domain. `localhost` is already allowed. Then open the diary and use Connect once. `npm run dev` does not run the function. Use `npm run dev:netlify` so `/api/strava` is available.

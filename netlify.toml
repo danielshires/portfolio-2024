@@ -75,11 +75,28 @@
   status = 200
   force = true
 
-# SPA fallback for client-side routing
+# Training diary. The path suffix selects connect, callback, or the diary.
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/api/strava/connect"
+  to = "/.netlify/functions/strava-diary/connect"
   status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/strava/callback"
+  to = "/.netlify/functions/strava-diary/callback"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/strava/diary"
+  to = "/.netlify/functions/strava-diary/diary"
+  status = 200
+  force = true
+
+# No site-wide rewrite to /index.html. This is a static site, and that rule
+# was serving the homepage for any page missing from the last build, including
+# /playground/training during netlify dev. Unknown URLs use the built 404 page.
 
 # SEO: Ensure www redirects to non-www (if needed)
 # [[redirects]]

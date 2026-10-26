@@ -1,0 +1,343 @@
+---
+import TrainingDiary from '../../components/content/playground/TrainingDiary.tsx'
+import { features } from '../../config/features'
+
+if (!features.experiments.enabled) {
+  return Astro.redirect('/404')
+}
+
+const pageTitle = 'Training diary'
+const pageDescription = 'A timeline of workouts recorded on the watch and read back from Strava.'
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='robots' content='noindex,follow' />
+    <meta name='description' content={pageDescription} />
+    <title>{pageTitle}</title>
+    <link href='https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&display=swap' rel='stylesheet' />
+  </head>
+  <body>
+    <TrainingDiary client:load />
+  </body>
+</html>
+
+<style is:global>
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    background-color: #1e1e1e;
+  }
+
+  astro-island {
+    display: block;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .diary {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    background-color: #1e1e1e;
+    color: white;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .diary h1,
+  .diary h2,
+  .diary p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+
+  .diary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 2rem 2rem 1.25rem;
+  }
+
+  .diary-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 1rem 1.5rem;
+    margin-left: auto;
+  }
+
+  .diary-header p {
+    margin-top: 0.2rem;
+  }
+
+  .diary-header p,
+  .diary-detail h2,
+  .diary-quiet,
+  .diary-axis {
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .diary-scales {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .diary-activities {
+    flex: 1 0 100%;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding-top: 0.35rem;
+  }
+
+  .diary-activities button {
+    flex: none;
+  }
+
+  .diary-scales button,
+  .diary-activities button,
+  .diary-connect {
+    background-color: #282828;
+    border: none;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.45;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .diary-scales button[aria-pressed='true'],
+  .diary-activities button[aria-pressed='true'] {
+    background-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .diary-scales button:focus-visible,
+  .diary-activities button:focus-visible,
+  .diary-connect:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.45);
+    outline-offset: 2px;
+  }
+
+  .diary-stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .diary-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    padding: 0 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .diary-calendar {
+    --week-count: 17;
+    flex: 1;
+    min-height: 16rem;
+    display: grid;
+    grid-template-columns: auto repeat(var(--week-count), minmax(0, 1fr));
+    grid-template-rows: 1.15rem repeat(7, minmax(0, 1fr));
+    gap: 4px 5px;
+    width: 100%;
+  }
+
+  .diary-weekday,
+  .diary-month {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .diary-weekday {
+    align-self: center;
+    padding-right: 0.4rem;
+  }
+
+  .diary-month {
+    align-self: end;
+  }
+
+  .diary-calendar button {
+    appearance: none;
+    position: relative;
+    border: none;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0;
+    min-height: 0;
+    cursor: pointer;
+    font: inherit;
+    color: transparent;
+  }
+
+  .diary-calendar button[data-mark='value'],
+  .diary-calendar button[data-mark='quiet'] {
+    background: white;
+  }
+
+  .diary-calendar button[data-mark='indoor'] {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+  }
+
+  .diary-calendar button[aria-selected='true'] {
+    outline: 1px solid white;
+    outline-offset: 2px;
+  }
+
+  .diary-calendar button:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 2px;
+  }
+
+  .diary-plot {
+    --day-count: 112;
+    width: max(100%, calc(var(--day-count) * 18px));
+    flex: 1;
+    min-height: 16rem;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .diary-plot svg {
+    display: block;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    height: auto;
+    cursor: pointer;
+  }
+
+  .diary-plot svg g:focus {
+    outline: none;
+  }
+
+  .diary-axis {
+    position: relative;
+    height: 1.6rem;
+    font-size: 12px;
+  }
+
+  .diary-axis span {
+    position: absolute;
+    top: 0.3rem;
+    white-space: nowrap;
+  }
+
+  .diary-detail {
+    margin: 0 2rem 1.25rem;
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    height: 8.5rem;
+    flex: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+  }
+
+  .diary-sessions {
+    list-style: none;
+    margin: 0.7rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .diary-session-name {
+    margin-top: 0.7rem;
+  }
+
+  .diary-sessions .diary-session-name {
+    margin-top: 0;
+  }
+
+  .diary-note {
+    margin-top: 0.75rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .diary-empty {
+    margin: auto;
+    width: min(100%, 34rem);
+    padding: 2rem;
+    box-sizing: border-box;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .diary-empty .diary-connect {
+    display: inline-flex;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    .diary-header,
+    .diary-scroll,
+    .diary-detail {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .diary-detail {
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+
+    .diary-calendar {
+      gap: 3px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .diary-plot {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .diary-header,
+    .diary-scroll {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    .diary-header {
+      flex-direction: column;
+      align-items: stretch;
+      padding-top: 0.75rem;
+    }
+
+    .diary-detail {
+      margin: 0.75rem;
+    }
+
+    .diary-empty {
+      padding: 0.75rem;
+    }
+  }
+</style>

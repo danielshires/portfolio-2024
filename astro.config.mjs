@@ -19,14 +19,16 @@ import react from "@astrojs/react";
 import sanity from '@sanity/astro';
 import swup from '@swup/astro';
 
-/** Dev-only: Astro on :4321 has no function runtime. Send the chat route to `netlify dev`. */
-function avatarDevProxy() {
+/** Dev-only: Astro on :4321 has no function runtime. Send API routes to `netlify dev`. */
+function playgroundDevProxy() {
     return {
-        name: 'avatar-dev-proxy',
+        name: 'playground-dev-proxy',
         configureServer(server) {
             server.middlewares.use((req, res, next) => {
                 const path = req.url?.split('?')[0]
-                if (path !== '/api/avatar') return next()
+                const isAvatar = path === '/api/avatar'
+                const isStrava = path === '/api/strava' || path?.startsWith('/api/strava/')
+                if (!isAvatar && !isStrava) return next()
 
                 const proxyReq = http.request(
                     {
@@ -45,7 +47,11 @@ function avatarDevProxy() {
                     if (res.headersSent) return
                     res.statusCode = 502
                     res.setHeader('content-type', 'application/json; charset=utf-8')
-                    res.end(JSON.stringify({ error: 'The avatar could not reply. Try again.' }))
+                    const path = req.url?.split('?')[0] ?? ''
+                    const message = path.startsWith('/api/strava')
+                        ? 'The diary could not load. Try again in a little while.'
+                        : 'The avatar could not reply. Try again.'
+                    res.end(JSON.stringify(path.startsWith('/api/strava') ? { status: 'error', message } : { error: message }))
                 })
                 req.pipe(proxyReq)
             })
@@ -123,7 +129,7 @@ export default defineConfig({
         defaultStrategy: 'hover',
     },
     vite: {
-        plugins: [avatarDevProxy()],
+        plugins: [playgroundDevProxy()],
         build: {
             chunkSizeWarningLimit: 1000,
             rollupOptions: {
