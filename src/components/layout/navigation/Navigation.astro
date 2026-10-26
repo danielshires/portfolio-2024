@@ -48,28 +48,39 @@ const menuButtonLayoutClass =
         <SettingsTrigger client:load />
       </div>
     </div>
-    <div
-      id='nav-menu'
-      class='nav-menu absolute right-0 top-[calc(100%+8px)] z-50 w-max max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200/60 bg-white/95 px-5 py-4 shadow-lg shadow-zinc-900/5 backdrop-blur-xl theme-transition dark:border-zinc-800/60 dark:bg-zinc-950/95 dark:shadow-zinc-900/40 md:hidden'>
-      <ul class='nav-menu-list flex flex-col items-start gap-1 whitespace-nowrap'>
+    </div>
+  </div>
+</nav>
+
+<!-- Full-page mobile menu overlay -->
+<div
+  id='nav-menu'
+  class='nav-menu fixed inset-0 z-40 bg-white dark:bg-zinc-950 md:hidden'>
+  <div class='container mx-auto flex h-full flex-col px-8 pt-20 pb-8'>
+    <div class='nav-menu-section'>
+      <ul class='nav-menu-list flex flex-col items-start'>
         {
           navigationItems.map((item, index) => (
             <li class='nav-menu-item w-full' style={`--item-index: ${index}`}>
-              <NavLink path={item.path} target='_self' href={item.href} class='block w-full rounded-lg px-3 py-2 -mx-3 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 transition-colors'>
+              <a 
+                href={item.href}
+                class='block py-2 text-2xl font-medium text-zinc-950 transition-colors hover:text-zinc-600 dark:text-zinc-50 dark:hover:text-zinc-300'
+                data-swup-preload>
                 {item.label}
-              </NavLink>
+              </a>
             </li>
           ))
         }
       </ul>
-      <div
-        class='nav-menu-footer mt-3 flex items-center gap-2 border-t border-zinc-200/60 pt-3 dark:border-zinc-800/60'>
-        <SocialIconLinks includeEmail class='gap-2' />
+    </div>
+    <div class='nav-menu-footer mt-auto flex items-center gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800'>
+      <SocialIconLinks includeEmail class='gap-3' />
+      <div class='ml-auto flex items-center gap-2'>
         <ThemeToggle client:load />
         <SettingsTrigger client:load />
       </div>
-      </div>
     </div>
+  </div>
   </div>
 </nav>
 
@@ -95,49 +106,44 @@ const menuButtonLayoutClass =
     pointer-events: none;
   }
 
-  /* Mobile menu animations */
+  /* Full-page mobile menu */
   .nav-menu {
     opacity: 0;
-    transform: translateY(-8px) scale(0.98);
-    transform-origin: top right;
     pointer-events: none;
     visibility: hidden;
     transition:
       opacity 0.2s ease-out,
-      transform 0.2s ease-out,
       visibility 0s linear 0.2s;
   }
 
   .nav-menu[data-open='true'] {
     opacity: 1;
-    transform: translateY(0) scale(1);
     pointer-events: auto;
     visibility: visible;
     transition:
       opacity 0.25s ease-out,
-      transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
       visibility 0s linear 0s;
   }
 
   /* Staggered menu item animations */
   .nav-menu-item {
     opacity: 0;
-    transform: translateX(-8px);
+    transform: translateY(8px);
     transition:
-      opacity 0.2s ease-out,
-      transform 0.2s ease-out;
+      opacity 0.25s ease-out,
+      transform 0.25s ease-out;
   }
 
   .nav-menu[data-open='true'] .nav-menu-item {
     opacity: 1;
-    transform: translateX(0);
-    transition-delay: calc(0.04s * var(--item-index, 0) + 0.1s);
+    transform: translateY(0);
+    transition-delay: calc(0.04s * var(--item-index, 0) + 0.08s);
   }
 
   /* Footer animation */
   .nav-menu-footer {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(8px);
     transition:
       opacity 0.2s ease-out,
       transform 0.2s ease-out;
@@ -146,7 +152,7 @@ const menuButtonLayoutClass =
   .nav-menu[data-open='true'] .nav-menu-footer {
     opacity: 1;
     transform: translateY(0);
-    transition-delay: 0.2s;
+    transition-delay: 0.25s;
   }
 
   /* Menu button text transition */
@@ -170,6 +176,11 @@ const menuButtonLayoutClass =
     opacity: 0;
     transform: translateY(4px);
     position: absolute;
+  }
+
+  /* Lock body scroll when menu is open */
+  :global(body.nav-menu-open) {
+    overflow: hidden;
   }
 </style>
 
@@ -205,7 +216,7 @@ const menuButtonLayoutClass =
     }
 
     const menuButton = nav.querySelector<HTMLButtonElement>('#nav-menu-button')
-    const menuPanel = nav.querySelector<HTMLElement>('#nav-menu')
+    const menuPanel = document.getElementById('nav-menu')
     const menuAbort = new AbortController()
     navRuntime.menuAbort = menuAbort
     const signal = menuAbort.signal
@@ -216,6 +227,12 @@ const menuButtonLayoutClass =
       const wasOpen = menuButton.getAttribute('aria-expanded') === 'true'
       menuPanel.setAttribute('data-open', open ? 'true' : 'false')
       menuButton.setAttribute('aria-expanded', open ? 'true' : 'false')
+
+      if (open) {
+        document.body.classList.add('nav-menu-open')
+      } else {
+        document.body.classList.remove('nav-menu-open')
+      }
 
       const stateClass = open
         ? menuButton.dataset.menuOpenClass
@@ -238,16 +255,6 @@ const menuButtonLayoutClass =
     )
 
     document.addEventListener(
-      'click',
-      (event) => {
-        const target = event.target
-        if (!(target instanceof Node) || nav.contains(target)) return
-        setMenuOpen(false)
-      },
-      { signal }
-    )
-
-    document.addEventListener(
       'keydown',
       (event) => {
         if (event.key !== 'Escape') return
@@ -258,7 +265,7 @@ const menuButtonLayoutClass =
 
     document.addEventListener('portfolio:close-nav-menu', () => setMenuOpen(false), { signal })
 
-    nav.addEventListener(
+    menuPanel?.addEventListener(
       'click',
       (event) => {
         const target = event.target
@@ -278,15 +285,13 @@ const menuButtonLayoutClass =
     )
 
     let lastScrollY = window.scrollY
-    /** Ignore subpixel / rubber-band noise */
     const DIRECTION_THRESHOLD_PX = 8
-    /** Treat as "at bottom" for iOS/safari clamp slack */
     const BOTTOM_SLACK_PX = 4
-    /** Don't reveal nav on tiny upward nudges when pinned at the bottom */
     const BOTTOM_SCROLL_UP_MIN_PX = 28
 
     function updateNav() {
       if (!nav) return
+      if (menuButton?.getAttribute('aria-expanded') === 'true') return
 
       const currentScrollY = window.scrollY
       const delta = currentScrollY - lastScrollY
@@ -314,7 +319,6 @@ const menuButtonLayoutClass =
 
       if (delta > 0) {
         nav.classList.add('nav-hidden')
-        if (menuButton?.getAttribute('aria-expanded') === 'true') setMenuOpen(false)
       } else {
         nav.classList.remove('nav-hidden')
       }
