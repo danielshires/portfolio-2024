@@ -66,6 +66,17 @@ function contactAria(label: string) {
             ))
           }
         </nav>
+        <span class="hidden sm:block h-3.5 w-px shrink-0 bg-zinc-200 dark:bg-zinc-700" aria-hidden="true" />
+        <a
+          href="/changelog"
+          data-swup-preload
+          class={footerMutedLinkClass}
+          aria-label="Changelog"
+        >
+          <Text variant="caption" color="muted" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+            Changelog
+          </Text>
+        </a>
       </div>
       <div class="shrink-0 text-center sm:text-right">
         <FooterMood client:load />

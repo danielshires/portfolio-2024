@@ -23,6 +23,7 @@ const STATIC_PRESET: PlainSitemapPage[] = [
   { url: '/design', priority: '0.9', changefreq: 'weekly' },
   { url: '/writing', priority: '0.8', changefreq: 'weekly' },
   { url: '/field-guide', priority: '0.5', changefreq: 'monthly' },
+  { url: '/changelog', priority: '0.3', changefreq: 'weekly' },
 ]
 
 export async function collectSitemapSources() {
