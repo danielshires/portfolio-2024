@@ -363,10 +363,6 @@ html.dark .settings-dialog-close:hover {
 
 /* Accessibility preferences */
 
-html[data-large-text] {
-    font-size: 112.5%;
-}
-
 html[data-reduced-motion],
 html[data-reduced-motion] *,
 html[data-reduced-motion] *::before,
@@ -452,23 +448,35 @@ html.dark[data-high-contrast]:not([data-input-method='mouse']) :focus-visible {
 }
 
 html[data-high-contrast] [data-slot='switch'] {
-    border-color: #000;
+    border: 2px solid #000;
 }
 
 html[data-high-contrast] [data-slot='switch'][data-unchecked] {
     background: #fff;
 }
 
+html[data-high-contrast] [data-slot='switch'][data-unchecked] [data-slot='switch-thumb'] {
+    background: #000;
+}
+
 html[data-high-contrast] [data-slot='switch'][data-checked] {
     background: #000;
 }
 
+html[data-high-contrast] [data-slot='switch'][data-checked] [data-slot='switch-thumb'] {
+    background: #fff;
+}
+
 html.dark[data-high-contrast] [data-slot='switch'] {
-    border-color: #fff;
+    border: 2px solid #fff;
 }
 
 html.dark[data-high-contrast] [data-slot='switch'][data-unchecked] {
     background: #000;
+}
+
+html.dark[data-high-contrast] [data-slot='switch'][data-unchecked] [data-slot='switch-thumb'] {
+    background: #fff;
 }
 
 html.dark[data-high-contrast] [data-slot='switch'][data-checked] {
