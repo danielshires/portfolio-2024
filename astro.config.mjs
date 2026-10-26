@@ -67,9 +67,11 @@ export default defineConfig({
     site: 'https://danielshires.com',
     redirects: {
         '/experiments': '/playground',
-        '/experiments/[...path]': '/playground/[...path]',
+        '/experiments/avatar': '/playground/avatar',
+        '/experiments/spinnerstudio': '/playground/spinnerstudio',
         '/playgrounds': '/playground',
-        '/playgrounds/[...path]': '/playground/[...path]',
+        '/playgrounds/avatar': '/playground/avatar',
+        '/playgrounds/spinnerstudio': '/playground/spinnerstudio',
     },
     integrations: [
         tailwind(),
