@@ -15,8 +15,6 @@ const { class: className } = Astro.props
 
 const canExpand = aboutContent.experience.some((entry) => entry.roles.length > 1)
 
-const leaderClass =
-  'mb-[0.3em] min-w-3 flex-1 self-end border-b border-dotted border-zinc-300 dark:border-zinc-600'
 const dateClass = 'shrink-0 text-sm tabular-nums text-zinc-500 dark:text-zinc-400'
 const orgClass = 'font-semibold text-zinc-900 dark:text-zinc-100'
 const roleClass = 'font-normal text-zinc-600 dark:text-zinc-400'
@@ -108,7 +106,7 @@ const tileInnerClass = 'absolute inset-px overflow-hidden rounded-[4px]'
                 )}
               </span>
             </span>
-            <div class='flex min-w-0 items-baseline gap-x-3'>
+            <div class='flex min-w-0 items-baseline justify-between gap-x-3'>
               <p class='min-w-0 leading-snug'>
                 {entry.organizationHref ? (
                   <a
@@ -123,7 +121,6 @@ const tileInnerClass = 'absolute inset-px overflow-hidden rounded-[4px]'
                 )}
                 <span class={roleClass}> {latest.title}</span>
               </p>
-              <span aria-hidden='true' class={leaderClass} />
               <span class={dateClass}>
                 {multiple ? (
                   <>
@@ -158,9 +155,8 @@ const tileInnerClass = 'absolute inset-px overflow-hidden rounded-[4px]'
                         <span aria-hidden='true' class='relative z-10 flex justify-center'>
                           <span class='size-1.5 rounded-full bg-zinc-300 ring-2 ring-zinc-50 dark:bg-zinc-600 dark:ring-zinc-900' />
                         </span>
-                        <div class='flex min-w-0 items-baseline gap-x-3'>
+                        <div class='flex min-w-0 items-baseline justify-between gap-x-3'>
                           <p class={`min-w-0 leading-snug ${roleClass}`}>{role.title}</p>
-                          <span aria-hidden='true' class={leaderClass} />
                           <span class={dateClass}>{experiencePeriod(role.start, role.end)}</span>
                         </div>
                       </li>

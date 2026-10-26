@@ -9,6 +9,8 @@
 export interface SocialLink {
   label: string
   href: string
+  /** Short handle shown on the right of the Connect row. */
+  handle: string
 }
 
 export interface ExperienceRole {
@@ -72,9 +74,9 @@ export const aboutContent: AboutContent = {
       "I work across discovery, strategy, and delivery on complex digital products in financial services, with a focus on scalable systems, accessibility, and inclusive product UI. I've contributed to products including CommBank Yello and NetBank, partnering closely with product, engineering, and research teams.",
   },
   social: [
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/shiresdaniel/' },
-    { label: 'GitHub', href: 'https://github.com/danielshires' },
-    { label: 'Email', href: 'mailto:hello@danielshires.com' },
+    { label: 'LinkedIn', handle: 'in/shiresdaniel', href: 'https://www.linkedin.com/in/shiresdaniel/' },
+    { label: 'GitHub', handle: '@danielshires', href: 'https://github.com/danielshires' },
+    { label: 'Email', handle: 'hello@danielshires.com', href: 'mailto:hello@danielshires.com' },
   ],
   cv: {
     href: '/cv/daniel-shires-cv.md',

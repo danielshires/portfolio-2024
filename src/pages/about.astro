@@ -3,13 +3,13 @@ import Layout from '../layouts/Layout.astro'
 import Text from '../components/ui/text/Text.astro'
 import {
   externalLinkGlyphGroupHoverClass,
+  linkFocusRingClass,
+  linkUnderlineDecorationClass,
   simpleHeroSectionClass,
   textLinkClass,
 } from '../components/ui/text/styles'
 import SectionHeading from '../components/ui/text/SectionHeading.astro'
 import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
-import SocialIconLinks from '../components/ui/icons/SocialIconLinks.astro'
-import ThemeToggle from '../components/ui/buttons/ThemeToggle.tsx'
 import Experience from '../components/content/experience/Experience.astro'
 import { aboutContent } from '../config/about'
 import {
@@ -19,7 +19,9 @@ import {
   urlFor,
 } from '../lib/sanity'
 
-const projects = await getAllProjects()
+/** Set true to show the project list under Experience. Markup stays in this file. */
+const showProjects = false
+const projects = showProjects ? await getAllProjects() : []
 
 const pageTitle = 'About | Daniel Shires'
 const pageDescription =
@@ -68,14 +70,38 @@ const structuredData = {
 
     <section class='mt-14 md:mt-20' aria-labelledby='connect-heading'>
       <SectionHeading id='connect-heading'>Connect</SectionHeading>
-      <div class='flex items-center gap-2'>
-        <SocialIconLinks includeEmail class='gap-2' />
-        <ThemeToggle client:load />
-      </div>
+      <ul class='flex flex-col'>
+        {
+          aboutContent.social.map((link) => {
+            const external = link.href.startsWith('http')
+            return (
+              <li>
+                <a
+                  href={link.href}
+                  class={`group flex min-w-0 items-baseline justify-between gap-x-3 py-2.5 ${linkFocusRingClass}`}
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noopener noreferrer' : undefined}>
+                  <span
+                    class={`font-semibold text-zinc-900 no-underline group-hover:underline dark:text-zinc-100 ${linkUnderlineDecorationClass}`}>
+                    {link.label}
+                  </span>
+                  <span class='inline-flex shrink-0 items-center gap-x-1 text-sm text-zinc-500 dark:text-zinc-400'>
+                    {link.handle}
+                    <ExternalLinkGlyph
+                      class={`relative top-px h-[0.8em] w-[0.8em] shrink-0 self-center ${externalLinkGlyphGroupHoverClass}`}
+                    />
+                  </span>
+                </a>
+              </li>
+            )
+          })
+        }
+      </ul>
     </section>
 
     <Experience class='mt-14 md:mt-20' />
 
+    {showProjects && (
     <section class='mt-14 md:mt-20' aria-label='Projects'>
       <SectionHeading href='/projects'>Projects</SectionHeading>
       {
@@ -136,5 +162,6 @@ const structuredData = {
         )
       }
     </section>
+    )}
   </article>
 </Layout>
