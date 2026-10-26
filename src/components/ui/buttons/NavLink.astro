@@ -8,9 +8,10 @@ interface Props {
   path: string
   target: string
   href: string
+  class?: string
 }
 
-const { href, path, target } = Astro.props
+const { href, path, target, class: className } = Astro.props
 
 const initialStyles =
   path === ''
@@ -20,10 +21,12 @@ const initialStyles =
     : currentPath.startsWith(path)
       ? navLinkActiveClass
       : navLinkInactiveClass
+
+const combinedClass = [initialStyles, className].filter(Boolean).join(' ')
 ---
 
 <a
-  class={initialStyles}
+  class={combinedClass}
   href={href}
   target={target}
   data-swup-preload
