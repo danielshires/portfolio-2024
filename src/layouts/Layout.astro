@@ -5,12 +5,14 @@ import '../styles/fonts.css'
 import Navigation from '../components/layout/navigation/Navigation.astro'
 import Footer from '../components/layout/Footer.astro'
 import AgentView from '../components/layout/AgentView.astro'
+import SettingsDialog from '../components/layout/settings/SettingsDialog.tsx'
 import Head from './Head.astro'
 import SEO from '../components/common/SEO.astro'
 import { mergeGlobalJsonLd } from '../lib/seo/merge-global-jsonld'
 import { buildAgentDocument } from '../lib/agent/document'
 import { renderAgentMarkdown } from '../lib/agent/render'
 import { navLinkActiveClass, navLinkInactiveClass } from '../components/ui/text/styles'
+import { settingsBootScript } from '../lib/settings/a11y'
 
 interface Props {
   pageTitle: string
@@ -90,10 +92,14 @@ const agentHtml = renderAgentMarkdown(await buildAgentDocument())
       } catch (e) {}
     })()
   </script>
+  <script is:inline set:html={settingsBootScript} />
   <script is:inline>
     ;(function () {
       try {
-        if (localStorage.getItem('agent-view') === 'on') {
+        if (
+          localStorage.getItem('agent-view') === 'on' &&
+          document.documentElement.hasAttribute('data-experiments')
+        ) {
           document.documentElement.setAttribute('data-agent-view', '')
         }
       } catch (e) {}
@@ -280,8 +286,21 @@ const agentHtml = renderAgentMarkdown(await buildAgentDocument())
           document.documentElement.classList.remove('dark')
         }
 
-        var bgColor = theme === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(250, 250, 250)'
-        var textColor = theme === 'dark' ? 'rgb(250, 250, 250)' : 'rgb(9, 9, 11)'
+        var highContrast = document.documentElement.hasAttribute('data-high-contrast')
+        var bgColor = highContrast
+          ? theme === 'dark'
+            ? '#000000'
+            : '#ffffff'
+          : theme === 'dark'
+            ? 'rgb(9, 9, 11)'
+            : 'rgb(250, 250, 250)'
+        var textColor = highContrast
+          ? theme === 'dark'
+            ? '#ffffff'
+            : '#000000'
+          : theme === 'dark'
+            ? 'rgb(250, 250, 250)'
+            : 'rgb(9, 9, 11)'
         document.documentElement.style.setProperty('--background-color', bgColor)
         document.documentElement.style.setProperty('--text-color', textColor)
 
@@ -310,7 +329,13 @@ const agentHtml = renderAgentMarkdown(await buildAgentDocument())
           }
         }
         if (themeColorMeta) {
-          themeColorMeta.content = theme === 'dark' ? '#09090b' : '#fcfbfb'
+          themeColorMeta.content = highContrast
+            ? theme === 'dark'
+              ? '#000000'
+              : '#ffffff'
+            : theme === 'dark'
+              ? '#09090b'
+              : '#fcfbfb'
         }
 
         var buttons = document.querySelectorAll('[data-theme-toggle]')
@@ -330,11 +355,20 @@ const agentHtml = renderAgentMarkdown(await buildAgentDocument())
             }
           }
         })
+
+        document.querySelectorAll('[data-theme-switch]').forEach(function (el) {
+          el.setAttribute('aria-checked', theme === 'dark' ? 'true' : 'false')
+        })
+        document.dispatchEvent(
+          new CustomEvent('portfolio:theme-change', { detail: { theme: theme } })
+        )
       }
 
       function refreshTheme() {
         applyThemeDom(resolveEffectiveTheme())
       }
+
+      window.refreshTheme = refreshTheme
 
       function toggleTheme() {
         var eff = resolveEffectiveTheme()
@@ -698,5 +732,6 @@ const agentHtml = renderAgentMarkdown(await buildAgentDocument())
       <slot />
     </main>
     <Footer />
+    <SettingsDialog client:load />
   </body>
 </html>

@@ -2,6 +2,7 @@
 // Components
 import NavLink from '../../ui/buttons/NavLink.astro'
 import ThemeToggle from '../../ui/buttons/ThemeToggle.tsx'
+import SettingsTrigger from '../settings/SettingsTrigger.tsx'
 import SocialIconLinks from '../../ui/icons/SocialIconLinks.astro'
 import { getNavigationItems } from '../../../config/features'
 import { navLinkActiveClass, navLinkInactiveClass } from '../../ui/text/styles'
@@ -43,6 +44,7 @@ const menuButtonLayoutClass =
       <div class='hidden shrink-0 items-center gap-2 md:flex md:gap-4'>
         <SocialIconLinks includeEmail class='gap-2' />
         <ThemeToggle client:load />
+        <SettingsTrigger client:load />
       </div>
     </div>
     <div
@@ -64,6 +66,7 @@ const menuButtonLayoutClass =
         class='mt-4 flex items-center gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800'>
         <SocialIconLinks includeEmail class='gap-2' />
         <ThemeToggle client:load />
+        <SettingsTrigger client:load />
       </div>
       </div>
     </div>
@@ -176,6 +179,8 @@ const menuButtonLayoutClass =
       },
       { signal }
     )
+
+    document.addEventListener('portfolio:close-nav-menu', () => setMenuOpen(false), { signal })
 
     nav.addEventListener(
       'click',
