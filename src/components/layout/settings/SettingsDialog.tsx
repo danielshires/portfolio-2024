@@ -171,17 +171,6 @@ export default function SettingsDialog() {
                 })
               }
             />
-            <SettingSwitch
-              label='Larger text'
-              description='Increases the base type size.'
-              checked={settings.a11y.text === 'large'}
-              onToggle={() =>
-                commit({
-                  ...settings,
-                  a11y: { ...settings.a11y, text: settings.a11y.text === 'large' ? 'default' : 'large' },
-                })
-              }
-            />
           </div>
         </section>
 
