@@ -76,7 +76,8 @@ const structuredData = {
   pageImage={pageImageAbsolute}
   jsonLd={structuredData}
   pageType='website'>
-  <div class='grid gap-8 overflow-hidden h-max pb-16 md:pb-24'>
+  {/* px/mx inset the clip box so the availability pulse can expand past the dot. */}
+  <div class='-mx-2 grid h-max gap-8 overflow-hidden px-2 pb-16 md:pb-24'>
     <Hero {...heroContent} />
     <ProjectGrid projects={projectsToShow} variant='featured' />
     {/* <ProjectGrid projects={projectsToShow} variant='text' /> */}
