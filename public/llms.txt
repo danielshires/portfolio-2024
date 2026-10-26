@@ -3,6 +3,9 @@
 site: https://danielshires.com/
 owner: Daniel Shires
 
+Full profile (plain markdown): https://danielshires.com/agent.md
+The homepage returns that document when the request sends Accept: text/markdown.
+
 Related: https://danielshires.com/ai.txt (pointer back to this file).
 
 ## What this site is

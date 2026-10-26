@@ -10,6 +10,11 @@
   targetPort = 4321
   port = 8888
 
+# Homepage only. Other routes stay HTML so they are not replaced by this profile.
+[[edge_functions]]
+  function = "agent-markdown"
+  path = "/"
+
 # CRITICAL SEO: 301 redirects to preserve rankings
 # These redirects ensure your current Google rankings are maintained
 # Add any URL changes here to maintain SEO value

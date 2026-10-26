@@ -16,6 +16,7 @@
     "include": [
         "src/**/*",
         "netlify/functions/**/*.ts",
+        "netlify/edge-functions/**/*.ts",
         ".astro/types.d.ts",
         "astro.config.mjs",
         "sanity.config.ts",

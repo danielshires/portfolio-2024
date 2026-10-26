@@ -1,0 +1,76 @@
+---
+interface Props {
+  html: string
+}
+
+const { html } = Astro.props
+---
+
+<div id='agent-view'>
+  <div class='agent-doc' set:html={html} />
+</div>
+
+<button
+  type='button'
+  id='agent-toggle'
+  class='agent-toggle'
+  data-experiment
+  aria-pressed='false'
+  aria-label='For agents'>
+  <span class='agent-toggle-label'>For agents</span>
+  <span class='agent-toggle-track' aria-hidden='true'>
+    <span class='agent-toggle-knob'></span>
+  </span>
+</button>
+
+<script is:inline>
+  ;(function () {
+    if (window.__agentToggleBound) return
+    window.__agentToggleBound = true
+
+    var button = document.getElementById('agent-toggle')
+    if (!button) return
+
+    function sync() {
+      var on = document.documentElement.hasAttribute('data-agent-view')
+      button.setAttribute('aria-pressed', on ? 'true' : 'false')
+    }
+
+    function setAgentView(on) {
+      if (on) {
+        document.documentElement.setAttribute('data-agent-view', '')
+        try {
+          localStorage.setItem('agent-view', 'on')
+        } catch (e) {}
+        window.scrollTo(0, 0)
+      } else {
+        document.documentElement.removeAttribute('data-agent-view')
+        try {
+          localStorage.setItem('agent-view', 'off')
+        } catch (e) {}
+      }
+      sync()
+    }
+
+    sync()
+
+    button.addEventListener('click', function () {
+      setAgentView(!document.documentElement.hasAttribute('data-agent-view'))
+    })
+
+    document.addEventListener(
+      'click',
+      function (event) {
+        var target = event.target
+        if (!target || typeof target.closest !== 'function') return
+        var link = target.closest('a[data-agent-exit]')
+        if (!link) return
+        // Hide on the next page. Hiding this page during the click cancels the navigation.
+        try {
+          localStorage.setItem('agent-view', 'off')
+        } catch (e) {}
+      },
+      true
+    )
+  })()
+</script>
