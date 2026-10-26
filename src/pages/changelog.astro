@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import SimpleHero from '../components/content/featured/SimpleHero.astro'
-import Changelog from '../components/content/changelog/Changelog'
+import SiteChangelog from '../components/content/changelog/Changelog'
 import { getChangelog } from '../lib/changelog'
 
 const days = getChangelog()
@@ -19,7 +19,7 @@ const pageDescription = 'Site updates, one build for each day.'
     />
 
     <section class='mt-10 max-w-3xl md:mt-12' aria-label='Changelog'>
-      <Changelog days={days} client:load />
+      <SiteChangelog days={days} client:load />
     </section>
   </article>
 </Layout>

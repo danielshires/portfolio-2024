@@ -192,22 +192,22 @@ export default async function handler(req: Request): Promise<Response> {
     },
   })
 
-  async function generate(target: string): Promise<Response> {
+  async function generate(target: string, key: string): Promise<Response> {
     return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${target}:generateContent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey,
+        'x-goog-api-key': key,
       },
       body: requestBody,
     })
   }
 
   try {
-    let response = await generate(model)
+    let response = await generate(model, apiKey)
     if (response.status === 429 && model !== fallbackModel) {
       console.error('gemini quota exceeded', model)
-      response = await generate(fallbackModel)
+      response = await generate(fallbackModel, apiKey)
     }
 
     if (!response.ok) {

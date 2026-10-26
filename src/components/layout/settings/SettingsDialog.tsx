@@ -17,7 +17,10 @@ type SettingSwitchProps = {
   description: string
   checked: boolean
   onToggle?: () => void
-} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onToggle' | 'role'>
+  className?: string
+  'data-theme-toggle'?: boolean
+  'data-theme-switch'?: boolean
+}
 
 const SettingSwitch = React.forwardRef<HTMLElement, SettingSwitchProps>(
   function SettingSwitch({ label, description, checked, onToggle, className, ...props }, ref) {
