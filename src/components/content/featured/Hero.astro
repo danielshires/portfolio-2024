@@ -1,6 +1,6 @@
 ---
 import HeroStatus from './HeroStatus'
-import { heroDisplayIntroClass, heroIdentityLabelClass } from '../../ui/text/styles'
+import { heroDisplayIntroClass, heroIdentityLabelClass, simpleHeroSectionClass } from '../../ui/text/styles'
 
 interface Props {
   name: string
@@ -37,7 +37,7 @@ const getInTouchClass = [
 
 <section
   id='intro'
-  class='flex flex-col items-start mt-44 md:mt-52 lg:mt-60'
+  class={`${simpleHeroSectionClass} items-start`}
   aria-label='Introduction'>
   {
     avatar && (

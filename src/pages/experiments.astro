@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import Text from '../components/ui/text/Text.astro'
+import SimpleHero from '../components/content/featured/SimpleHero.astro'
 import { features } from '../config/features'
 import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
 import {
@@ -9,7 +9,6 @@ import {
   linkListParagraphClass,
   linkListRowAnchorClass,
   linkListStrongTitleClass,
-  simpleHeroSectionClass,
 } from '../components/ui/text/styles'
 
 if (!features.experiments.enabled) {
@@ -35,32 +34,32 @@ const experiments = [
 
 <Layout pageTitle={pageTitle} pageDescription={pageDescription} robots='noindex,follow'>
   <article class='pb-16 md:pb-24'>
-    <header class={simpleHeroSectionClass} aria-label='Experiments'>
-      <Text variant='h1'>Experiments</Text>
-    </header>
+    <SimpleHero
+      introText={{
+        first: 'Experiments',
+        second: 'Prototypes and playgrounds. They may change or disappear.',
+      }}
+    />
 
-    <section class='mt-10 md:mt-14 max-w-3xl' aria-label='Experiment list'>
-      <Text variant='lead'>Prototypes and playgrounds. They may change or disappear.</Text>
-      <div class='mt-10 flex flex-col md:mt-12'>
-        {
-          experiments.map((experiment) => (
-            <a
-              href={experiment.href}
-              class={linkListRowAnchorClass}
-              aria-label={`${experiment.title} (opens in new tab)`}
-              target='_blank'
-              rel='noopener noreferrer'>
-              <p class={linkListParagraphClass}>
-                <span class={linkListStrongTitleClass}>{experiment.title}</span>{' '}
-                <span class={linkListMutedContinuationClass}>{experiment.description}</span>{' '}
-                <ExternalLinkGlyph
-                  class={`relative top-[0.03em] h-[0.72em] w-[0.72em] align-middle ${externalLinkGlyphGroupHoverClass}`}
-                />
-              </p>
-            </a>
-          ))
-        }
-      </div>
+    <section class='mt-10 flex max-w-3xl flex-col md:mt-12' aria-label='Experiment list'>
+      {
+        experiments.map((experiment) => (
+          <a
+            href={experiment.href}
+            class={linkListRowAnchorClass}
+            aria-label={`${experiment.title} (opens in new tab)`}
+            target='_blank'
+            rel='noopener noreferrer'>
+            <p class={linkListParagraphClass}>
+              <span class={linkListStrongTitleClass}>{experiment.title}</span>{' '}
+              <span class={linkListMutedContinuationClass}>{experiment.description}</span>{' '}
+              <ExternalLinkGlyph
+                class={`relative top-[0.03em] h-[0.72em] w-[0.72em] align-middle ${externalLinkGlyphGroupHoverClass}`}
+              />
+            </p>
+          </a>
+        ))
+      }
     </section>
   </article>
 </Layout>

@@ -7,6 +7,7 @@ import type { NotFoundPathItem } from '../components/errors/not-found-paths'
 import {
   heroDisplayIntroClass,
   sectionLabelTypographyClass,
+  simpleHeroSectionClass,
 } from '../components/ui/text/styles'
 import {
   getAllPosts,
@@ -71,7 +72,7 @@ const surpriseTargetsJson = JSON.stringify(surpriseForClient)
   robots='noindex,follow'>
   <div class='grid gap-8 overflow-hidden h-max pb-16 md:pb-24'>
     <section
-      class='flex flex-col items-start mt-44 md:mt-52 lg:mt-60'
+      class={`${simpleHeroSectionClass} items-start`}
       aria-labelledby='not-found-hero-heading'>
       <p class={sectionLabelTypographyClass}>Detour</p>
       <h1 id='not-found-hero-heading' class:list={[heroDisplayIntroClass, 'max-w-4xl']}>

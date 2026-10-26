@@ -38,6 +38,7 @@ export interface AboutSummary {
   paragraph1Link: { label: string; href: string }
   paragraph1AfterLink: string
   paragraph2: string
+  paragraph3: string
 }
 
 export interface AboutContent {
@@ -64,14 +65,16 @@ export function experienceSpan(roles: readonly ExperienceRole[]): string {
 export const aboutContent: AboutContent = {
   summary: {
     paragraph1BeforeLink:
-      "I'm a Senior Product Designer based in Sydney, currently working at ",
+      "I'm a Senior Product Designer based in Sydney, currently at ",
     paragraph1Link: {
       label: 'Commonwealth Bank',
       href: 'https://www.commbank.com.au',
     },
-    paragraph1AfterLink: '.',
+    paragraph1AfterLink: ', working on the future of customer communication.',
     paragraph2:
-      "I work across discovery, strategy, and delivery on complex digital products in financial services, with a focus on scalable systems, accessibility, and inclusive product UI. I've contributed to products including CommBank Yello and NetBank, partnering closely with product, engineering, and research teams.",
+      'I bring together product discovery, customer-centred design and systems thinking to turn complex problems into useful digital experiences. Working closely with product, engineering and research, I help shape ideas from early exploration through to delivery.',
+    paragraph3:
+      'I also use AI to explore concepts, rapidly prototype and build working experiences—bridging the gap between design and development.',
   },
   social: [
     { label: 'LinkedIn', handle: 'in/shiresdaniel', href: 'https://www.linkedin.com/in/shiresdaniel/' },
@@ -88,10 +91,9 @@ export const aboutContent: AboutContent = {
       organizationHref: 'https://www.commbank.com.au',
       logo: '/images/logos/commbank.svg',
       roles: [
-        { title: 'Senior Product Designer', start: '2026', end: 'present' },
-        { title: 'Senior UX Designer', start: '2025', end: 'present' },
-        { title: 'Senior UI Designer', start: '2023', end: '2025' },
-        { title: 'Specialist UI Designer', start: '2022', end: '2023' },
+        { title: 'Senior Experience Designer', start: '2025', end: 'present' },
+        { title: 'Senior UI Designer', start: '2024', end: '2025' },
+        { title: 'Specialist UI Designer', start: '2022', end: '2024' },
       ],
     },
     {

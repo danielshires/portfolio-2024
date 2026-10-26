@@ -31,9 +31,9 @@ const featuredProjects = await getFeaturedProjects()
 const projectsToShow = featuredProjects.length > 0 ? featuredProjects : allProjects
 
 // SEO optimized content
-const pageTitle = 'Daniel Shires | Product Designer | Sydney, Australia'
+const pageTitle = 'Daniel Shires | Senior Product Designer | Sydney'
 const pageDescription =
-  'Product Designer with 5+ years experience creating user-centered digital experiences. Based in Sydney, working at Commonwealth Bank. View my design portfolio and thinking out loud.'
+  'Senior Product Designer in Sydney at Commonwealth Bank. Shaping complex digital products in financial services, from discovery through delivery.'
 const pageImage = avatarUrl || '/images/jpg/background.webp'
 const pageImageAbsolute = new URL(pageImage, SITE_ORIGIN).href
 
@@ -43,7 +43,7 @@ const structuredData = {
   '@type': 'Person',
   '@id': PERSON_NODE_ID,
   name: 'Daniel Shires',
-  jobTitle: 'Product Designer',
+  jobTitle: 'Senior Product Designer',
   url: SITE_ORIGIN,
   image: pageImageAbsolute,
   description: pageDescription,
@@ -57,12 +57,12 @@ const structuredData = {
     name: 'Commonwealth Bank',
   },
   knowsAbout: [
-    'UX Design',
-    'UI Design',
-    'Product Design',
+    'Product design',
+    'Product discovery',
+    'Design systems',
+    'Accessibility',
+    'Customer-centred design',
     'Photography',
-    'Front-end Development',
-    'Human Centered Design',
   ],
   sameAs: siteOwnerSameAs(),
 }

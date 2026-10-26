@@ -25,7 +25,7 @@ const projects = showProjects ? await getAllProjects() : []
 
 const pageTitle = 'About | Daniel Shires'
 const pageDescription =
-  'Product designer in Sydney at Commonwealth Bank. Work history, case studies, and ways to connect.'
+  'Senior Product Designer in Sydney at Commonwealth Bank. Discovery, customer-centred design, and systems thinking for complex products.'
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -57,13 +57,13 @@ const structuredData = {
             href={aboutContent.summary.paragraph1Link.href}
             target='_blank'
             rel='noopener noreferrer'
-            class={`text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>
-            {aboutContent.summary.paragraph1Link.label}
-          </a>
-          {aboutContent.summary.paragraph1AfterLink}
+            class={`text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>{aboutContent.summary.paragraph1Link.label}</a>{aboutContent.summary.paragraph1AfterLink}
         </Text>
         <Text variant='body' class='!text-xl !leading-relaxed md:!text-[2rem] md:!leading-snug'>
           {aboutContent.summary.paragraph2}
+        </Text>
+        <Text variant='body' class='!text-xl !leading-relaxed md:!text-[2rem] md:!leading-snug'>
+          {aboutContent.summary.paragraph3}
         </Text>
       </div>
     </section>

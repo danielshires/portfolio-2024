@@ -72,6 +72,7 @@ function aboutSection(): string {
   const intro = [
     `${summary.paragraph1BeforeLink}${summary.paragraph1Link.label} (${summary.paragraph1Link.href})${summary.paragraph1AfterLink}`,
     summary.paragraph2,
+    summary.paragraph3,
   ].join('\n\n')
   const history = experience
     .map((entry) => {

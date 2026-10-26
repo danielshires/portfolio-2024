@@ -84,8 +84,8 @@ export const stackBelowHeroClass = 'mt-16 md:mt-20'
 /** Inner spacing for SimpleHero title + subline (Projects / Thinking out loud intros). */
 export const simpleHeroHeadingStackClass = 'flex flex-col gap-5 md:gap-8'
 
-/** Top spacing aligned with `Hero` on the homepage. */
-export const simpleHeroSectionClass = 'flex flex-col mt-44 md:mt-52 lg:mt-60'
+/** Top spacing aligned with `Hero` on the homepage. Clears the fixed nav with a short gap. */
+export const simpleHeroSectionClass = 'flex flex-col mt-28 md:mt-36 lg:mt-44'
 
 /** 1px underline stroke + zinc decoration colors (use with `hover:underline`, optional `no-underline`). */
 export const linkUnderlineDecorationClass =
