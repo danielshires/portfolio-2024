@@ -323,17 +323,19 @@ export default function AvatarChat() {
       </aside>
 
       <section className="studio-stage">
-        <button
-          type="button"
-          className="studio-menu-toggle"
-          onClick={() => setSidebarOpen(true)}
-          aria-label="Open conversation history"
-          aria-expanded={sidebarOpen}
-        >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </button>
+        {!sidebarOpen && (
+          <button
+            type="button"
+            className="studio-menu-toggle"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Open conversation history"
+            aria-expanded={sidebarOpen}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+        )}
         <div
           ref={scrollerRef}
           className="studio-result"

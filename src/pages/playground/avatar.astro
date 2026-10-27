@@ -180,7 +180,7 @@ const pageDescription =
     padding: 10px 12px;
     border-radius: 1rem;
     background-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
     box-sizing: border-box;
   }
 
@@ -431,6 +431,7 @@ const pageDescription =
       cursor: pointer;
       border-radius: 8px;
       z-index: 10;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .studio-menu-toggle:hover {
@@ -452,6 +453,21 @@ const pageDescription =
 
     .studio-composer {
       padding: 0 0.75rem 0.75rem;
+    }
+
+    .studio-composer-bar {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    }
+
+    .studio-composer button {
+      padding: 10px 14px;
+      min-height: 44px;
+      border-radius: 8px;
+    }
+
+    .studio-composer textarea {
+      min-height: 44px;
+      padding: 10px 4px;
     }
   }
 </style>
