@@ -375,38 +375,64 @@ export default function TrainingDiary() {
   return (
     <div className='diary'>
       <header className='diary-header'>
-        <div>
+        <div className='diary-title'>
           <h1>Training diary</h1>
           <p>{ready ? `Last ${WEEKS} weeks` : 'Workouts from the watch, read back from Strava.'}</p>
         </div>
         {ready ? (
-          <div className='diary-controls'>
-            <div className='diary-scales' role='group' aria-label='Chart'>
-              {CHARTS.map((item) => (
-                <button
-                  key={item.id}
-                  type='button'
-                  aria-pressed={chart === item.id}
-                  onClick={() => setChart(item.id)}>
-                  {item.label}
-                </button>
-              ))}
+          <>
+            <div className='diary-controls diary-controls-desktop'>
+              <div className='diary-scales' role='group' aria-label='Chart'>
+                {CHARTS.map((item) => (
+                  <button
+                    key={item.id}
+                    type='button'
+                    aria-pressed={chart === item.id}
+                    onClick={() => setChart(item.id)}>
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+              <div
+                className='diary-scales'
+                role='group'
+                aria-label={chart === 'calendar' ? 'What the days show' : 'What the bars show'}>
+                {SCALES.map((item) => (
+                  <button
+                    key={item.id}
+                    type='button'
+                    aria-pressed={scale === item.id}
+                    onClick={() => setScale(item.id)}>
+                    {item.label}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div
-              className='diary-scales'
-              role='group'
-              aria-label={chart === 'calendar' ? 'What the days show' : 'What the bars show'}>
-              {SCALES.map((item) => (
-                <button
-                  key={item.id}
-                  type='button'
-                  aria-pressed={scale === item.id}
-                  onClick={() => setScale(item.id)}>
-                  {item.label}
-                </button>
-              ))}
+            <div className='diary-controls diary-controls-mobile'>
+              <select
+                className='diary-select'
+                value={chart}
+                onChange={(e) => setChart(e.target.value as ChartKind)}
+                aria-label='Chart type'>
+                {CHARTS.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+              <select
+                className='diary-select'
+                value={scale}
+                onChange={(e) => setScale(e.target.value as DiaryScale)}
+                aria-label='Metric'>
+                {SCALES.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
+          </>
         ) : null}
         {sports.length > 1 ? (
           <div className='diary-activities' role='group' aria-label='Activity'>

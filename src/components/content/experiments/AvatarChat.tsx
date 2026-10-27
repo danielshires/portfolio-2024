@@ -137,6 +137,7 @@ export default function AvatarChat() {
   const [draft, setDraft] = useState('')
   const [pendingId, setPendingId] = useState<string | null>(null)
   const [error, setError] = useState<{ id: string; text: string } | null>(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const scrollerRef = useRef<HTMLDivElement>(null)
   const composerRef = useRef<HTMLTextAreaElement>(null)
   const pendingRef = useRef(false)
@@ -176,6 +177,7 @@ export default function AvatarChat() {
     setActiveId(id)
     setDraft('')
     setError(null)
+    setSidebarOpen(false)
   }
 
   function newChat() {
@@ -184,6 +186,7 @@ export default function AvatarChat() {
     if (current && current.messages.length === 0) {
       setDraft('')
       setError(null)
+      setSidebarOpen(false)
       composerRef.current?.focus()
       return
     }
@@ -192,6 +195,7 @@ export default function AvatarChat() {
     setActiveId(created.id)
     setDraft('')
     setError(null)
+    setSidebarOpen(false)
     composerRef.current?.focus()
   }
 
@@ -276,8 +280,30 @@ export default function AvatarChat() {
 
   return (
     <div className="studio">
-      <aside className="studio-controls" aria-label="Conversations">
-        <h1>Digital avatar</h1>
+      {sidebarOpen && (
+        <div
+          className="studio-overlay"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={`studio-controls${sidebarOpen ? ' studio-controls-open' : ''}`}
+        aria-label="Conversations"
+      >
+        <div className="studio-controls-header">
+          <h1>Digital avatar</h1>
+          <button
+            type="button"
+            className="studio-close"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
         <button type="button" className="studio-new" onClick={newChat} disabled={pendingId !== null}>
           New chat
         </button>
@@ -297,6 +323,17 @@ export default function AvatarChat() {
       </aside>
 
       <section className="studio-stage">
+        <button
+          type="button"
+          className="studio-menu-toggle"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open conversation history"
+          aria-expanded={sidebarOpen}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M3 5H17M3 10H17M3 15H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
         <div
           ref={scrollerRef}
           className="studio-result"
