@@ -25,6 +25,8 @@ interface Props {
   heading?: string
   description?: string
   projectUrl: string
+  /** Discipline values used by the Projects page filters. */
+  disciplines?: string[]
 }
 
 const {
@@ -35,14 +37,16 @@ const {
   heading,
   projectUrl,
   showSubtitle = true,
+  disciplines,
 } = Astro.props
+const disciplinesAttr = disciplines?.length ? disciplines.join(' ') : undefined
 const lineDescription = heading || Astro.props.description || ''
 const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} project`
 ---
 
 {
   variant === 'text' ? (
-    <div class='col-span-full'>
+    <div class='col-span-full' data-project-card data-disciplines={disciplinesAttr}>
       <a
         href={projectUrl}
         target={external ? '_blank' : undefined}
@@ -72,7 +76,7 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
       </a>
     </div>
   ) : (
-    <div class='col-span-1 md:col-span-3 lg:col-span-1 p-1'>
+    <div class='col-span-1 md:col-span-3 lg:col-span-1 p-1' data-project-card data-disciplines={disciplinesAttr}>
       <a
         href={projectUrl}
         target={external ? '_blank' : undefined}
