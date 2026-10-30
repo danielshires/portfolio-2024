@@ -184,6 +184,16 @@ export interface Album {
   publishedAt: string
 }
 
+/** Keep in sync with the `disciplines` options in `portfolio-25/schemaTypes/project.js`. */
+export const projectDisciplines = [
+  { value: 'product-design', label: 'Product design' },
+  { value: 'research', label: 'Research' },
+  { value: 'brand', label: 'Brand' },
+  { value: 'digital-design', label: 'Digital design' },
+] as const
+
+export type ProjectDiscipline = (typeof projectDisciplines)[number]['value']
+
 export interface Project {
   _id: string
   title: string
@@ -201,6 +211,7 @@ export interface Project {
   heroImage?: SanityImage
   outcomes?: Array<{ statistic: string; description: string }>
   category?: 'product' | 'independent'
+  disciplines?: ProjectDiscipline[]
   problem?: any // Portable Text content
   contribution?: any // Portable Text content
   solution?: any // Portable Text content
@@ -580,6 +591,7 @@ export async function getAllProjects(): Promise<Project[]> {
       heroImage,
       outcomes,
       category,
+      disciplines,
       featured,
       publishedAt,
       tags,
