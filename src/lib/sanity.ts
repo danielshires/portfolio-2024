@@ -233,12 +233,12 @@ const config = {
   projectId: '5fq3rcf6',
   dataset: 'production',
   apiVersion: '2024-03-19',
-  // Use CDN in production for performance, but with API token for cache-busting when needed
-  useCdn: import.meta.env.PROD && !import.meta.env.SANITY_API_TOKEN,
-  token: import.meta.env.SANITY_API_TOKEN,
-  // When a token is present, Sanity returns drafts alongside published documents,
-  // which causes duplicate entries on listings. Force "published" so the site
-  // only ever sees published content (regardless of token scope).
+  // Always use the CDN for published reads so SSR writing pages stay fast and
+  // a Sanity publish can go live without a site rebuild (CDN lag is usually ~60s).
+  useCdn: true,
+  // When a token is present, Sanity can return drafts alongside published documents,
+  // which causes duplicate entries on listings. Omit the read token and force
+  // "published" so the public site only ever sees published content.
   perspective: 'published' as const,
 }
 

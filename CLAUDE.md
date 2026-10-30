@@ -17,7 +17,7 @@ All commands are run from the project root:
 This is Dan Portfolio, built with **Astro 4**, **Sanity CMS**, **React**, and **Tailwind CSS**.
 
 ### Tech Stack
-- **Framework**: Astro 4 with SSG (Static Site Generation)
+- **Framework**: Astro 4 hybrid on `@astrojs/netlify` (static by default; writing/homepage preview/sitemap/`agent.md` are SSR from Sanity CDN)
 - **CMS**: Sanity (Project ID: 5fq3rcf6, Production dataset)
 - **UI**: React components + Astro components
 - **Styling**: Tailwind CSS with custom dark/light theme system
