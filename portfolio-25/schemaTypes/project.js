@@ -47,10 +47,19 @@ const galleryImageFields = [
     validation: Rule => Rule.required(),
   },
   {
+    name: 'heading',
+    type: 'string',
+    title: 'Caption headline',
+    description:
+      'Two to four words that set up the caption, shown in bold before it (e.g. "Paper first"). You can also start the caption with "Headline — ".',
+    validation: Rule => Rule.max(40),
+  },
+  {
     name: 'caption',
     type: 'string',
     title: 'Caption',
-    description: 'Optional caption for the image',
+    description:
+      'One short sentence on what this moment shows or why it mattered. Pairs read best under 90 characters each.',
   },
 ]
 

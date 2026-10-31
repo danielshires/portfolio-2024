@@ -1,5 +1,5 @@
 ---
-import Text from '../../ui/text/Text.astro'
+import GalleryCaption from './GalleryCaption.astro'
 import { urlFor } from '../../../lib/sanity'
 import type { ProjectGalleryImage, ProjectGalleryRow } from '../../../lib/sanity'
 
@@ -44,31 +44,44 @@ function imageUrl(image: ProjectGalleryImage, kind: 'single' | 'pair') {
   }
   return builder.width(3840).fit('max').url()
 }
+
+function hasCaption(image: ProjectGalleryImage) {
+  return Boolean(image.heading?.trim() || image.caption?.trim())
+}
+
+const figureLabels = new Map<ProjectGalleryImage, string>()
+renderRows
+  .flatMap((row) => row.images)
+  .filter(hasCaption)
+  .forEach((image, index) => figureLabels.set(image, `Fig. ${String(index + 1).padStart(2, '0')}`))
 ---
 
 {
   renderRows.length > 0 && (
     <section class='col-span-full' aria-label='Project gallery'>
-      <div class='space-y-8'>
+      <div class='space-y-12 md:space-y-20'>
         {renderRows.map((row) => (
-          <div class={row.kind === 'pair' ? 'grid grid-cols-1 gap-4 md:grid-cols-2' : undefined}>
+          <div class={row.kind === 'pair' ? 'grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-2' : undefined}>
             {row.images.map((image) => (
-              <figure class='space-y-4'>
+              <figure>
                 <img
                   src={imageUrl(image, row.kind)}
                   alt={image.alt || ''}
                   class={
                     row.kind === 'pair'
-                      ? 'aspect-square w-full rounded-xl object-cover'
-                      : 'h-auto w-full rounded-xl'
+                      ? 'block aspect-square w-full rounded-xl object-cover'
+                      : 'block h-auto w-full rounded-xl'
                   }
                   loading='lazy'
                   decoding='async'
                 />
-                {image.caption && (
-                  <Text variant='caption' color='muted' class='text-center'>
-                    {image.caption}
-                  </Text>
+                {figureLabels.has(image) && (
+                  <GalleryCaption
+                    layout={row.kind}
+                    label={figureLabels.get(image)!}
+                    heading={image.heading}
+                    caption={image.caption}
+                  />
                 )}
               </figure>
             ))}

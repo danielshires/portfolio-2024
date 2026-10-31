@@ -44,6 +44,7 @@ export interface SanityImage {
 export interface ProjectGalleryImage extends SanityImage {
   _key?: string
   alt?: string
+  heading?: string
   caption?: string
 }
 
@@ -618,6 +619,7 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
         _key,
         asset,
         alt,
+        heading,
         caption,
         crop,
         hotspot,
@@ -626,6 +628,7 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
           _key,
           asset,
           alt,
+          heading,
           caption,
           crop,
           hotspot
@@ -635,6 +638,7 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
           _key,
           asset,
           alt,
+          heading,
           caption,
           crop,
           hotspot
