@@ -1,6 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getProjectBySlug, getAllProjects, urlFor, flattenProjectGallery } from '../../lib/sanity'
+import {
+  getProjectBySlug,
+  getAllProjects,
+  urlFor,
+  flattenProjectGallery,
+  caseStudyFigureLabels,
+} from '../../lib/sanity'
 import ProjectMeta from '../../components/content/projects/ProjectMeta.astro'
 import ProjectOutcomes from '../../components/content/projects/ProjectOutcomes.astro'
 import CaseStudySection from '../../components/content/projects/CaseStudySection.astro'
@@ -61,6 +67,7 @@ const caseStudySections = [
   { heading: 'The outcome', body: fullProject.outcomeSummary },
   { heading: 'What I learned', body: fullProject.learnings },
 ].filter((section) => Array.isArray(section.body) && section.body.length > 0)
+const figureLabels = caseStudyFigureLabels(caseStudySections.map((section) => section.body))
 
 const canonicalUrl = new URL(Astro.url.pathname, 'https://danielshires.com').href
 const galleryImages = flattenProjectGallery(fullProject.images)
@@ -163,12 +170,13 @@ const jsonLd = {
           number={String(index + 1).padStart(2, '0')}
           heading={section.heading}
           body={section.body}
+          figureLabels={figureLabels}
         />
       ))
     }
   </div>
 
-  <ProjectGallery rows={fullProject.images} tint={fullProject.surfaceTint} />
+  <ProjectGallery rows={fullProject.images} tint={fullProject.surfaceTint} figureOffset={figureLabels.size} />
 
   <!-- Related Projects Section -->
   {

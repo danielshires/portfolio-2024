@@ -9,10 +9,18 @@ interface Props {
   number: string
   heading: string
   body?: PortableTextBlock[]
+  /** "Fig. 01"-style labels for captioned images, keyed by block `_key`. */
+  figureLabels?: Map<string, string>
 }
 
-const { number, heading, body } = Astro.props
+const { number, heading, body, figureLabels } = Astro.props
 const hasBody = Array.isArray(body) && body.length > 0
+const labelledBody = hasBody
+  ? body.map((block) => {
+      const label = block._key ? figureLabels?.get(block._key) : undefined
+      return label ? { ...block, figureLabel: label } : block
+    })
+  : []
 
 const portableTextComponents = {
   type: {
@@ -40,7 +48,7 @@ const headingId = `case-study-${number}`
       </div>
       <div class='lg:col-span-8'>
         <div class='prose prose-lg dark:prose-invert max-w-none'>
-          <PortableText value={body} components={portableTextComponents} />
+          <PortableText value={labelledBody} components={portableTextComponents} />
         </div>
       </div>
     </section>

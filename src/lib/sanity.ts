@@ -84,6 +84,23 @@ export function flattenProjectGallery(rows?: ProjectGalleryRow[]): ProjectGaller
   return rows?.flatMap(galleryRowImages) ?? []
 }
 
+/** Zero-based figure index to its caption label, e.g. 0 → "Fig. 01". */
+export function figureLabel(index: number): string {
+  return `Fig. ${String(index + 1).padStart(2, '0')}`
+}
+
+/** Labels for captioned images in case study bodies, keyed by block `_key`, numbered in reading order. */
+export function caseStudyFigureLabels(bodies: unknown[]): Map<string, string> {
+  const labels = new Map<string, string>()
+  for (const block of bodies.flatMap((body) => (Array.isArray(body) ? body : []))) {
+    const node = block as { _type?: string; _key?: string; caption?: unknown; asset?: unknown }
+    if (node._type === 'image' && node._key && node.asset && typeof node.caption === 'string' && node.caption.trim()) {
+      labels.set(node._key, figureLabel(labels.size))
+    }
+  }
+  return labels
+}
+
 /** Optional SEO overrides (Sanity `seo` object on post / project). */
 export interface DocumentSeo {
   title?: string

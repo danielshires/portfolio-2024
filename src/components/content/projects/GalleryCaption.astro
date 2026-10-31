@@ -1,6 +1,7 @@
 ---
 interface Props {
-  layout: 'single' | 'pair'
+  /** `single`: full-width gallery image. `pair`: side-by-side gallery image. `column`: image in a case study text column. */
+  layout: 'single' | 'pair' | 'column'
   label: string
   heading?: string
   caption?: string
@@ -20,12 +21,17 @@ function splitLeadIn(heading?: string, caption?: string) {
 
 const { lead, rest } = splitLeadIn(Astro.props.heading, Astro.props.caption)
 const runInLead = lead && rest && !/[.!?:]$/.test(lead) ? `${lead}.` : lead
+const figcaptionClass = {
+  single: 'mt-5 max-w-2xl space-y-1.5 md:mt-6',
+  pair: 'mt-4 max-w-md space-y-1.5',
+  column: 'mt-4 max-w-2xl space-y-1.5',
+}
 const labelClass = 'font-mono text-xs font-normal uppercase tracking-wider text-zinc-500 dark:text-zinc-400'
 ---
 
 {
   (lead || rest) && (
-    <figcaption class={layout === 'single' ? 'mt-5 max-w-2xl space-y-1.5 md:mt-6' : 'mt-4 max-w-md space-y-1.5'}>
+    <figcaption class={figcaptionClass[layout]}>
       <span class={`${labelClass} block`}>{label}</span>
       <p
         class={

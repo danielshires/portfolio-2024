@@ -1,17 +1,19 @@
 ---
 import GalleryCaption from './GalleryCaption.astro'
-import { galleryRowImages, urlFor } from '../../../lib/sanity'
-import { gridGutterClass } from '../../ui/text/styles'
+import { figureLabel, galleryRowImages, urlFor } from '../../../lib/sanity'
+import { gridGutterClass, projectImageFrameClass } from '../../ui/text/styles'
 import type { ProjectGalleryImage, ProjectGalleryRow } from '../../../lib/sanity'
 
 interface Props {
   rows?: ProjectGalleryRow[]
   tint?: string
+  /** Captioned figures already shown in the case study sections, so numbering carries on. */
+  figureOffset?: number
 }
 
 // Sanity returns null, not undefined, when a project has no gallery images.
 const rows = Astro.props.rows ?? []
-const { tint } = Astro.props
+const { tint, figureOffset = 0 } = Astro.props
 const brandTint = tint && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tint) ? tint : undefined
 
 type RowKind = 'single' | 'pair' | 'trio'
@@ -48,9 +50,6 @@ function hasCaption(image: ProjectGalleryImage) {
   return Boolean(image.heading?.trim() || image.caption?.trim())
 }
 
-/** Hairline keeps near-white artwork from merging into the light page; dark mode needs no edge. */
-const imageFrameClass = 'block w-full rounded-2xl ring-1 ring-zinc-900/[0.07] md:rounded-3xl dark:ring-0'
-
 const surfaceClasses = {
   neutral: 'bg-zinc-100 dark:bg-zinc-900',
   brand:
@@ -67,7 +66,7 @@ const figureLabels = new Map<ProjectGalleryImage, string>()
 renderRows
   .flatMap((row) => row.images)
   .filter(hasCaption)
-  .forEach((image, index) => figureLabels.set(image, `Fig. ${String(index + 1).padStart(2, '0')}`))
+  .forEach((image, index) => figureLabels.set(image, figureLabel(figureOffset + index)))
 ---
 
 {
@@ -84,7 +83,7 @@ renderRows
                 <img
                   src={imageUrl(image, row.kind)}
                   alt={image.alt || ''}
-                  class={`${imageFrameClass} ${surfaceClass(image)} ${row.kind === 'single' ? 'h-auto' : 'aspect-square object-cover'}`}
+                  class={`${projectImageFrameClass} ${surfaceClass(image)} ${row.kind === 'single' ? 'h-auto' : 'aspect-square object-cover'}`}
                   loading='lazy'
                   decoding='async'
                 />

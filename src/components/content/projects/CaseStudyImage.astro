@@ -1,10 +1,12 @@
 ---
+import GalleryCaption from './GalleryCaption.astro'
 import { urlFor } from '../../../lib/sanity'
 import type { SanityImage } from '../../../lib/sanity'
+import { projectImageFrameClass } from '../../ui/text/styles'
 
 /** Portable Text `image` block in a case study section, shown at its natural aspect ratio. */
 interface Props {
-  node: SanityImage & { alt?: string; caption?: string }
+  node: SanityImage & { alt?: string; caption?: string; figureLabel?: string }
 }
 
 const { node } = Astro.props
@@ -30,7 +32,7 @@ const srcset = [800, 1200, 1600, 2400].map((w) => `${urlAt(w)} ${w}w`).join(', '
 const isPortrait = height > width * 1.2
 ---
 
-<figure class:list={['my-10 not-prose', isPortrait && 'max-w-md']}>
+<figure class:list={['my-10 md:my-12 not-prose', isPortrait && 'max-w-md']}>
   <img
     src={urlAt(1600)}
     srcset={srcset}
@@ -38,9 +40,9 @@ const isPortrait = height > width * 1.2
     alt={alt}
     width={width}
     height={height}
-    class='w-full h-auto rounded-lg'
+    class={`${projectImageFrameClass} h-auto`}
     loading='lazy'
     decoding='async'
   />
-  {caption && <figcaption class='mt-3 text-sm text-zinc-500 dark:text-zinc-400'>{caption}</figcaption>}
+  {caption && node.figureLabel && <GalleryCaption layout='column' label={node.figureLabel} caption={caption} />}
 </figure>
