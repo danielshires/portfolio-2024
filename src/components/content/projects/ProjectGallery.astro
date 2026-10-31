@@ -1,6 +1,7 @@
 ---
 import GalleryCaption from './GalleryCaption.astro'
 import { galleryRowImages, urlFor } from '../../../lib/sanity'
+import { gridGutterClass } from '../../ui/text/styles'
 import type { ProjectGalleryImage, ProjectGalleryRow } from '../../../lib/sanity'
 
 interface Props {
@@ -29,8 +30,8 @@ const renderRows: RenderRow[] = rows.flatMap((row, index) => {
 
 const rowGridClass: Record<RowKind, string | undefined> = {
   single: undefined,
-  pair: 'grid grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-8',
-  trio: 'grid grid-cols-1 gap-y-10 md:grid-cols-3 md:gap-x-8',
+  pair: `grid grid-cols-1 gap-y-10 md:grid-cols-2 ${gridGutterClass}`,
+  trio: `grid grid-cols-1 gap-y-10 md:grid-cols-3 ${gridGutterClass}`,
 }
 
 function imageUrl(image: ProjectGalleryImage, kind: RowKind) {

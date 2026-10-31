@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro'
 import { getAllProjects, urlFor, projectListHref, isExternalProject } from '../../lib/sanity'
 import type { Project } from '../../lib/sanity'
 import Text from '../../components/ui/text/Text.astro'
+import { gridGutterClass } from '../../components/ui/text/styles'
 import SectionHeading from '../../components/ui/text/SectionHeading.astro'
 import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 import ProjectCard from '../../components/content/projects/ProjectCard.astro'
@@ -84,7 +85,7 @@ const structuredData = {
         {productProjects.length > 0 && (
           <section class='flex flex-col' aria-labelledby='projects-product'>
             <SectionHeading id='projects-product'>Product design</SectionHeading>
-            <div class='grid grid-cols-1 md:grid-cols-6 lg:grid-cols-2 gap-8'>
+            <div class={`grid grid-cols-1 md:grid-cols-6 lg:grid-cols-2 gap-y-8 ${gridGutterClass}`}>
               {leadProjects.map((project) => (
                 <ProjectCard
                   projectImage={cardImage(project, 1200, 800)}
@@ -96,7 +97,7 @@ const structuredData = {
               ))}
             </div>
             {otherProductProjects.length > 0 && (
-              <div class='mt-12 grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-8'>
+              <div class={`mt-12 grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-y-8 ${gridGutterClass}`}>
                 {otherProductProjects.map((project) => (
                   <ProjectCard
                     projectImage={cardImage(project, 800, 533)}

@@ -9,6 +9,7 @@ import RelatedProjects from '../../components/content/projects/RelatedProjects.a
 import FieldGuideConceptLinks from '../../components/content/field-guide/FieldGuideConceptLinks.astro'
 import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
 import Text from '../../components/ui/text/Text.astro'
+import { gridGutterClass } from '../../components/ui/text/styles'
 import { PERSON_NODE_ID } from '../../lib/seo/merge-global-jsonld'
 
 // Generate static paths for internal case-study pages only (link-out projects have no /projects/[slug] page).
@@ -133,7 +134,7 @@ const jsonLd = {
   <section
     class='grid grid-cols-1 lg:grid-cols-2 items-center mt-40 mb-20 md:pt-32 md:mb-40'>
     <!-- Left Column: Project Title, Subtitle, and Metadata -->
-    <div class='grid grid-cols-1 lg:grid-cols-2 col-span-1 md:col-span-2 gap-16'>
+    <div class={`grid grid-cols-1 lg:grid-cols-2 col-span-1 md:col-span-2 gap-y-16 ${gridGutterClass}`}>
       <div class='lg:col-span-1'>
         <Text variant='h1' class='mb-2'>{fullProject.title}</Text>
         <Text variant='h2' color='muted' class='mb-8'>{fullProject.subtitle}</Text>
