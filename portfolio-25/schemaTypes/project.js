@@ -47,10 +47,36 @@ const galleryImageFields = () => [
     validation: Rule => Rule.required(),
   },
   {
+    name: 'heading',
+    type: 'string',
+    title: 'Caption headline',
+    description:
+      'Two to four words that set up the caption, shown in bold before it (e.g. "Paper first"). You can also start the caption with "Headline — ".',
+    validation: Rule => Rule.max(40),
+  },
+  {
     name: 'caption',
     type: 'string',
     title: 'Caption',
-    description: 'Optional caption for the image',
+    description:
+      'One short sentence on what this moment shows or why it mattered. Pairs read best under 90 characters each.',
+  },
+  {
+    name: 'surface',
+    type: 'string',
+    title: 'Surface',
+    description:
+      'For transparent PNGs: the site draws a background that adapts to light and dark mode. Use "None" for photos and images with their own background.',
+    options: {
+      list: [
+        { title: 'None (full-bleed)', value: 'none' },
+        { title: 'Neutral', value: 'neutral' },
+        { title: 'Brand tint', value: 'brand' },
+      ],
+      layout: 'radio',
+      direction: 'horizontal',
+    },
+    initialValue: 'none',
   },
 ]
 
@@ -286,10 +312,44 @@ export default {
             },
           },
         },
+        {
+          name: 'imageTrio',
+          title: 'Three images',
+          type: 'object',
+          description: 'Shown as three squares in a row. Export each at 2160×2160.',
+          fields: [
+            galleryImage('first', 'First'),
+            galleryImage('second', 'Second'),
+            galleryImage('third', 'Third'),
+          ],
+          preview: {
+            select: {
+              firstAlt: 'first.alt',
+              media: 'first',
+            },
+            prepare({ firstAlt, media }) {
+              return {
+                title: 'Three images',
+                subtitle: firstAlt,
+                media,
+              }
+            },
+          },
+        },
       ],
       description:
-        'Screenshots and mockups. Add a full-width image, or two images side by side. Order here is the order on the page.',
+        'Screenshots and mockups. Add a full-width image, two images side by side, or three in a row. Order here is the order on the page.',
       hidden: ({ parent }) => parent?.linkBehavior === 'external',
+    },
+    {
+      name: 'surfaceTint',
+      title: 'Brand tint',
+      type: 'string',
+      description:
+        'Hex colour (e.g. #1d4ed8) behind images set to "Brand tint". Use the full-strength brand colour; the site softens it for light and dark mode.',
+      validation: Rule =>
+        Rule.regex(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i, { name: 'hex colour' }).error('Use a hex colour like #1d4ed8'),
+      hidden: isExternal,
     },
     {
       name: 'relatedProjects',

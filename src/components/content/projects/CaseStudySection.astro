@@ -2,6 +2,7 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import { PortableText } from 'astro-portabletext'
 import Text from '../../ui/text/Text.astro'
+import { gridGutterClass } from '../../ui/text/styles'
 import CaseStudyImage from './CaseStudyImage.astro'
 
 interface Props {
@@ -25,7 +26,7 @@ const headingId = `case-study-${number}`
 {
   hasBody && (
     <section
-      class='grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-16 py-12 md:py-16 border-t border-zinc-200 dark:border-zinc-800'
+      class={`grid grid-cols-1 lg:grid-cols-12 gap-y-4 ${gridGutterClass} py-12 md:py-16 border-t border-zinc-200 dark:border-zinc-800`}
       aria-labelledby={headingId}>
       <div class='lg:col-span-4'>
         <div class='lg:sticky lg:top-32'>

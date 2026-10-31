@@ -4,6 +4,7 @@ import type { Project } from '../../../lib/sanity'
 import Text from '../../ui/text/Text.astro'
 import ProjectCard from './ProjectCard.astro'
 import SectionHeading from '../../ui/text/SectionHeading.astro'
+import { gridGutterClass } from '../../ui/text/styles'
 
 interface Props {
   projects: Project[]
@@ -43,7 +44,7 @@ const transformedProjects = projects.map((project) => ({
     </Text>
   </SectionHeading>
 
-  <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+  <div class={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 ${gridGutterClass}`}>
     {transformedProjects.map((project) => <ProjectCard {...project} />)}
   </div>
 </section>

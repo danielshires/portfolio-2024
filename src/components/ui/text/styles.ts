@@ -78,6 +78,12 @@ export function combineStyles(
   return styles.filter(Boolean).join(' ')
 }
 
+/**
+ * Column gutter shared by every multi-column layout (case studies, galleries, project cards, page headers),
+ * so their column edges land on the same 12-column lines.
+ */
+export const gridGutterClass = 'gap-x-8'
+
 /** Vertical offset from hero-style intros to first content block (Thinking out loud / Projects lists). */
 export const stackBelowHeroClass = 'mt-16 md:mt-20'
 

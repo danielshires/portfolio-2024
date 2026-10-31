@@ -1,75 +1,100 @@
 ---
-import Text from '../../ui/text/Text.astro'
-import { urlFor } from '../../../lib/sanity'
+import GalleryCaption from './GalleryCaption.astro'
+import { galleryRowImages, urlFor } from '../../../lib/sanity'
+import { gridGutterClass } from '../../ui/text/styles'
 import type { ProjectGalleryImage, ProjectGalleryRow } from '../../../lib/sanity'
 
 interface Props {
   rows?: ProjectGalleryRow[]
+  tint?: string
 }
 
 // Sanity returns null, not undefined, when a project has no gallery images.
 const rows = Astro.props.rows ?? []
+const { tint } = Astro.props
+const brandTint = tint && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tint) ? tint : undefined
+
+type RowKind = 'single' | 'pair' | 'trio'
 
 type RenderRow = {
   key: string
-  kind: 'single' | 'pair'
+  kind: RowKind
   images: ProjectGalleryImage[]
 }
 
-function withAsset(image?: ProjectGalleryImage): image is ProjectGalleryImage {
-  return Boolean(image?.asset)
-}
+const kindByCount: Record<number, RowKind> = { 1: 'single', 2: 'pair', 3: 'trio' }
 
-const renderRows: RenderRow[] = []
-
-rows.forEach((row, index) => {
-  const key = row._key || String(index)
-  if (row._type === 'imagePair') {
-    const sides = [row.left, row.right].filter(withAsset)
-    if (sides.length === 2) {
-      renderRows.push({ key, kind: 'pair', images: sides })
-    } else if (sides.length === 1) {
-      renderRows.push({ key, kind: 'single', images: sides })
-    }
-    return
-  }
-  if (withAsset(row)) {
-    renderRows.push({ key, kind: 'single', images: [row] })
-  }
+const renderRows: RenderRow[] = rows.flatMap((row, index) => {
+  const images = galleryRowImages(row)
+  const kind = kindByCount[images.length]
+  return kind ? [{ key: row._key || String(index), kind, images }] : []
 })
 
-function imageUrl(image: ProjectGalleryImage, kind: 'single' | 'pair') {
-  const builder = urlFor(image).quality(90).auto('format')
-  if (kind === 'pair') {
-    return builder.width(1600).height(1600).fit('crop').url()
-  }
-  return builder.width(3840).fit('max').url()
+const rowGridClass: Record<RowKind, string | undefined> = {
+  single: undefined,
+  pair: `grid grid-cols-1 gap-y-10 md:grid-cols-2 ${gridGutterClass}`,
+  trio: `grid grid-cols-1 gap-y-10 md:grid-cols-3 ${gridGutterClass}`,
 }
+
+function imageUrl(image: ProjectGalleryImage, kind: RowKind) {
+  const builder = urlFor(image).quality(90).auto('format')
+  if (kind === 'single') {
+    return builder.width(3840).fit('max').url()
+  }
+  return builder.width(1600).height(1600).fit('crop').url()
+}
+
+function hasCaption(image: ProjectGalleryImage) {
+  return Boolean(image.heading?.trim() || image.caption?.trim())
+}
+
+/** Hairline keeps near-white artwork from merging into the light page; dark mode needs no edge. */
+const imageFrameClass = 'block w-full rounded-2xl ring-1 ring-zinc-900/[0.07] md:rounded-3xl dark:ring-0'
+
+const surfaceClasses = {
+  neutral: 'bg-zinc-100 dark:bg-zinc-900',
+  brand:
+    'bg-[color-mix(in_srgb,var(--gallery-tint)_10%,white)] dark:bg-[color-mix(in_srgb,var(--gallery-tint)_18%,#18181b)]',
+}
+
+function surfaceClass(image: ProjectGalleryImage) {
+  if (image.surface === 'brand') return brandTint ? surfaceClasses.brand : surfaceClasses.neutral
+  if (image.surface === 'neutral') return surfaceClasses.neutral
+  return ''
+}
+
+const figureLabels = new Map<ProjectGalleryImage, string>()
+renderRows
+  .flatMap((row) => row.images)
+  .filter(hasCaption)
+  .forEach((image, index) => figureLabels.set(image, `Fig. ${String(index + 1).padStart(2, '0')}`))
 ---
 
 {
   renderRows.length > 0 && (
-    <section class='col-span-full' aria-label='Project gallery'>
-      <div class='space-y-8'>
+    <section
+      class='col-span-full'
+      aria-label='Project gallery'
+      style={brandTint ? `--gallery-tint: ${brandTint}` : undefined}>
+      <div class='space-y-12 md:space-y-20'>
         {renderRows.map((row) => (
-          <div class={row.kind === 'pair' ? 'grid grid-cols-1 gap-4 md:grid-cols-2' : undefined}>
+          <div class={rowGridClass[row.kind]}>
             {row.images.map((image) => (
-              <figure class='space-y-4'>
+              <figure>
                 <img
                   src={imageUrl(image, row.kind)}
                   alt={image.alt || ''}
-                  class={
-                    row.kind === 'pair'
-                      ? 'aspect-square w-full rounded-xl object-cover'
-                      : 'h-auto w-full rounded-xl'
-                  }
+                  class={`${imageFrameClass} ${surfaceClass(image)} ${row.kind === 'single' ? 'h-auto' : 'aspect-square object-cover'}`}
                   loading='lazy'
                   decoding='async'
                 />
-                {image.caption && (
-                  <Text variant='caption' color='muted' class='text-center'>
-                    {image.caption}
-                  </Text>
+                {figureLabels.has(image) && (
+                  <GalleryCaption
+                    layout={row.kind === 'single' ? 'single' : 'pair'}
+                    label={figureLabels.get(image)!}
+                    heading={image.heading}
+                    caption={image.caption}
+                  />
                 )}
               </figure>
             ))}
