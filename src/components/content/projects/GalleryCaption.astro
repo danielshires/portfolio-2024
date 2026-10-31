@@ -1,0 +1,48 @@
+---
+interface Props {
+  /** `single`: full-width gallery image. `pair`: side-by-side gallery image. `column`: image in a case study text column. */
+  layout: 'single' | 'pair' | 'column'
+  label: string
+  heading?: string
+  caption?: string
+}
+
+const { layout, label } = Astro.props
+
+/** Lets editors write "Headline — rest of caption" without filling in a separate headline field. */
+function splitLeadIn(heading?: string, caption?: string) {
+  const explicit = heading?.trim()
+  const text = caption?.trim() ?? ''
+  if (explicit) return { lead: explicit, rest: text }
+  const match = text.match(/^(.{1,40}?)\s+[—–]\s+(.+)$/s)
+  if (match) return { lead: match[1], rest: match[2] }
+  return { lead: '', rest: text }
+}
+
+const { lead, rest } = splitLeadIn(Astro.props.heading, Astro.props.caption)
+const runInLead = lead && rest && !/[.!?:]$/.test(lead) ? `${lead}.` : lead
+const figcaptionClass = {
+  single: 'mt-5 max-w-2xl space-y-1.5 md:mt-6',
+  pair: 'mt-4 max-w-md space-y-1.5',
+  column: 'mt-4 max-w-2xl space-y-1.5',
+}
+const labelClass = 'font-mono text-xs font-normal uppercase tracking-wider text-zinc-500 dark:text-zinc-400'
+---
+
+{
+  (lead || rest) && (
+    <figcaption class={figcaptionClass[layout]}>
+      <span class={`${labelClass} block`}>{label}</span>
+      <p
+        class={
+          layout === 'single'
+            ? 'text-base leading-relaxed text-zinc-600 md:text-lg dark:text-zinc-400'
+            : 'text-sm leading-relaxed text-zinc-600 md:text-base dark:text-zinc-400'
+        }>
+        {lead && <span class='font-medium text-zinc-900 dark:text-zinc-100'>{runInLead}</span>}
+        {lead && rest && ' '}
+        {rest}
+      </p>
+    </figcaption>
+  )
+}
