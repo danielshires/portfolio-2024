@@ -34,7 +34,7 @@ He also uses AI to explore ideas, prototype quickly, and build working products,
 
 ## Stack
 
-This site is a static [Astro](https://astro.build) 4 build, hosted on [Netlify](https://www.netlify.com). Pages are generated ahead of time.
+This site is an [Astro](https://astro.build) 4 site on [Netlify](https://www.netlify.com). Most pages are generated ahead of time; writing is rendered on request from Sanity so new posts can go live without a rebuild.
 
 Projects, writing, pictures, and albums come from [Sanity](https://www.sanity.io) (project `5fq3rcf6`, production dataset). The studio is at [/studio](https://danielshires.com/studio). About copy, experience, and social links are edited in `src/config/about.ts`. The CV is the markdown file linked above.
 

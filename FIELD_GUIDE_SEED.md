@@ -36,11 +36,9 @@ For any case study, use **Concepts demonstrated** to reference Field Guide entri
 
 ## Troubleshooting: “Field guide” block missing under an article
 
-### A. Static site (most common)
+### A. Writing is on-request (hybrid SSR)
 
-Journal posts are **pre-rendered at build time**. Editing Sanity does **not** update production until the site rebuilds.
-
-- **Netlify:** trigger **Deploy site** (production or your branch) after content changes, or add a [deploy webhook](https://docs.netlify.com/configure-builds/build-hooks/) from Sanity when documents publish.
+Writing pages fetch Sanity at request time, so publishing a post in Sanity should appear on `/writing` without a rebuild (allow ~60s for the Sanity CDN). Projects, pictures, and field-guide entries are still pre-rendered — those need a Netlify deploy to update production.
 
 ### B. Wrong link field on the post
 

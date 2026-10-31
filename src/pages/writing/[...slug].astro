@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import { getAllPosts, getPostBySlug, resolveReadNextPosts, urlFor, type Post } from '../../lib/sanity'
+import { getPostBySlug, resolveReadNextPosts, urlFor } from '../../lib/sanity'
+import { applySanityPageCache } from '../../lib/sanityPageCache'
 import SanityImage from '../../components/media/images/SanityImage.astro'
 import Text from '../../components/ui/text/Text.astro'
 import ReadNext from '../../components/content/posts/ReadNext.astro'
@@ -10,14 +11,8 @@ import { PortableText } from 'astro-portabletext'
 import SiteChildNav from '../../components/layout/navigation/SiteChildNav.astro'
 import { PERSON_NODE_ID } from '../../lib/seo/merge-global-jsonld'
 
-export async function getStaticPaths() {
-  const posts = await getAllPosts()
-  return posts
-    .filter((post: Post) => post.slug?.current)
-    .map((post: Post) => ({
-      params: { slug: post.slug.current },
-    }))
-}
+// Fetch from Sanity on each request so publishing a post does not need a rebuild.
+export const prerender = false
 
 const { slug } = Astro.params
 
@@ -30,6 +25,8 @@ const post = await getPostBySlug(slug)
 if (!post) {
   return Astro.redirect('/404')
 }
+
+applySanityPageCache(Astro.response.headers)
 
 const readNextPosts = resolveReadNextPosts(post)
 

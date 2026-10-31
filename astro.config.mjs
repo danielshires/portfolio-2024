@@ -1,8 +1,8 @@
 /**
  * Astro Configuration
- * 
+ *
  * Dan Portfolio (Astro 4), featuring:
- * - Static Site Generation (SSG)
+ * - Hybrid rendering via @astrojs/netlify (static by default; writing is SSR)
  * - React components for interactivity
  * - Tailwind CSS for styling
  * - Sanity CMS integration
@@ -18,6 +18,7 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import sanity from '@sanity/astro';
 import swup from '@swup/astro';
+import netlify from '@astrojs/netlify';
 
 /** Dev-only: Astro on :4321 has no function runtime. Send API routes to `netlify dev`. */
 function playgroundDevProxy() {
@@ -71,6 +72,11 @@ const sanityConfig = {
 // https://astro.build/config
 export default defineConfig({
     site: 'https://danielshires.com',
+    // Hybrid: pages prerender unless they set `export const prerender = false`.
+    // Writing (+ homepage preview / sitemap / agent.md) stay on-request so Sanity
+    // publishes do not need a Netlify rebuild.
+    output: 'hybrid',
+    adapter: netlify(),
     redirects: {
         '/experiments': '/playground',
         '/experiments/avatar': '/playground/avatar',
