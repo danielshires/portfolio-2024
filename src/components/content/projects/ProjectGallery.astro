@@ -1,6 +1,6 @@
 ---
 import GalleryCaption from './GalleryCaption.astro'
-import { urlFor } from '../../../lib/sanity'
+import { galleryRowImages, urlFor } from '../../../lib/sanity'
 import type { ProjectGalleryImage, ProjectGalleryRow } from '../../../lib/sanity'
 
 interface Props {
@@ -11,40 +11,34 @@ interface Props {
 const { rows = [], tint } = Astro.props
 const brandTint = tint && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tint) ? tint : undefined
 
+type RowKind = 'single' | 'pair' | 'trio'
+
 type RenderRow = {
   key: string
-  kind: 'single' | 'pair'
+  kind: RowKind
   images: ProjectGalleryImage[]
 }
 
-function withAsset(image?: ProjectGalleryImage): image is ProjectGalleryImage {
-  return Boolean(image?.asset)
-}
+const kindByCount: Record<number, RowKind> = { 1: 'single', 2: 'pair', 3: 'trio' }
 
-const renderRows: RenderRow[] = []
-
-rows.forEach((row, index) => {
-  const key = row._key || String(index)
-  if (row._type === 'imagePair') {
-    const sides = [row.left, row.right].filter(withAsset)
-    if (sides.length === 2) {
-      renderRows.push({ key, kind: 'pair', images: sides })
-    } else if (sides.length === 1) {
-      renderRows.push({ key, kind: 'single', images: sides })
-    }
-    return
-  }
-  if (withAsset(row)) {
-    renderRows.push({ key, kind: 'single', images: [row] })
-  }
+const renderRows: RenderRow[] = rows.flatMap((row, index) => {
+  const images = galleryRowImages(row)
+  const kind = kindByCount[images.length]
+  return kind ? [{ key: row._key || String(index), kind, images }] : []
 })
 
-function imageUrl(image: ProjectGalleryImage, kind: 'single' | 'pair') {
+const rowGridClass: Record<RowKind, string | undefined> = {
+  single: undefined,
+  pair: 'grid grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-8',
+  trio: 'grid grid-cols-1 gap-y-10 md:grid-cols-3 md:gap-x-8',
+}
+
+function imageUrl(image: ProjectGalleryImage, kind: RowKind) {
   const builder = urlFor(image).quality(90).auto('format')
-  if (kind === 'pair') {
-    return builder.width(1600).height(1600).fit('crop').url()
+  if (kind === 'single') {
+    return builder.width(3840).fit('max').url()
   }
-  return builder.width(3840).fit('max').url()
+  return builder.width(1600).height(1600).fit('crop').url()
 }
 
 function hasCaption(image: ProjectGalleryImage) {
@@ -81,19 +75,19 @@ renderRows
       style={brandTint ? `--gallery-tint: ${brandTint}` : undefined}>
       <div class='space-y-12 md:space-y-20'>
         {renderRows.map((row) => (
-          <div class={row.kind === 'pair' ? 'grid grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-8' : undefined}>
+          <div class={rowGridClass[row.kind]}>
             {row.images.map((image) => (
               <figure>
                 <img
                   src={imageUrl(image, row.kind)}
                   alt={image.alt || ''}
-                  class={`${imageFrameClass} ${surfaceClass(image)} ${row.kind === 'pair' ? 'aspect-square object-cover' : 'h-auto'}`}
+                  class={`${imageFrameClass} ${surfaceClass(image)} ${row.kind === 'single' ? 'h-auto' : 'aspect-square object-cover'}`}
                   loading='lazy'
                   decoding='async'
                 />
                 {figureLabels.has(image) && (
                   <GalleryCaption
-                    layout={row.kind}
+                    layout={row.kind === 'single' ? 'single' : 'pair'}
                     label={figureLabels.get(image)!}
                     heading={image.heading}
                     caption={image.caption}

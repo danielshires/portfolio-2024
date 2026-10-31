@@ -294,9 +294,33 @@ export default {
             },
           },
         },
+        {
+          name: 'imageTrio',
+          title: 'Three images',
+          type: 'object',
+          description: 'Shown as three squares in a row. Export each at 2160×2160.',
+          fields: [
+            galleryImage('first', 'First'),
+            galleryImage('second', 'Second'),
+            galleryImage('third', 'Third'),
+          ],
+          preview: {
+            select: {
+              firstAlt: 'first.alt',
+              media: 'first',
+            },
+            prepare({ firstAlt, media }) {
+              return {
+                title: 'Three images',
+                subtitle: firstAlt,
+                media,
+              }
+            },
+          },
+        },
       ],
       description:
-        'Screenshots and mockups. Add a full-width image, or two images side by side. Order here is the order on the page.',
+        'Screenshots and mockups. Add a full-width image, two images side by side, or three in a row. Order here is the order on the page.',
       hidden: ({ parent }) => parent?.linkBehavior === 'external',
     },
     {
