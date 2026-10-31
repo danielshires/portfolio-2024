@@ -1,0 +1,119 @@
+---
+interface Props {
+  options: ReadonlyArray<{ value: string; label: string }>
+  /** Element id of the region the filters control. */
+  controls: string
+}
+
+const { options, controls } = Astro.props
+const filters = [{ value: 'all', label: 'All' }, ...options]
+
+const pillClass = [
+  'inline-flex items-center rounded-full border border-solid px-3.5 py-1.5 text-sm transition-colors duration-200',
+  'border-zinc-200 text-zinc-600 hover:border-zinc-400 hover:text-zinc-900',
+  'dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-100',
+  'aria-pressed:border-zinc-900 aria-pressed:bg-zinc-900 aria-pressed:text-white',
+  'dark:aria-pressed:border-zinc-100 dark:aria-pressed:bg-zinc-100 dark:aria-pressed:text-zinc-900',
+  'outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950',
+].join(' ')
+---
+
+<div role='group' aria-label='Filter projects by discipline' class='flex flex-wrap gap-2' data-project-filters>
+  {
+    filters.map((filter) => (
+      <button
+        type='button'
+        class={pillClass}
+        aria-pressed={filter.value === 'all' ? 'true' : 'false'}
+        aria-controls={controls}
+        data-filter={filter.value}>
+        {filter.label}
+      </button>
+    ))
+  }
+</div>
+
+<style is:global>
+  /* Utility display classes (e.g. `flex`) otherwise win over the `hidden` attribute. */
+  [data-project-card][hidden],
+  [data-project-section][hidden],
+  [data-project-filter-empty][hidden] {
+    display: none !important;
+  }
+</style>
+
+<script>
+  const PARAM = 'discipline'
+
+  function initProjectFilters(): (() => void) | undefined {
+    const group = document.querySelector<HTMLElement>('[data-project-filters]')
+    if (!group) return undefined
+
+    const buttons = Array.from(group.querySelectorAll<HTMLButtonElement>('button[data-filter]'))
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-project-card]'))
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-project-section]'))
+    const empty = document.querySelector<HTMLElement>('[data-project-filter-empty]')
+    const status = document.querySelector<HTMLElement>('[data-project-filter-status]')
+    const known = new Set(buttons.map((button) => button.dataset.filter))
+
+    const apply = (value: string, updateUrl: boolean) => {
+      const active = known.has(value) ? value : 'all'
+      buttons.forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.filter === active))
+      })
+
+      let visible = 0
+      cards.forEach((card) => {
+        const disciplines = (card.dataset.disciplines ?? '').split(' ')
+        const show = active === 'all' || disciplines.includes(active)
+        card.hidden = !show
+        if (show) visible += 1
+      })
+      sections.forEach((section) => {
+        section.hidden = !section.querySelector('[data-project-card]:not([hidden])')
+      })
+      if (empty) empty.hidden = visible > 0
+
+      if (status) {
+        const label = buttons.find((button) => button.dataset.filter === active)?.textContent?.trim()
+        status.textContent =
+          active === 'all'
+            ? `Showing all ${visible} projects`
+            : `Showing ${visible} ${visible === 1 ? 'project' : 'projects'} in ${label}`
+      }
+
+      if (updateUrl) {
+        const url = new URL(window.location.href)
+        if (active === 'all') url.searchParams.delete(PARAM)
+        else url.searchParams.set(PARAM, active)
+        history.replaceState(history.state, '', url)
+      }
+    }
+
+    const onClick = (event: MouseEvent) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>('button[data-filter]')
+      if (button?.dataset.filter) apply(button.dataset.filter, true)
+    }
+
+    group.addEventListener('click', onClick)
+    apply(new URL(window.location.href).searchParams.get(PARAM) ?? 'all', false)
+
+    return () => group.removeEventListener('click', onClick)
+  }
+
+  let cleanup: (() => void) | undefined
+
+  function boot() {
+    cleanup?.()
+    cleanup = initProjectFilters()
+  }
+
+  function teardown() {
+    cleanup?.()
+    cleanup = undefined
+  }
+
+  document.addEventListener('astro:page-load', boot)
+  document.addEventListener('astro:before-swap', teardown)
+  boot()
+</script>
