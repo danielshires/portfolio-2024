@@ -49,6 +49,9 @@ function hasCaption(image: ProjectGalleryImage) {
   return Boolean(image.heading?.trim() || image.caption?.trim())
 }
 
+/** Hairline keeps near-white artwork from merging into the light page; dark mode needs no edge. */
+const imageFrameClass = 'block w-full rounded-2xl ring-1 ring-zinc-900/[0.07] md:rounded-3xl dark:ring-0'
+
 const figureLabels = new Map<ProjectGalleryImage, string>()
 renderRows
   .flatMap((row) => row.images)
@@ -61,17 +64,13 @@ renderRows
     <section class='col-span-full' aria-label='Project gallery'>
       <div class='space-y-12 md:space-y-20'>
         {renderRows.map((row) => (
-          <div class={row.kind === 'pair' ? 'grid grid-cols-1 gap-x-4 gap-y-10 md:grid-cols-2' : undefined}>
+          <div class={row.kind === 'pair' ? 'grid grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-8' : undefined}>
             {row.images.map((image) => (
               <figure>
                 <img
                   src={imageUrl(image, row.kind)}
                   alt={image.alt || ''}
-                  class={
-                    row.kind === 'pair'
-                      ? 'block aspect-square w-full rounded-xl object-cover'
-                      : 'block h-auto w-full rounded-xl'
-                  }
+                  class={`${imageFrameClass} ${row.kind === 'pair' ? 'aspect-square object-cover' : 'h-auto'}`}
                   loading='lazy'
                   decoding='async'
                 />
