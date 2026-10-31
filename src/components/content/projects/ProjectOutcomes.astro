@@ -1,5 +1,6 @@
 ---
 import Text from '../../ui/text/Text.astro';
+import { gridGutterClass } from '../../ui/text/styles';
 
 interface Props {
   outcomes: string[] | {
@@ -19,15 +20,19 @@ const normalizedOutcomes = Array.isArray(outcomes)
       return outcome
     })
   : []
+
+// Thirds of the 12-column page grid keep card widths the same across projects, so the second card
+// lines up with the case study text column. The schema allows up to four, which need quarters.
+const cardSpanClass = normalizedOutcomes.length > 3 ? 'lg:col-span-3' : 'lg:col-span-4'
 ---
 
-<section class="col-span-1 md:col-span-6 py-8">
+<section class="col-span-full">
   <Text variant="h4" class="pb-6">Impact</Text>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+  <div class={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-y-8 ${gridGutterClass}`}>
     {normalizedOutcomes.map((outcome, index) => (
       <div
-        class="bg-zinc-50 dark:bg-zinc-800 rounded-lg p-6 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors"
+        class={`${cardSpanClass} bg-zinc-50 dark:bg-zinc-800 rounded-lg p-6 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors`}
         style={`animation-delay: ${index * 0.1}s`}
       >
         <!-- Outcome Text -->

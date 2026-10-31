@@ -138,28 +138,21 @@ const jsonLd = {
   robots={resolvedRobots}
   jsonLd={jsonLd}>
   <!-- Project Header Section -->
-  <section
-    class='grid grid-cols-1 lg:grid-cols-2 items-center mt-40 mb-20 md:pt-32 md:mb-40'>
-    <!-- Left Column: Project Title, Subtitle, and Metadata -->
-    <div class={`grid grid-cols-1 lg:grid-cols-2 col-span-1 md:col-span-2 gap-y-16 ${gridGutterClass}`}>
-      <div class='lg:col-span-1'>
-        <Text variant='h1' class='mb-2'>{fullProject.title}</Text>
-        <Text variant='h2' color='muted' class='mb-8'>{fullProject.subtitle}</Text>
-        <ProjectMeta
-          client={fullProject.client}
-          role={fullProject.role}
-          team={fullProject.team}
-          year={fullProject.publishedAt ? new Date(fullProject.publishedAt).getFullYear() : undefined}
-        />
-      </div>
-
-      <!-- Right Column: headline outcomes -->
-      <div class='lg:col-span-1'>
-        {fullProject.outcomes && fullProject.outcomes.length > 0 && (
-          <ProjectOutcomes outcomes={fullProject.outcomes} />
-        )}
-      </div>
+  <section class={`grid grid-cols-1 lg:grid-cols-12 gap-y-16 md:gap-y-20 ${gridGutterClass} mt-40 mb-20 md:pt-32 md:mb-32`}>
+    <div class='lg:col-span-8'>
+      <Text variant='h1' class='mb-2'>{fullProject.title}</Text>
+      <Text variant='h2' color='muted' class='mb-8'>{fullProject.subtitle}</Text>
+      <ProjectMeta
+        client={fullProject.client}
+        role={fullProject.role}
+        team={fullProject.team}
+        year={fullProject.publishedAt ? new Date(fullProject.publishedAt).getFullYear() : undefined}
+      />
     </div>
+
+    {fullProject.outcomes && fullProject.outcomes.length > 0 && (
+      <ProjectOutcomes outcomes={fullProject.outcomes} />
+    )}
   </section>
 
   <!-- Case study sections -->
