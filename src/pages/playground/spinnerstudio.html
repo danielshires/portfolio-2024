@@ -46,11 +46,60 @@
             /* Space between control groups */
         }
         
+        .control-section {
+            border-radius: 8px;
+        }
+        
+        .control-section + .control-section {
+            margin-top: 4px;
+        }
+        
+        .control-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.8);
+            list-style: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .control-section-header::-webkit-details-marker {
+            display: none;
+        }
+        
+        .control-section-header::after {
+            content: '+';
+            font-size: 18px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .control-section[open] .control-section-header {
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .control-section[open] .control-section-header::after {
+            content: '−';
+        }
+        
+        .control-section .control-group {
+            padding: 12px 14px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 0 0 8px 8px;
+        }
+
         .control-group {
             display: flex;
             flex-direction: column;
             gap: 4px;
-            /* Increased spacing between controls */
         }
         
         .label-value {
@@ -62,10 +111,8 @@
         input[type="range"] {
             flex-grow: 1;
             background: #333;
-            /* Darker background for the slider */
             border-radius: 4px;
             height: 8px;
-            /* Adjust height for a better appearance */
         }
         
         input,
@@ -73,18 +120,20 @@
         button {
             margin: 5px 0;
             background-color: #282828;
-            /* Control background color */
             border: none;
             color: white;
-            /* Control text color */
             padding: 5px;
             border-radius: 4px;
             font-family: 'IBM Plex Mono', monospace;
-            /* Set font for inputs */
         }
         
         button {
             cursor: pointer;
+            padding: 8px 10px;
+        }
+        
+        button:hover {
+            background-color: #333;
         }
         
         @media (max-width: 768px) {
@@ -92,14 +141,23 @@
                 flex-direction: column;
             }
             section {
-                order: -1;
-                height: 300px;
-                /* Adjust height for mobile */
+                order: 1;
+                flex: 1;
+                min-height: 50vh;
+                height: auto;
             }
             .controls {
-                width: 100%;
-                border-left: none;
-                border-top: 1px solid #ddd;
+                order: 2;
+                width: auto;
+                margin: 0.75rem;
+                padding: 12px;
+                border-radius: 1rem;
+                max-height: 45vh;
+                overflow-y: auto;
+                gap: 0;
+            }
+            .control-section + .control-section {
+                margin-top: 8px;
             }
         }
     </style>
@@ -109,92 +167,98 @@
 
     <div class="controls">
         <!-- Shape Configuration -->
-        <div class="control-group">
-            <div class="label-value">
-                <label for="shapeCount">Number of Shapes</label>
-                <span id="shapeCountValue">18</span>
-            </div>
-            <input type="range" id="shapeCount" value="18" min="1" max="50">
+        <details class="control-section" open>
+            <summary class="control-section-header">Shape</summary>
+            <div class="control-group">
+                <div class="label-value">
+                    <label for="shapeCount">Count</label>
+                    <span id="shapeCountValue">18</span>
+                </div>
+                <input type="range" id="shapeCount" value="18" min="1" max="50">
 
-            <div class="label-value">
-                <label for="shapeType">Shape Type</label>
-                <select id="shapeType">
-                <option value="rectangle">Rectangle</option>
-                <option value="circle">Circle</option>
-                <option value="polygon">Polygon</option>
-                <option value="triangle">Triangle</option>
-                <option value="star">Star</option>
-                <option value="ellipse">Ellipse</option>
-            </select>
-            </div>
+                <div class="label-value">
+                    <label for="shapeType">Type</label>
+                    <select id="shapeType">
+                    <option value="rectangle">Rectangle</option>
+                    <option value="circle">Circle</option>
+                    <option value="polygon">Polygon</option>
+                    <option value="triangle">Triangle</option>
+                    <option value="star">Star</option>
+                    <option value="ellipse">Ellipse</option>
+                </select>
+                </div>
 
-            <div class="label-value">
-                <label for="shapeSize">Shape Size</label>
-                <span id="shapeSizeValue">200</span>
-            </div>
-            <input type="range" id="shapeSize" value="200" min="50" max="300">
+                <div class="label-value">
+                    <label for="shapeSize">Size</label>
+                    <span id="shapeSizeValue">200</span>
+                </div>
+                <input type="range" id="shapeSize" value="200" min="50" max="300">
 
-            <div class="label-value">
-                <label for="shapeColor">Shape Color</label>
-                <input type="color" id="shapeColor" value="#ffffff">
+                <div class="label-value">
+                    <label for="plotRadius">Radius</label>
+                    <span id="plotRadiusValue">200</span>
+                </div>
+                <input type="range" id="plotRadius" value="200" min="50" max="400">
             </div>
+        </details>
 
-            <div class="label-value">
-                <label for="strokeColor">Stroke Color</label>
-                <input type="color" id="strokeColor" value="#ffffff">
-            </div>
+        <!-- Colors -->
+        <details class="control-section">
+            <summary class="control-section-header">Colors</summary>
+            <div class="control-group">
+                <div class="label-value">
+                    <label for="shapeColor">Fill</label>
+                    <input type="color" id="shapeColor" value="#ffffff">
+                </div>
 
-            <div class="label-value">
-                <label for="strokeWidth">Stroke Width</label>
-                <span id="strokeWidthValue">0.1</span>
-            </div>
-            <input type="range" id="strokeWidth" value="0.1" min="0.1" max="10" step="0.1">
+                <div class="label-value">
+                    <label for="strokeColor">Stroke</label>
+                    <input type="color" id="strokeColor" value="#ffffff">
+                </div>
 
-            <div class="label-value">
-                <label for="shapeOpacity">Shape Opacity</label>
-                <span id="shapeOpacityValue">1</span>
-            </div>
-            <input type="range" id="shapeOpacity" value="1" min="0" max="1" step="0.01">
-        </div>
+                <div class="label-value">
+                    <label for="strokeWidth">Stroke Width</label>
+                    <span id="strokeWidthValue">0.1</span>
+                </div>
+                <input type="range" id="strokeWidth" value="0.1" min="0.1" max="10" step="0.1">
 
-        <!-- Positioning and Movement -->
-        <div class="control-group">
-            <div class="label-value">
-                <label for="plotRadius">Plot Radius</label>
-                <span id="plotRadiusValue">200</span>
+                <div class="label-value">
+                    <label for="shapeOpacity">Opacity</label>
+                    <span id="shapeOpacityValue">1</span>
+                </div>
+                <input type="range" id="shapeOpacity" value="1" min="0" max="1" step="0.01">
+
+                <button id="randomColorButton">Randomize</button>
             </div>
-            <input type="range" id="plotRadius" value="200" min="50" max="400">
-        </div>
+        </details>
 
         <!-- Animation Control -->
-        <div class="control-group">
-            <div class="label-value">
-                <label for="rotationSpeed">Rotation Speed</label>
-                <span id="rotationSpeedValue">1</span>
+        <details class="control-section">
+            <summary class="control-section-header">Animation</summary>
+            <div class="control-group">
+                <div class="label-value">
+                    <label for="rotationSpeed">Rotation</label>
+                    <span id="rotationSpeedValue">1</span>
+                </div>
+                <input type="range" id="rotationSpeed" value="1" min="0.1" max="5" step="0.1">
+
+                <div class="label-value">
+                    <label for="scaleSpeed">Scale</label>
+                    <span id="scaleSpeedValue">0.002</span>
+                </div>
+                <input type="range" id="scaleSpeed" value="0.002" min="0.001" max="0.01" step="0.001">
+
+                <div class="label-value">
+                    <label for="rotationDirection">Direction</label>
+                    <select id="rotationDirection">
+                    <option value="clockwise">Clockwise</option>
+                    <option value="counterclockwise">Counter</option>
+                </select>
+                </div>
+
+                <button id="resetButton">Reset All</button>
             </div>
-            <input type="range" id="rotationSpeed" value="1" min="0.1" max="5" step="0.1">
-
-            <div class="label-value">
-                <label for="scaleSpeed">Scale Speed</label>
-                <span id="scaleSpeedValue">0.002</span>
-            </div>
-            <input type="range" id="scaleSpeed" value="0.002" min="0.001" max="0.01" step="0.001">
-
-            <div class="label-value">
-                <label for="rotationDirection">Rotation Direction</label>
-                <select id="rotationDirection">
-                <option value="clockwise">Clockwise</option>
-                <option value="counterclockwise">Counterclockwise</option>
-            </select>
-            </div>
-
-            <button id="resetButton">Reset</button>
-        </div>
-
-        <!-- Randomization -->
-        <div class="control-group">
-            <button id="randomColorButton">Random Colors</button>
-        </div>
+        </details>
     </div>
 
     <section></section>
