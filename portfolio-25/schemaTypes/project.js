@@ -38,7 +38,7 @@ const caseStudyBody = [
 
 const isExternal = ({ parent }) => parent?.linkBehavior === 'external'
 
-const galleryImageFields = [
+const galleryImageFields = () => [
   {
     name: 'alt',
     type: 'string',
@@ -59,7 +59,7 @@ const galleryImage = (name, title) => ({
   title,
   type: 'image',
   options: { hotspot: true },
-  fields: galleryImageFields,
+  fields: galleryImageFields(),
   validation: Rule => Rule.required(),
 })
 
@@ -240,11 +240,12 @@ export default {
       type: 'array',
       of: [
         {
+          title: 'Full-width image',
           type: 'image',
           options: {
             hotspot: true,
           },
-          fields: galleryImageFields,
+          fields: galleryImageFields(),
         },
         {
           name: 'imagePair',
