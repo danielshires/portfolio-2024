@@ -23,6 +23,9 @@ Ask which direction to sync if the request doesn't say:
 | Color | `prose/*` | `typography.DEFAULT` (Light) and `typography.invert` (Dark) colours in `tailwind.config.mjs` |
 | Color | `text-default`, `text-muted`, `text-inverted` | `colorStyles` in `src/components/ui/text/styles.ts` |
 | Color | `text-label` | `sectionLabelTypographyClass` in `styles.ts` |
+| Color | `primary-hover` | `hover:bg-zinc-800` in `ButtonPrimary.astro` |
+| Color | `loading-track` | track classes in `LoadingBar.astro` |
+| Color | `spinner-track` | track ring classes in `Loading.astro` (light mode uses `gray-200`; Figma rounds to `zinc/200`) |
 | Typography | `font/sans`, `font/mono` | `fontFamily.sans`, `fontFamily.mono` |
 | Typography | `size/base` | `fontSize.base` (other sizes are Tailwind defaults) |
 | Type Scale (Mobile / Tablet / Desktop) | `<variant>/font-size`, `<variant>/line-height` | `variantStyles` in `styles.ts` (Display: `heroDisplayIntroClass`). Mobile = unprefixed classes, Tablet = `md:`, Desktop = `lg:`. Line height is px: size × Tailwind leading (`tight` 1.25, `snug` 1.375, `relaxed` 1.625). |
@@ -44,4 +47,8 @@ Semantic colours alias primitives. When syncing, compare the **alias target** (e
 1. Read the current values from the code locations above.
 2. Load the `figma-use` skill, `create_session`, then update existing variables **by name** with `setValueForMode` (aliases via `createVariableAlias`). Never delete and recreate variables: that breaks every bound layer in the file.
 3. Create a variable only for a genuinely new token, with scopes and WEB code syntax matching its siblings.
-4. Screenshot both boards on the **Design Tokens** page (`Tokens — Light`, `Tokens — Dark`) to confirm the change rendered.
+4. Screenshot both boards on the **Design Tokens** page (`Tokens — Light`, `Tokens — Dark`) and the three sheets on the **Style Guide** page to confirm the change rendered.
+
+## Components
+
+The **Style Guide** page holds token-bound components (`Button / Primary`, `Spinner`, `Loading bar`, `Picture card`) that mirror `ButtonPrimary.astro`, `Loading.astro`, `LoadingBar.astro` and `PictureCard.astro`. If one of those files changes its classes, update the matching component's fills, padding or radius by binding to existing variables, not literal values.
