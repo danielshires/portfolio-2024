@@ -1,0 +1,34 @@
+---
+import { urlFor } from '../../../lib/sanity'
+import type { SanityImage } from '../../../lib/sanity'
+import { projectImageFrameClass } from '../../ui/text/styles'
+
+/** Project hero shown under the page title, cropped to a fixed wide frame around its Studio hotspot. */
+interface Props {
+  image: SanityImage & { alt?: string }
+}
+
+const { image } = Astro.props
+
+const urlAt = (w: number) =>
+  urlFor(image).width(w).height(Math.round((w * 9) / 16)).quality(85).fit('crop').auto('format').url()
+const srcset = [800, 1200, 1600, 2400, 3200].map((w) => `${urlAt(w)} ${w}w`).join(', ')
+---
+
+{
+  image?.asset && (
+    <figure class='col-span-full'>
+      <img
+        src={urlAt(1600)}
+        srcset={srcset}
+        sizes='(min-width: 1280px) 1200px, 100vw'
+        alt={image.alt || ''}
+        width='1600'
+        height='900'
+        class={`${projectImageFrameClass} aspect-video h-auto object-cover`}
+        fetchpriority='high'
+        decoding='async'
+      />
+    </figure>
+  )
+}

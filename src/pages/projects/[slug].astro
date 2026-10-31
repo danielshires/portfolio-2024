@@ -9,6 +9,7 @@ import {
 } from '../../lib/sanity'
 import ProjectMeta from '../../components/content/projects/ProjectMeta.astro'
 import ProjectOutcomes from '../../components/content/projects/ProjectOutcomes.astro'
+import ProjectHeroImage from '../../components/content/projects/ProjectHeroImage.astro'
 import CaseStudySection from '../../components/content/projects/CaseStudySection.astro'
 import ProjectGallery from '../../components/content/projects/ProjectGallery.astro'
 import RelatedProjects from '../../components/content/projects/RelatedProjects.astro'
@@ -138,7 +139,7 @@ const jsonLd = {
   robots={resolvedRobots}
   jsonLd={jsonLd}>
   <!-- Project Header Section -->
-  <section class={`grid grid-cols-1 lg:grid-cols-12 gap-y-16 md:gap-y-20 ${gridGutterClass} mt-40 mb-20 md:pt-32 md:mb-32`}>
+  <section class={`grid grid-cols-1 lg:grid-cols-12 gap-y-12 md:gap-y-16 ${gridGutterClass} mt-28 md:mt-36 lg:mt-44 mb-20 md:mb-32`}>
     <div class='lg:col-span-8'>
       <Text variant='h1' class='mb-2'>{fullProject.title}</Text>
       <Text variant='h2' color='muted' class='mb-8'>{fullProject.subtitle}</Text>
@@ -149,6 +150,8 @@ const jsonLd = {
         year={fullProject.publishedAt ? new Date(fullProject.publishedAt).getFullYear() : undefined}
       />
     </div>
+
+    {fullProject.heroImage && <ProjectHeroImage image={fullProject.heroImage} />}
 
     {fullProject.outcomes && fullProject.outcomes.length > 0 && (
       <ProjectOutcomes outcomes={fullProject.outcomes} />
