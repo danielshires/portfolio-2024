@@ -94,6 +94,23 @@ export default {
       description: 'Groups the Projects page. Product design is listed first.',
     },
     {
+      name: 'disciplines',
+      title: 'Disciplines',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: 'Product design', value: 'product-design' },
+          { title: 'Research', value: 'research' },
+          { title: 'Brand', value: 'brand' },
+          { title: 'Digital design', value: 'digital-design' },
+        ],
+        layout: 'grid',
+      },
+      description:
+        'Powers the filters on the Projects page. Pick every discipline the project shows off. Product design projects with none picked appear under Product design.',
+    },
+    {
       name: 'linkBehavior',
       title: 'Link behavior',
       type: 'string',
