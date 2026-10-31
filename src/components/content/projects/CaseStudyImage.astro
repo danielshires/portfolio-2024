@@ -1,0 +1,46 @@
+---
+import { urlFor } from '../../../lib/sanity'
+import type { SanityImage } from '../../../lib/sanity'
+
+/** Portable Text `image` block in a case study section, shown at its natural aspect ratio. */
+interface Props {
+  node: SanityImage & { alt?: string; caption?: string }
+}
+
+const { node } = Astro.props
+
+if (!node?.asset) {
+  return null
+}
+
+const alt = typeof node.alt === 'string' && node.alt.trim() !== '' ? node.alt : ''
+const caption = typeof node.caption === 'string' ? node.caption.trim() : ''
+
+// Asset refs encode the original size, e.g. image-<hash>-2400x1351-png.
+const match = node.asset._ref?.match(/-(\d+)x(\d+)-/)
+const crop = node.crop
+const sourceWidth = match ? Number(match[1]) : 1200
+const sourceHeight = match ? Number(match[2]) : 800
+const width = Math.round(sourceWidth * (1 - (crop?.left ?? 0) - (crop?.right ?? 0)))
+const height = Math.round(sourceHeight * (1 - (crop?.top ?? 0) - (crop?.bottom ?? 0)))
+
+// Width-only URLs: passing a height makes the image builder crop to that ratio.
+const urlAt = (w: number) => urlFor(node).width(w).quality(85).fit('max').auto('format').url()
+const srcset = [800, 1200, 1600, 2400].map((w) => `${urlAt(w)} ${w}w`).join(', ')
+const isPortrait = height > width * 1.2
+---
+
+<figure class:list={['my-10 not-prose', isPortrait && 'max-w-md']}>
+  <img
+    src={urlAt(1600)}
+    srcset={srcset}
+    sizes='(min-width: 1024px) 66vw, 100vw'
+    alt={alt}
+    width={width}
+    height={height}
+    class='w-full h-auto rounded-lg'
+    loading='lazy'
+    decoding='async'
+  />
+  {caption && <figcaption class='mt-3 text-sm text-zinc-500 dark:text-zinc-400'>{caption}</figcaption>}
+</figure>
