@@ -44,7 +44,9 @@ export interface SanityImage {
 export interface ProjectGalleryImage extends SanityImage {
   _key?: string
   alt?: string
+  heading?: string
   caption?: string
+  surface?: 'none' | 'neutral' | 'brand'
 }
 
 /** Two gallery images shown side by side. */
@@ -55,21 +57,31 @@ export interface ProjectGalleryPair {
   right?: ProjectGalleryImage
 }
 
-export type ProjectGalleryRow = ProjectGalleryImage | ProjectGalleryPair
+/** Three gallery images shown in a row. */
+export interface ProjectGalleryTrio {
+  _type: 'imageTrio'
+  _key?: string
+  first?: ProjectGalleryImage
+  second?: ProjectGalleryImage
+  third?: ProjectGalleryImage
+}
 
-/** Images from gallery rows, with a one-sided pair treated as a single image. */
+export type ProjectGalleryRow = ProjectGalleryImage | ProjectGalleryPair | ProjectGalleryTrio
+
+/** Images in one gallery row that have an uploaded asset, in display order. */
+export function galleryRowImages(row: ProjectGalleryRow): ProjectGalleryImage[] {
+  const candidates =
+    row._type === 'imagePair'
+      ? [row.left, row.right]
+      : row._type === 'imageTrio'
+        ? [row.first, row.second, row.third]
+        : [row]
+  return candidates.filter((image): image is ProjectGalleryImage => Boolean(image?.asset))
+}
+
+/** Every image across gallery rows, in display order. */
 export function flattenProjectGallery(rows?: ProjectGalleryRow[]): ProjectGalleryImage[] {
-  if (!rows?.length) return []
-  const images: ProjectGalleryImage[] = []
-  for (const row of rows) {
-    if (row._type === 'imagePair') {
-      if (row.left?.asset) images.push(row.left)
-      if (row.right?.asset) images.push(row.right)
-    } else if (row.asset) {
-      images.push(row)
-    }
-  }
-  return images
+  return rows?.flatMap(galleryRowImages) ?? []
 }
 
 /** Optional SEO overrides (Sanity `seo` object on post / project). */
@@ -218,6 +230,7 @@ export interface Project {
   outcomeSummary?: any // Portable Text content
   learnings?: any // Portable Text content
   images?: ProjectGalleryRow[]
+  surfaceTint?: string
   relatedProjects?: Project[]
   featured?: boolean
   publishedAt: string
@@ -625,12 +638,15 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       solution,
       outcomeSummary,
       learnings,
+      surfaceTint,
       images[] {
         _type,
         _key,
         asset,
         alt,
+        heading,
         caption,
+        surface,
         crop,
         hotspot,
         left {
@@ -638,7 +654,9 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
           _key,
           asset,
           alt,
+          heading,
           caption,
+          surface,
           crop,
           hotspot
         },
@@ -647,7 +665,42 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
           _key,
           asset,
           alt,
+          heading,
           caption,
+          surface,
+          crop,
+          hotspot
+        },
+        first {
+          _type,
+          _key,
+          asset,
+          alt,
+          heading,
+          caption,
+          surface,
+          crop,
+          hotspot
+        },
+        second {
+          _type,
+          _key,
+          asset,
+          alt,
+          heading,
+          caption,
+          surface,
+          crop,
+          hotspot
+        },
+        third {
+          _type,
+          _key,
+          asset,
+          alt,
+          heading,
+          caption,
+          surface,
           crop,
           hotspot
         }
