@@ -18,7 +18,7 @@ const pillClass = [
 ].join(' ')
 ---
 
-<div role='group' aria-label='Filter projects by discipline' class='flex flex-wrap gap-2' data-project-filters>
+<div role='group' aria-label='Filter projects' class='flex flex-wrap gap-2' data-project-filters>
   {
     filters.map((filter) => (
       <button
@@ -36,14 +36,13 @@ const pillClass = [
 <style is:global>
   /* Utility display classes (e.g. `flex`) otherwise win over the `hidden` attribute. */
   [data-project-card][hidden],
-  [data-project-section][hidden],
   [data-project-filter-empty][hidden] {
     display: none !important;
   }
 </style>
 
 <script>
-  const PARAM = 'discipline'
+  const PARAM = 'filter'
 
   function initProjectFilters(): (() => void) | undefined {
     const group = document.querySelector<HTMLElement>('[data-project-filters]')
@@ -51,7 +50,6 @@ const pillClass = [
 
     const buttons = Array.from(group.querySelectorAll<HTMLButtonElement>('button[data-filter]'))
     const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-project-card]'))
-    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-project-section]'))
     const empty = document.querySelector<HTMLElement>('[data-project-filter-empty]')
     const status = document.querySelector<HTMLElement>('[data-project-filter-status]')
     const known = new Set(buttons.map((button) => button.dataset.filter))
@@ -64,13 +62,10 @@ const pillClass = [
 
       let visible = 0
       cards.forEach((card) => {
-        const disciplines = (card.dataset.disciplines ?? '').split(' ')
-        const show = active === 'all' || disciplines.includes(active)
+        const filters = (card.dataset.filters ?? '').split(' ').filter(Boolean)
+        const show = active === 'all' || filters.includes(active)
         card.hidden = !show
         if (show) visible += 1
-      })
-      sections.forEach((section) => {
-        section.hidden = !section.querySelector('[data-project-card]:not([hidden])')
       })
       if (empty) empty.hidden = visible > 0
 
@@ -84,6 +79,7 @@ const pillClass = [
 
       if (updateUrl) {
         const url = new URL(window.location.href)
+        url.searchParams.delete('discipline')
         if (active === 'all') url.searchParams.delete(PARAM)
         else url.searchParams.set(PARAM, active)
         history.replaceState(history.state, '', url)
@@ -96,7 +92,8 @@ const pillClass = [
     }
 
     group.addEventListener('click', onClick)
-    apply(new URL(window.location.href).searchParams.get(PARAM) ?? 'all', false)
+    const params = new URL(window.location.href).searchParams
+    apply(params.get(PARAM) ?? params.get('discipline') ?? 'all', false)
 
     return () => group.removeEventListener('click', onClick)
   }

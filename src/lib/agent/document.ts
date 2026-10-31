@@ -15,7 +15,7 @@ const WRITING_LIMIT = 8
 
 const PAGE_NOTES: Record<string, string> = {
   '/': 'profile, selected work, and recent writing',
-  '/projects': 'case studies and independent work',
+  '/projects': 'selected projects',
   '/pictures': 'photography',
   '/writing': 'essays and notes',
   '/about': 'summary, experience, and ways to connect',

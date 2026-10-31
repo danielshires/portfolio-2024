@@ -107,21 +107,8 @@ export default {
       description: 'State the design challenge or value, not just the subject.'
     },
     {
-      name: 'category',
-      title: 'Category',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Product design', value: 'product' },
-          { title: 'Independent project', value: 'independent' },
-        ],
-        layout: 'radio',
-      },
-      description: 'Groups the Projects page. Product design is listed first.',
-    },
-    {
-      name: 'disciplines',
-      title: 'Disciplines',
+      name: 'filter',
+      title: 'Filters',
       type: 'array',
       of: [{ type: 'string' }],
       options: {
@@ -130,11 +117,23 @@ export default {
           { title: 'Research', value: 'research' },
           { title: 'Brand', value: 'brand' },
           { title: 'Digital design', value: 'digital-design' },
+          { title: 'Case study', value: 'case-study' },
         ],
         layout: 'grid',
       },
       description:
-        'Powers the filters on the Projects page. Pick every discipline the project shows off. Product design projects with none picked appear under Product design.',
+        'Every filter this project appears under on the Projects page. It still shows when All is selected.',
+      validation: Rule => Rule.required().min(1).unique(),
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      readOnly: true,
+      hidden: true,
+      deprecated: {
+        reason: 'Replaced by Filter. Kept so existing values are not lost.',
+      },
     },
     {
       name: 'linkBehavior',

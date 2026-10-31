@@ -5,34 +5,17 @@ import {
   urlFor,
   projectListHref,
   isExternalProject,
-  projectDisciplines,
+  projectFilters,
+  projectFilterList,
 } from '../../lib/sanity'
 import type { Project } from '../../lib/sanity'
 import Text from '../../components/ui/text/Text.astro'
 import { gridGutterClass } from '../../components/ui/text/styles'
-import SectionHeading from '../../components/ui/text/SectionHeading.astro'
 import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 import ProjectCard from '../../components/content/projects/ProjectCard.astro'
 import ProjectFilters from '../../components/content/projects/ProjectFilters.astro'
 
 const projects = await getAllProjects()
-
-// Uncategorised projects fall back by link type: case studies read as product work, link-outs as independent.
-const projectCategory = (project: Project) =>
-  project.category ?? (isExternalProject(project) ? 'independent' : 'product')
-
-// Product work that hasn't been tagged yet still shows up under the Product design filter.
-const projectDisciplineValues = (project: Project) =>
-  project.disciplines?.length
-    ? project.disciplines
-    : projectCategory(project) === 'product'
-      ? ['product-design']
-      : []
-
-const productProjects = projects.filter((project) => projectCategory(project) === 'product')
-const independentProjects = projects.filter((project) => projectCategory(project) === 'independent')
-const leadProjects = productProjects.slice(0, 2)
-const otherProductProjects = productProjects.slice(2)
 
 function cardImage(project: Project, width: number, height: number) {
   return {
@@ -98,67 +81,25 @@ const structuredData = {
     projects.length > 0 ? (
       <>
         <div class='mt-12 md:mt-16'>
-          <ProjectFilters options={projectDisciplines} controls='project-list' />
+          <ProjectFilters options={projectFilters} controls='project-list' />
           <p class='sr-only' role='status' aria-live='polite' data-project-filter-status />
         </div>
-        <div id='project-list' class='my-16 md:my-24 flex flex-col gap-20 md:gap-28'>
-          {productProjects.length > 0 && (
-            <section class='flex flex-col' aria-labelledby='projects-product' data-project-section>
-              <SectionHeading id='projects-product'>Product design</SectionHeading>
-              <div class={`grid grid-cols-1 md:grid-cols-6 lg:grid-cols-2 gap-y-8 ${gridGutterClass}`}>
-                {leadProjects.map((project) => (
-                  <ProjectCard
-                    projectImage={cardImage(project, 1200, 800)}
-                    title={project.title}
-                    heading={project.subtitle}
-                    projectUrl={projectListHref(project)}
-                    external={isExternalProject(project)}
-                    disciplines={projectDisciplineValues(project)}
-                  />
-                ))}
-              </div>
-              {otherProductProjects.length > 0 && (
-                <div class={`mt-12 grid grid-cols-1 md:grid-cols-6 lg:grid-cols-3 gap-y-8 ${gridGutterClass}`}>
-                  {otherProductProjects.map((project) => (
-                    <ProjectCard
-                      projectImage={cardImage(project, 800, 533)}
-                      title={project.title}
-                      heading={project.subtitle}
-                      projectUrl={projectListHref(project)}
-                      external={isExternalProject(project)}
-                      disciplines={projectDisciplineValues(project)}
-                    />
-                  ))}
-                </div>
-              )}
-            </section>
-          )}
-          {independentProjects.length > 0 && (
-            <section class='flex flex-col' aria-labelledby='projects-independent' data-project-section>
-              <SectionHeading id='projects-independent'>
-                Independent projects
-                <Text slot='description' variant='body' color='muted'>
-                  Tools, references and experiments I've built outside client work.
-                </Text>
-              </SectionHeading>
-              <div class='flex flex-col'>
-                {independentProjects.map((project) => (
-                  <ProjectCard
-                    variant='text'
-                    projectImage={cardImage(project, 800, 533)}
-                    title={project.title}
-                    heading={project.subtitle}
-                    projectUrl={projectListHref(project)}
-                    external={isExternalProject(project)}
-                    disciplines={projectDisciplineValues(project)}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
+        <div id='project-list' class='my-16 md:my-24'>
+          <div class={`grid grid-cols-1 md:grid-cols-6 lg:grid-cols-2 gap-y-8 ${gridGutterClass}`}>
+            {projects.map((project) => (
+              <ProjectCard
+                projectImage={cardImage(project, 1200, 800)}
+                title={project.title}
+                heading={project.subtitle}
+                projectUrl={projectListHref(project)}
+                external={isExternalProject(project)}
+                filters={projectFilterList(project)}
+              />
+            ))}
+          </div>
           <div data-project-filter-empty hidden>
             <Text variant='body' color='muted'>
-              No projects in this discipline yet.
+              No projects in this filter yet.
             </Text>
           </div>
         </div>

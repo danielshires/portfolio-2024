@@ -213,15 +213,18 @@ export interface Album {
   publishedAt: string
 }
 
-/** Keep in sync with the `disciplines` options in `portfolio-25/schemaTypes/project.js`. */
-export const projectDisciplines = [
+/** Keep in sync with the `filter` options in `portfolio-25/schemaTypes/project.js`. */
+export const projectFilters = [
   { value: 'product-design', label: 'Product design' },
   { value: 'research', label: 'Research' },
   { value: 'brand', label: 'Brand' },
   { value: 'digital-design', label: 'Digital design' },
+  { value: 'case-study', label: 'Case study' },
 ] as const
 
-export type ProjectDiscipline = (typeof projectDisciplines)[number]['value']
+export type ProjectFilter = (typeof projectFilters)[number]['value']
+
+const projectFilterValues = new Set<string>(projectFilters.map((filter) => filter.value))
 
 export interface Project {
   _id: string
@@ -239,8 +242,10 @@ export interface Project {
   duration?: string
   heroImage?: SanityImage
   outcomes?: Array<{ statistic: string; description: string }>
+  /** Projects page filters. A project can appear under more than one. */
+  filter?: ProjectFilter[]
+  /** Legacy grouping, kept until each project has a filter set. */
   category?: 'product' | 'independent'
-  disciplines?: ProjectDiscipline[]
   problem?: any // Portable Text content
   contribution?: any // Portable Text content
   solution?: any // Portable Text content
@@ -291,6 +296,22 @@ export function isExternalProject(
   project: Pick<Project, 'linkBehavior' | 'externalUrl'>
 ): boolean {
   return project.linkBehavior === 'external' && Boolean(project.externalUrl?.trim())
+}
+
+/**
+ * Filters a project appears under.
+ * A value saved as a single string still counts. Projects tagged product before this field existed still read as Product design.
+ */
+export function projectFilterList(
+  project: Pick<Project, 'category'> & { filter?: ProjectFilter | ProjectFilter[] | null }
+): ProjectFilter[] {
+  const raw = project.filter
+  const values = (Array.isArray(raw) ? raw : raw ? [raw] : []).filter((value): value is ProjectFilter =>
+    projectFilterValues.has(value)
+  )
+  if (values.length) return values
+  if (project.category === 'product') return ['product-design']
+  return []
 }
 
 /** Href for project cards and lists: internal path or external URL. */
@@ -620,8 +641,8 @@ export async function getAllProjects(): Promise<Project[]> {
       duration,
       heroImage,
       outcomes,
+      filter,
       category,
-      disciplines,
       featured,
       publishedAt,
       tags,
