@@ -61,6 +61,23 @@ const galleryImageFields = [
     description:
       'One short sentence on what this moment shows or why it mattered. Pairs read best under 90 characters each.',
   },
+  {
+    name: 'surface',
+    type: 'string',
+    title: 'Surface',
+    description:
+      'For transparent PNGs: the site draws a background that adapts to light and dark mode. Use "None" for photos and images with their own background.',
+    options: {
+      list: [
+        { title: 'None (full-bleed)', value: 'none' },
+        { title: 'Neutral', value: 'neutral' },
+        { title: 'Brand tint', value: 'brand' },
+      ],
+      layout: 'radio',
+      direction: 'horizontal',
+    },
+    initialValue: 'none',
+  },
 ]
 
 const galleryImage = (name, title) => ({
@@ -281,6 +298,16 @@ export default {
       description:
         'Screenshots and mockups. Add a full-width image, or two images side by side. Order here is the order on the page.',
       hidden: ({ parent }) => parent?.linkBehavior === 'external',
+    },
+    {
+      name: 'surfaceTint',
+      title: 'Brand tint',
+      type: 'string',
+      description:
+        'Hex colour (e.g. #1d4ed8) behind images set to "Brand tint". Use the full-strength brand colour; the site softens it for light and dark mode.',
+      validation: Rule =>
+        Rule.regex(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i, { name: 'hex colour' }).error('Use a hex colour like #1d4ed8'),
+      hidden: isExternal,
     },
     {
       name: 'relatedProjects',

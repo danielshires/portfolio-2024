@@ -46,6 +46,7 @@ export interface ProjectGalleryImage extends SanityImage {
   alt?: string
   heading?: string
   caption?: string
+  surface?: 'none' | 'neutral' | 'brand'
 }
 
 /** Two gallery images shown side by side. */
@@ -208,6 +209,7 @@ export interface Project {
   outcomeSummary?: any // Portable Text content
   learnings?: any // Portable Text content
   images?: ProjectGalleryRow[]
+  surfaceTint?: string
   relatedProjects?: Project[]
   featured?: boolean
   publishedAt: string
@@ -614,6 +616,7 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       solution,
       outcomeSummary,
       learnings,
+      surfaceTint,
       images[] {
         _type,
         _key,
@@ -621,6 +624,7 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
         alt,
         heading,
         caption,
+        surface,
         crop,
         hotspot,
         left {
@@ -630,6 +634,7 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
           alt,
           heading,
           caption,
+          surface,
           crop,
           hotspot
         },
@@ -640,6 +645,7 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
           alt,
           heading,
           caption,
+          surface,
           crop,
           hotspot
         }

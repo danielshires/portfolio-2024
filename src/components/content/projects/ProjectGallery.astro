@@ -5,9 +5,11 @@ import type { ProjectGalleryImage, ProjectGalleryRow } from '../../../lib/sanity
 
 interface Props {
   rows?: ProjectGalleryRow[]
+  tint?: string
 }
 
-const { rows = [] } = Astro.props
+const { rows = [], tint } = Astro.props
+const brandTint = tint && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tint) ? tint : undefined
 
 type RenderRow = {
   key: string
@@ -52,6 +54,18 @@ function hasCaption(image: ProjectGalleryImage) {
 /** Hairline keeps near-white artwork from merging into the light page; dark mode needs no edge. */
 const imageFrameClass = 'block w-full rounded-2xl ring-1 ring-zinc-900/[0.07] md:rounded-3xl dark:ring-0'
 
+const surfaceClasses = {
+  neutral: 'bg-zinc-100 dark:bg-zinc-900',
+  brand:
+    'bg-[color-mix(in_srgb,var(--gallery-tint)_10%,white)] dark:bg-[color-mix(in_srgb,var(--gallery-tint)_18%,#18181b)]',
+}
+
+function surfaceClass(image: ProjectGalleryImage) {
+  if (image.surface === 'brand') return brandTint ? surfaceClasses.brand : surfaceClasses.neutral
+  if (image.surface === 'neutral') return surfaceClasses.neutral
+  return ''
+}
+
 const figureLabels = new Map<ProjectGalleryImage, string>()
 renderRows
   .flatMap((row) => row.images)
@@ -61,7 +75,10 @@ renderRows
 
 {
   renderRows.length > 0 && (
-    <section class='col-span-full' aria-label='Project gallery'>
+    <section
+      class='col-span-full'
+      aria-label='Project gallery'
+      style={brandTint ? `--gallery-tint: ${brandTint}` : undefined}>
       <div class='space-y-12 md:space-y-20'>
         {renderRows.map((row) => (
           <div class={row.kind === 'pair' ? 'grid grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-8' : undefined}>
@@ -70,7 +87,7 @@ renderRows
                 <img
                   src={imageUrl(image, row.kind)}
                   alt={image.alt || ''}
-                  class={`${imageFrameClass} ${row.kind === 'pair' ? 'aspect-square object-cover' : 'h-auto'}`}
+                  class={`${imageFrameClass} ${surfaceClass(image)} ${row.kind === 'pair' ? 'aspect-square object-cover' : 'h-auto'}`}
                   loading='lazy'
                   decoding='async'
                 />
