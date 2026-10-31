@@ -5,6 +5,20 @@
 /* Custom CSS Variables */
 
 :root {
+    /* Space-separated RGB so tailwind.config.mjs can wrap them as rgb(var(--zinc-*) / <alpha>).
+     * Mirrored as the "Primitives" variable collection in the Portfolio 2025 Figma file. */
+    --zinc-50: 250 250 250;
+    --zinc-100: 244 244 245;
+    --zinc-200: 228 228 231;
+    --zinc-300: 212 212 216;
+    --zinc-400: 161 161 170;
+    --zinc-500: 113 113 122;
+    --zinc-600: 82 82 91;
+    --zinc-700: 63 63 70;
+    --zinc-800: 39 39 42;
+    --zinc-900: 24 24 27;
+    --zinc-950: 9 9 11;
+
     --background-color: rgb(250, 250, 250);
     --text-color: rgb(9, 9, 11);
     /* Black specks on the light canvas. White specks are for the dark canvas. */
