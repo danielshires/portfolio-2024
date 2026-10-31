@@ -143,19 +143,16 @@ SANITY_DATASET=production
 
 ## 🌐 Deployment
 
-The site is optimized for static hosting platforms like:
-- Vercel
-- Netlify
-- GitHub Pages
+Hosted on Netlify with Astro hybrid rendering (`@astrojs/netlify`). Most pages are pre-rendered; writing (plus the homepage writing preview, sitemap, and `/agent.md`) is rendered on request from Sanity’s CDN so publishing a post does not need a rebuild.
 
-Build the project with `npm run build` and deploy the `dist/` folder.
+Build with `npm run build`. Code and non-writing content changes still need a Netlify deploy.
 
 ## 📝 Content Management
 
 Access the Sanity Studio at `/studio` to manage:
 - Photography albums and images
 - Design projects and case studies
-- Blog posts and journal entries
+- Blog posts and journal entries (live after publish; allow ~60s for the CDN)
 - Site settings and metadata
 
 ## 🤝 Contributing

@@ -1,10 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import { getAllPosts } from '../../lib/sanity'
+import { applySanityPageCache } from '../../lib/sanityPageCache'
 import JournalPostList from '../../components/content/journal/JournalPostList.astro'
 import SimpleHero from '../../components/content/featured/SimpleHero.astro'
 
+// Fetch from Sanity on each request so new posts appear without a rebuild.
+export const prerender = false
+
 const posts = await getAllPosts()
+applySanityPageCache(Astro.response.headers)
 
 // SEO optimized content
 const pageTitle = 'Thinking out loud | Daniel Shires'

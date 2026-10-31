@@ -1,5 +1,6 @@
 import { collectSitemapSources } from '../lib/sitemap-sources'
 import type { Post, Album, Project, Picture, ConceptSummary } from '../lib/sanity'
+import { SANITY_PAGE_CACHE_CONTROL } from '../lib/sanityPageCache'
 
 // CRITICAL SEO: Preserve these URL structures to maintain Google rankings
 // Current URL patterns that must be maintained:
@@ -9,6 +10,9 @@ import type { Post, Album, Project, Picture, ConceptSummary } from '../lib/sanit
 // - /pictures - Photography collections
 // - /design - Design portfolio
 // - / - Homepage
+
+// On-request so newly published writing URLs appear without a rebuild.
+export const prerender = false
 
 export async function GET() {
   const { staticPages, posts, internalProjects, albums, pictures, concepts } =
@@ -99,6 +103,7 @@ export async function GET() {
   return new Response(sitemap, {
     headers: {
       'Content-Type': 'application/xml',
+      'Cache-Control': SANITY_PAGE_CACHE_CONTROL,
     },
   })
 }

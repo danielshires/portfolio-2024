@@ -6,9 +6,14 @@ import ProjectGrid from '../components/content/projects/ProjectGrid.astro'
 import Experience from '../components/content/experience/Experience.astro'
 import { stackBelowHeroClass } from '../components/ui/text/styles'
 import { getAuthorBySlug, getAllProjects, getFeaturedProjects, getAllPosts, urlFor } from '../lib/sanity'
+import { applySanityPageCache } from '../lib/sanityPageCache'
 import { PERSON_NODE_ID, SITE_ORIGIN, siteOwnerSameAs } from '../lib/seo/merge-global-jsonld'
 
+// On-request so the writing preview tracks Sanity without a rebuild.
+export const prerender = false
+
 const author = await getAuthorBySlug('daniel-shires')
+applySanityPageCache(Astro.response.headers)
 const avatarUrl = author?.image ? urlFor(author.image).width(192).height(192).url() : undefined
 
 const heroContent = {
