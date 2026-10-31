@@ -84,6 +84,13 @@ export function combineStyles(
  */
 export const gridGutterClass = 'gap-x-8'
 
+/**
+ * Frame for project images (case study sections and gallery).
+ * Hairline keeps near-white artwork from merging into the light page; dark mode needs no edge.
+ */
+export const projectImageFrameClass =
+  'block w-full rounded-2xl ring-1 ring-zinc-900/[0.07] md:rounded-3xl dark:ring-0'
+
 /** Vertical offset from hero-style intros to first content block (Thinking out loud / Projects lists). */
 export const stackBelowHeroClass = 'mt-16 md:mt-20'
 
