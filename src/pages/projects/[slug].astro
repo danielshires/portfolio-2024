@@ -9,7 +9,6 @@ import {
 } from '../../lib/sanity'
 import ProjectMeta from '../../components/content/projects/ProjectMeta.astro'
 import ProjectOutcomes from '../../components/content/projects/ProjectOutcomes.astro'
-import ProjectHeroImage from '../../components/content/projects/ProjectHeroImage.astro'
 import CaseStudySection from '../../components/content/projects/CaseStudySection.astro'
 import ProjectGallery from '../../components/content/projects/ProjectGallery.astro'
 import RelatedProjects from '../../components/content/projects/RelatedProjects.astro'
@@ -139,10 +138,12 @@ const jsonLd = {
   robots={resolvedRobots}
   jsonLd={jsonLd}>
   <!-- Project Header Section -->
-  <section class={`grid grid-cols-1 lg:grid-cols-12 gap-y-12 md:gap-y-16 ${gridGutterClass} mt-28 md:mt-36 lg:mt-44 mb-20 md:mb-32`}>
+  <section class={`grid grid-cols-1 lg:grid-cols-12 gap-y-12 md:gap-y-16 ${gridGutterClass} mt-28 md:mt-36 lg:mt-44 mb-8 md:mb-12`}>
     <div class='lg:col-span-8'>
-      <Text variant='h1' class='mb-2'>{fullProject.title}</Text>
-      <Text variant='h2' color='muted' class='mb-8'>{fullProject.subtitle}</Text>
+      <Text variant='h1' class='mb-4'>{fullProject.title}</Text>
+      {fullProject.subtitle && (
+        <Text variant='lead' color='muted' class='mb-8 max-w-2xl'>{fullProject.subtitle}</Text>
+      )}
       <ProjectMeta
         client={fullProject.client}
         role={fullProject.role}
@@ -151,15 +152,13 @@ const jsonLd = {
       />
     </div>
 
-    {fullProject.heroImage && <ProjectHeroImage image={fullProject.heroImage} />}
+  </section>
 
+  <!-- Case study sections. Impact is 00 so it reads as the opening row, ahead of 01. -->
+  <div class='mb-20'>
     {fullProject.outcomes && fullProject.outcomes.length > 0 && (
       <ProjectOutcomes outcomes={fullProject.outcomes} />
     )}
-  </section>
-
-  <!-- Case study sections -->
-  <div class='mb-20'>
     {
       caseStudySections.map((section, index) => (
         <CaseStudySection

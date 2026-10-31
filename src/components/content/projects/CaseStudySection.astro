@@ -2,7 +2,7 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import { PortableText } from 'astro-portabletext'
 import Text from '../../ui/text/Text.astro'
-import { gridGutterClass } from '../../ui/text/styles'
+import { gridGutterClass, sectionLabelTypographyClass } from '../../ui/text/styles'
 import CaseStudyImage from './CaseStudyImage.astro'
 
 interface Props {
@@ -34,20 +34,18 @@ const headingId = `case-study-${number}`
 {
   hasBody && (
     <section
-      class={`grid grid-cols-1 lg:grid-cols-12 gap-y-4 ${gridGutterClass} py-12 md:py-16 border-t border-zinc-200 dark:border-zinc-800`}
+      class={`grid grid-cols-1 lg:grid-cols-12 gap-y-8 ${gridGutterClass} py-12 md:py-16 border-t border-zinc-200 dark:border-zinc-800`}
       aria-labelledby={headingId}>
       <div class='lg:col-span-4'>
         <div class='lg:sticky lg:top-32'>
-          <Text variant='caption' color='muted' class='font-mono mb-2'>
-            {number}
-          </Text>
-          <Text variant='h4' id={headingId}>
+          <p class={sectionLabelTypographyClass}>{number}</p>
+          <Text variant='h2' id={headingId} class='mt-3'>
             {heading}
           </Text>
         </div>
       </div>
       <div class='lg:col-span-8'>
-        <div class='prose prose-lg dark:prose-invert max-w-none'>
+        <div class='prose dark:prose-invert max-w-none prose-p:text-lg prose-p:leading-relaxed prose-li:text-lg prose-li:leading-relaxed prose-headings:font-normal prose-headings:tracking-tight prose-h3:text-xl md:prose-h3:text-2xl prose-h4:text-xl md:prose-h4:text-2xl prose-blockquote:border-zinc-300 prose-blockquote:font-normal prose-blockquote:not-italic prose-blockquote:text-xl md:prose-blockquote:text-2xl prose-blockquote:leading-snug dark:prose-blockquote:border-zinc-700 dark:prose-blockquote:text-zinc-100'>
           <PortableText value={labelledBody} components={portableTextComponents} />
         </div>
       </div>

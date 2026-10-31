@@ -1,6 +1,6 @@
 ---
-import Text from '../../ui/text/Text.astro';
-import { gridGutterClass } from '../../ui/text/styles';
+import Text from '../../ui/text/Text.astro'
+import { gridGutterClass, sectionLabelTypographyClass } from '../../ui/text/styles'
 
 interface Props {
   outcomes: string[] | {
@@ -21,27 +21,39 @@ const normalizedOutcomes = Array.isArray(outcomes)
     })
   : []
 
-// Thirds of the 12-column page grid keep card widths the same across projects, so the second card
-// lines up with the case study text column. The schema allows up to four, which need quarters.
-const cardSpanClass = normalizedOutcomes.length > 3 ? 'lg:col-span-3' : 'lg:col-span-4'
+// The case study rows put the heading in four columns and the writing in the remaining eight.
+// These figures use that same split, so the first number starts on the writing column.
+const figureColumns =
+  normalizedOutcomes.length >= 4
+    ? 'sm:grid-cols-2 lg:grid-cols-4'
+    : normalizedOutcomes.length === 3
+      ? 'sm:grid-cols-2 lg:grid-cols-3'
+      : normalizedOutcomes.length === 2
+        ? 'sm:grid-cols-2'
+        : 'grid-cols-1'
 ---
 
-<section class="col-span-full">
-  <Text variant="h4" class="pb-6">Impact</Text>
+<section
+  class={`grid grid-cols-1 lg:grid-cols-12 gap-y-8 ${gridGutterClass} py-12 md:py-16 border-t border-zinc-200 dark:border-zinc-800`}
+  aria-labelledby='case-study-00'>
+  <div class='lg:col-span-4'>
+    <p class={sectionLabelTypographyClass}>00</p>
+    <Text variant='h2' id='case-study-00' class='mt-3'>
+      Impact
+    </Text>
+  </div>
 
-  <div class={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-y-8 ${gridGutterClass}`}>
-    {normalizedOutcomes.map((outcome, index) => (
-      <div
-        class={`${cardSpanClass} bg-zinc-50 dark:bg-zinc-800 rounded-lg p-6 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors`}
-        style={`animation-delay: ${index * 0.1}s`}
-      >
-        <!-- Outcome Text -->
-        <div class="space-y-2">
-          <Text variant="h3" weight="bold" class="font-mono">{outcome.statistic}</Text>
-          {outcome.description && (
-            <Text variant="body" weight="medium">{outcome.description}</Text>
-          )}
-        </div>
+  <div class={`grid grid-cols-1 content-start gap-y-10 lg:col-span-8 ${figureColumns} ${gridGutterClass}`}>
+    {normalizedOutcomes.map((outcome) => (
+      <div>
+        <p class="text-5xl md:text-6xl font-normal tracking-tight leading-none text-zinc-900 dark:text-zinc-100">
+          {outcome.statistic}
+        </p>
+        {outcome.description && (
+          <p class="mt-3 max-w-[16rem] text-base leading-snug text-zinc-600 dark:text-zinc-400">
+            {outcome.description}
+          </p>
+        )}
       </div>
     ))}
   </div>
