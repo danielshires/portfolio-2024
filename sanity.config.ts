@@ -1,3 +1,4 @@
+// Website studio entry. The schema itself lives in portfolio-25.
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { schemaTypes } from './portfolio-25/schemaTypes'
