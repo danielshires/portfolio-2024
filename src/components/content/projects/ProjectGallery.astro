@@ -9,7 +9,9 @@ interface Props {
   tint?: string
 }
 
-const { rows = [], tint } = Astro.props
+// Sanity returns null, not undefined, when a project has no gallery images.
+const rows = Astro.props.rows ?? []
+const { tint } = Astro.props
 const brandTint = tint && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(tint) ? tint : undefined
 
 type RowKind = 'single' | 'pair' | 'trio'

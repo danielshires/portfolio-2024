@@ -3,7 +3,7 @@ import type { PortableTextBlock } from '@portabletext/types'
 import { PortableText } from 'astro-portabletext'
 import Text from '../../ui/text/Text.astro'
 import { gridGutterClass } from '../../ui/text/styles'
-import PortableTextImage from '../posts/PortableTextImage.astro'
+import CaseStudyImage from './CaseStudyImage.astro'
 
 interface Props {
   number: string
@@ -16,7 +16,7 @@ const hasBody = Array.isArray(body) && body.length > 0
 
 const portableTextComponents = {
   type: {
-    image: PortableTextImage,
+    image: CaseStudyImage,
   },
 }
 
