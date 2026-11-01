@@ -4,6 +4,7 @@ import Hero from '../components/content/featured/Hero.astro'
 import WritingPreview from '../components/content/posts/WritingPreview.astro'
 import ProjectGrid from '../components/content/projects/ProjectGrid.astro'
 import Experience from '../components/content/experience/Experience.astro'
+import DesignValues from '../components/content/values/DesignValues.astro'
 import { stackBelowHeroClass } from '../components/ui/text/styles'
 import { getAuthorBySlug, getAllProjects, getFeaturedProjects, getAllPosts, urlFor } from '../lib/sanity'
 import { applySanityPageCache } from '../lib/sanityPageCache'
@@ -84,6 +85,7 @@ const structuredData = {
   {/* px/mx inset the clip box so the availability pulse can expand past the dot. */}
   <div class='-mx-2 grid h-max gap-8 overflow-hidden px-2 pb-16 md:pb-24'>
     <Hero {...heroContent} />
+    <DesignValues class={stackBelowHeroClass} />
     <ProjectGrid projects={projectsToShow} variant='featured' />
     {/* <ProjectGrid projects={projectsToShow} variant='text' /> */}
     <WritingPreview posts={allPosts} />

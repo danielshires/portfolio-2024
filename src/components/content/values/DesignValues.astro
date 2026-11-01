@@ -1,0 +1,62 @@
+---
+import SectionHeading from '../../ui/text/SectionHeading.astro'
+import Text from '../../ui/text/Text.astro'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+
+interface DesignValue {
+  title: string
+  description: string
+}
+
+const values: DesignValue[] = [
+  {
+    title: 'Discovery first',
+    description:
+      'Start with the problem, not the solution. Map the landscape, question assumptions, and find the opportunities worth pursuing.',
+  },
+  {
+    title: 'Customer-centred',
+    description:
+      'Design with people, not for them. Research, test, and iterate until the experience feels natural and the complexity disappears.',
+  },
+  {
+    title: 'Systems thinking',
+    description:
+      'Build patterns that scale. Create consistent, accessible foundations that make good design easier across every touchpoint.',
+  },
+  {
+    title: 'Collaborative craft',
+    description:
+      'Work across disciplines. Facilitate workshops, align stakeholders, and shape product direction through shared understanding.',
+  },
+  {
+    title: 'AI-augmented',
+    description:
+      'Bridge design and development. Use AI to explore ideas faster, prototype working solutions, and bring concepts to life.',
+  },
+]
+---
+
+<section class:list={['group/values', className]} aria-labelledby='values-heading'>
+  <SectionHeading id='values-heading'>How I work</SectionHeading>
+
+  <ul class='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
+    {
+      values.map((value) => (
+        <li class='flex flex-col gap-2'>
+          <Text variant='h5' class='text-zinc-900 dark:text-zinc-100'>
+            {value.title}
+          </Text>
+          <Text variant='body' color='muted' class='text-sm leading-relaxed'>
+            {value.description}
+          </Text>
+        </li>
+      ))
+    }
+  </ul>
+</section>
