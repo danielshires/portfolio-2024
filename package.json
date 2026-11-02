@@ -20,6 +20,8 @@
         "@portabletext/react": "^3.2.1",
         "@portabletext/to-html": "^2.0.14",
         "@portabletext/types": "^2.0.13",
+        "@react-three/drei": "^9.122.0",
+        "@react-three/fiber": "^8.18.0",
         "@sanity/astro": "^3.2.6",
         "@sanity/client": "^6.29.1",
         "@sanity/image-url": "^1.1.0",
@@ -37,13 +39,15 @@
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-icons": "^5.5.0",
-        "tailwindcss": "^3.4.3"
+        "tailwindcss": "^3.4.3",
+        "three": "^0.187.0"
     },
     "devDependencies": {
         "@tailwindcss/typography": "^0.5.13",
         "@types/d3-scale": "^4.0.9",
         "@types/d3-shape": "^3.2.0",
         "@types/node": "^22.15.30",
+        "@types/three": "^0.187.0",
         "typescript": "^5.8.3"
     }
 }

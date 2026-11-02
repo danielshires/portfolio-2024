@@ -1,5 +1,6 @@
 ---
 import HeroStatus from './HeroStatus'
+import HeroAvatar3D from './HeroAvatar3D'
 import Text from '../../ui/text/Text.astro'
 import { heroDisplayIntroClass, heroIdentityLabelClass, heroStatusOpticalAlignClass, simpleHeroSectionClass } from '../../ui/text/styles'
 
@@ -9,11 +10,13 @@ interface Props {
   /** Context under the headline (current role, way of working). Should not restate the headline. */
   supporting?: string
   avatar?: string
+  /** Homepage only: 96px 3D avatar that reacts to clicks; `avatar` is its poster image. */
+  interactiveAvatar?: boolean
   /** Homepage only: pulsing availability, place, weather, and local time around the name. */
   localStatus?: boolean
 }
 
-const { name, intro, supporting, avatar, localStatus } = Astro.props
+const { name, intro, supporting, avatar, interactiveAvatar, localStatus } = Astro.props
 
 /** Collapsed whitespace length — above this, headline spans ~80% of the content column for long quotes. */
 const LONG_INTRO_CHAR_THRESHOLD = 96
@@ -43,7 +46,10 @@ const getInTouchClass = [
   class={`${simpleHeroSectionClass} items-start`}
   aria-label='Introduction'>
   {
-    avatar && (
+    avatar && interactiveAvatar && <HeroAvatar3D poster={avatar} name={name} client:visible />
+  }
+  {
+    avatar && !interactiveAvatar && (
       <img
         src={avatar}
         alt={name ? `${name} avatar` : 'Avatar'}

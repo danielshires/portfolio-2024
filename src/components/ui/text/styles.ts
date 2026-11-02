@@ -44,7 +44,11 @@ export const alignStyles: Record<TextAlign, string> = {
 }
 
 // Map variants to HTML elements
-export const variantElements: Record<TextVariant, keyof JSX.IntrinsicElements> = {
+// Listed tags rather than `keyof JSX.IntrinsicElements`: three.js adds its own
+// intrinsic elements (e.g. `image`) whose required props break <Element>.
+export type TextElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'p'
+
+export const variantElements: Record<TextVariant, TextElement> = {
   h1: 'h1',
   h2: 'h2',
   h3: 'h3',

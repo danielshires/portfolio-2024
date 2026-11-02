@@ -136,6 +136,11 @@ export default defineConfig({
     },
     vite: {
         plugins: [playgroundDevProxy()],
+        // Dev: pre-bundle with React up front. Discovering these later re-optimizes deps and
+        // leaves the lazy avatar scene on a second copy of React (invalid hook call).
+        optimizeDeps: {
+            include: ['three', '@react-three/fiber', 'three/examples/jsm/loaders/GLTFLoader.js'],
+        },
         build: {
             chunkSizeWarningLimit: 1000,
             rollupOptions: {
@@ -143,6 +148,8 @@ export default defineConfig({
                     manualChunks: {
                         'react-vendor': ['react', 'react-dom'],
                         'sanity-vendor': ['@sanity/client', '@sanity/image-url'],
+                        // Only the homepage avatar uses these; keeps three.js out of shared chunks.
+                        'three-vendor': ['three', '@react-three/fiber'],
                     }
                 }
             }
