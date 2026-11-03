@@ -115,21 +115,6 @@ export default {
       validation: Rule => Rule.max(480).warning('Keep it short enough to read at a glance.')
     },
     {
-      name: 'pageLayout',
-      title: 'Page layout',
-      type: 'string',
-      description: 'Case studies get a section menu for the write-up; visual projects lead with the work.',
-      options: {
-        list: [
-          { title: 'Visual', value: 'visual' },
-          { title: 'Case study', value: 'caseStudy' }
-        ],
-        layout: 'radio',
-        direction: 'horizontal'
-      },
-      initialValue: 'visual'
-    },
-    {
       name: 'filter',
       title: 'Filters',
       type: 'array',

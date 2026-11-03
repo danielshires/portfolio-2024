@@ -13,7 +13,7 @@ if (!features.experiments.enabled) {
 const projects = (await getAllProjects()).filter((p) => p.slug?.current && p.linkBehavior !== 'external')
 const variants = [
   { key: 'visual', name: 'Visuals first', note: 'Every project leads with the work: title, summary, impact and strong visuals. Key projects add a “Read the full story” link to a separate case study page with a section menu.' },
-  { key: 'mixed', name: 'Mixed', note: 'The rail for case studies and the hero for visual work, set by Page layout in Studio.' },
+  { key: 'mixed', name: 'Mixed', note: 'The rail for case studies and the hero for visual work, picked per project.' },
   { key: 'hero', name: 'A · Hero', note: 'Inset rounded image first, then title and meta side by side, impact as a band. Visual projects collapse the brief into two short columns and go straight to the work.' },
   { key: 'rail', name: 'B · Rail', note: 'Sticky “On this page” rail that tracks the section in view, with impact figures pinned underneath. Becomes a sticky scrolling tab strip on mobile.' },
   { key: 'story', name: 'C · Story', note: 'Wildcard: a pinned visual on the left that cross-fades as you read the chapters on the right. Captions become chapters, so it works for galleries and write-ups alike.' },
