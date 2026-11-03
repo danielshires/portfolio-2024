@@ -1,0 +1,63 @@
+---
+import { recommendations } from '../../../config/recommendations'
+import SectionHeading from '../../ui/text/SectionHeading.astro'
+
+interface Props {
+  class?: string
+  /** Limit the number of recommendations shown (for homepage preview) */
+  limit?: number
+  /** Show a link to the full recommendations section */
+  href?: string
+}
+
+const { class: className, limit, href } = Astro.props
+
+const displayedRecommendations = limit ? recommendations.slice(0, limit) : recommendations
+
+const quoteClass = 'text-base leading-relaxed text-zinc-900 dark:text-zinc-100'
+const nameClass = 'font-semibold text-zinc-900 dark:text-zinc-100'
+const metaClass = 'text-sm text-zinc-500 dark:text-zinc-400'
+const avatarClass =
+  'size-12 shrink-0 rounded-full object-cover ring-1 ring-zinc-200 dark:ring-zinc-700'
+const initialsClass =
+  'flex size-12 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm font-medium text-zinc-600 ring-1 ring-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:ring-zinc-700'
+---
+
+<section class:list={[className]} aria-labelledby='recommendations-heading'>
+  <SectionHeading id='recommendations-heading' href={href}>Recommendations</SectionHeading>
+
+  <ul class='flex flex-col gap-6'>
+    {
+      displayedRecommendations.map((rec) => (
+        <li>
+          <blockquote class='flex items-start gap-4'>
+            {rec.avatar ? (
+              <img
+                src={rec.avatar}
+                alt=''
+                width='48'
+                height='48'
+                class={avatarClass}
+                loading='lazy'
+                decoding='async'
+              />
+            ) : (
+              <span class={initialsClass} aria-hidden='true'>
+                {rec.initials}
+              </span>
+            )}
+            <div class='flex min-w-0 flex-col gap-1'>
+              <p class={quoteClass}>"{rec.quote}"</p>
+              <footer class='flex flex-wrap items-baseline gap-x-2'>
+                <cite class={`${nameClass} not-italic`}>{rec.name}</cite>
+                <span class={metaClass}>
+                  {rec.role}, {rec.organization}
+                </span>
+              </footer>
+            </div>
+          </blockquote>
+        </li>
+      ))
+    }
+  </ul>
+</section>

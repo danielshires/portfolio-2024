@@ -11,6 +11,7 @@ import {
 import SectionHeading from '../components/ui/text/SectionHeading.astro'
 import ExternalLinkGlyph from '../components/ui/icons/ExternalLinkGlyph.astro'
 import Experience from '../components/content/experience/Experience.astro'
+import Recommendations from '../components/content/recommendations/Recommendations.astro'
 import { aboutContent } from '../config/about'
 import {
   getAllProjects,
@@ -100,6 +101,8 @@ const structuredData = {
     </section>
 
     <Experience class='mt-14 md:mt-20' />
+
+    <Recommendations class='mt-14 md:mt-20' />
 
     {showProjects && (
     <section class='mt-14 md:mt-20' aria-label='Projects'>
