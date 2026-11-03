@@ -27,14 +27,14 @@ export const Switch = React.forwardRef<HTMLElement, SwitchProps>(function Switch
       data-size={size}
       className={mergeClassName(
         joinClassName(
-          'group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent outline-none transition-colors',
+          'group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent outline-hidden transition-colors',
           'after:absolute after:-inset-x-3 after:-inset-y-2',
           'focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-white',
           'data-[size=default]:h-[18.4px] data-[size=default]:w-[32px]',
           'data-[size=sm]:h-[14px] data-[size=sm]:w-[24px]',
-          'data-[unchecked]:bg-zinc-200 dark:data-[unchecked]:bg-zinc-700',
-          'data-[checked]:bg-zinc-900 dark:data-[checked]:bg-zinc-100',
-          'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50'
+          'data-unchecked:bg-zinc-200 dark:data-unchecked:bg-zinc-700',
+          'data-checked:bg-zinc-900 dark:data-checked:bg-zinc-100',
+          'data-disabled:cursor-not-allowed data-disabled:opacity-50'
         ),
         className
       )}
@@ -42,11 +42,11 @@ export const Switch = React.forwardRef<HTMLElement, SwitchProps>(function Switch
       <SwitchPrimitive.Thumb
         data-slot='switch-thumb'
         className={joinClassName(
-          'pointer-events-none block rounded-full bg-white shadow-sm ring-0 transition-transform',
-          'dark:data-[unchecked]:bg-zinc-100 dark:data-[checked]:bg-zinc-900',
+          'pointer-events-none block rounded-full bg-white shadow-xs ring-0 transition-transform',
+          'dark:data-unchecked:bg-zinc-100 dark:data-checked:bg-zinc-900',
           'group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3',
-          'group-data-[size=default]/switch:data-[unchecked]:translate-x-0 group-data-[size=sm]/switch:data-[unchecked]:translate-x-0',
-          'group-data-[size=default]/switch:data-[checked]:translate-x-[calc(100%-2px)] group-data-[size=sm]/switch:data-[checked]:translate-x-[calc(100%-2px)]'
+          'data-unchecked:group-data-[size=default]/switch:translate-x-0 data-unchecked:group-data-[size=sm]/switch:translate-x-0',
+          'data-checked:group-data-[size=default]/switch:translate-x-[calc(100%-2px)] data-checked:group-data-[size=sm]/switch:translate-x-[calc(100%-2px)]'
         )}
       />
     </SwitchPrimitive.Root>

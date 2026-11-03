@@ -26,7 +26,7 @@ const ContactCTA: React.FC<ReactContactCTAProps> = ({
       variant={variant}
       size={size}
       href={emailHref}
-      className={`group !p-2 sm:!px-3 sm:!py-1.5 ${className}`}
+      className={`group p-2! sm:px-3! sm:py-1.5! ${className}`}
       aria-label="Send email to Daniel Shires"
       {...rest}
     >

@@ -28,6 +28,72 @@ interface GeminiResponse {
   }>
 }
 
+/** Newline-delimited JSON events: `delta` (more reply text), then `done` or `error`. */
+const STREAM_HEADERS = {
+  'content-type': 'application/x-ndjson; charset=utf-8',
+  'cache-control': 'no-store',
+}
+
+type StreamEvent =
+  | { type: 'delta'; text: string }
+  | { type: 'done'; reply: string; suggestions: string[] }
+  | { type: 'error'; error: string }
+
+/** Turns Gemini's server-sent events into reply deltas, then the parsed reply and suggestions. */
+function streamReply(upstream: Response): ReadableStream<Uint8Array> {
+  const encoder = new TextEncoder()
+  return new ReadableStream({
+    async start(controller) {
+      const send = (event: StreamEvent) => controller.enqueue(encoder.encode(`${JSON.stringify(event)}\n`))
+      const reader = upstream.body?.getReader()
+      if (!reader) {
+        send({ type: 'error', error: 'The avatar could not reply. Try again.' })
+        controller.close()
+        return
+      }
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let raw = ''
+      let sent = 0
+      try {
+        while (true) {
+          const { value, done } = await reader.read()
+          if (done) break
+          buffer += decoder.decode(value, { stream: true })
+          // Each SSE event is a `data: {...}` line holding the next chunk of model output.
+          let newline = buffer.indexOf('\n')
+          while (newline >= 0) {
+            const line = buffer.slice(0, newline).trim()
+            buffer = buffer.slice(newline + 1)
+            newline = buffer.indexOf('\n')
+            if (!line.startsWith('data:')) continue
+            try {
+              raw += replyText(JSON.parse(line.slice(5)) as GeminiResponse)
+            } catch {
+              continue
+            }
+            const reply = partialReply(raw)
+            if (reply.length > sent) {
+              send({ type: 'delta', text: reply.slice(sent) })
+              sent = reply.length
+            }
+          }
+        }
+        const parsed = parseModelReply(raw)
+        const fallback = partialReply(raw).trim()
+        if (parsed) send({ type: 'done', ...parsed })
+        else if (fallback) send({ type: 'done', reply: fallback, suggestions: [] })
+        else send({ type: 'error', error: 'The avatar could not reply. Try again.' })
+      } catch (error) {
+        console.error('avatar stream failed', error)
+        send({ type: 'error', error: 'The avatar could not reply. Try again.' })
+      } finally {
+        controller.close()
+      }
+    },
+  })
+}
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS })
 }
@@ -92,13 +158,43 @@ function systemInstruction(siteText: string): string {
   ].join('\n')
 }
 
+/** The model's (non-thought) text in a response or stream chunk, untrimmed. */
 function replyText(payload: GeminiResponse): string {
   const parts = payload.candidates?.[0]?.content?.parts ?? []
   return parts
     .filter((part) => part.text && !part.thought)
     .map((part) => part.text)
     .join('')
-    .trim()
+}
+
+/**
+ * The reply decoded so far from partial JSON like `{"reply": "Hi, I'm Dan and I`, so it can be
+ * streamed before the model has finished. Stops before an escape that hasn't fully arrived.
+ */
+function partialReply(raw: string): string {
+  const key = raw.match(/"reply"\s*:\s*"/)
+  if (!key || key.index === undefined) return ''
+  let out = ''
+  for (let i = key.index + key[0].length; i < raw.length; i++) {
+    const char = raw[i]
+    if (char === '"') break
+    if (char !== '\\') {
+      out += char
+      continue
+    }
+    const next = raw[i + 1]
+    if (next === undefined) break
+    if (next === 'u') {
+      const hex = raw.slice(i + 2, i + 6)
+      if (hex.length < 4) break
+      out += String.fromCharCode(parseInt(hex, 16))
+      i += 5
+      continue
+    }
+    out += ({ n: '\n', t: '\t', r: '', b: '', f: '' } as Record<string, string>)[next] ?? next
+    i += 1
+  }
+  return out
 }
 
 function parseModelReply(text: string): { reply: string; suggestions: string[] } | null {
@@ -188,12 +284,14 @@ export default async function handler(req: Request): Promise<Response> {
           suggestions: { type: 'array', items: { type: 'string' } },
         },
         required: ['reply', 'suggestions'],
+        // Reply first, so it can stream before the suggestions arrive.
+        propertyOrdering: ['reply', 'suggestions'],
       },
     },
   })
 
   async function generate(target: string, key: string): Promise<Response> {
-    return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${target}:generateContent`, {
+    return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${target}:streamGenerateContent?alt=sse`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -218,14 +316,7 @@ export default async function handler(req: Request): Promise<Response> {
       return json({ error: 'The avatar could not reply. Try again.' }, 502)
     }
 
-    const payload = (await response.json()) as GeminiResponse
-    const reply = replyText(payload)
-    const parsed = parseModelReply(reply)
-    if (parsed) return json(parsed)
-    if (!reply || reply.startsWith('{')) {
-      return json({ error: 'The avatar could not reply. Try again.' }, 502)
-    }
-    return json({ reply, suggestions: [] })
+    return new Response(streamReply(response), { status: 200, headers: STREAM_HEADERS })
   } catch (error) {
     console.error('avatar chat failed', error)
     return json({ error: 'The avatar could not reply. Try again.' }, 502)

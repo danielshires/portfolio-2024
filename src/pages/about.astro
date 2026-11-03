@@ -51,7 +51,7 @@ const structuredData = {
 
     <section class='mt-10 md:mt-14 max-w-3xl' aria-label='Summary'>
       <div class='space-y-4'>
-        <Text variant='body' class='!text-xl !leading-relaxed md:!text-[2rem] md:!leading-snug'>
+        <Text variant='body' class='text-xl! leading-relaxed! md:text-[2rem]! md:leading-snug!'>
           {aboutContent.summary.paragraph1BeforeLink}
           <a
             href={aboutContent.summary.paragraph1Link.href}
@@ -59,10 +59,10 @@ const structuredData = {
             rel='noopener noreferrer'
             class={`text-zinc-900 dark:text-zinc-100 ${textLinkClass}`}>{aboutContent.summary.paragraph1Link.label}</a>{aboutContent.summary.paragraph1AfterLink}
         </Text>
-        <Text variant='body' class='!text-xl !leading-relaxed md:!text-[2rem] md:!leading-snug'>
+        <Text variant='body' class='text-xl! leading-relaxed! md:text-[2rem]! md:leading-snug!'>
           {aboutContent.summary.paragraph2}
         </Text>
-        <Text variant='body' class='!text-xl !leading-relaxed md:!text-[2rem] md:!leading-snug'>
+        <Text variant='body' class='text-xl! leading-relaxed! md:text-[2rem]! md:leading-snug!'>
           {aboutContent.summary.paragraph3}
         </Text>
       </div>
@@ -128,7 +128,7 @@ const structuredData = {
                         alt=''
                         width='48'
                         height='48'
-                        class='size-[3rem] shrink-0 self-start rounded-md object-cover'
+                        class='size-12 shrink-0 self-start rounded-md object-cover'
                         loading='lazy'
                         decoding='async'
                       />

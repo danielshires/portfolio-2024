@@ -4,7 +4,7 @@
  * Dan Portfolio (Astro 4), featuring:
  * - Hybrid rendering via @astrojs/netlify (static by default; writing is SSR)
  * - React components for interactivity
- * - Tailwind CSS for styling
+ * - Tailwind CSS v4 for styling (Vite plugin; theme still in tailwind.config.mjs via @config)
  * - Sanity CMS integration
  * - Swup (main-only swap; instant feel with theme off + no head asset wait)
  * - Sharp image optimization
@@ -14,7 +14,7 @@ import {
     defineConfig
 } from 'astro/config';
 import http from 'node:http';
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import sanity from '@sanity/astro';
 import swup from '@swup/astro';
@@ -86,7 +86,6 @@ export default defineConfig({
         '/playgrounds/spinnerstudio': '/playground/spinnerstudio',
     },
     integrations: [
-        tailwind(),
         react({
             include: ['**/*.jsx', '**/*.tsx', '**/*.js', '**/*.ts']
         }),
@@ -135,11 +134,29 @@ export default defineConfig({
         defaultStrategy: 'hover',
     },
     vite: {
-        plugins: [playgroundDevProxy()],
-        // Dev: pre-bundle with React up front. Discovering these later re-optimizes deps and
-        // leaves the lazy avatar scene on a second copy of React (invalid hook call).
+        plugins: [tailwindcss(), playgroundDevProxy()],
+        // Dev: pre-bundle these up front. Discovering one mid-session re-optimizes deps, which
+        // breaks already-open pages ("Outdated Optimize Dep") and can leave the lazy avatar scene
+        // on a second copy of React. Collapsible and the AI Elements packages are only reached
+        // from the chat playground.
         optimizeDeps: {
-            include: ['three', '@react-three/fiber', 'three/examples/jsm/loaders/GLTFLoader.js'],
+            include: [
+                'three',
+                '@react-three/fiber',
+                'three/examples/jsm/loaders/GLTFLoader.js',
+                '@base-ui/react/collapsible',
+                'radix-ui',
+                '@radix-ui/react-use-controllable-state',
+                'class-variance-authority',
+                'clsx',
+                'tailwind-merge',
+                'lucide-react',
+                'motion/react',
+                'use-stick-to-bottom',
+                'streamdown',
+                'cmdk',
+                'nanoid',
+            ],
         },
         build: {
             chunkSizeWarningLimit: 1000,

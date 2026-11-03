@@ -1,14 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 
+// theme() gives arrays in Tailwind 3 and may give strings in 4, so the typography config reads
+// font stacks and font sizes through these.
+const fontStack = (value) => (Array.isArray(value) ? value.join(',') : value)
+const sizeOf = (value) => (Array.isArray(value) ? value[0] : value)
+
 export default {
     content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
     theme: {
         extend: {
             colors: {
-                primary: {
-                    DEFAULT: 'rgb(var(--zinc-950))',
-                    light: 'rgb(var(--zinc-50))',
-                },
                 focus: {
                     DEFAULT: '#000000',
                     dark: '#ffffff',
@@ -61,12 +62,33 @@ export default {
                     '38%': { transform: 'translateX(130%)', opacity: '0' },
                     '100%': { transform: 'translateX(0)', opacity: '1' },
                 },
+                'engagement-pop': {
+                    '0%': { transform: 'scale(1)' },
+                    '35%': { transform: 'scale(1.28)' },
+                    '100%': { transform: 'scale(1)' },
+                },
+                'engagement-burst': {
+                    '0%': { transform: 'translate(0, 0) scale(0.4)', opacity: '0.9' },
+                    '100%': { transform: 'translate(var(--burst-x, 0px), -18px) scale(0.9)', opacity: '0' },
+                },
+                'engagement-blink': {
+                    '0%, 100%': { transform: 'scaleY(1)' },
+                    '40%': { transform: 'scaleY(0.15)' },
+                },
+                'engagement-tick': {
+                    '0%': { transform: 'translateY(0.35em)', opacity: '0' },
+                    '100%': { transform: 'translateY(0)', opacity: '1' },
+                },
             },
             animation: {
                 'link-icon-external-wrap':
                     'link-icon-external-wrap 0.72s cubic-bezier(0.4, 0, 0.2, 1) both',
                 'link-icon-right-wrap': 'link-icon-right-wrap 0.65s cubic-bezier(0.4, 0, 0.2, 1) both',
                 'link-icon-left-wrap': 'link-icon-left-wrap 0.65s cubic-bezier(0.4, 0, 0.2, 1) both',
+                'engagement-pop': 'engagement-pop 0.42s cubic-bezier(0.2, 0.9, 0.3, 1.2) both',
+                'engagement-burst': 'engagement-burst 0.65s ease-out both',
+                'engagement-blink': 'engagement-blink 0.4s ease-in-out both',
+                'engagement-tick': 'engagement-tick 0.28s cubic-bezier(0.2, 0.8, 0.2, 1) both',
             },
             typography: (theme) => ({
                 DEFAULT: {
@@ -77,7 +99,7 @@ export default {
                             maxWidth: '60ch',
                         },
                         li: {
-                            fontSize: theme('fontSize.base')[0],
+                            fontSize: sizeOf(theme('fontSize.base')),
                             lineHeight: theme('lineHeight.relaxed'),
                             color: theme('colors.zinc.900'),
                         },
@@ -85,59 +107,59 @@ export default {
                             color: 'rgb(var(--zinc-950))',
                         },
                         h1: {
-                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontFamily: fontStack(theme('fontFamily.sans')),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.3xl')[0],
+                            fontSize: sizeOf(theme('fontSize.3xl')),
                             lineHeight: theme('lineHeight.snug'),
                             letterSpacing: theme('letterSpacing.tight'),
                             color: theme('colors.zinc.900'),
                         },
                         h2: {
-                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontFamily: fontStack(theme('fontFamily.sans')),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.2xl')[0],
+                            fontSize: sizeOf(theme('fontSize.2xl')),
                             lineHeight: theme('lineHeight.snug'),
                             color: theme('colors.zinc.900'),
                         },
                         h3: {
-                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontFamily: fontStack(theme('fontFamily.sans')),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.xl')[0],
+                            fontSize: sizeOf(theme('fontSize.xl')),
                             lineHeight: theme('lineHeight.snug'),
                             color: theme('colors.zinc.900'),
                         },
                         h4: {
-                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontFamily: fontStack(theme('fontFamily.sans')),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.lg')[0],
+                            fontSize: sizeOf(theme('fontSize.lg')),
                             lineHeight: theme('lineHeight.snug'),
                             color: theme('colors.zinc.900'),
                         },
                         h5: {
-                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontFamily: fontStack(theme('fontFamily.sans')),
                             fontWeight: '600',
-                            fontSize: theme('fontSize.base')[0],
+                            fontSize: sizeOf(theme('fontSize.base')),
                             lineHeight: theme('lineHeight.snug'),
                             color: theme('colors.zinc.900'),
                         },
                         p: {
-                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontFamily: fontStack(theme('fontFamily.sans')),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.base')[0],
+                            fontSize: sizeOf(theme('fontSize.base')),
                             color: theme('colors.zinc.900'),
                             lineHeight: theme('lineHeight.relaxed'),
 
                         },
                         '.prose-caption': {
-                            fontFamily: theme('fontFamily.sans').join(','),
+                            fontFamily: fontStack(theme('fontFamily.sans')),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.sm')[0],
+                            fontSize: sizeOf(theme('fontSize.sm')),
                             color: theme('colors.zinc.900'),
                         },
                         '.prose-overline': {
-                            fontFamily: theme('fontFamily.mono').join(','),
+                            fontFamily: fontStack(theme('fontFamily.mono')),
                             fontWeight: '400',
-                            fontSize: theme('fontSize.xs')[0],
+                            fontSize: sizeOf(theme('fontSize.xs')),
                             textTransform: 'uppercase',
                             letterSpacing: theme('letterSpacing.wide'),
                             color: theme('colors.zinc.900'),
@@ -216,7 +238,7 @@ export default {
                             color: theme('colors.zinc.400'),
                         },
                         '.prose-overline': {
-                            fontFamily: theme('fontFamily.mono').join(','),
+                            fontFamily: fontStack(theme('fontFamily.mono')),
                             color: theme('colors.zinc.400'),
                         },
                         'strong': {

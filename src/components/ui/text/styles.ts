@@ -16,14 +16,16 @@ export type TextColor = 'default' | 'muted' | 'inverted'
 export type TextAlign = 'left' | 'center' | 'right'
 
 // Define default styles for each variant (single coordinated scale sitewide)
+// The `md:`/`lg:leading-*` values keep the line heights these had in Tailwind 3, where a
+// responsive `text-*` size also reset line height; in v4 `leading-*` always wins.
 export const variantStyles: Record<TextVariant, string> = {
-  h1: 'text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight leading-tight md:leading-snug',
-  h2: 'text-2xl md:text-3xl font-normal tracking-tight leading-snug',
-  h3: 'text-xl md:text-2xl font-normal leading-snug',
-  h4: 'text-lg md:text-xl font-normal leading-snug',
+  h1: 'text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight leading-tight md:leading-snug lg:leading-none',
+  h2: 'text-2xl md:text-3xl font-normal tracking-tight leading-snug md:leading-9',
+  h3: 'text-xl md:text-2xl font-normal leading-snug md:leading-8',
+  h4: 'text-lg md:text-xl font-normal leading-snug md:leading-7',
   h5: 'text-base font-semibold leading-snug',
   subtitle: 'text-base font-normal leading-snug',
-  lead: 'text-lg md:text-xl font-normal leading-relaxed',
+  lead: 'text-lg md:text-xl font-normal leading-relaxed md:leading-7',
   body: 'text-base font-normal leading-relaxed',
   caption: 'text-sm font-normal leading-snug',
   overline: 'text-xs font-normal uppercase tracking-wider font-mono',
@@ -115,7 +117,7 @@ export const textLinkClass = `no-underline hover:underline ${linkUnderlineDecora
 export const footerMutedLinkClass =
   'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors no-underline hover:underline underline-offset-4 decoration-zinc-400 decoration-1 hover:decoration-zinc-600 dark:decoration-zinc-500 dark:hover:decoration-zinc-300'
 export const linkFocusRingClass =
-  'rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
+  'rounded-xs outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950'
 
 /**
  * Stroke color for external-link arrows inside a parent with Tailwind `group` (homepage project list/cards, About).
@@ -127,21 +129,21 @@ export const externalLinkGlyphGroupHoverClass =
  * Explore “back” row: text-only link; faux underline on {@link siteChildNavBackLabelClass} uses `group` hover/focus.
  */
 export const siteChildNavBackAnchorClass =
-  `site-child-nav-back group inline-block w-max max-w-full text-lg font-normal text-zinc-900 no-underline hover:!no-underline visited:!no-underline dark:text-zinc-100 md:text-xl ${linkFocusRingClass}`
+  `site-child-nav-back group inline-block w-max max-w-full text-lg font-normal text-zinc-900 no-underline hover:no-underline! visited:no-underline! dark:text-zinc-100 md:text-xl ${linkFocusRingClass}`
 
 /** Faux underline via border-bottom (paired with {@link siteChildNavBackAnchorClass}). */
 export const siteChildNavBackLabelClass =
-  'site-child-nav-back__label border-b border-transparent pb-[1px] text-left leading-snug transition-[border-color] group-hover:border-zinc-900 dark:group-hover:border-zinc-100'
+  'site-child-nav-back__label border-b border-transparent pb-px text-left leading-snug transition-[border-color] group-hover:border-zinc-900 dark:group-hover:border-zinc-100'
 
 /**
  * Card-style row link (title + optional muted body): whole row clickable; underline only the title via
  * {@link cardLinkTitleUnderlineClass} on the heading `Text`.
  *
- * `hover:!no-underline` keeps `.prose a:hover` / `prose-invert` from re-applying underline to the `<a>` (it would propagate to
+ * `hover:no-underline!` keeps `.prose a:hover` / `prose-invert` from re-applying underline to the `<a>` (it would propagate to
  * all text inside the block link); the heading still picks up {@link cardLinkTitleUnderlineClass}.
  */
 export const cardLinkAnchorClass =
-  `group block no-underline hover:!no-underline visited:!no-underline ${linkFocusRingClass}`
+  `group block no-underline hover:no-underline! visited:no-underline! ${linkFocusRingClass}`
 
 export const cardLinkTitleUnderlineClass =
   'no-underline underline-offset-4 decoration-zinc-400 decoration-1 transition-colors group-hover:underline group-hover:decoration-zinc-600 dark:decoration-zinc-500 dark:group-hover:decoration-zinc-300'
@@ -194,7 +196,8 @@ export const heroIdentityLabelClass = sectionLabelTypographyClass
 /** Homepage hero headline typography (display scale). Column width is set in `Hero.astro` from intro length. */
 export const heroDisplayIntroClass = [
   'whitespace-pre-line text-left font-normal tracking-tight text-zinc-900 dark:text-zinc-100',
-  'leading-snug md:leading-snug lg:leading-[1.12]',
+  // sm:leading-10 keeps Tailwind 3's line height for sm:text-4xl (see variantStyles).
+  'leading-snug sm:leading-10 md:leading-snug lg:leading-[1.12]',
   'text-3xl sm:text-4xl md:text-5xl lg:text-[4rem]',
   'mt-4',
 ].join(' ')

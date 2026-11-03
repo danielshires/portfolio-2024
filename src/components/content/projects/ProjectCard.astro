@@ -81,10 +81,10 @@ const linkLabel = external ? `${title} (opens in new tab)` : `View ${title} proj
         href={projectUrl}
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener noreferrer' : undefined}
-        class='group block relative overflow-hidden transition-colors duration-300 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white cursor-pointer'
+        class='group block relative overflow-hidden transition-colors duration-300 rounded-lg outline-hidden focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white cursor-pointer'
         aria-label={linkLabel}
         data-swup-preload={external ? undefined : true}>
-        <div class='w-full aspect-[3/2] overflow-hidden rounded-xl'>
+        <div class='w-full aspect-3/2 overflow-hidden rounded-xl'>
           <img
             src={projectImage.src}
             alt={projectImage.alt}

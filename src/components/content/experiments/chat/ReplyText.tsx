@@ -42,19 +42,3 @@ export function linkSegments(text: string): Segment[] {
   if (cursor < text.length) segments.push({ type: 'text', value: text.slice(cursor) })
   return segments
 }
-
-export function ReplyText({ text }: { text: string }) {
-  return (
-    <>
-      {linkSegments(text).map((segment, index) =>
-        segment.type === 'text' ? (
-          <span key={index}>{segment.value}</span>
-        ) : (
-          <a key={index} href={segment.href} target="_blank" rel="noopener noreferrer">
-            {segment.label}
-          </a>
-        ),
-      )}
-    </>
-  )
-}

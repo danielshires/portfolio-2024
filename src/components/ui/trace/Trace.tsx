@@ -91,7 +91,7 @@ export function TraceCollapsibleTrigger({
     <Collapsible.Trigger
       data-slot='trace-collapsible-trigger'
       className={joinClassName(
-        'group flex w-fit max-w-full min-w-0 cursor-pointer items-center gap-1 rounded-sm border-0 bg-transparent p-0 text-left font-inherit text-zinc-600 outline-none transition-colors hover:text-zinc-900 focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 dark:text-zinc-400 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950',
+        'group flex w-fit max-w-full min-w-0 cursor-pointer items-center gap-1 rounded-xs border-0 bg-transparent p-0 text-left font-inherit text-zinc-600 outline-hidden transition-colors hover:text-zinc-900 focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 dark:text-zinc-400 dark:hover:text-zinc-100 dark:focus-visible:ring-zinc-100 dark:focus-visible:ring-offset-zinc-950',
         classNameString(className),
       )}
       {...props}>
@@ -104,7 +104,7 @@ export function TraceCollapsibleTrigger({
         strokeLinecap='round'
         strokeLinejoin='round'
         aria-hidden='true'
-        className='size-4 shrink-0 transition-transform duration-200 group-data-[panel-open]:rotate-90 motion-reduce:transition-none'>
+        className='size-4 shrink-0 transition-transform duration-200 group-data-panel-open:rotate-90 motion-reduce:transition-none'>
         <path d='m9 18 6-6-6-6' />
       </svg>
     </Collapsible.Trigger>
@@ -119,7 +119,7 @@ export function TraceCollapsibleContent({
   return (
     <Collapsible.Panel
       data-slot='trace-collapsible-content'
-      className='h-[var(--collapsible-panel-height)] min-w-0 overflow-hidden transition-[height] duration-200 data-[ending-style]:h-0 data-[starting-style]:h-0 motion-reduce:transition-none'
+      className='h-(--collapsible-panel-height) min-w-0 overflow-hidden transition-[height] duration-200 data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none'
       {...props}>
       <div
         data-slot='trace-collapsible-content-inner'

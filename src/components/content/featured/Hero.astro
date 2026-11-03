@@ -29,7 +29,7 @@ const exploreProjectsClass = [
   'bg-zinc-900 text-zinc-50 hover:bg-zinc-800',
   'dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700',
   'transition-colors duration-200',
-  'outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-white',
+  'outline-hidden focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-white',
 ].join(' ')
 
 const getInTouchClass = [
@@ -37,7 +37,7 @@ const getInTouchClass = [
   'border-zinc-300 bg-transparent text-zinc-700 hover:border-zinc-400 hover:bg-zinc-50',
   'dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-900',
   'transition-colors duration-200',
-  'outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-white',
+  'outline-hidden focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-white',
 ].join(' ')
 ---
 
@@ -47,6 +47,18 @@ const getInTouchClass = [
   aria-label='Introduction'>
   {
     avatar && interactiveAvatar && <HeroAvatar3D poster={avatar} name={name} client:visible />
+  }
+  {
+    avatar && interactiveAvatar && (
+      // Before first paint on a full load, mark the outfit the visitor left the avatar in, so CSS
+      // shows its still rather than Work Dan's. Storage key and markPersona: avatarCycle.ts.
+      <script is:inline>
+        try {
+          var saved = JSON.parse(sessionStorage.getItem('avatar-cycle') || 'null')
+          if (saved && saved.persona) document.documentElement.dataset.avatarPersona = saved.persona
+        } catch (e) {}
+      </script>
+    )
   }
   {
     avatar && !interactiveAvatar && (

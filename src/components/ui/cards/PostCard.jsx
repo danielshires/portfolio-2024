@@ -16,10 +16,10 @@ export default function PostCard({ post }) {
     return (
         <a
             href={`/journal/${post.slug?.current || post._id}`}
-            className="group block relative overflow-hidden transition-all duration-300 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+            className="group block relative overflow-hidden transition-all duration-300 rounded-lg outline-hidden focus-visible:ring-2 focus-visible:ring-zinc-950 cursor-pointer"
         >
             {post.mainImage ? (
-                <div className="w-full aspect-[2/1] overflow-hidden rounded-lg">
+                <div className="w-full aspect-2/1 overflow-hidden rounded-lg">
                     <img
                         src={imageUrl}
                         alt={post.title}
@@ -29,7 +29,7 @@ export default function PostCard({ post }) {
                     />
                 </div>
             ) : (
-                <div className="w-full aspect-[2/1] flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 text-4xl">📝</div>
+                <div className="w-full aspect-2/1 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 text-4xl">📝</div>
             )}
             <div className="flex flex-col justify-between pt-6">
                 <div className="">

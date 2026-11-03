@@ -1,10 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './tailwind.css';
 
-/* Custom CSS Variables */
+@layer utilities {
+  /* Custom CSS Variables */
 
-:root {
+  :root {
     /* Space-separated RGB so tailwind.config.mjs can wrap them as rgb(var(--zinc-*) / <alpha>).
      * Mirrored as the "Primitives" variable collection in the Portfolio 2025 Figma file. */
     --zinc-50: 250 250 250;
@@ -24,17 +23,16 @@
     /* Black specks on the light canvas. White specks are for the dark canvas. */
     --page-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='8' intercept='-5'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     --page-grain-on-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='8' intercept='-5'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+  }
 
-.dark {
+  .dark {
     --background-color: rgb(9, 9, 11);
     --text-color: rgb(250, 250, 250);
-}
+  }
 
+  /* Base Styles */
 
-/* Base Styles */
-
-html {
+  html {
     scroll-behavior: smooth;
     /* Reserve scrollbar width so centered `container` + fixed nav align the same whether the page scrolls */
     scrollbar-gutter: stable;
@@ -43,43 +41,50 @@ html {
     text-size-adjust: 100%;
     min-height: 100%;
     position: relative;
-}
+  }
 
-@media (prefers-reduced-motion: reduce) {
+  @media (prefers-reduced-motion: reduce) {
     html {
-        scroll-behavior: auto;
+      scroll-behavior: auto;
     }
-}
+  }
 
-/* Light: very subtle blush wash (static — follows LM/DM via `.dark` on html) */
-html:not(.dark) {
+  /* Light: very subtle blush wash (static — follows LM/DM via `.dark` on html) */
+  html:not(.dark) {
     background-color: #fdfcfd;
-    background-image: linear-gradient(165deg, #ffffff 0%, #fdfbfc 50%, #faf7fa 100%);
+    background-image: linear-gradient(
+      165deg,
+      #ffffff 0%,
+      #fdfbfc 50%,
+      #faf7fa 100%
+    );
     background-attachment: scroll;
-}
+  }
 
-html.dark {
+  html.dark {
     background-color: rgb(9, 9, 11);
-}
+  }
 
-body {
+  body {
     font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        'Segoe UI',
-        Roboto,
-        sans-serif;
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
     position: relative;
     z-index: 1;
     background-color: transparent;
     color: var(--text-color);
-    transition: background-color 0.2s ease-out, color 0.2s ease-out;
-}
+    transition:
+      background-color 0.2s ease-out,
+      color 0.2s ease-out;
+  }
 
-/* Grain on `html` (not `body::before` with z-index:-1 — that paints behind `html`’s fill and disappears). */
-html:not(.dark)::before,
-html.dark::before {
+  /* Grain on `html` (not `body::before` with z-index:-1 — that paints behind `html`’s fill and disappears). */
+  html:not(.dark)::before,
+  html.dark::before {
     content: '';
     position: fixed;
     inset: 0;
@@ -87,40 +92,39 @@ html.dark::before {
     z-index: 0;
     background-repeat: repeat;
     background-size: 240px 240px;
-}
+  }
 
-html:not(.dark)::before {
+  html:not(.dark)::before {
     background-image: var(--page-grain);
     opacity: 0.06;
     mix-blend-mode: multiply;
-}
+  }
 
-html.dark::before {
+  html.dark::before {
     background-image: var(--page-grain-on-dark);
     opacity: 0.06;
     mix-blend-mode: screen;
-}
+  }
 
+  /* Typography */
 
-/* Typography */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 400;
     line-height: 1.2;
-}
+  }
 
-p {
+  p {
     line-height: 1.6;
-}
+  }
 
-
-/* Links — default no underline; prose uses typography plugin; UI uses `hover:underline` utilities.
+  /* Links — default no underline; prose uses typography plugin; UI uses `hover:underline` utilities.
  * Must stay in `@layer base` so `@layer utilities` (e.g. hover/group-hover underline) can override. */
+}
 
 @layer base {
     a {
@@ -132,85 +136,88 @@ p {
     }
 }
 
-/* Buttons */
+/* Element resets sit in the base layer so utility classes win, as they did in Tailwind v3. */
+@layer base {
+    /* Buttons */
 
-button {
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-family: inherit;
-}
-
-
-/* Images */
-
-img {
-    max-width: 100%;
-    height: auto;
-}
+    button {
+        cursor: pointer;
+        border: none;
+        background: none;
+        font-family: inherit;
+    }
 
 
-/* Focus styles — avoid a persistent box on mouse-clicked links (:focus without :focus-visible) */
+    /* Images */
 
-*:focus:not(:focus-visible) {
-    outline: none !important;
-}
-
-*:focus-visible {
-    outline: 2px solid #000000;
-    outline-offset: 2px;
-}
-
-.dark *:focus-visible {
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
-}
-
-/* Tracked mouse modality: strip outlines and Tailwind ring shadows after pointer use */
-html[data-input-method="mouse"] *:focus,
-html[data-input-method="mouse"] *:focus-visible,
-html[data-input-method="mouse"] a:focus,
-html[data-input-method="mouse"] a:focus-visible,
-html[data-input-method="mouse"] button:focus,
-html[data-input-method="mouse"] button:focus-visible,
-html[data-input-method="mouse"] [tabindex]:focus,
-html[data-input-method="mouse"] [tabindex]:focus-visible,
-html[data-input-method="mouse"] [role="button"]:focus,
-html[data-input-method="mouse"] [role="button"]:focus-visible,
-html[data-input-method="mouse"] input:focus,
-html[data-input-method="mouse"] input:focus-visible,
-html[data-input-method="mouse"] .cursor-pointer:focus,
-html[data-input-method="mouse"] .cursor-pointer:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-    -webkit-tap-highlight-color: transparent !important;
-    border-color: inherit !important;
-    -webkit-focus-ring-color: transparent !important;
-    -moz-outline: none !important;
-}
-
-/* Reinforce keyboard modality (Tab navigation) once input method switches */
-html[data-input-method="keyboard"] *:focus-visible,
-html[data-input-method="keyboard"] a:focus-visible,
-html[data-input-method="keyboard"] button:focus-visible,
-html[data-input-method="keyboard"] [tabindex]:focus-visible {
-    outline: 2px solid #000000 !important;
-    outline-offset: 2px !important;
-}
-
-html.dark[data-input-method="keyboard"] *:focus-visible,
-html.dark[data-input-method="keyboard"] a:focus-visible,
-html.dark[data-input-method="keyboard"] button:focus-visible,
-html.dark[data-input-method="keyboard"] [tabindex]:focus-visible {
-    outline: 2px solid #ffffff !important;
-    outline-offset: 2px !important;
-}
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 
 
-/* Smooth transitions */
+    /* Focus styles — avoid a persistent box on mouse-clicked links (:focus without :focus-visible) */
 
-* {
-    transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out;
+    *:focus:not(:focus-visible) {
+        outline: none !important;
+    }
+
+    *:focus-visible {
+        outline: 2px solid #000000;
+        outline-offset: 2px;
+    }
+
+    .dark *:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 2px;
+    }
+
+    /* Tracked mouse modality: strip outlines and Tailwind ring shadows after pointer use */
+    html[data-input-method="mouse"] *:focus,
+    html[data-input-method="mouse"] *:focus-visible,
+    html[data-input-method="mouse"] a:focus,
+    html[data-input-method="mouse"] a:focus-visible,
+    html[data-input-method="mouse"] button:focus,
+    html[data-input-method="mouse"] button:focus-visible,
+    html[data-input-method="mouse"] [tabindex]:focus,
+    html[data-input-method="mouse"] [tabindex]:focus-visible,
+    html[data-input-method="mouse"] [role="button"]:focus,
+    html[data-input-method="mouse"] [role="button"]:focus-visible,
+    html[data-input-method="mouse"] input:focus,
+    html[data-input-method="mouse"] input:focus-visible,
+    html[data-input-method="mouse"] .cursor-pointer:focus,
+    html[data-input-method="mouse"] .cursor-pointer:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        border-color: inherit !important;
+        -webkit-focus-ring-color: transparent !important;
+        -moz-outline: none !important;
+    }
+
+    /* Reinforce keyboard modality (Tab navigation) once input method switches */
+    html[data-input-method="keyboard"] *:focus-visible,
+    html[data-input-method="keyboard"] a:focus-visible,
+    html[data-input-method="keyboard"] button:focus-visible,
+    html[data-input-method="keyboard"] [tabindex]:focus-visible {
+        outline: 2px solid #000000 !important;
+        outline-offset: 2px !important;
+    }
+
+    html.dark[data-input-method="keyboard"] *:focus-visible,
+    html.dark[data-input-method="keyboard"] a:focus-visible,
+    html.dark[data-input-method="keyboard"] button:focus-visible,
+    html.dark[data-input-method="keyboard"] [tabindex]:focus-visible {
+        outline: 2px solid #ffffff !important;
+        outline-offset: 2px !important;
+    }
+
+
+    /* Smooth transitions */
+
+    * {
+        transition: background-color 0.2s ease-out, color 0.2s ease-out, border-color 0.2s ease-out;
+    }
 }
 
 
@@ -499,4 +506,13 @@ html.dark[data-high-contrast] [data-slot='switch'][data-checked] {
 
 html.dark[data-high-contrast] [data-slot='switch'][data-checked] [data-slot='switch-thumb'] {
     background: #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-engagement-pop,
+    .animate-engagement-burst,
+    .animate-engagement-blink,
+    .animate-engagement-tick {
+        animation: none !important;
+    }
 }
