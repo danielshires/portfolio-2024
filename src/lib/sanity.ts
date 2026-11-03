@@ -230,6 +230,8 @@ export interface Project {
   _id: string
   title: string
   subtitle?: string
+  /** Short intro under the title on the project page. */
+  summary?: string
   slug: {
     current: string
   }
@@ -663,6 +665,7 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       _id,
       title,
       subtitle,
+      summary,
       slug,
       client,
       role,

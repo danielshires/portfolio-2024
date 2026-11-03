@@ -107,6 +107,14 @@ export default {
       description: 'State the design challenge or value, not just the subject.'
     },
     {
+      name: 'summary',
+      title: 'Summary',
+      type: 'text',
+      rows: 4,
+      description: 'Two or three sentences shown under the title: the problem, what you did, and what changed.',
+      validation: Rule => Rule.max(480).warning('Keep it short enough to read at a glance.')
+    },
+    {
       name: 'filter',
       title: 'Filters',
       type: 'array',
