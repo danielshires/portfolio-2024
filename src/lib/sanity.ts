@@ -230,6 +230,10 @@ export interface Project {
   _id: string
   title: string
   subtitle?: string
+  /** Short intro under the title on the project page. */
+  summary?: string
+  /** Case studies get the section menu; visual projects lead with the work. */
+  pageLayout?: 'caseStudy' | 'visual'
   slug: {
     current: string
   }
@@ -663,6 +667,8 @@ export async function getProjectBySlug(slug: string): Promise<Project> {
       _id,
       title,
       subtitle,
+      summary,
+      pageLayout,
       slug,
       client,
       role,

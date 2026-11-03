@@ -1,0 +1,600 @@
+---
+// Layout prototypes for project pages. Not linked from the site; compare at /playground/project-layouts.
+import type { PortableTextBlock } from '@portabletext/types'
+import { PortableText } from 'astro-portabletext'
+import Layout from '../../../../layouts/Layout.astro'
+import {
+  getAllProjects,
+  getProjectBySlug,
+  urlFor,
+  flattenProjectGallery,
+  caseStudyFigureLabels,
+} from '../../../../lib/sanity'
+import type { SanityImage } from '../../../../lib/sanity'
+import ProjectHeroImage from '../../../../components/content/projects/ProjectHeroImage.astro'
+import ProjectMeta from '../../../../components/content/projects/ProjectMeta.astro'
+import CaseStudySection from '../../../../components/content/projects/CaseStudySection.astro'
+import CaseStudyImage from '../../../../components/content/projects/CaseStudyImage.astro'
+import ProjectGallery from '../../../../components/content/projects/ProjectGallery.astro'
+import RelatedProjects from '../../../../components/content/projects/RelatedProjects.astro'
+import SiteChildNav from '../../../../components/layout/navigation/SiteChildNav.astro'
+import Text from '../../../../components/ui/text/Text.astro'
+import {
+  gridGutterClass,
+  projectImageFrameClass,
+  sectionLabelTypographyClass,
+} from '../../../../components/ui/text/styles'
+import { features } from '../../../../config/features'
+import {
+  storySections,
+  hasFullStory,
+  readMinutes as storyReadMinutes,
+  shortHeading,
+  formatList,
+  proseClass,
+} from '../_story'
+
+const variants = ['visual', 'mixed', 'hero', 'rail', 'story'] as const
+type Variant = (typeof variants)[number]
+
+export async function getStaticPaths() {
+  const projects = await getAllProjects()
+  return projects
+    .filter((project) => project.slug?.current && project.linkBehavior !== 'external')
+    .flatMap((project) =>
+      ['visual', 'mixed', 'hero', 'rail', 'story'].map((variant) => ({ params: { variant, slug: project.slug.current } })),
+    )
+}
+
+if (!features.experiments.enabled) {
+  return Astro.redirect('/404')
+}
+
+const variant = Astro.params.variant as Variant
+const slug = Astro.params.slug!
+const project = await getProjectBySlug(slug)
+if (!project || !variants.includes(variant)) {
+  return Astro.redirect('/404')
+}
+
+const allProjects = (await getAllProjects()).filter(
+  (p) => p.slug?.current && p.linkBehavior !== 'external',
+)
+
+const sections = storySections(project)
+const figureLabels = caseStudyFigureLabels(sections.map((s) => s.body))
+const outcomes = (project.outcomes ?? []).map((o) =>
+  typeof o === 'string' ? { statistic: o, description: '' } : o,
+)
+const galleryImages = flattenProjectGallery(project.images)
+const hasGallery = galleryImages.length > 0
+// Case studies lead with writing; visual projects lead with the work.
+// Until Page layout is set in Studio, fall back to the projects picked as case studies.
+const caseStudySlugs = ['commbank-yello', 'formbay-explains']
+const isCaseStudy = project.pageLayout ? project.pageLayout === 'caseStudy' : caseStudySlugs.includes(slug)
+// Mixed: the rail for case studies, the hero for visual work.
+const layout = variant === 'mixed' ? (isCaseStudy ? 'rail' : 'hero') : variant
+const year = project.publishedAt ? new Date(project.publishedAt).getFullYear() : undefined
+
+function withFigureLabels(body: PortableTextBlock[]) {
+  return body.map((block) => {
+    const label = block._key ? figureLabels.get(block._key) : undefined
+    return label ? { ...block, figureLabel: label } : block
+  })
+}
+const ptComponents = { type: { image: CaseStudyImage } }
+
+const imageUrl = (image: SanityImage, w = 1600) =>
+  urlFor(image).width(w).quality(85).fit('max').auto('format').url()
+
+// ---- Hero ----
+const heroAlt = (project.heroImage as { alt?: string } | undefined)?.alt ?? ''
+const heroSrc = project.heroImage
+  ? urlFor(project.heroImage).width(2800).height(1400).quality(85).fit('crop').auto('format').url()
+  : undefined
+
+// ---- Rail: one nav entry per section on the page ----
+const railItems = [
+  { id: 'overview', label: 'Overview' },
+  ...(outcomes.length > 0 ? [{ id: 'impact', label: 'Impact' }] : []),
+  ...sections.map((s) => ({ id: s.id, label: shortHeading(s.heading) })),
+  ...(hasGallery ? [{ id: 'designs', label: 'Designs' }] : []),
+]
+
+// Intro under the title, from the project's Summary in Sanity.
+const intro = project.summary?.trim()
+
+
+const readMinutes = storyReadMinutes(sections)
+
+const railMeta = [
+  ['Client', project.client],
+  ['Role', formatList(project.role)],
+  ['Team', formatList(project.team)],
+  ['Year', year],
+  ['Read', `${readMinutes} min`],
+].filter(([, value]) => value)
+
+// ---- Visuals first: the work on this page; the write-up gets its own page for key projects ----
+const visualMeta = railMeta.filter(([label]) => label !== 'Read')
+const storyHref = hasFullStory(sections) ? `/playground/project-layouts/visual/${slug}/story` : undefined
+const storyLinkClass =
+  'group/story inline-flex items-baseline gap-2 text-lg text-zinc-900 underline decoration-zinc-300 underline-offset-4 transition-colors hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-700 dark:hover:decoration-zinc-100'
+
+// ---- Story: chapters on the right, a pinned visual on the left that follows them ----
+type Visual = { src: string; alt: string; cover: boolean; caption?: string }
+type Chapter = {
+  id: string
+  kind: 'intro' | 'section' | 'figure'
+  label: string
+  heading?: string
+  body?: PortableTextBlock[]
+  caption?: string
+  visual?: number
+}
+const visuals: Visual[] = []
+const chapters: Chapter[] = []
+if (project.heroImage) {
+  visuals.push({ src: imageUrl(project.heroImage, 2000), alt: heroAlt, cover: true })
+}
+chapters.push({ id: 'intro', kind: 'intro', label: 'Overview', visual: visuals.length ? 0 : undefined })
+const storyGallery = galleryImages.map((image, i) => ({
+  id: `fig-${i}`,
+  kind: 'figure' as const,
+  label: `Fig. ${String(i + 1).padStart(2, '0')}`,
+  heading: image.heading,
+  caption: image.caption,
+  image,
+}))
+const pushGallery = () =>
+  storyGallery.forEach(({ image, ...chapter }) => {
+    visuals.push({ src: imageUrl(image), alt: image.alt ?? '', cover: false, caption: image.heading || image.caption })
+    chapters.push({ ...chapter, visual: visuals.length - 1 })
+  })
+sections.forEach((section, i) => {
+  const images = section.body.filter((b) => b._type === 'image' && (b as any).asset) as any[]
+  const text = section.body.filter((b) => b._type !== 'image')
+  const firstVisual = visuals.length
+  images.forEach((img) =>
+    visuals.push({ src: imageUrl(img), alt: img.alt ?? '', cover: false, caption: img.caption }),
+  )
+  chapters.push({
+    id: section.id,
+    kind: 'section',
+    label: String(i + 1).padStart(2, '0'),
+    heading: section.heading,
+    body: text,
+    visual: images.length ? firstVisual : undefined,
+  })
+  images.slice(1).forEach((img, j) =>
+    chapters.push({
+      id: `${section.id}-img-${j}`,
+      kind: 'figure',
+      label: figureLabels.get(img._key) ?? 'Figure',
+      caption: img.caption,
+      visual: firstVisual + j + 1,
+    }),
+  )
+})
+pushGallery()
+
+const variantLabels: Record<Variant, string> = { visual: 'Visuals first', mixed: 'Mixed', hero: 'A · Hero', rail: 'B · Rail', story: 'C · Story' }
+---
+
+<Layout pageTitle={`${project.title} (${variant}) | Layout prototype`} pageDescription='Project page layout prototype.' robots='noindex,follow'>
+  {/* =================== VISUALS FIRST =================== */}
+  {
+    layout === 'visual' && (
+      <>
+        <section class='mt-28 md:mt-36 lg:mt-44 pb-12 md:pb-16'>
+          <Text variant='h1' class='mb-4'>{project.title}</Text>
+          {project.subtitle && <Text variant='lead' color='muted' class='max-w-2xl'>{project.subtitle}</Text>}
+          {intro && (
+            <Text variant='lead' class='mt-8 max-w-3xl'>{intro}</Text>
+          )}
+          <dl class='mt-10 flex flex-wrap gap-x-12 gap-y-6'>
+            {visualMeta.map(([label, value]) => (
+              <div class='max-w-xs'>
+                <dt class={sectionLabelTypographyClass}>{label}</dt>
+                <dd class='mt-2'><Text variant='body'>{value}</Text></dd>
+              </div>
+            ))}
+          </dl>
+          {storyHref && (
+            <a href={storyHref} class={`${storyLinkClass} mt-10`}>
+              Read the full story · {readMinutes} min <span aria-hidden='true' class='transition-transform group-hover/story:translate-x-1'>→</span>
+            </a>
+          )}
+        </section>
+
+        {heroSrc && (
+          <img
+            src={heroSrc}
+            alt={heroAlt}
+            class={`${projectImageFrameClass} h-[56svh] min-h-80 object-cover md:h-[72svh]`}
+            fetchpriority='high'
+          />
+        )}
+
+        {outcomes.length > 0 && (
+          <section
+            aria-label='Impact'
+            class={`grid grid-cols-1 sm:grid-cols-2 ${['', 'lg:grid-cols-1', 'lg:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4'][Math.min(outcomes.length, 4)]} ${gridGutterClass} gap-y-10 py-12 md:py-16`}>
+            {outcomes.map((o) => (
+              <div>
+                <p class='text-5xl md:text-6xl font-normal tracking-tight leading-none text-zinc-900 dark:text-zinc-100'>{o.statistic}</p>
+                {o.description && (
+                  <p class='mt-3 max-w-[16rem] text-base leading-snug text-zinc-600 dark:text-zinc-400'>{o.description}</p>
+                )}
+              </div>
+            ))}
+          </section>
+        )}
+
+        {hasGallery && (
+          <div class:list={['mb-20', outcomes.length === 0 && 'mt-4']}>
+            <ProjectGallery rows={project.images} tint={project.surfaceTint} />
+          </div>
+        )}
+
+        {/* Key projects: the write-up lives on its own page, offered again once the work has been seen. */}
+        {storyHref && (
+          <section class='mb-20 border-t border-zinc-200 pt-12 md:pt-16 dark:border-zinc-800'>
+            <p class={sectionLabelTypographyClass}>The full story · {readMinutes} min read</p>
+            <Text variant='h2' class='mt-3 max-w-2xl'>How it came together</Text>
+            <Text variant='body' color='muted' class='mt-4 max-w-2xl'>
+              {sections.map((sec) => shortHeading(sec.heading)).join(', ')}.
+            </Text>
+            <a href={storyHref} class={`${storyLinkClass} mt-8`}>
+              Read the full story <span aria-hidden='true' class='transition-transform group-hover/story:translate-x-1'>→</span>
+            </a>
+          </section>
+        )}
+      </>
+    )
+  }
+
+  {/* =================== A · HERO =================== */}
+  {
+    layout === 'hero' && (
+      <>
+        {heroSrc && (
+          <div class='mt-28 md:mt-36'>
+            <img
+              src={heroSrc}
+              alt={heroAlt}
+              class={`${projectImageFrameClass} h-[56svh] min-h-80 object-cover md:h-[72svh]`}
+              fetchpriority='high'
+            />
+          </div>
+        )}
+
+        <section class={`grid grid-cols-1 lg:grid-cols-12 gap-y-10 ${gridGutterClass} pt-12 md:pt-16 pb-12 md:pb-16`}>
+          <div class='lg:col-span-7'>
+            <p class={sectionLabelTypographyClass}>{isCaseStudy ? 'Case study' : 'Project'}{year && ` · ${year}`}</p>
+            <Text variant='h1' class='mt-4 mb-5'>{project.title}</Text>
+            {project.subtitle && <Text variant='lead' color='muted' class='max-w-2xl'>{project.subtitle}</Text>}
+          </div>
+          <dl class='lg:col-span-4 lg:col-start-9 grid grid-cols-2 gap-x-8 gap-y-5 content-end'>
+            {[
+              ['Client', project.client],
+              ['Role', project.role?.join(', ')],
+              ['Team', project.team?.join(', ')],
+              ['Year', year],
+            ]
+              .filter(([, v]) => v)
+              .map(([k, v]) => (
+                <div>
+                  <dt class={sectionLabelTypographyClass}>{k}</dt>
+                  <dd class='mt-1.5 text-base text-zinc-900 dark:text-zinc-100'>{v}</dd>
+                </div>
+              ))}
+          </dl>
+        </section>
+
+        {outcomes.length > 0 && (
+          <section
+            aria-label='Impact'
+            class={`grid grid-cols-1 sm:grid-cols-2 ${['', 'lg:grid-cols-1', 'lg:grid-cols-2', 'lg:grid-cols-3', 'lg:grid-cols-4'][Math.min(outcomes.length, 4)]} ${gridGutterClass} gap-y-10 border-y border-zinc-200 py-12 md:py-16 dark:border-zinc-800`}>
+            {outcomes.map((o) => (
+              <div>
+                <p class='text-5xl md:text-6xl font-normal tracking-tight leading-none text-zinc-900 dark:text-zinc-100'>
+                  {o.statistic}
+                </p>
+                {o.description && (
+                  <p class='mt-3 max-w-[16rem] text-base leading-snug text-zinc-600 dark:text-zinc-400'>{o.description}</p>
+                )}
+              </div>
+            ))}
+          </section>
+        )}
+
+        {isCaseStudy ? (
+          <div class='mb-20'>
+            {sections.map((s, i) => (
+              <CaseStudySection
+                number={String(i + 1).padStart(2, '0')}
+                heading={s.heading}
+                body={s.body}
+                figureLabels={figureLabels}
+              />
+            ))}
+          </div>
+        ) : (
+          <>
+            {/* Visual projects: the brief sits in two short columns, then the work takes over. */}
+            {sections.length > 0 && (
+              <section class={`grid grid-cols-1 md:grid-cols-2 ${gridGutterClass} gap-y-10 border-t border-zinc-200 py-12 md:py-16 dark:border-zinc-800`}>
+                {sections.map((s) => (
+                  <div>
+                    <p class={sectionLabelTypographyClass}>{s.heading}</p>
+                    <div class={`${proseClass} mt-4 prose-p:text-base md:prose-p:text-lg`}>
+                      <PortableText value={withFigureLabels(s.body)} components={ptComponents} />
+                    </div>
+                  </div>
+                ))}
+              </section>
+            )}
+          </>
+        )}
+
+        <div class='mt-4 mb-20'>
+          <ProjectGallery rows={project.images} tint={project.surfaceTint} figureOffset={figureLabels.size} />
+        </div>
+      </>
+    )
+  }
+
+  {/* =================== B · RAIL =================== */}
+  {
+    layout === 'rail' && (
+      <div
+        class={`grid grid-cols-1 lg:grid-cols-12 ${gridGutterClass} mt-28 md:mt-36 lg:mt-44 mb-20`}
+        data-spy-root>
+        <aside class='lg:col-span-3 sticky top-14 md:top-16 z-30 -mx-8 px-8 lg:mx-0 lg:px-0 lg:self-start lg:top-32 bg-white/90 backdrop-blur dark:bg-zinc-950/90 lg:bg-transparent lg:backdrop-blur-none lg:dark:bg-transparent'>
+          <nav aria-label='On this page' class='py-3 lg:py-0'>
+            <ol class='flex gap-5 overflow-x-auto whitespace-nowrap lg:flex-col lg:gap-0 lg:overflow-visible [scrollbar-width:none]'>
+              {railItems.map((item) => (
+                <li>
+                  <a
+                    href={`#${item.id}`}
+                    data-spy-link={item.id}
+                    data-no-swup
+                    class='group/link relative flex items-baseline gap-2 py-1 text-base text-zinc-500 transition-[color,padding] duration-200 hover:text-zinc-900 data-[active]:text-zinc-900 lg:py-1.5 lg:data-[active]:pl-3 dark:text-zinc-400 dark:hover:text-zinc-100 dark:data-[active]:text-zinc-100'>
+                    <span aria-hidden='true' class='absolute left-0 top-1/2 hidden h-4 w-px -translate-y-1/2 bg-current opacity-0 transition-opacity group-data-[active]/link:opacity-100 lg:block' />
+                    {item.label}
+                    {item.id === 'designs' && (
+                      <span class='font-mono text-xs tabular-nums opacity-0 transition-opacity group-data-[active]/link:opacity-60' data-gallery-count>
+                        1/{galleryImages.length}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </aside>
+
+        <div class='lg:col-span-9 min-w-0'>
+          <section id='overview' data-spy-section class='scroll-mt-40 pb-12 md:pb-16'>
+            <Text variant='h1' class='mb-4'>{project.title}</Text>
+            {project.subtitle && <Text variant='lead' color='muted' class='max-w-2xl'>{project.subtitle}</Text>}
+            {intro && (
+              <Text variant='lead' class='mt-8 max-w-3xl'>{intro}</Text>
+            )}
+            <dl class='mt-10 flex flex-wrap gap-x-12 gap-y-6'>
+              {railMeta.map(([label, value]) => (
+                <div class='max-w-xs'>
+                  <dt class={sectionLabelTypographyClass}>{label}</dt>
+                  <dd class='mt-2'><Text variant='body'>{value}</Text></dd>
+                </div>
+              ))}
+            </dl>
+            {project.heroImage && (
+              <div class='mt-12 md:mt-16'>
+                <ProjectHeroImage image={project.heroImage} />
+              </div>
+            )}
+          </section>
+
+          {railItems.slice(1).map((item) => {
+            const sectionClass = `scroll-mt-40 border-t border-zinc-200 py-12 md:py-16 dark:border-zinc-800`
+            if (item.id === 'impact') {
+              return (
+                <section id='impact' data-spy-section class={sectionClass}>
+                  <p class={sectionLabelTypographyClass}>00</p>
+                  <Text variant='h2' class='mt-3 mb-10'>Impact</Text>
+                  <div class={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${gridGutterClass} gap-y-10`}>
+                    {outcomes.map((o) => (
+                      <div>
+                        <p class='text-5xl md:text-6xl font-normal tracking-tight leading-none text-zinc-900 dark:text-zinc-100'>{o.statistic}</p>
+                        <p class='mt-3 max-w-[16rem] text-base leading-snug text-zinc-600 dark:text-zinc-400'>{o.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )
+            }
+            if (item.id === 'designs') {
+              return (
+                <section id='designs' data-spy-section class={sectionClass}>
+                  <p class={sectionLabelTypographyClass}>{String(sections.length + 1).padStart(2, '0')}</p>
+                  <Text variant='h2' class='mt-3 mb-10'>Designs</Text>
+                  <ProjectGallery rows={project.images} tint={project.surfaceTint} figureOffset={figureLabels.size} />
+                </section>
+              )
+            }
+            const s = sections.find((x) => x.id === item.id)!
+            return (
+              <section id={s.id} data-spy-section class={sectionClass}>
+                <p class={sectionLabelTypographyClass}>{String(sections.indexOf(s) + 1).padStart(2, '0')}</p>
+                <Text variant='h2' class='mt-3 mb-6'>{s.heading}</Text>
+                <div class={`${proseClass} max-w-3xl`}>
+                  <PortableText value={withFigureLabels(s.body)} components={ptComponents} />
+                </div>
+              </section>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+  {/* =================== C · STORY (wildcard) =================== */}
+  {
+    layout === 'story' && (
+      <div class='mt-20 md:mt-24 lg:grid lg:grid-cols-12 lg:gap-x-12 mb-20' data-story>
+        <div class='hidden lg:block lg:col-span-7'>
+          <div class='sticky top-24 h-[calc(100svh-7.5rem)]'>
+            <div class='relative h-full overflow-hidden rounded-3xl bg-zinc-100 dark:bg-zinc-900'>
+              {visuals.map((v, i) => (
+                <img
+                  src={v.src}
+                  alt={v.alt}
+                  data-story-visual={i}
+                  class:list={[
+                    'absolute inset-0 h-full w-full transition-[opacity,transform] duration-700 ease-out',
+                    v.cover ? 'object-cover' : 'object-contain p-10',
+                    i === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-[1.02]',
+                  ]}
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                />
+              ))}
+              <div class='absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 text-xs font-mono uppercase tracking-wider'>
+                <span class='rounded-full bg-white/85 px-3 py-1.5 text-zinc-700 backdrop-blur dark:bg-zinc-950/80 dark:text-zinc-300' data-story-counter>
+                  01 / {String(visuals.length).padStart(2, '0')}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class='lg:col-span-5'>
+          {chapters.map((c) => (
+            <article
+              id={c.id}
+              data-story-chapter
+              data-visual={c.visual ?? ''}
+              class:list={[
+                'flex flex-col justify-center',
+                c.kind === 'figure' ? 'py-10 lg:min-h-[60svh]' : 'py-12 lg:min-h-[85svh]',
+                c.kind !== 'intro' && 'border-t border-zinc-200 dark:border-zinc-800',
+              ]}>
+              {c.visual !== undefined && (
+                <img
+                  src={visuals[c.visual].src}
+                  alt={visuals[c.visual].alt}
+                  class={`${projectImageFrameClass} mb-8 h-auto lg:hidden`}
+                  loading='lazy'
+                />
+              )}
+              {c.kind === 'intro' && (
+                <>
+                  <p class={sectionLabelTypographyClass}>{isCaseStudy ? 'Case study' : 'Project'}{year && ` · ${year}`}</p>
+                  <Text variant='h1' class='mt-4 mb-5'>{project.title}</Text>
+                  {project.subtitle && <Text variant='lead' color='muted' class='mb-8'>{project.subtitle}</Text>}
+                  <ProjectMeta client={project.client} role={project.role} team={project.team} />
+                  {outcomes.length > 0 && (
+                    <div class='mt-12 grid grid-cols-2 gap-x-8 gap-y-8'>
+                      {outcomes.map((o) => (
+                        <div>
+                          <p class='text-5xl md:text-6xl font-normal tracking-tight leading-none text-zinc-900 dark:text-zinc-100'>{o.statistic}</p>
+                          <p class='mt-3 text-base leading-snug text-zinc-600 dark:text-zinc-400'>{o.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <p class={`${sectionLabelTypographyClass} mt-16 hidden lg:block`}>Scroll ↓</p>
+                </>
+              )}
+              {c.kind === 'section' && (
+                <>
+                  <p class={sectionLabelTypographyClass}>{c.label}</p>
+                  <Text variant='h2' class='mt-3 mb-6'>{c.heading}</Text>
+                  <div class={proseClass}>
+                    <PortableText value={c.body ?? []} components={ptComponents} />
+                  </div>
+                </>
+              )}
+              {c.kind === 'figure' && (
+                <>
+                  <p class={sectionLabelTypographyClass}>{c.label}</p>
+                  {c.heading && <Text variant='h3' class='mt-3'>{c.heading}</Text>}
+                  {c.caption && <Text variant='body' color='muted' class='mt-3 max-w-md'>{c.caption}</Text>}
+                </>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  {
+    project.relatedProjects && project.relatedProjects.length > 0 && (
+      <section class='my-20'>
+        <RelatedProjects projects={project.relatedProjects} />
+      </section>
+    )
+  }
+  <SiteChildNav parentHref='/playground/project-layouts' parentLabel='Layout prototypes' layout='full' />
+
+  {/* Prototype switcher */}
+  <div class='fixed inset-x-0 bottom-16 z-50 flex justify-center px-4 pointer-events-none'>
+    <div class='pointer-events-auto flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-zinc-200 bg-white/90 p-1 text-sm shadow-lg backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/90'>
+      {variants.map((v) => (
+        <a
+          href={`/playground/project-layouts/${v}/${slug}`}
+          class:list={[
+            'whitespace-nowrap rounded-full px-3 py-1.5',
+            v === variant ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900' : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100',
+          ]}>
+          {variantLabels[v]}
+        </a>
+      ))}
+      <span class='mx-1 h-5 w-px bg-zinc-200 dark:bg-zinc-700' />
+      <select
+        aria-label='Project'
+        class='rounded-full bg-transparent px-2 py-1.5 text-zinc-700 dark:text-zinc-300'
+        onchange={`location.href='/playground/project-layouts/${variant}/'+this.value`}>
+        {allProjects.map((p) => (
+          <option value={p.slug.current} selected={p.slug.current === slug}>{p.title}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import '../_rail-spy'
+
+  // C · Story: swap the pinned visual to whichever chapter is crossing the middle of the screen.
+  const story = document.querySelector('[data-story]')
+  if (story) {
+    const visuals = [...story.querySelectorAll<HTMLElement>('[data-story-visual]')]
+    const counter = story.querySelector<HTMLElement>('[data-story-counter]')
+    const chapters = [...story.querySelectorAll<HTMLElement>('[data-story-chapter]')]
+    let current = 0
+    const show = (index: number) => {
+      if (index === current || !visuals[index]) return
+      visuals.forEach((v, i) => {
+        v.classList.toggle('opacity-100', i === index)
+        v.classList.toggle('scale-100', i === index)
+        v.classList.toggle('opacity-0', i !== index)
+        v.classList.toggle('scale-[1.02]', i !== index)
+      })
+      current = index
+      if (counter) counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(visuals.length).padStart(2, '0')}`
+    }
+    const update = () => {
+      const line = window.innerHeight * 0.5
+      let visual = 0
+      for (const c of chapters) {
+        if (c.getBoundingClientRect().top > line) break
+        if (c.dataset.visual !== '') visual = Number(c.dataset.visual)
+      }
+      show(visual)
+    }
+    addEventListener('scroll', update, { passive: true })
+    update()
+  }
+</script>
