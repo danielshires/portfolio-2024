@@ -1,164 +1,127 @@
-# Dan Portfolio
+# danielshires.com
 
-A modern, responsive portfolio website showcasing photography collections and design projects. Built with Astro, React, and Sanity CMS for optimal performance and content management.
+The personal site of Daniel Shires, a Senior Product Designer based in Woonona, NSW. It holds case studies, writing, photography, a field guide of design concepts, and a playground of small experiments, including a 3D avatar you can chat with.
 
-## 🎯 About
+Live at [danielshires.com](https://danielshires.com).
 
-This portfolio features:
-- **Photography Collections**: Curated albums and individual photographs
-- **Design Projects**: UX/UI design work and case studies
-- **Responsive Design**: Optimized for all devices
-- **Performance Focused**: Fast loading with optimized images
-- **Content Management**: Powered by Sanity CMS
-- **SEO Optimized**: Comprehensive search engine optimization
+## What's on the site
 
-## 🚀 Tech Stack
+| Route | What it is |
+| --- | --- |
+| `/` | Homepage, with a 3D Memoji-style avatar that reacts when you click it |
+| `/projects` | Case studies, filterable in one list, with views and claps per project |
+| `/writing` | Posts. Served on request from Sanity, so a publish is live in about a minute with no rebuild |
+| `/pictures` | Photography, as individual pictures and albums |
+| `/field-guide` | Short entries on design concepts and methods |
+| `/design` | Design portfolio |
+| `/playground` | Experiments: avatar chat, a Strava training diary, and Spinner Studio |
+| `/changelog` | Every commit to the site, grouped by day and read from git history at build time |
+| `/about` | About me |
+| `/agent.md` | A Markdown profile of me and the site for AI agents. The homepage also returns it to clients that ask for Markdown |
+| `/studio` | Sanity Studio for editing content |
 
-- **Framework**: [Astro](https://astro.build/) - Static site generator
-- **Frontend**: React, Preact, TypeScript
-- **Styling**: Tailwind CSS
-- **CMS**: [Sanity](https://www.sanity.io/) - Headless content management
-- **Icons**: Iconify, Remix Icons
-- **Images**: Sharp image optimization with AVIF format
+Old URLs (`/journal`, `/experiments`, `/playgrounds`) redirect to their current homes.
 
-## 📁 Project Structure
+## Tech stack
+
+- **Framework**: [Astro 4](https://astro.build/) in hybrid mode on Netlify. Pages are static by default; writing, the homepage preview, the sitemap and `agent.md` render on request.
+- **UI**: React 19 for interactive parts, Astro components for everything else
+- **Styling**: Tailwind CSS 4, IBM Plex Sans and Mono, light and dark themes
+- **CMS**: [Sanity](https://www.sanity.io/) (project `5fq3rcf6`, dataset `production`)
+- **3D**: three.js and React Three Fiber for the avatar
+- **AI chat**: Gemini, through a Netlify Function, with AI Elements and Streamdown for the chat UI
+- **Storage**: Netlify Blobs for project engagement counts and rate limits
+- **Page transitions**: Swup
+- **Images**: Sharp, served as AVIF
+
+## Getting started
+
+Requires Node 20 (the version Netlify builds with).
+
+```bash
+npm install
+npm run dev
+```
+
+The site runs at `localhost:4321`. Content comes from the production Sanity dataset, so no setup is needed to browse it.
+
+The API routes (avatar chat, Strava diary, project engagement) are Netlify Functions, which plain `astro dev` can't run. To use them locally, start Netlify Dev alongside it:
+
+```bash
+npm run dev:netlify
+```
+
+Astro then proxies `/api/*` requests to Netlify Dev on port 8888.
+
+### Environment variables
+
+Put these in a `.env` file, and in Netlify's site settings for production. All are optional for browsing the site locally.
+
+| Variable | Used for |
+| --- | --- |
+| `GEMINI_API_KEY` | Avatar chat |
+| `GEMINI_MODEL` | Overrides the default Gemini model |
+| `RATE_LIMIT_SALT` | Hashing visitor IDs for rate limits |
+| `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET`, `STRAVA_ATHLETE_ID` | Training diary |
+| `PUBLIC_GA_ID` | Google Analytics |
+| `PUBLIC_FEATURE_*` | Show or hide sections of the site. See [FEATURE_FLAGS.md](FEATURE_FLAGS.md) |
+
+## Scripts
+
+| Command | Action |
+| --- | --- |
+| `npm run dev` | Start the dev server at `localhost:4321` |
+| `npm run dev:netlify` | Start Netlify Dev, for the API routes |
+| `npm run build` | Type-check with `astro check`, then build to `dist/` |
+| `npm run preview` | Preview the production build |
+| `npm run avatar:prepare -- <file.glb>` | Turn a Meshy 3D export into the homepage avatar model |
+
+## Project structure
 
 ```
 /
-├── public/                 # Static assets (fonts, images, favicon)
 ├── src/
-│   ├── components/         # Reusable UI components
-│   │   ├── content/        # Content-specific components
-│   │   ├── layout/         # Layout and navigation
-│   │   ├── media/          # Image and gallery components
-│   │   ├── shared/         # Shared components including SEO
-│   │   └── ui/             # Base UI components
-│   ├── content/            # Static content (albums, posts)
-│   ├── layouts/            # Page layouts
-│   ├── lib/                # Utilities and Sanity client
-│   ├── pages/              # Astro pages and routes
-│   └── styles/             # Global styles
-├── portfolio-25/           # The only Sanity Studio. Deploy from this folder.
-└── sanity.config.ts        # Points the website /studio route at portfolio-25
+│   ├── pages/             # Routes
+│   ├── components/        # content/, layout/, media/, ui/ — grouped by feature
+│   ├── layouts/           # Page layouts, global styles and theme
+│   └── lib/
+│       ├── sanity.ts      # Sanity client and every content query
+│       ├── agent/         # The agent.md profile
+│       ├── avatar/        # Site context given to the avatar chat
+│       ├── server/        # Rate limiting and Blob helpers for functions
+│       └── seo/           # Structured data helpers
+├── netlify/
+│   ├── functions/         # avatar-chat, strava-diary, project-engagement
+│   └── edge-functions/    # Serves agent.md on / to clients that want Markdown
+├── portfolio-25/          # Sanity Studio and schemas. The only studio; deploy from here
+├── scripts/avatar/        # Avatar model preparation
+├── public/                # Fonts, images, 3D models
+└── docs/tone/             # Writing tone guides
 ```
 
-## 🛠️ Development
+## Content
 
-### Prerequisites
+Edit content in Sanity Studio at `/studio`, or run the studio from `portfolio-25/`. Content types:
 
-- Node.js (v18 or higher)
-- npm or yarn
+- **Projects**: case studies
+- **Posts**: writing
+- **Pictures** and **albums**: photography
+- **Concepts**: field guide entries
+- **Authors** and **site settings**
 
-### Installation
+Writing goes live within about a minute of publishing. Projects, pictures and other prerendered pages update on the next Netlify deploy.
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd 034-Dan-Photography-Portfolio
-```
+## Deploying
 
-2. Install dependencies:
-```bash
-npm install
-```
+Netlify builds and deploys `main` to production. Work happens on branches and merges through pull requests.
 
-3. Set up environment variables (if needed):
-```bash
-# Create .env file with Sanity configuration
-SANITY_PROJECT_ID=your_project_id
-SANITY_DATASET=production
+## Other docs
 
-# Optional: Google Analytics (`src/components/common/SEO.astro`)
-# PUBLIC_GA_ID=G-XXXXXXXXXX
-```
+- [FEATURE_FLAGS.md](FEATURE_FLAGS.md): turning sections on and off
+- [IMAGE_QUALITY_GUIDE.md](IMAGE_QUALITY_GUIDE.md): which image component to use, and quality settings
+- [PROJECT_TEMPLATE_README.md](PROJECT_TEMPLATE_README.md): the project page template
+- [SEO_MIGRATION_CHECKLIST.md](SEO_MIGRATION_CHECKLIST.md): SEO checks for URL changes and launches
 
-### Available Scripts
+## License
 
-| Command           | Action                                       |
-| ----------------- | -------------------------------------------- |
-| `npm run dev`     | Start development server at `localhost:4321` |
-| `npm run build`   | Build for production                         |
-| `npm run preview` | Preview production build locally             |
-| `npm run astro`   | Run Astro CLI commands                       |
-
-## 📸 Features
-
-### Photography
-- **Album Collections**: Organized photography series
-- **Image Optimization**: Automatic AVIF conversion and responsive images
-- **Gallery Views**: Grid and individual photo displays
-- **Categories**: Visual diary, landscapes, architecture, and more
-
-### Design Portfolio
-- **Project Showcases**: Detailed case studies and design work
-- **Interactive Elements**: Smooth animations and transitions
-- **Responsive Layout**: Optimized for all screen sizes
-
-### Content Management
-- **Sanity Studio**: Visual content editor at `/studio`
-- **Portable Text**: Rich text content with custom components
-- **Image Management**: Optimized image handling with Sanity
-
-## 🔍 SEO Optimization
-
-### Meta Tags & Social Media
-- **Open Graph**: Optimized for Facebook, LinkedIn, and social sharing
-- **Twitter Cards**: Enhanced Twitter sharing with large image cards
-- **Meta Descriptions**: Unique, compelling descriptions for each page
-- **Canonical URLs**: Proper canonical tags to prevent duplicate content
-
-### Structured Data
-- **Person Schema**: Rich snippets for personal information
-- **BlogPosting Schema**: Enhanced blog post listings
-- **CreativeWork Schema**: Design project structured data
-- **CollectionPage Schema**: Photography collections markup
-- **Organization Schema**: Professional affiliations
-
-### Technical SEO
-- **XML Sitemap**: Comprehensive sitemap with priorities and change frequencies
-- **Robots.txt**: Optimized crawl directives
-- **Page Speed**: Optimized images and code splitting
-- **Mobile-First**: Responsive design with mobile optimization
-- **Semantic HTML**: Proper heading hierarchy and semantic markup
-
-### Content Optimization
-- **Keyword Integration**: Strategic keyword placement in titles and descriptions
-- **Internal Linking**: Cross-linking between related content
-- **Image Alt Text**: Descriptive alt text for all images
-- **URL Structure**: Clean, SEO-friendly URLs
-
-## 🎨 Design System
-
-- **Typography**: IBM Plex Sans / IBM Plex Mono (Google Fonts)
-- **Colors**: Dark/light theme support
-- **Components**: Modular, reusable UI components
-- **Animations**: Smooth page transitions and scroll effects
-
-## 📱 Performance
-
-- **Image Optimization**: Sharp service with AVIF format
-- **Code Splitting**: Automatic vendor chunk optimization
-- **Prefetching**: Smart link prefetching
-- **Lazy Loading**: Optimized image loading
-
-## 🌐 Deployment
-
-Hosted on Netlify with Astro hybrid rendering (`@astrojs/netlify`). Most pages are pre-rendered; writing (plus the homepage writing preview, sitemap, and `/agent.md`) is rendered on request from Sanity’s CDN so publishing a post does not need a rebuild.
-
-Build with `npm run build`. Code and non-writing content changes still need a Netlify deploy.
-
-## 📝 Content Management
-
-Access the Sanity Studio at `/studio` to manage:
-- Photography albums and images
-- Design projects and case studies
-- Blog posts and journal entries (live after publish; allow ~60s for the CDN)
-- Site settings and metadata
-
-## 🤝 Contributing
-
-This is a personal portfolio project. For questions or feedback, please reach out directly.
-
-## 📄 License
-
-This project is private and proprietary.
+Private and proprietary. This is a personal site; for questions, get in touch through [danielshires.com](https://danielshires.com).
