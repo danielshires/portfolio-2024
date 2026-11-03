@@ -94,6 +94,19 @@ function streamReply(upstream: Response): ReadableStream<Uint8Array> {
   })
 }
 
+const OUT_OF_CREDITS = "Bummer, I've used up all my credits for today. Try again tomorrow."
+
+/**
+ * Google refuses with 403 when the billing account has an unpaid balance, and with 429 once a
+ * daily quota is spent. Either way the avatar is out of credits until someone tops up or the
+ * day resets, unlike a per-minute 429 that clears on its own.
+ */
+async function outOfCredits(response: Response) {
+  if (response.status !== 403 && response.status !== 429) return false
+  const detail = await response.text().catch(() => '')
+  return /billing|per ?day/i.test(detail)
+}
+
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS })
 }
@@ -310,6 +323,9 @@ export default async function handler(req: Request): Promise<Response> {
 
     if (!response.ok) {
       console.error('gemini request failed', response.status)
+      if (await outOfCredits(response)) {
+        return json({ error: OUT_OF_CREDITS }, 503)
+      }
       if (response.status === 429) {
         return json({ error: 'The avatar has reached its limit for now. Try again in a little while.' }, 429)
       }
